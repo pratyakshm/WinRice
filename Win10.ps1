@@ -34,8 +34,11 @@ $tweaks = @(
 	"PrintServiceTweaksDone"
 
 ### Explorer Changes ###
-	"DisableIndexingOnBatt",        # "EnableIndexingOnBatt",
-	"ShowVerboseStatus",            # "HideVerboseStatus",
+	"PrintBeginExplorerTweaks",
+	"DisableIndexingOnBatt",       # "EnableIndexingOnBatt",
+	"ShowVerboseStatus",           # "HideVerboseStatus",
+	"EnablePrtScrToSnip",		   # "DisablePrtScrSnip",
+	"PrintExplorerTweaksDone",
 
 ### UI changes ###
 	"PrintBeginUITweaks",
@@ -52,8 +55,9 @@ $tweaks = @(
 	"PrintUITweaksDone",
 	
 ### Security changes ###
-	"PrintBeginSecurityTweak",
+	"PrintBeginSecurityTweaks",
 	"DisableMeltdownCompatFlag",   # "EnableMeltdownCompatFlag",
+	"DisableSMB",				   # "EnableSMB",
 	"PrintSecurityTweaksDone",
 	
 ###  Tasks after successful run ###
@@ -149,6 +153,13 @@ Function PrintAppTweaksDone {
 
 ### Privacy Tweaks ###
 
+# Update status: beginning privacy changes
+Function PrintBeginPrivacyTweaks {
+	Write-Output "###########"
+	Write-Output "Beginning with privacy tweaks..."
+	Write-Output "###########"
+	}
+
 # Disable automatic Maps updates
 Function DisableMapUpdates {
 	Write-Output "Disabling automatic Maps updates..."
@@ -229,6 +240,7 @@ Function EnableLocationTracking {
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\lfsvc\Service\Configuration" -Name "Status" -Type DWord -Value 1
 	Write-Output "Location Tracking has been enabled."
 }
+
 # Disable Advertising ID
 Function DisableAdvertisingID {
 	Write-Output "Disabling Advertising ID..."
@@ -245,6 +257,14 @@ Function EnableAdvertisingID {
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo" -Name "DisabledByGroupPolicy" -ErrorAction SilentlyContinue
 	Write-Output "Advertising ID has been enabled."
 }
+
+# Update status: beginning privacy changes
+Function PrintPrivacyTweaksDone {
+	Write-Output "###########"
+	Write-Output "Privacy tweaks have been appplied."
+	Write-Output "###########"
+	}
+
 
 
 ### Service Tweaks ###
@@ -314,7 +334,8 @@ Function SetBIOSTimeLocal {
 	Remove-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name "RealTimeIsUniversal" -ErrorAction SilentlyContinue
 	Write-Output "BIOS time has been set to Local time."
 }
-# Update status: security tweaks done
+
+# Update status: service tweaks done
 Function PrintServiceTweaksDone {
 	Write-Output "###########"
 	Write-Output "Service tweaks have been applied, next up: UI tweaks:"
@@ -323,7 +344,15 @@ Function PrintServiceTweaksDone {
 
 
 
+
 ### Explorer  changes ###
+
+# Update status: beginning Explorer Tweaks
+Function PrintBeginExplorerTweaks {	
+	Write-Output "###########"
+	Write-Output "Beginning Explorer tweaks..."
+	Write-Output "###########"
+}
 
 # Disable indexing on battery power 
 Function DisableIndexingOnBatt {
@@ -352,6 +381,29 @@ Function HideVerboseStatus {
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "VerboseStatus" -Type DWord -Value 0
 	Write-Output "Verbose Status has been disabled."
 }
+
+# Enable use print screen key to open screen snipping
+Function EnablePrtScrToSnip {
+	Write-Output "Directing Print screen key to launch screen snipping..."
+	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 1
+	Write-Output "Print screen key is set to launch screen snip."
+	}
+	
+# Disable use print screen key to open screen snipping
+Function DisablePrtScrSnip {
+	Write-Output "Disabling Print screen key's ability to launch screen snip..."
+	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
+	Write-Output "Print screen key will now no longer launch screen snip."
+	}
+
+# Update status: Explorer Tweaks done
+Function PrintExplorerTweaksDone {	
+	Write-Output "###########"
+	Write-Output "Explorer tweaks have been applied."
+	Write-Output "###########"
+}
+
+
 
 ### UI changes ###
 
@@ -516,9 +568,9 @@ Function HideSecondsFromTaskbar {
 # Update status: UI tweaks done
 Function PrintUITweaksDone {
 	Write-Output "###########"
-	Write-Output "UI tweaks have been applied, next up Security tweaks."
+	Write-Output "User Interface tweaks have been applied."
 	Write-Output "###########"
-	}
+}
 
 
 
@@ -530,6 +582,7 @@ Function PrintBeginSecurityTweaks {
 	Write-Output "Beginning Security tweaks..."
 	Write-Output "###########"
 	}
+	
 # Enable Meltdown (CVE-2017-5754) compatibility flag - Required for January 2018 and all subsequent Windows updates
 # This flag is normally automatically enabled by compatible antivirus software (such as Windows Defender).
 # Use the tweak only if you have confirmed that your AV is compatible but unable to set the flag automatically or if you don't use any AV at all.
@@ -549,6 +602,25 @@ Function DisableMeltdownCompatFlag {
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat" -Name "cadca5fe-87d3-4b96-b7fb-a231484277cc" -ErrorAction SilentlyContinue
 	Write-Output "Meltdown (CVE-2017-5754) compatibility flag has been disabled."
 }
+
+# Disable SMB1 and SMB2 
+Function DisableSMB {
+	Write-Output "Disabling Server Message Block v1 and v2..."
+	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB1" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB2" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\NetBT\Parameters" -Name "SMBDeviceEnabled" -Type DWord -Value 0
+	Write-Output "Server Message Block v1 and v2 have been disabled."
+}
+
+# Enable SMB1 and SMB2 
+Function EnableSMB {
+	Write-Output "Enabling Server Message Block v1 and v2..."
+	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB1" -Type DWord -Value 1
+	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB2" -Type DWord -Value 1
+	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\NetBT\Parameters" -Name "SMBDeviceEnabled" -Type DWord -Value 1
+	Write-Output "Server Message Block v1 and v2 have been enabled."
+}
+
 # Update status: security tweaks done
 Function PrintSecurityTweaksDone {
 	Write-Output "###########"
