@@ -15,10 +15,10 @@ This is a PowerShell script that automates tasks usually done after a fresh inst
 &nbsp;
 
 ## How to run
-1. Download the appropriate variant of the script. Extract the ZIP file and place the Win10.ps1 file to your OS drive (Local Disk C primarily).
-2. Open PowerShell, go two folders back by doing ```cd ../../```.
-3. Type ```Set-ExecutionPolicy Unrestricted``` and press Enter, in the warning that follows, press ```a``` key.
-4. Finally, to run the script, do ```./Win10.ps1```. If it prompts with an alert, press ```r``` key.
+1. Download **Start.bat** and **Win10.ps1** from the latest [release](https://github.com/PratyakshM/Win10-Script/releases).
+2. Move both the files you downloaded to C: drive.
+3. Double-click on Start.bat.
+4. Sit back and wait until the script prompts you to restart your PC.
 
 &nbsp;
 
@@ -52,14 +52,17 @@ If any of the above criteria are not met, the script would still continue to run
 
 ## Contributors list
 Special thanks to:  
+   
+ [Chris Titus](https://github.com/ChrisTitusTech)   
+ [Davesh](https://t.me/Mr_Agarwal)  
+ [Jish](https://github.com/uncannyjish)  
+ [Keshav](https://t.me/KeshavJ0shi)  
  [Microsoft (MSFT)](https://microsoft.com)  
  [Microsoft Community](https://community.microsoft.com)  
- [Windows Central](https://windowscentral.com)  
- [Chris Titus](https://github.com/ChrisTitusTech)  
- [Davesh](https://t.me/Mr_Agarwal)  
+ [Pulkit](https://t.me/Pulkit077)    
  [Vancel](https://t.me/bancelhub)  
- [Keshav](https://t.me/KeshavJ0shi)  
- [Pulkit](https://t.me/Pulkit077)  
+ [Windows Central](https://windowscentral.com)  
 and everyone else who was directly or indirectly involved in this project.
 
 &nbsp;
+   
