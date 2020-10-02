@@ -3,7 +3,7 @@
 ## Contents
  - [Description](#description)
  - [How to run](#how-to-run)
- - [Windows build support](#windows-build-support)
+ - [Compatibility](#compatibility)
  - [Frequently asked questions](#faq)
  - [Contributors list](#contributors-list)
  
@@ -22,7 +22,7 @@ This is a PowerShell script that automates tasks usually done after a fresh inst
 
 &nbsp;
 
-## Windows build support
+## Compatibility
 This script currently supports Build 19041 of the May 2020 Update. However, it perfectly runs on Windows 20H2 builds (Build 19042) of the upcoming October 2020 Update.  
 **Notes:**  
 - Functions of the script that need ```winget``` dependency will not be able to run over properly on Build 19041 of May 2020 update.  
@@ -60,6 +60,7 @@ Special thanks to:
  [Microsoft (MSFT)](https://microsoft.com)  
  [Microsoft Community](https://community.microsoft.com)  
  [Pulkit](https://t.me/Pulkit077)    
+ [Sycnex](https://t.me/Sycnex)  
  [Vancel](https://t.me/bancelhub)  
  [Windows Central](https://windowscentral.com)  
 and everyone else who was directly or indirectly involved in this project.
