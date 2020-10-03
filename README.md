@@ -34,7 +34,7 @@ If any of the above criteria are not met, the script would still continue to run
 ## FAQ
 
 **Q:** Can I run the script safely?  
-**A:** No, you have to understand what the functions do and what will be the implications for you if you run them. Some functions lower security, hide controls and uninstall applications. **If you're not sure what the script does, do not attempt to run it!**
+**A:** No, you have to understand what the functions do and what will be the implications for you if you run them. **If you're not sure what the script does, do not attempt to run it!**
 
 **Q:** I've run the script and it did something I don't like, how can I undo it?  
 **A:** For every tweak, there is also a corresponding function which restores the default settings. The default is considered freshly installed Windows 10 or Windows Server 2016 with no adjustments made during or after the installation. Use the tweaks to create and run new preset. Alternatively, since some functions are just automation for actions which can be done using GUI, find appropriate control and modify it manually.
