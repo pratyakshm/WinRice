@@ -55,6 +55,7 @@ Special thanks to:
    
  [Chris Titus](https://github.com/ChrisTitusTech)   
  [Davesh](https://t.me/Mr_Agarwal)  
+ [Disassembler](https://github.com/Disassembler0)  
  [Jish](https://github.com/uncannyjish)  
  [Keshav](https://t.me/KeshavJ0shi)  
  [Microsoft (MSFT)](https://microsoft.com)  
