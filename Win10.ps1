@@ -43,7 +43,6 @@ $tweaks = @(
 ### UI changes ###
 	"PrintBeginUITweaks",
 	"HideLangIcon",                # "ShowLangIcon",
-	"EnableThemeAwareStartMenu"	   # "DisableThemeAwareStartMenu",
     "HideKnownExtensions",         # "ShowKnownExtensions",
 	"DisableStickyKeys",           # "EnableStickyKeys",
 	"SetExplorerThisPC",           # "SetExplorerQuickAccess",
@@ -426,22 +425,6 @@ Function ShowLangIcon {
 	Write-Output "Showing language icon in Taskbar..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\CTF\LangBar" -Name "ShowStatus" -Type DWord -Value 4
 	Write-Output "Shown Language icon in Taskbar."
-}
-
-# Enable ThemeAware Tiles in Start menu 
-Function EnableThemeAwareStartMenu {
-	Write-Output "Enabling Theme Aware Tiles in Start Menu (this will only work if your build is 19041.508 or up)..."
-	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FeatureManagement\Overrides\0\2093230218" -Name "EnabledState" -Type DWord -Value 2
-	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FeatureManagement\Overrides\0\2093230218" -Name "EnabledStateOptions" -Type DWord -Value 0
-	Write-Output "Enabled Theme Aware Tiles in Start Menu."
-}
-
-# Disable ThemeAware Tiles in Start menu
-Function DisableThemeAwareStartMenu {
-	Write-Output "Disabling Theme Aware Tiles in Start Menu..."
-	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FeatureManagement\Overrides\0\2093230218" -Name "EnabledState" -Type DWord -Value 0
-	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FeatureManagement\Overrides\0\2093230218" -Name "EnabledStateOptions" -Type DWord -Value 1
-	Write-Output "Disabled Theme Aware Tiles in Start Menu."
 }
 
 # Show known file extensions
