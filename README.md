@@ -10,7 +10,7 @@
 &nbsp;
 
 ## Description
-This is a PowerShell script that automates tasks usually done after a fresh installation of Microsoft™ Windows® operating system. Please do not proceed ahead if you do not have any idea of what this script does.
+CleanWin project aims to detox and tweak Windows 10, its recommended to run this after a fresh installation or upgrade of Windows.
 
 &nbsp;
 
