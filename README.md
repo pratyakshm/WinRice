@@ -3,8 +3,10 @@
 ## Contents
  - [Description](#description)
  - [How to run](#how-to-run)
+ - [List of tasks](#list-of-tasks)  
  - [Compatibility](#compatibility)
  - [Frequently asked questions](#faq)
+ - [Discussion](#discussion)
  - [Contributors list](#contributors-list)
  
 &nbsp;
@@ -22,37 +24,118 @@ CleanWin project aims to detox and tweak Windows 10, its recommended to run this
 
 &nbsp;
 
+## List of tasks:
+This section contains the list of tasks that are performed by this script. They're grouped in the following categories:
+<details>
+<summary>Apps</summary>
+List of apps removed:
+<br>3D Viewer        
+<br>Alarms and Clock
+<br>Cortana  
+<br>Camera  
+<br>Feedback Hub 
+<br>Get Help      
+<br>Get started  
+<br>Groove Music  
+<br>Mail and Calendar  
+<br>Messaging  
+<br>Maps  
+<br>Microsoft News  
+<br>Microsoft Solitaire Collection  
+<br>Mixed Reality Portal  
+<br>Movies & TV  
+<br>OneConnect  
+<br>Office  
+<br>Office Lens  
+<br>OneNote  
+<br>Paint 3D  
+<br>People  
+<br>Sway  
+<br>Skype  
+<br>Sticky Notes  
+<br>Whiteboard  
+<br>Your Phone  
+<br><br>List of apps installed:
+<br>7-zip
+</details>
+
+<details>
+<summary>Privacy</summary>
+Disable maps updates
+<br>Disable feedback
+<br>Disable advertising ID
+<br>Disable location tracking
+<br>Disable background apps
+</details>
+
+<details>
+<summary>Services</summary>
+Disable AutoPlay
+<br>Disable Autorun
+<br>Disable disk defragmentation
+<br>Set BIOS time to UTC
+</details>
+
+<details>
+<summary>Windows Explorer</summary>
+Disable Search Indexing when on battery power
+<br>Show verbose status
+<br>Use Print Screen key to open Snip & Sketch overlay
+</details>
+
+<details>
+<summary>User Inteface</summary>
+Hide language icon from taskbar
+<br>Hide known extensions
+<br>Disable sticky keys prompt
+<br>Set Explorer to open This PC instead of Quick access
+<br>Hide 3D Objects tabs from This PC and Quick Access
+<br>Hide task view icon from taskbar
+<br>Show all tray icons on taskbar
+<br>Show seconds in taskbar clock
+</details>
+
+<details>
+<summary>Security</summary>
+Disable Server Message Block
+<br>Disable Meltdown compatibility flag
+</details>
+
+&nbsp;
+
 ## Compatibility
-This script currently supports Build 19041 of the May 2020 Update. However, it perfectly runs on Windows 20H2 builds (Build 19042) of the upcoming October 2020 Update.  
-**Notes:**  
-- Functions of the script that need ```winget``` dependency will not be able to run over properly on Build 19041 of May 2020 update.  
-- The tweak concerning Theme aware tiles in start menu needs Build 19041.508 of the May 2020 update to work correctly.  
-If any of the above criteria are not met, the script would still continue to run but will throw errors on those particular tasks.
+CleanWin is compatible with the Windows 10 October 2020 update (builds 19042.508 and up).
 
 &nbsp;
 
 ## FAQ
 
-**Q:** Can I run the script safely?  
+**Q:** Can I use CleanWin safely?  
 **A:** No, you have to understand what the functions do and what will be the implications for you if you run them. **If you're not sure what the script does, do not attempt to run it!**
 
-**Q:** I've run the script and it did something I don't like, how can I undo it?  
+**Q:** I've used CleanWin and it did something I don't like, how can I undo it?  
 **A:** For every tweak, there is also a corresponding function which restores the default settings. The default is considered freshly installed Windows 10 or Windows Server 2016 with no adjustments made during or after the installation. Use the tweaks to create and run new preset. Alternatively, since some functions are just automation for actions which can be done using GUI, find appropriate control and modify it manually.
 
-**Q:** I've run the script and it broke my computer / killed someone / caused an apocalypse.  
+**Q:** I've run CleanWin and it broke my computer / killed someone / caused an apocalypse.  
 **A:** I don't care, and that's not a question.
 
 **Q:** I'm using a tweak for &lt;feature&gt; on my installation, can you add it?  
 **A:** Submit a PR, create a feature request issue or drop me a message. 
 
-**Q:** Can I use the script or modify it for my / my company's needs?  
-**A:** You're allowed to do that as long as your project has references to this repository for picking up further updates that I'll do here.
+&nbsp;
+
+## Discussion
+Click on the Telegram logo below to join my channel and group for CleanWin project discussions!  
+<br><a href="https://t.me/PratyakshProjects" 
+target="_blank">
+  <img align="left" alt="Pratyaksh's Channel on Telegram" width="22px" 
+  src="https://upload.wikimedia.org/wikipedia/commons/8/83/Telegram_2019_Logo.svg" />
+</a>
 
 &nbsp;
 
 ## Contributors list
 Special thanks to:  
-   
  [Chris Titus](https://github.com/ChrisTitusTech)   
  [Davesh](https://t.me/Mr_Agarwal)  
  [Disassembler](https://github.com/Disassembler0)  
@@ -67,4 +150,3 @@ Special thanks to:
 and everyone else who was directly or indirectly involved in this project.
 
 &nbsp;
-   
