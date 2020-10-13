@@ -139,9 +139,6 @@ Function DebloatAll {
 
 # Install apps
 Function InstallApps {
-	Write-Output "Installing the new Microsoft Edge..."
-	winget install msedge
-	Write-Output "Microsoft Edge has been installed."
 	Write-Output "Installing 7-zip..."
 	winget install 7zip.
 	Write-Output "7-zip has been installed."
