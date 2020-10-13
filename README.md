@@ -15,8 +15,8 @@ CleanWin project aims to detox and tweak Windows 10, its recommended to run this
 &nbsp;
 
 ## How To Run
-1. Download **Start.bat** and **Win10.ps1** from the latest [release](https://github.com/PratyakshM/Win10-Script/releases).
-2. Move both the files you downloaded to C: drive and double-click on Start.bat while making sure you give it the administrator privilege.
+1. Download **CleanWin.zip** from the latest [release tag](https://github.com/PratyakshM/CleanWin/releases/tag/0.2).
+2. Extract the contents of the ZIP file into your C: drive and launch **Start.bat**.
 
 &nbsp;
 
