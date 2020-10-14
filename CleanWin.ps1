@@ -82,7 +82,7 @@ Function StopExplorer {
 	Write-Output "Shutting down Windows Explorer before beginning execution of script."
 	taskkill /f /im explorer.exe
 	Write-Output "Beginning script execution."
-	}
+}
 
 ####### Application changes ###
 
@@ -91,7 +91,7 @@ Function PrintBeginAppTweaks {
 	Write-Output "###########"
 	Write-Output "Beginning with app tweaks..."
 	Write-Output "###########"
-	}
+}
 
 # Debloat apps
 Function DebloatAll {
@@ -153,7 +153,7 @@ Function PrintAppTweaksDone {
 	Write-Output "###########"
 	Write-Output "Apps tweaks have been applied."
 	Write-Output "###########"
-	}
+}
 
 
 ### Privacy Tweaks ###
@@ -163,7 +163,7 @@ Function PrintBeginPrivacyTweaks {
 	Write-Output "###########"
 	Write-Output "Beginning with privacy tweaks..."
 	Write-Output "###########"
-	}
+}
 
 # Disable automatic Maps updates
 Function DisableMapUpdates {
@@ -268,7 +268,7 @@ Function PrintPrivacyTweaksDone {
 	Write-Output "###########"
 	Write-Output "Privacy tweaks have been appplied."
 	Write-Output "###########"
-	}
+}
 
 
 
@@ -279,7 +279,7 @@ Function PrintBeginServiceTweaks {
 	Write-Output "###########"
 	Write-Output "Beginning Service tweaks..."
 	Write-Output "###########"
-	}
+}
 
 # Disable Autoplay
 Function DisableAutoplay {
@@ -345,8 +345,7 @@ Function PrintServiceTweaksDone {
 	Write-Output "###########"
 	Write-Output "Service tweaks have been applied, next up: UI tweaks:"
 	Write-Output "###########"
-	}
-
+}
 
 
 
@@ -627,7 +626,7 @@ Function PrintSecurityTweaksDone {
 	Write-Output "###########"
 	Write-Output "Security tweaks have been applied."
 	Write-Output "###########"
-	}
+}
 
 
 
@@ -638,28 +637,21 @@ Function PrintEndTasksBegin{
 	Write-Output "###########"
 	Write-Output "Performing tasks after successful execution of scripts..."
 	Write-Output "###########"
-	}
+}
 	
 # Start Explorer.exe
 Function StartExplorer {
 	Write-Output "Attempting to start Windows Explorer..."
 	start explorer.exe
 	Write-Output "Windows Explorer has started."
-	}
+}
 	
 # Update status: Script execution successful
 Function PrintEndTasksDone{
 	Write-Output "###########"
 	Write-Output "Script execution successful, all tasks have been performed successfully."
 	Write-Output "###########"
-	}
-	
-# Restart PC after execution, on user-input
-Function RestartOnInput {
-	Write-Output "Press any key to restart this PC."
-	[Console]::ReadKey($true) | Out-Null
-	Restart-Computer
-	}
+}
 
 # Call the desired tweak functions
 $tweaks | ForEach { Invoke-Expression $_ }
