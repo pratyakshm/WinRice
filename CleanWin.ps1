@@ -27,6 +27,7 @@ $tweaks = @(
 
 ### Service Tweaks ###
 	"PrintBeginServiceTweaks"
+	"UpdateOnlyFromMSFT"           # "UpdateFromOtherSources"
 	"DisableAutoplay",             # "EnableAutoplay",
 	"DisableAutorun",              # "EnableAutorun",
 	"DisableDefragmentation",      # "EnableDefragmentation",
@@ -279,6 +280,21 @@ Function PrintBeginServiceTweaks {
 	Write-Output "###########"
 	Write-Output "Beginning Service tweaks..."
 	Write-Output "###########"
+}
+
+# Update only from MSFT (no LAN or P2P)
+Function UpdateOnlyFromMSFT {
+	Write-Output "Disabling P2P and LAN Updates so that this PC will recieve Windows Updates only from Microsoft servers..."
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DownloadMode -Type DWord -Value 0
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DODownloadMode -Type DWord -Value 0
+	Write-Output "This PC is now set to download updates only from Microsoft servers."
+}
+
+Function UpdateFromOtherSources {
+	Write-Output "Enabling back P2P and LAN based Windows Updates delivery..."
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DownloadMode -Type DWord -Value 3
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DODownloadMode -Type DWord -Value 3
+	Write-Output "This PC can now also recieve updates from other sources like LAN and P2P."
 }
 
 # Disable Autoplay
@@ -572,14 +588,14 @@ Function PrintBeginSecurityTweaks {
 	}
 
 Function AutoLoginPostUpdate {
-	Write-Output  "Enabling this PC to automatically login after Windows Update..."
-	Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 1
+	Write-Output "Enabling this PC to automatically login after Windows Update..."
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 1
 	Write-Output "This PC is now set to automatically login after a Windows Update restart."
 } 
 
 Function StayOnLockscreenPostUpdate {
 	Write-Output "Telling this PC to not automatically login post a Windows Update reset."
-	Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 0
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 0
 	Write-Output "This PC will now no longer automatically login to the most recent user account post a Windows Update restart."
 }
 
