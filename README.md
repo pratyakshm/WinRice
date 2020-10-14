@@ -49,8 +49,16 @@ Disable maps updates
 </details>
 
 <details>
+<summary>Security</summary>
+Enable automatic login when PC restarts after installing a Windows Update
+<br>Disable Server Message Block
+<br>Disable Meltdown compatibility flag
+</details>   
+
+<details>
 <summary>Services</summary>
-Disable AutoPlay
+Disable Windows Update delivery via P2P and LAN
+<br>Disable AutoPlay
 <br>Disable Autorun
 <br>Disable disk defragmentation
 <br>Set BIOS time to UTC
@@ -61,12 +69,7 @@ Disable AutoPlay
 Disable Search Indexing when on battery power
 <br>Show verbose status
 <br>Use Print Screen key to open Snip & Sketch overlay
-</details>
-
-<details>
-<summary>User Inteface</summary>
-Hide language icon from taskbar
-<br>Hide known extensions
+<br>Hide language icon from taskbar
 <br>Disable sticky keys prompt
 <br>Set Explorer to open This PC instead of Quick access
 <br>Hide 3D Objects tabs from This PC and Quick Access
@@ -74,12 +77,6 @@ Hide language icon from taskbar
 <br>Show all tray icons on taskbar
 <br>Show seconds in taskbar clock
 </details>
-
-<details>
-<summary>Security</summary>
-Disable Server Message Block
-<br>Disable Meltdown compatibility flag
-</details>   
 
 ## Wiki:
 [Click here](https://github.com/PratyakshM/CleanWin/wiki/Wiki) to visit the Wiki (contains detailed documentation).      
