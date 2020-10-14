@@ -27,7 +27,7 @@ $tweaks = @(
 
 ### Service Tweaks ###
 	"PrintBeginServiceTweaks"
-	"UpdateOnlyFromMSFT"           # "UpdateFromOtherSources"
+	"UpdateOnlyFromMSFT"           # "UpdateFromOtherSources",
 	"DisableAutoplay",             # "EnableAutoplay",
 	"DisableAutorun",              # "EnableAutorun",
 	"DisableDefragmentation",      # "EnableDefragmentation",
@@ -44,7 +44,6 @@ $tweaks = @(
 ### UI changes ###
 	"PrintBeginUITweaks",
 	"HideLangIcon",                # "ShowLangIcon",
-    "HideKnownExtensions",         # "ShowKnownExtensions",
 	"DisableStickyKeys",           # "EnableStickyKeys",
 	"SetExplorerThisPC",           # "SetExplorerQuickAccess",
     "Hide3DObjectsInThisPC",       # "Show3DObjectsInThisPC",
@@ -56,7 +55,7 @@ $tweaks = @(
 	
 ### Security changes ###
 	"PrintBeginSecurityTweaks",
-	"AutoLoginPostUpdate", 		   # "StayOnLockscreenPostUpdate"
+	"AutoLoginPostUpdate", 		   # "StayOnLockscreenPostUpdate",
 	"DisableMeltdownCompatFlag",   # "EnableMeltdownCompatFlag",
 	"DisableSMB",				   # "EnableSMB",
 	"PrintSecurityTweaksDone",
@@ -446,20 +445,6 @@ Function ShowLangIcon {
 	Write-Output "Showing language icon in Taskbar..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\CTF\LangBar" -Name "ShowStatus" -Type DWord -Value 4
 	Write-Output "Shown Language icon in Taskbar."
-}
-
-# Show known file extensions
-Function ShowKnownExtensions {
-	Write-Output "Showing known file extensions..."
-	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 0
-	Write-Output "File extensions are now being shown for all files."
-}
-
-# Hide known file extensions
-Function HideKnownExtensions {
-	Write-Output "Hiding known file extensions..."
-	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 1
-	Write-Output "File extensions have been hid."
 }
 
 # Disable Sticky keys prompt
