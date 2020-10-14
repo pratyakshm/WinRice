@@ -55,6 +55,7 @@ $tweaks = @(
 	
 ### Security changes ###
 	"PrintBeginSecurityTweaks",
+	"AutoLoginPostUpdate", 		   # "StayOnLockscreenPostUpdate"
 	"DisableMeltdownCompatFlag",   # "EnableMeltdownCompatFlag",
 	"DisableSMB",				   # "EnableSMB",
 	"PrintSecurityTweaksDone",
@@ -570,7 +571,19 @@ Function PrintBeginSecurityTweaks {
 	Write-Output "Beginning Security tweaks..."
 	Write-Output "###########"
 	}
-	
+
+Function AutoLoginPostUpdate {
+	Write-Output  "Enabling this PC to automatically login after Windows Update..."
+	Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 1
+	Write-Output "This PC is now set to automatically login after a Windows Update restart."
+} 
+
+Function StayOnLockscreenPostUpdate {
+	Write-Output "Telling this PC to not automatically login post a Windows Update reset."
+	Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 0
+	Write-Output "This PC will now no longer automatically login to the most recent user account post a Windows Update restart."
+}
+
 # Enable Meltdown (CVE-2017-5754) compatibility flag - Required for January 2018 and all subsequent Windows updates
 # This flag is normally automatically enabled by compatible antivirus software (such as Windows Defender).
 # Use the tweak only if you have confirmed that your AV is compatible but unable to set the flag automatically or if you don't use any AV at all.
