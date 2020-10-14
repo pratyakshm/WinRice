@@ -1,32 +1,11 @@
-# Documentation
+# Instructions
 
-## Contents
- - [Description](#description)
- - [How To Run](#how-to-run)   
- - [Wiki](#wiki)   
- - [List Of Tasks](#list-of-tasks)  
- - [Discussion](#discussion)
-
-&nbsp;
-
-## Description
-CleanWin project aims to detox and tweak Windows 10, its recommended to run this after a fresh installation or upgrade of Windows.
-
-&nbsp;
-
-## How To Run
+## How to run:
 1. Download **CleanWin.zip** from the latest [release tag](https://github.com/PratyakshM/CleanWin/releases/tag/0.2).
-2. Extract the contents of the ZIP file into your C: drive and launch **Start.bat**.
-
-&nbsp;
-
-## Wiki
-[Click here](https://github.com/PratyakshM/CleanWin/wiki/Wiki) to visit the Wiki (contains detailed documentation).  
-
-&nbsp;
+2. Extract the contents of the ZIP file into your C: drive and launch **Start.bat**.    
 
 ## List of tasks:
-This section contains the list of tasks that are performed by this script. They're grouped in the following categories:
+This section contains the list of tasks that CleanWin performs. They're grouped in the following categories:
 <details>
 <summary>Apps</summary>
 List of apps removed:
@@ -100,12 +79,12 @@ Hide language icon from taskbar
 <summary>Security</summary>
 Disable Server Message Block
 <br>Disable Meltdown compatibility flag
-</details>
+</details>   
 
-&nbsp;
+## Wiki:
+[Click here](https://github.com/PratyakshM/CleanWin/wiki/Wiki) to visit the Wiki (contains detailed documentation).      
 
-## Discussion
+
+## Discussion:
 Below are the links to my Telegram group & channel so you can receive updates on my work and discuss about CleanWin and technology in general!  
-[Channel](https://t.me/PratyakshProjects) | [Group](https://t.me/pratt_community)
-
-&nbsp;
+[Channel](https://t.me/PratyakshProjects) | [Group](https://t.me/pratt_community)   
