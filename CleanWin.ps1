@@ -34,15 +34,11 @@ $tweaks = @(
 	"SetBIOSTimeUTC",              # "SetBIOSTimeLocal",
 	"PrintServiceTweaksDone"
 
-### Explorer Changes ###
+### Windows Explorer Changes ###
 	"PrintBeginExplorerTweaks",
 	"DisableIndexingOnBatt",       # "EnableIndexingOnBatt",
 	"ShowVerboseStatus",           # "HideVerboseStatus",
 	"EnablePrtScrToSnip",		   # "DisablePrtScrSnip",
-	"PrintExplorerTweaksDone",
-
-### UI changes ###
-	"PrintBeginUITweaks",
 	"HideLangIcon",                # "ShowLangIcon",
 	"DisableStickyKeys",           # "EnableStickyKeys",
 	"SetExplorerThisPC",           # "SetExplorerQuickAccess",
@@ -51,8 +47,15 @@ $tweaks = @(
 	"HideTaskView",                # "ShowTaskView",
 	"ShowTrayIcons",               # "HideTrayIcons",
 	"ShowSecondsInTaskbar",        # "HideSecondsFromTaskbar"
-	"PrintUITweaksDone",
-	
+	"PrinteExplorerTweaksDone",
+
+### Features changes ###
+	"PrintBeginFeatureTweaks",
+	"EnableWSL",
+	"EnableVM",
+	"DefaultWSL2",
+	"PrintFeatureTweaksDone",
+
 ### Security changes ###
 	"PrintBeginSecurityTweaks",
 	"AutoLoginPostUpdate", 		   # "StayOnLockscreenPostUpdate",
@@ -413,26 +416,8 @@ Function DisablePrtScrSnip {
 	Write-Output "Disabling Print screen key's ability to launch screen snip..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
 	Write-Output "Print screen key will now no longer launch screen snip."
-	}
-
-# Update status: Explorer Tweaks done
-Function PrintExplorerTweaksDone {	
-	Write-Output "###########"
-	Write-Output "Explorer tweaks have been applied."
-	Write-Output "###########"
 }
 
-
-
-### UI changes ###
-
-# Update status: beginning UI tweaks
-Function PrintBeginUITweaks {
-	Write-Output "###########"
-	Write-Output "Beginning User Interface tweaks..."
-	Write-Output "###########"
-	}
-	
 # Hide language icon in Taskbar
 Function HideLangIcon {
 	Write-Output "Hiding language icon from Taskbar..."
@@ -554,14 +539,48 @@ Function HideSecondsFromTaskbar {
 	Write-Output "Made taskbar clock hide seconds"
 }
 
-# Update status: UI tweaks done
-Function PrintUITweaksDone {
+# Update status: Explorer Tweaks done
+Function PrintExplorerTweaksDone {	
 	Write-Output "###########"
-	Write-Output "User Interface tweaks have been applied."
+	Write-Output "Explorer tweaks have been applied."
 	Write-Output "###########"
 }
 
 
+
+### Features changes ###
+
+# Update status: Beginning feature tweaks
+Function PrintBeginFeatureTweaks {	
+	Write-Output "###########"
+	Write-Output "Beginning Windows feature changes..."
+	Write-Output "###########"
+}
+
+Function EnableWSL {
+	Write-Output "Enabling Windows Subsystem for Linux..."
+	dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+	Write-Output "Windows Subsystem for Linux has been enabled."
+}
+
+Function EnableVM {
+	Write-Output "Enabling Virtual Machine..."
+	dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+	Write-Output "Virtual Machine has been enabled."
+}
+
+Function DefaultWSL2 {
+	Write-Output "Setting default Windows Subsystem for Linux version to 2..."
+	wsl --set-default-version 2
+	Write-Output "Windows Subsystem for Linux version 2 is now set as default."
+}
+
+# Update status: Feature tweaks done
+Function PrintFeatureTweaksDone {	
+	Write-Output "###########"
+	Write-Output "Feature changes have been performed."
+	Write-Output "###########"
+}
 
 ### Security changes ###
 
