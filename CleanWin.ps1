@@ -30,7 +30,6 @@ $tweaks = @(
 
 ### Windows Explorer Changes ###
 	"PrintBeginExplorerTweaks",
-	"DisableIndexingOnBatt",       # "EnableIndexingOnBatt",
 	"ShowVerboseStatus",           # "HideVerboseStatus",
 	"EnablePrtScrToSnip",		   # "DisablePrtScrSnip",
 	"HideLangIcon",                # "ShowLangIcon",
@@ -305,20 +304,6 @@ Function PrintBeginExplorerTweaks {
 	Write-Output "###########"
 	Write-Output "Beginning Explorer tweaks..."
 	Write-Output "###########"
-}
-
-# Disable indexing on battery power 
-Function DisableIndexingOnBatt {
-	Write-Output "Disabling Windows Search indexing when on battery power..."
-	Set-ItemProperty -Path "HKLM:\MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Name "PreventIndexOnBattery" -Type DWord -Value 1
-	Write-Output "Windows Search Indexing will not remain disabled when PC is on battery power."
-}
-
-# Enable indexing on battery power
-Function EnableIndexingOnBatt {
-	Write-Output "Disabling Windows Search indexing when on battery power..."
-	Set-ItemProperty -Path "HKLM:\MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Name "PreventIndexOnBattery" -Type DWord -Value 0
-	Write-Output "Windows Search Indexing will not remain disabled when PC is on battery power."
 }
 
 # Show verbose status
