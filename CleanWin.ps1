@@ -45,7 +45,6 @@ $tweaks = @(
 	"PrintBeginFeatureTweaks",
 	"EnableWSL",
 	"EnableVM",
-	"DefaultWSL2",
 	"PrintFeatureTweaksDone",
 
 ### Security changes ###
@@ -468,12 +467,6 @@ Function EnableVM {
 	Write-Output "Enabling Virtual Machine..."
 	dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 	Write-Output "Virtual Machine has been enabled."
-}
-
-Function DefaultWSL2 {
-	Write-Output "Setting default Windows Subsystem for Linux version to 2..."
-	wsl --set-default-version 2
-	Write-Output "Windows Subsystem for Linux version 2 is now set as default."
 }
 
 # Update status: Feature tweaks done
