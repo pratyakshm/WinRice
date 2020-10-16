@@ -14,6 +14,7 @@ $tweaks = @(
 	
 ### Application changes ###
 	"PrintBeginAppTweaks",
+	"InstallChoco",
 	"InstallApps",
 	"DebloatAll",
 	"PrintAppTweaksDone",
@@ -82,9 +83,9 @@ Function FetchAdmin {
 
 # Kill explorer.exe
 Function StopExplorer {
-	Write-Output "Shutting down Windows Explorer before beginning execution of script."
+	Write-Output "Shutting down Windows Explorer before beginning execution of script..."
 	taskkill /f /im explorer.exe
-	Write-Output "Beginning script execution."
+	Write-Output "Beginning script execution..."
 }
 
 ####### Application changes ###
@@ -141,13 +142,18 @@ Function DebloatAll {
 	Write-Output "UWP apps have been debloated."
 }
 
+# Install chocolatey
+Function InstallChoco {
+	Write-Output "Installing Chocolatey..."
+	Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+	choco install chocolatey-core.extension -y
+	Write-Output "Chocolatey has been installed."
+}
+
 # Install apps
 Function InstallApps {
-	Write-Output "Installing the new Microsoft Edge..."
-	winget install msedge
-	Write-Output "Microsoft Edge has been installed."
 	Write-Output "Installing 7-zip..."
-	winget install 7zip.
+	choco install 7zip -y
 	Write-Output "7-zip has been installed."
 }
 
@@ -581,6 +587,8 @@ Function PrintFeatureTweaksDone {
 	Write-Output "Feature changes have been performed."
 	Write-Output "###########"
 }
+
+
 
 ### Security changes ###
 
