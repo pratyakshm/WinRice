@@ -22,7 +22,7 @@ $tweaks = @(
 ### Service Tweaks ###
 	"PrintBeginServiceTweaks"
 	"DisableAutoUpdates",		   # "EnableAutoUpdates",
-	"UpdateOnlyFromMSFT"           # "UpdateFromOtherSources",
+	"DisableLANP2P"                # "EnableLANP2P",
 	"DisableAutoplay",             # "EnableAutoplay",
 	"DisableAutorun",              # "EnableAutorun",
 	"DisableDefragmentation",      # "EnableDefragmentation",
@@ -230,7 +230,7 @@ Function EnableAutoUpdates {
 }
 
 # Update only from MSFT (no LAN or P2P)
-Function UpdateOnlyFromMSFT {
+Function DisableLANP2P {
 	Write-Output "Disabling P2P and LAN updates..."
 	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config")) {
 		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" | Out-Null
@@ -240,7 +240,7 @@ Function UpdateOnlyFromMSFT {
 	Write-Output "P2P and LAN updates have been disabled."
 }
 
-Function UpdateFromOtherSources {
+Function EnableLANP2P {
 	Write-Output "Enabling back P2P and LAN updates..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DownloadMode -Type DWord -Value 3
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DODownloadMode -Type DWord -Value 3
