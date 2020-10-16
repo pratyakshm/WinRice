@@ -38,8 +38,7 @@ $tweaks = @(
     "Hide3DObjectsInThisPC",       # "Show3DObjectsInThisPC",
 	"Hide3DObjectsInExplorer",     # "Show3DObjectsInExplorer",
 	"HideTaskView",                # "ShowTaskView",
-	"ShowTrayIcons",               # "HideTrayIcons",
-	"ShowSecondsInTaskbar",        # "HideSecondsFromTaskbar"
+	"ShowSecondsInTaskbar",        # "HideSecondsFromTaskbar",
 	"PrintExplorerTweaksDone",
 
 ### Features changes ###
@@ -426,19 +425,6 @@ Function ShowTaskView {
 	Write-Output "Showing Task View button..."
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -ErrorAction SilentlyContinue
 	Write-Output "Shown Task View button."
-}
-
-# Show all tray icons
-Function ShowTrayIcons {
-	Write-Output "Showing all tray icons..."
-	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name "EnableAutoTray" -Type DWord -Value 0
-}
-
-# Hide tray icons as needed
-Function HideTrayIcons {
-	Write-Output "Hiding tray icons..."
-	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name "EnableAutoTray" -ErrorAction SilentlyContinue
-	Write-Output "Hid tray icons."
 }
 
 # Show Seconds in taskbar clock
