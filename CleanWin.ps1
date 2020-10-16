@@ -53,7 +53,10 @@ $tweaks = @(
 	"DisableMeltdownCompatFlag",   # "EnableMeltdownCompatFlag",
 	"DisableSMB",				   # "EnableSMB",
 	"PrintSecurityTweaksDone",
-	
+
+### Uncategorised changes ###
+	"EnableUltimatePerf"	
+
 ### Application changes ###
 	"PrintBeginAppTweaks",
 	"InstallChoco",
@@ -550,7 +553,14 @@ Function PrintSecurityTweaksDone {
 	Write-Output "###########"
 }
 
+####### Uncategorized changes (will be properly categorized later) ###
+Function EnableUltimatePerf {
+	Write-Output "Force enabling Ulimate performance power plan"
+	powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
+	Write-Output "Ultimate Performance mode has been enabled. You can check it out under 'Control Panel\System and Security\Power Options'!"
 
+}
+# To delete Ultimate performance power plan (its safe to do so), you need to go to Control Panel\System and Security\Power Options, click on "Ultimate performance" and then click on "Delete this plan"
 
 ####### Application changes ###
 
