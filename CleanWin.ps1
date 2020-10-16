@@ -32,7 +32,6 @@ $tweaks = @(
 	"PrintBeginExplorerTweaks",
 	"ShowVerboseStatus",           # "HideVerboseStatus",
 	"EnablePrtScrToSnip",		   # "DisablePrtScrSnip",
-	"HideLangIcon",                # "ShowLangIcon",
 	"DisableStickyKeys",           # "EnableStickyKeys",
 	"SetExplorerThisPC",           # "SetExplorerQuickAccess",
     "Hide3DObjectsInThisPC",       # "Show3DObjectsInThisPC",
@@ -330,20 +329,6 @@ Function DisablePrtScrSnip {
 	Write-Output "Disabling Print screen key's ability to launch screen snip..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
 	Write-Output "Print screen key will now no longer launch screen snip."
-}
-
-# Hide language icon in Taskbar
-Function HideLangIcon {
-	Write-Output "Hiding language icon from Taskbar..."
-	Set-ItemProperty -Path "HKCU:\Software\Microsoft\CTF\LangBar" -Name "ShowStatus" -Type DWord -Value 3
-	Write-Output "Hid Language icon from Taskbar."
-}
-
-# Show lanugage icon in Taskbar
-Function ShowLangIcon {
-	Write-Output "Showing language icon in Taskbar..."
-	Set-ItemProperty -Path "HKCU:\Software\Microsoft\CTF\LangBar" -Name "ShowStatus" -Type DWord -Value 4
-	Write-Output "Shown Language icon in Taskbar."
 }
 
 # Disable Sticky keys prompt
