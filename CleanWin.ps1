@@ -108,8 +108,8 @@ Function DebloatAll {
 	 "Microsoft.MixedReality.Portal"
 	 "Microsoft.MicrosoftStickyNotes"  
 	 "Microsoft.MSPaint"
-	 *OneNote*
-	 *Office*
+	 "Microsoft.Office.OneNote"
+	 "Microsoft.MicrosoftOfficeHub"
 	 "Microsoft.MicrosoftSolitaireCollection" 
 	 "Microsoft.NetworkSpeedTest" 
 	 "Microsoft.News" 
