@@ -13,24 +13,26 @@ $tweaks = @(
 	"StopExplorer",
 	
 ### Privacy Tweaks ###
+	"PrintStartPrivacyChanges",
 	"DisableMapUpdates",	       # "EnableMapUpdates",
 	"DisableFeedback",		       # "EnableFeedback",
 	"DisableBackgroundApps",       # "EnableBackgroundApps",
 	"DisableLocationTracking",     # "EnableLocationTracking",
 	"DisableAdvertisingID",        # "EnableAdvertisingID",
+	"PrintEndPrivacyChanges",
 
 ### Service Tweaks ###
-	"PrintBeginServiceTweaks"
+	"PrintStartServicesChanges",
 	"DisableAutoUpdates",		   # "EnableAutoUpdates",
 	"DisableLANP2P"                # "EnableLANP2P",
 	"DisableAutoplay",             # "EnableAutoplay",
 	"DisableAutorun",              # "EnableAutorun",
 	"DisableDefragmentation",      # "EnableDefragmentation",
 	"SetBIOSTimeUTC",              # "SetBIOSTimeLocal",
-	"PrintServiceTweaksDone"
+	"PrintEndServicesChanges",
 
 ### Windows Explorer Changes ###
-	"PrintBeginExplorerTweaks",
+	"PrintStartExplorerChanges",
 	"ShowVerboseStatus",           # "HideVerboseStatus",
 	"EnablePrtScrToSnip",		   # "DisablePrtScrSnip",
 	"DisableStickyKeys",           # "EnableStickyKeys",
@@ -39,37 +41,37 @@ $tweaks = @(
 	"Hide3DObjectsInExplorer",     # "Show3DObjectsInExplorer",
 	"HideTaskView",                # "ShowTaskView",
 	"ShowSecondsInTaskbar",        # "HideSecondsFromTaskbar",
-	"PrintExplorerTweaksDone",
+	"PrintEndExplorerChanges",
 
 ### Features changes ###
-	"PrintBeginFeatureTweaks",
+	"PrintStartFeaturesChanges",
 	"EnableWSL",
 	"EnableVM",
-	"PrintFeatureTweaksDone",
+	"PrintEndFeaturesChanges",
 
 ### Security changes ###
-	"PrintBeginSecurityTweaks",
+	"PrintStartSecurityChanges",
 	"AutoLoginPostUpdate", 		   # "StayOnLockscreenPostUpdate",
 	"DisableMeltdownCompatFlag",   # "EnableMeltdownCompatFlag",
 	"DisableSMB",				   # "EnableSMB",
-	"PrintSecurityTweaksDone",
+	"PrintEndSecurityChanges",
 
-### Uncategorised changes ###
-	"EnableUltimatePerf"	
+### System changes ###
+	"PrintStartSystemChanges",
+	"EnableUltimatePerf",	
+	"PrintEndSystemChanges",
 
 ### Application changes ###
-	"PrintBeginAppTweaks",
+	"PrintStartAppsChanges",
 	"InstallChoco",
 	"InstallApps",
-	"DebloatAll",
-	"PrintAppTweaksDone",
+	"DebloatApps",
+	"PrintStartAppsChanges",
 
 ###  Tasks after successful run ###
 	"PrintEndTasksBegin",
 	"StartExplorer",
-	"PrintEndTasksDone",
-	"RestartOnInput"
-
+	"PrintEndEndTasks"
 )
 ### Tasks before beginning execution ###
 
@@ -90,12 +92,12 @@ Function StopExplorer {
 
 
 
-### Privacy Tweaks ###
+######### Privacy Changes #########
 
 # Update status: beginning privacy changes
-Function PrintBeginPrivacyTweaks {
+Function PrintStartPrivacyChanges {
 	Write-Output "###########"
-	Write-Output "Beginning with privacy tweaks..."
+	Write-Output "Starting to apply privacy changes..."
 	Write-Output "###########"
 }
 
@@ -197,21 +199,21 @@ Function EnableAdvertisingID {
 	Write-Output "Advertising ID has been enabled."
 }
 
-# Update status: beginning privacy changes
-Function PrintPrivacyTweaksDone {
+# Update status: End privacy changes
+Function PrintEndPrivacyChanges {
 	Write-Output "###########"
-	Write-Output "Privacy tweaks have been appplied."
+	Write-Output "Privacy changes have been applied."
 	Write-Output "###########"
 }
 
 
 
-### Service Tweaks ###
+######### Service Tweaks #########
 
-# Update status: beginning service tweaks
-Function PrintBeginServiceTweaks {
+# Update status: beginning services changes
+Function PrintStartServicesChanges {
 	Write-Output "###########"
-	Write-Output "Beginning Service tweaks..."
+	Write-Output "Starting to apply Service changes..."
 	Write-Output "###########"
 }
 
@@ -309,21 +311,21 @@ Function SetBIOSTimeLocal {
 	Write-Output "BIOS time has been set to Local time."
 }
 
-# Update status: service tweaks done
-Function PrintServiceTweaksDone {
+# Update status: service changes done
+Function PrintEndServicesChanges {
 	Write-Output "###########"
-	Write-Output "Service tweaks have been applied, next up: UI tweaks:"
+	Write-Output "Services changes have been applied."
 	Write-Output "###########"
 }
 
 
 
-### Explorer  changes ###
+######### Explorer changes #########
 
-# Update status: beginning Explorer Tweaks
-Function PrintBeginExplorerTweaks {	
+# Update status: beginning Explorer Changes
+Function PrintStartExplorerChanges {	
 	Write-Output "###########"
-	Write-Output "Beginning Explorer tweaks..."
+	Write-Output "Starting to apply Windows Explorer changes..."
 	Write-Output "###########"
 }
 
@@ -449,20 +451,20 @@ Function HideSecondsFromTaskbar {
 	Write-Output "Made taskbar clock hide seconds"
 }
 
-# Update status: Explorer Tweaks done
-Function PrintExplorerTweaksDone {	
+# Update status: Explorer changes done
+Function PrintEndExplorerChanges {	
 	Write-Output "###########"
-	Write-Output "Explorer tweaks have been applied."
+	Write-Output "Explorer changes have been applied."
 	Write-Output "###########"
 }
 
 
-### Features changes ###
+######### Features changes #########
 
-# Update status: Beginning feature tweaks
-Function PrintBeginFeatureTweaks {	
+# Update status: Beginning features changes
+Function PrintStartFeaturesChanges {	
 	Write-Output "###########"
-	Write-Output "Beginning Windows feature changes..."
+	Write-Output "Starting to apply Windows optional features changes..."
 	Write-Output "###########"
 }
 
@@ -478,23 +480,23 @@ Function EnableVM {
 	Write-Output "Virtual Machine has been enabled."
 }
 
-# Update status: Feature tweaks done
-Function PrintFeatureTweaksDone {	
+# Update status: Feature changes done
+Function PrintEndFeaturesChanges {	
 	Write-Output "###########"
-	Write-Output "Feature changes have been performed."
+	Write-Output "Feature changes have been applied."
 	Write-Output "###########"
 }
 
 
 
-### Security changes ###
+######### Security changes #########
 
-# Update status: beginning security tweaks
-Function PrintBeginSecurityTweaks {
+# Update status: beginning security changes
+Function PrintStartSecurityChanges {
 	Write-Output "###########"
-	Write-Output "Beginning Security tweaks..."
+	Write-Output "Starting to apply Security changes"
 	Write-Output "###########"
-	}
+}
 
 Function AutoLoginPostUpdate {
 	Write-Output "Enabling this PC to automatically login after Windows Update..."
@@ -547,32 +549,48 @@ Function EnableSMB {
 }
 
 # Update status: security tweaks done
-Function PrintSecurityTweaksDone {
+Function PrintEndSecurityChanges {
 	Write-Output "###########"
-	Write-Output "Security tweaks have been applied."
+	Write-Output "Security changes have been applied."
 	Write-Output "###########"
 }
 
-####### Uncategorized changes (will be properly categorized later) ###
+
+
+######### System changes #########
+
+Function PrintStartSystemChanges {
+	Write-Output "###########"
+	Write-Output "Starting system changes..."
+	Write-Output "###########"
+}
+
+# To delete Ultimate performance power plan (its safe to do so), you need to go to Control Panel\System and Security\Power Options, click on "Ultimate performance" and then click on "Delete this plan"
 Function EnableUltimatePerf {
-	Write-Output "Force enabling Ulimate performance power plan"
+	Write-Output "Force enabling Ulimate performance power plan..."
 	powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
 	Write-Output "Ultimate Performance mode has been enabled. You can check it out under 'Control Panel\System and Security\Power Options'!"
-
 }
-# To delete Ultimate performance power plan (its safe to do so), you need to go to Control Panel\System and Security\Power Options, click on "Ultimate performance" and then click on "Delete this plan"
 
-####### Application changes ###
-
-# Update status: beginning application changes
-Function PrintBeginAppTweaks {
+Function PrintEndSystemChanges {
 	Write-Output "###########"
-	Write-Output "Beginning with app tweaks..."
+	Write-Output "System changes have been applied."
+	Write-Output "###########"
+}
+
+
+
+######### App changes #########
+
+# Update status: starting app changes
+Function PrintStartAppsChanges {
+	Write-Output "###########"
+	Write-Output "Starting to apply apps changes..."
 	Write-Output "###########"
 }
 
 # Debloat apps
-Function DebloatAll {
+Function DebloatApps {
 	# Prebuilt apps
 	Write-Output "Beginning removal of UWP apps..."
 	$Bloatware = @(
@@ -632,16 +650,15 @@ Function InstallApps {
 }
 
 # Update status: app tweaks done
-Function PrintAppTweaksDone {
+Function PrintEndAppsChanges {
 	Write-Output "###########"
-	Write-Output "Apps tweaks have been applied."
+	Write-Output "Apps changes have been applied."
 	Write-Output "###########"
 }
 
 
 
-
-### Tasks after successful run ###
+######### Tasks after successful run #########
 
 # Update status: Performing tasks after successful execution
 Function PrintEndTasksBegin{
@@ -658,7 +675,7 @@ Function StartExplorer {
 }
 	
 # Update status: Script execution successful
-Function PrintEndTasksDone{
+Function PrintEndEndTasks {
 	Write-Output "###########"
 	Write-Output "Script execution successful, all tasks have been performed successfully."
 	Write-Output "###########"
