@@ -213,17 +213,20 @@ Function PrintBeginServiceTweaks {
 
 # Update only from MSFT (no LAN or P2P)
 Function UpdateOnlyFromMSFT {
-	Write-Output "Disabling P2P and LAN Updates so that this PC will recieve Windows Updates only from Microsoft servers..."
+	Write-Output "Disabling P2P and LAN updates..."
+	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config")) {
+		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" | Out-Null
+	}
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DownloadMode -Type DWord -Value 0
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DODownloadMode -Type DWord -Value 0
-	Write-Output "This PC is now set to download updates only from Microsoft servers."
+	Write-Output "P2P and LAN updates have been disabled."
 }
 
 Function UpdateFromOtherSources {
-	Write-Output "Enabling back P2P and LAN based Windows Updates delivery..."
+	Write-Output "Enabling back P2P and LAN updates..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DownloadMode -Type DWord -Value 3
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DODownloadMode -Type DWord -Value 3
-	Write-Output "This PC can now also recieve updates from other sources like LAN and P2P."
+	Write-Output "LAN and P2P updates have been disabled."
 }
 
 # Disable Autoplay
