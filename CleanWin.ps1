@@ -21,6 +21,7 @@ $tweaks = @(
 
 ### Service Tweaks ###
 	"PrintBeginServiceTweaks"
+	"DisableAutoUpdates",		   # "EnableAutoUpdates",
 	"UpdateOnlyFromMSFT"           # "UpdateFromOtherSources",
 	"DisableAutoplay",             # "EnableAutoplay",
 	"DisableAutorun",              # "EnableAutorun",
@@ -209,6 +210,23 @@ Function PrintBeginServiceTweaks {
 	Write-Output "###########"
 	Write-Output "Beginning Service tweaks..."
 	Write-Output "###########"
+}
+
+# Disable automatic updates
+Function DisableAutoUpdates {
+	Write-Output "Turning off automatic Windows updates..."
+	If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU")) {
+	New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" | Out-Null
+}
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name NoAutoUpdate -Type DWord -Value 1
+	Write-Output "Automatic Windows updates have been turned off."
+}
+
+# Enable automatic updates
+Function EnableAutoUpdates {
+	Write-Output "Turning on automatic Windows updates..."
+	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -ErrorAction SilentlyContinue
+	Write-Output "Automatic Windows updates have been turned on."
 }
 
 # Update only from MSFT (no LAN or P2P)
