@@ -5,7 +5,7 @@
 2. Extract the contents of the ZIP file into your C: drive and launch **Start.bat**.    
 
 ## List of tasks:
-This section contains the list of tasks that CleanWin performs. They're grouped in the following categories:
+This section contains the list of tasks that CleanWin performs. They're grouped in the following categories (sorted by alphabetical order):
 <details>
 <summary>Apps</summary>
 List of apps removed:
