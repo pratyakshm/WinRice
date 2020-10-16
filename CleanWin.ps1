@@ -12,13 +12,6 @@ $tweaks = @(
 	"FetchAdmin",
 	"StopExplorer",
 	
-### Application changes ###
-	"PrintBeginAppTweaks",
-	"InstallChoco",
-	"InstallApps",
-	"DebloatAll",
-	"PrintAppTweaksDone",
-	
 ### Privacy Tweaks ###
 	"DisableMapUpdates",	       # "EnableMapUpdates",
 	"DisableFeedback",		       # "EnableFeedback",
@@ -48,7 +41,7 @@ $tweaks = @(
 	"HideTaskView",                # "ShowTaskView",
 	"ShowTrayIcons",               # "HideTrayIcons",
 	"ShowSecondsInTaskbar",        # "HideSecondsFromTaskbar"
-	"PrinteExplorerTweaksDone",
+	"PrintExplorerTweaksDone",
 
 ### Features changes ###
 	"PrintBeginFeatureTweaks",
@@ -64,6 +57,13 @@ $tweaks = @(
 	"DisableSMB",				   # "EnableSMB",
 	"PrintSecurityTweaksDone",
 	
+### Application changes ###
+	"PrintBeginAppTweaks",
+	"InstallChoco",
+	"InstallApps",
+	"DebloatAll",
+	"PrintAppTweaksDone",
+
 ###  Tasks after successful run ###
 	"PrintEndTasksBegin",
 	"StartExplorer",
@@ -88,81 +88,6 @@ Function StopExplorer {
 	Write-Output "Beginning script execution..."
 }
 
-####### Application changes ###
-
-# Update status: beginning application changes
-Function PrintBeginAppTweaks {
-	Write-Output "###########"
-	Write-Output "Beginning with app tweaks..."
-	Write-Output "###########"
-}
-
-# Debloat apps
-Function DebloatAll {
-	# Prebuilt apps
-	Write-Output "Beginning removal of UWP apps..."
-	$Bloatware = @(
-	 "Microsoft.549981C3F5F10"
-	 "Microsoft.BingNews"
-	 "Microsoft.BingWeather" 
-	 "Microsoft.GetHelp" 
-	 "Microsoft.Getstarted" 
-	 "Microsoft.Messaging"
-	 "Microsoft.Microsoft3DViewer" 
-	 "Microsoft.MixedReality.Portal"
-	 "Microsoft.MicrosoftStickyNotes"  
-	 "Microsoft.MSPaint"
-	 "Microsoft.Office.OneNote"
-	 "Microsoft.MicrosoftOfficeHub"
-	 "Microsoft.MicrosoftSolitaireCollection" 
-	 "Microsoft.NetworkSpeedTest" 
-	 "Microsoft.News" 
-	 "Microsoft.Office.Lens" 
-	 "Microsoft.Office.Sway" 
-	 "Microsoft.OneConnect"
-	 "Microsoft.People" 
-	 "Microsoft.Print3D" 
-	 "Microsoft.SkypeApp" 
-	 "Microsoft.StorePurchaseApp" 
-	 "Microsoft.Whiteboard" 
-	 "Microsoft.WindowsAlarms"
-	 "Microsoft.WindowsCamera"
-	 "Microsoft.WindowsCommunicationsApps" 
-	 "Microsoft.WindowsFeedbackHub" 
-	 "Microsoft.WindowsMaps" 
-	 "Microsoft.WindowsSoundRecorder" 
-	 "Microsoft.YourPhone"
-	 "Microsoft.ZuneVideo"
-	 "Microsoft.ZuneMusic"
-	)
-	foreach ($Bloat in $Bloatware) {
-		Get-AppxPackage -Name $Bloat| Remove-AppxPackage
-        Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online
-        Write-Output "Removing $Bloat."}
-	Write-Output "UWP apps have been debloated."
-}
-
-# Install chocolatey
-Function InstallChoco {
-	Write-Output "Installing Chocolatey..."
-	Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-	choco install chocolatey-core.extension -y
-	Write-Output "Chocolatey has been installed."
-}
-
-# Install apps
-Function InstallApps {
-	Write-Output "Installing 7-zip..."
-	choco install 7zip -y
-	Write-Output "7-zip has been installed."
-}
-
-# Update status: app tweaks done
-Function PrintAppTweaksDone {
-	Write-Output "###########"
-	Write-Output "Apps tweaks have been applied."
-	Write-Output "###########"
-}
 
 
 ### Privacy Tweaks ###
@@ -553,7 +478,6 @@ Function PrintExplorerTweaksDone {
 }
 
 
-
 ### Features changes ###
 
 # Update status: Beginning feature tweaks
@@ -655,6 +579,85 @@ Function PrintSecurityTweaksDone {
 	Write-Output "Security tweaks have been applied."
 	Write-Output "###########"
 }
+
+
+
+####### Application changes ###
+
+# Update status: beginning application changes
+Function PrintBeginAppTweaks {
+	Write-Output "###########"
+	Write-Output "Beginning with app tweaks..."
+	Write-Output "###########"
+}
+
+# Debloat apps
+Function DebloatAll {
+	# Prebuilt apps
+	Write-Output "Beginning removal of UWP apps..."
+	$Bloatware = @(
+	 "Microsoft.549981C3F5F10"
+	 "Microsoft.BingNews"
+	 "Microsoft.BingWeather" 
+	 "Microsoft.GetHelp" 
+	 "Microsoft.Getstarted" 
+	 "Microsoft.Messaging"
+	 "Microsoft.Microsoft3DViewer" 
+	 "Microsoft.MixedReality.Portal"
+	 "Microsoft.MicrosoftStickyNotes"  
+	 "Microsoft.MSPaint"
+	 "Microsoft.Office.OneNote"
+	 "Microsoft.MicrosoftOfficeHub"
+	 "Microsoft.MicrosoftSolitaireCollection" 
+	 "Microsoft.NetworkSpeedTest" 
+	 "Microsoft.News" 
+	 "Microsoft.Office.Lens" 
+	 "Microsoft.Office.Sway" 
+	 "Microsoft.OneConnect"
+	 "Microsoft.People" 
+	 "Microsoft.Print3D" 
+	 "Microsoft.SkypeApp" 
+	 "Microsoft.StorePurchaseApp" 
+	 "Microsoft.Whiteboard" 
+	 "Microsoft.WindowsAlarms"
+	 "Microsoft.WindowsCamera"
+	 "Microsoft.WindowsCommunicationsApps" 
+	 "Microsoft.WindowsFeedbackHub" 
+	 "Microsoft.WindowsMaps" 
+	 "Microsoft.WindowsSoundRecorder" 
+	 "Microsoft.YourPhone"
+	 "Microsoft.ZuneVideo"
+	 "Microsoft.ZuneMusic"
+	)
+	foreach ($Bloat in $Bloatware) {
+		Get-AppxPackage -Name $Bloat| Remove-AppxPackage
+        Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online
+        Write-Output "Removing $Bloat."}
+	Write-Output "UWP apps have been debloated."
+}
+
+# Install chocolatey
+Function InstallChoco {
+	Write-Output "Installing Chocolatey..."
+	Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+	choco install chocolatey-core.extension -y
+	Write-Output "Chocolatey has been installed."
+}
+
+# Install apps
+Function InstallApps {
+	Write-Output "Installing 7-zip..."
+	choco install 7zip -y
+	Write-Output "7-zip has been installed."
+}
+
+# Update status: app tweaks done
+Function PrintAppTweaksDone {
+	Write-Output "###########"
+	Write-Output "Apps tweaks have been applied."
+	Write-Output "###########"
+}
+
 
 
 
