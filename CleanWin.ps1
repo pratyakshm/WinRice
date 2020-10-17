@@ -8,30 +8,27 @@
 $tweaks = @(
 
 ### Tasks before beginning execution ###
-	"FetchAdmin",
-	"StopExplorer",
+	"CleanWin",
 	
 ### Privacy Tweaks ###
-	"PrintStartPrivacyChanges",
+	"PrintPrivacyChanges",
 	"DisableMapUpdates",	       # "EnableMapUpdates",
 	"DisableFeedback",		       # "EnableFeedback",
 	"DisableBackgroundApps",       # "EnableBackgroundApps",
 	"DisableLocationTracking",     # "EnableLocationTracking",
 	"DisableAdvertisingID",        # "EnableAdvertisingID",
-	"PrintEndPrivacyChanges",
 
 ### Service Tweaks ###
-	"PrintStartServicesChanges",
+	"PrintServicesChanges",
 	"DisableAutoUpdates",		   # "EnableAutoUpdates",
 	"DisableLANP2P"                # "EnableLANP2P",
 	"DisableAutoplay",             # "EnableAutoplay",
 	"DisableAutorun",              # "EnableAutorun",
 	"DisableDefragmentation",      # "EnableDefragmentation",
 	"SetBIOSTimeUTC",              # "SetBIOSTimeLocal",
-	"PrintEndServicesChanges",
 
 ### Windows Explorer Changes ###
-	"PrintStartExplorerChanges",
+	"PrintExplorerChanges",
 	"ShowVerboseStatus",           # "HideVerboseStatus",
 	"EnablePrtScrToSnip",		   # "DisablePrtScrSnip",
 	"DisableStickyKeys",           # "EnableStickyKeys",
@@ -42,66 +39,54 @@ $tweaks = @(
 	"HideTaskView",                # "RestoreTaskView",
 	"HideCortana",			       # "RestoreCortana",
 	"ShowSecondsInTaskbar",        # "HideSecondsFromTaskbar",
-	"PrintEndExplorerChanges",
 
 ### Features changes ###
-	"PrintStartFeaturesChanges",
+	"PrintFeaturesChanges",
 	"EnableWSL",
 	"EnableVM",
-	"PrintEndFeaturesChanges",
 
 ### Security changes ###
-	"PrintStartSecurityChanges",
+	"PrintSecurityChanges",
 	"AutoLoginPostUpdate", 		   # "StayOnLockscreenPostUpdate",
 	"DisableMeltdownCompatFlag",   # "EnableMeltdownCompatFlag",
 	"DisableSMB",				   # "EnableSMB",
-	"PrintEndSecurityChanges",
 
 ### System changes ###
-	"PrintStartSystemChanges",
+	"PrintSystemChanges",
 	"EnableUltimatePerf",	
-	"PrintEndSystemChanges",
 
 ### Application changes ###
-	"PrintStartAppsChanges",
+	"PrintAppsChanges",
 	"InstallChoco",
 	"InstallApps",
 	"DebloatApps",
-	"PrintStartAppsChanges",
 
 ###  Tasks after successful run ###
 	"PrintEndTasksBegin",
-	"StartExplorer",
 	"PrintEndEndTasks"
 )
 ### Tasks before beginning execution ###
 
-# Fetch Administrator permissions
-Function FetchAdmin {
-	If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator")) {
-		Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`" $PSCommandArgs" -WorkingDirectory $pwd -Verb RunAs
-		Exit
-	}
-}
-
-# Kill explorer.exe
-Function StopExplorer {
-	Write-Output "Shutting down Windows Explorer before beginning execution of script..."
-	taskkill /f /im explorer.exe
-	Write-Output "Beginning script execution..."
+# CleanWin
+Function CleanWin {
+	Write-Output " "
+	Write-Output "CleanWin by pratyakshm"
+	Write-Output "https://github.com/pratyakshm/CleanWin"
+	Write-Output "Version 0.3"
+	Write-Output "All rights reserved."
+	Start-Sleep 5s
 }
 
 
 
 ######### Privacy Changes #########
 
-# Update status: beginning privacy changes
-Function PrintStartPrivacyChanges {
+# Update status: privacy changes
+Function PrintPrivacyChanges {
 	Write-Output " "
-	Write-Output " "
-	Write-Output "###########"
-	Write-Output "Starting to apply privacy changes..."
-	Write-Output "###########"
+	Write-Output "-------------------------"
+	Write-Output "     PRIVACY CHANGES     "
+	Write-Output "-------------------------"
 	Write-Output " "
 }
 
@@ -205,23 +190,17 @@ Function EnableAdvertisingID {
 	Write-Output "Advertising ID has been turned on."
 }
 
-# Update status: End privacy changes
-Function PrintEndPrivacyChanges {
-	Write-Output " "
-	Write-Output "###########"
-	Write-Output "Privacy changes have been applied."
-	Write-Output "###########"
-	Write-Output " "
-}
+
 
 ######### Service Tweaks #########
 
-# Update status: beginning services changes
-Function PrintStartServicesChanges {
+# Update status: services changes
+Function PrintServicesChanges {
 	Write-Output " "
-	Write-Output "###########"
-	Write-Output "Starting to apply Service changes..."
-	Write-Output "###########"
+	Write-Output " "
+	Write-Output "---------------------------"
+	Write-Output "     SERVICES CHANGES      "   
+	Write-Output "---------------------------"
 	Write-Output " "
 }
 
@@ -326,25 +305,17 @@ Function SetBIOSTimeLocal {
 	Write-Output "BIOS time has been set to Local time."
 }
 
-# Update status: service changes done
-Function PrintEndServicesChanges {
-	Write-Output " "
-	Write-Output "###########"
-	Write-Output "Services changes have been applied."
-	Write-Output "###########"
-	Write-Output " "
-}
-
 
 
 ######### Explorer changes #########
 
-# Update status: beginning Explorer Changes
-Function PrintStartExplorerChanges {	
+# Update status: Explorer Changes
+Function PrintExplorerChanges {	
 	Write-Output " "
-	Write-Output "###########"
-	Write-Output "Starting to apply Windows Explorer changes..."
-	Write-Output "###########"
+	Write-Output " "
+	Write-Output "----------------------------------"
+	Write-Output "     WINDOWS EXPLORER CHANGES     "
+	Write-Output "----------------------------------"
 	Write-Output " "
 }
 
@@ -451,7 +422,7 @@ Function Restore3DObjectsInExplorer {
 Function HideSearchBar {
 	Write-Output " "
 	Write-Output "Hiding search bar from taskbar..."
-	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 1
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
 	Write-Output "Searchbar has been hidden from taskbar."
 }
 
@@ -508,25 +479,17 @@ Function HideSecondsFromTaskbar {
 	Write-Output "Made taskbar clock hide seconds."
 }
 
-# Update status: Explorer changes done
-Function PrintEndExplorerChanges {	
-	Write-Output " "
-	Write-Output "###########"
-	Write-Output "Explorer changes have been applied."
-	Write-Output "###########"
-	Write-Output " "
-}
 
 
 ######### Features changes #########
 
-# Update status: Beginning features changes
-Function PrintStartFeaturesChanges {
+# Update status: features changes
+Function PrintFeaturesChanges {
 	Write-Output " "	
 	Write-Output " "
-	Write-Output "###########"
-	Write-Output "Starting to apply Windows optional features changes..."
-	Write-Output "###########"
+	Write-Output "--------------------------------------------"
+	Write-Output "     WINDOWS OPTIONAL FEATURES CHANGES      "
+	Write-Output "--------------------------------------------"
 	Write-Output " "
 }
 
@@ -542,36 +505,29 @@ Function EnableVM {
 	Write-Output "Virtual Machine feature has been turned on."
 }
 
-# Update status: Feature changes done
-Function PrintEndFeaturesChanges {	
-	Write-Output " "
-	Write-Output "###########"
-	Write-Output "Feature changes have been applied."
-	Write-Output "###########"
-	Write-Output " "
-}
-
 
 
 ######### Security changes #########
 
 # Update status: beginning security changes
-Function PrintStartSecurityChanges {
+Function PrintSecurityChanges {
 	Write-Output " "
 	Write-Output " "
-	Write-Output "###########"
-	Write-Output "Starting to apply Security changes"
-	Write-Output "###########"
+	Write-Output "----------------------------"
+	Write-Output "      SECURITY CHANGES      "
+	Write-Output "----------------------------"
 	Write-Output " "
 }
 
 Function AutoLoginPostUpdate {
+	Write-Output " "
 	Write-Output "Telling this PC to automatically login after Windows Update..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 1
 	Write-Output "This PC is now set to automatically login after a Windows Update restart."
 } 
 
 Function StayOnLockscreenPostUpdate {
+	Write-Output " "
 	Write-Output "Telling this PC to not automatically login post a Windows Update reset."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 0
 	Write-Output "This PC will now no longer automatically login to the most recent user account post a Windows Update restart."
@@ -582,6 +538,7 @@ Function StayOnLockscreenPostUpdate {
 # Use the tweak only if you have confirmed that your AV is compatible but unable to set the flag automatically or if you don't use any AV at all.
 # See https://support.microsoft.com/en-us/help/4072699/january-3-2018-windows-security-updates-and-antivirus-software for details.
 Function EnableMeltdownCompatFlag {
+	Write-Output " "
 	Write-Output "Turning on Meltdown (CVE-2017-5754) compatibility flag..."
 	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat")) {
 		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat" | Out-Null
@@ -592,6 +549,7 @@ Function EnableMeltdownCompatFlag {
 
 # Disable Meltdown (CVE-2017-5754) compatibility flag
 Function DisableMeltdownCompatFlag {
+	Write-Output " "
 	Write-Output "Turning off Meltdown (CVE-2017-5754) compatibility flag..."
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat" -Name "cadca5fe-87d3-4b96-b7fb-a231484277cc" -ErrorAction SilentlyContinue
 	Write-Output "Meltdown (CVE-2017-5754) compatibility flag has been turned off."
@@ -599,6 +557,7 @@ Function DisableMeltdownCompatFlag {
 
 # Disable SMB1 and SMB2 
 Function DisableSMB {
+	Write-Output " "
 	Write-Output "Turning off Server Message Block v1 and v2..."
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB1" -Type DWord -Value 0
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB2" -Type DWord -Value 0
@@ -608,32 +567,24 @@ Function DisableSMB {
 
 # Enable SMB1 and SMB2 
 Function EnableSMB {
-	Write-Output "Turning on Server Message Block v1 and v2..."
+	Write-Output " "
+	Write-Output "Turning on Server Message Block v1 and v2..."1
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB1" -Type DWord -Value 1
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB2" -Type DWord -Value 1
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\NetBT\Parameters" -Name "SMBDeviceEnabled" -Type DWord -Value 1
 	Write-Output "Server Message Block v1 and v2 have been turned on."
 }
 
-# Update status: security tweaks done
-Function PrintEndSecurityChanges {
-	Write-Output " "
-	Write-Output "###########"
-	Write-Output "Security changes have been applied."
-	Write-Output "###########"
-	Write-Output " "
-}
-
 
 
 ######### System changes #########
 
-Function PrintStartSystemChanges {
+Function PrintSystemChanges {
 	Write-Output " "
 	Write-Output " "
-	Write-Output "###########"
-	Write-Output "Starting system changes..."
-	Write-Output "###########"
+	Write-Output "--------------------------"
+	Write-Output "      SYSTEM CHANGES      "
+	Write-Output "--------------------------"
 	Write-Output " "
 }
 
@@ -644,25 +595,17 @@ Function EnableUltimatePerf {
 	Write-Output "Ultimate Performance mode has been enabled. You can check it out under 'Control Panel\System and Security\Power Options'!"
 }
 
-Function PrintEndSystemChanges {
-	Write-Output " "
-	Write-Output "###########"
-	Write-Output "System changes have been applied."
-	Write-Output "###########"
-	Write-Output " "
-}
-
 
 
 ######### App changes #########
 
 # Update status: starting app changes
-Function PrintStartAppsChanges {
+Function PrintAppsChanges {
 	Write-Output " "
 	Write-Output " "
-	Write-Output "###########"
-	Write-Output "Starting to apply apps changes..."
-	Write-Output "###########"
+	Write-Output "-------------------------"
+	Write-Output "       APP CHANGES       "
+	Write-Output "-------------------------"
 	Write-Output " "
 }
 
@@ -728,42 +671,30 @@ Function InstallApps {
 	Write-Output "7-zip has been installed."
 }
 
-# Update status: app tweaks done
-Function PrintEndAppsChanges {
-	Write-Output " "
-	Write-Output "###########"
-	Write-Output "Apps changes have been applied."
-	Write-Output "###########"
-	Write-Output " "
-}
-
-
 
 ######### Tasks after successful run #########
 
 # Update status: Performing tasks after successful execution
 Function PrintEndTasksBegin{
 	Write-Output " "
-	Write-Output "###########"
+	Write-Output "--------------"
 	Write-Output "Performing tasks after successful execution of scripts..."
-	Write-Output "###########"
+	Write-Output "--------------"
 	Write-Output " "
 }
-	
-# Start Explorer.exe
-Function StartExplorer {
-	Write-Output "Attempting to start Windows Explorer..."
-	start explorer.exe
-	Write-Output "Windows Explorer has started."
-}
-	
+		
 # Update status: Script execution successful
 Function PrintEndEndTasks {
 	Write-Output " "
-	Write-Output "###########"
-	Write-Output "Script execution successful, all tasks have been performed successfully."
-	Write-Output "###########"
 	Write-Output " "
+	Write-Output " "
+	Write-Output "Script execution successful, this PC will give you 10 seconds before it restarts so you can save your work."
+	Start-Sleep 2
+	Write-Output "To cancel restart, please press Ctrl+C."
+	Start-Sleep 8
+	Write-Output "Restarting PC now!"
+	Start-Sleep 2
+	Restart-Computer
 }
 
 # Call the desired tweak functions
