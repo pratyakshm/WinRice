@@ -1,8 +1,7 @@
 ##############
 #
-# Windows 10 - Setup Script
+# CleanWin
 # Author: PratyakshM <pratyakshm@protonmail.com>
-# Notes: Please run the script ONLY after giving the documentation (here, README.md) a thorough read.
 #
 ##############
 # Default preset
@@ -97,28 +96,32 @@ Function StopExplorer {
 
 # Update status: beginning privacy changes
 Function PrintStartPrivacyChanges {
+	Write-Output " "
+	Write-Output " "
 	Write-Output "###########"
 	Write-Output "Starting to apply privacy changes..."
 	Write-Output "###########"
+	Write-Output " "
 }
 
 # Disable automatic Maps updates
 Function DisableMapUpdates {
-	Write-Output "Disabling automatic Maps updates..."
+	Write-Output "Turning off automatic maps updates..."
 	Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 0
-	Write-Output "Automatic Maps updates have been disabled."
+	Write-Output "Automatic Maps updates have been turned off."
 }
 
 # Enable automatic Maps updates
 Function EnableMapUpdates {
-	Write-Output "Enabling automatic Maps updates..."
+	Write-Output "Turning on automatic maps updates..."
 	Remove-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -ErrorAction SilentlyContinue
-	Write-Output "Automatic Maps updates have been enabled."
+	Write-Output "Automatic Maps updates have been turned on."
 }
 
 # Disable Feedback
 Function DisableFeedback {
-	Write-Output "Disabling Feedback..."
+	Write-Output " "
+	Write-Output "Turning off Feedback..."
 	If (!(Test-Path "HKCU:\SOFTWARE\Microsoft\Siuf\Rules")) {
 		New-Item -Path "HKCU:\SOFTWARE\Microsoft\Siuf\Rules" -Force | Out-Null
 	}
@@ -126,94 +129,99 @@ Function DisableFeedback {
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection" -Name "DoNotShowFeedbackNotifications" -Type DWord -Value 1
 	Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
 	Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
-	Write-Output "Feedback has been disabled."
+	Write-Output "Feedback has been turned off."
 }
 
 # Enable Feedback
 Function EnableFeedback {
-	Write-Output "Enabling Feedback..."
+	Write-Output "Turning on feedback..."
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Siuf\Rules" -Name "NumberOfSIUFInPeriod" -ErrorAction SilentlyContinue
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection" -Name "DoNotShowFeedbackNotifications" -ErrorAction SilentlyContinue
 	Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
 	Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
-	Write-Output "Feedback has been enabled."
+	Write-Output "Feedback has been turned on."
 }
 
 # Disable Background application access - ie. if apps can download or update when they aren't used - Cortana is excluded as its inclusion breaks start menu search
 Function DisableBackgroundApps {
-	Write-Output "Disabling Background app access..."
+	Write-Output " "
+	Write-Output "Turning off background apps..."
 	Get-ChildItem -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications" -Exclude "Microsoft.Windows.Cortana*" | ForEach {
 		Set-ItemProperty -Path $_.PsPath -Name "Disabled" -Type DWord -Value 1
 		Set-ItemProperty -Path $_.PsPath -Name "DisabledByUser" -Type DWord -Value 1
 	}
-	Write-Output "Background app access has been disabled."
+	Write-Output "Background apps have been turned off."
 }
 
 # Enable Background application access
 Function EnableBackgroundApps {
-	Write-Output "Enabling Background app access..."
+	Write-Output "Turning on background apps..."
 	Get-ChildItem -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications" | ForEach {
 		Remove-ItemProperty -Path $_.PsPath -Name "Disabled" -ErrorAction SilentlyContinue
 		Remove-ItemProperty -Path $_.PsPath -Name "DisabledByUser" -ErrorAction SilentlyContinue
 	}
-	Write-Output "Background app access has been enabled."
+	Write-Output "Background apps have been turned on."
 }
 
 # Disable Location Tracking
 Function DisableLocationTracking {
-	Write-Output "Disabling Location tracking..."
+	Write-Output " "
+	Write-Output "Turning off location tracking..."
 	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location")) {
 		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location" -Force | Out-Null
 	}
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location" -Name "Value" -Type String -Value "Deny"
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}" -Name "SensorPermissionState" -Type DWord -Value 0
-	Write-Output "Location tracking has been disabled."
+	Write-Output "Location tracking has been turned off."
 }
 
 # Enable Location Tracking
 Function EnableLocationTracking {
-	Write-Output "Enabling Location Tracking..."
+	Write-Output "Turning on location Tracking..."
 	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location")) {
 		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location" -Force | Out-Null
 	}
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location" -Name "Value" -Type String -Value "Allow"
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}" -Name "SensorPermissionState" -Type DWord -Value 1
-	Write-Output "Location Tracking has been enabled."
+	Write-Output "Location tracking has been turned on."
 }
 
 # Disable Advertising ID
 Function DisableAdvertisingID {
-	Write-Output "Disabling Advertising ID..."
+	Write-Output " "
+	Write-Output "Turning off Advertising ID..."
 	If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo")) {
 		New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo" | Out-Null
 	}
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo" -Name "DisabledByGroupPolicy" -Type DWord -Value 1
-	Write-Output "Advertising ID has been disabled."
+	Write-Output "Advertising ID has been turned off."
 }
 
 # Enable Advertising ID
 Function EnableAdvertisingID {
-	Write-Output "Enabling Advertising ID..."
+	Write-Output "Turning on Advertising ID..."
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo" -Name "DisabledByGroupPolicy" -ErrorAction SilentlyContinue
-	Write-Output "Advertising ID has been enabled."
+	Write-Output "Advertising ID has been turned on."
 }
 
 # Update status: End privacy changes
 Function PrintEndPrivacyChanges {
+	Write-Output " "
 	Write-Output "###########"
 	Write-Output "Privacy changes have been applied."
 	Write-Output "###########"
+	Write-Output " "
 }
-
-
 
 ######### Service Tweaks #########
 
 # Update status: beginning services changes
 Function PrintStartServicesChanges {
+	Write-Output " "
 	Write-Output "###########"
 	Write-Output "Starting to apply Service changes..."
 	Write-Output "###########"
+	Write-Output " "
 }
 
 # Disable automatic updates
@@ -236,70 +244,75 @@ Function EnableAutoUpdates {
 
 # Update only from MSFT (no LAN or P2P)
 Function DisableLANP2P {
-	Write-Output "Disabling P2P and LAN updates..."
+	Write-Output " "
+	Write-Output "Turning off P2P and LAN updates..."
 	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization")) {
 		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization" | Out-Null
 		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" | Out-Null
 	}
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DownloadMode -Type DWord -Value 0
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DODownloadMode -Type DWord -Value 0
-	Write-Output "P2P and LAN updates have been disabled."
+	Write-Output "P2P and LAN updates have been turned off."
 }
 
 Function EnableLANP2P {
-	Write-Output "Enabling back P2P and LAN updates..."
+	Write-Output "Turning on P2P and LAN updates..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DownloadMode -Type DWord -Value 3
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DODownloadMode -Type DWord -Value 3
-	Write-Output "LAN and P2P updates have been disabled."
+	Write-Output "LAN and P2P updates have been turned on."
 }
 
 # Disable Autoplay
 Function DisableAutoplay {
-	Write-Output "Disabling Autoplay..."
+	Write-Output " "
+	Write-Output "Turning off AutoPlay..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -Name "DisableAutoplay" -Type DWord -Value 1
-	Write-Output "AutoPlay has been disabled."
+	Write-Output "AutoPlay has been turned off."
 }
 
 # Enable Autoplay
 Function EnableAutoplay {
-	Write-Output "Enabling Autoplay..."
+	Write-Output "Turning on Autoplay..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -Name "DisableAutoplay" -Type DWord -Value 0
-	Write-Output "AutoPlay has been enabled."
+	Write-Output "AutoPlay has been turned on."
 }
 
 # Disable Autorun for all drives
 Function DisableAutorun {
-	Write-Output "Disabling Autorun for all drives..."
+	Write-Output " "
+	Write-Output "Turning off Autorun for all drives..."
 	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer")) {
 		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" | Out-Null
 	}
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoDriveTypeAutoRun" -Type DWord -Value 255
-	Write-Output "Autorun has been disabled."
+	Write-Output "Autorun has been turned off for all drives."
 }
 
 # Enable Autorun for removable drives
 Function EnableAutorun {
-	Write-Output "Enabling Autorun for all drives..."
+	Write-Output "Turning on Autorun for all drives..."
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoDriveTypeAutoRun" -ErrorAction SilentlyContinue
-		Write-Output "Autorun has been enabled."
+		Write-Output "Autorun has been turned on."
 }
 
 # Disable scheduled defragmentation task
 Function DisableDefragmentation {
-	Write-Output "Disabling scheduled defragmentation..."
+	Write-Output " "
+	Write-Output "Turning off scheduled defragmentation..."
 	Disable-ScheduledTask -TaskName "Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
-	Write-Output "Scheduled defragmentation has been disabled."
+	Write-Output "Scheduled defragmentation has been turned off."
 }
 
 # Enable scheduled defragmentation task
 Function EnableDefragmentation {
-	Write-Output "Enabling scheduled defragmentation..."
+	Write-Output "Turning on scheduled defragmentation..."
 	Enable-ScheduledTask -TaskName "Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
-	Write-Output "Scheduled defragmentation has been enabled."
+	Write-Output "Scheduled defragmentation has been turned on.."
 }
 
 # Set BIOS time to UTC
 Function SetBIOSTimeUTC {
+	Write-Output " "
 	Write-Output "Setting BIOS time to UTC..."
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name "RealTimeIsUniversal" -Type DWord -Value 1
 	Write-Output "BIOS time has been set to UTC."
@@ -314,9 +327,11 @@ Function SetBIOSTimeLocal {
 
 # Update status: service changes done
 Function PrintEndServicesChanges {
+	Write-Output " "
 	Write-Output "###########"
 	Write-Output "Services changes have been applied."
 	Write-Output "###########"
+	Write-Output " "
 }
 
 
@@ -325,55 +340,60 @@ Function PrintEndServicesChanges {
 
 # Update status: beginning Explorer Changes
 Function PrintStartExplorerChanges {	
+	Write-Output " "
 	Write-Output "###########"
 	Write-Output "Starting to apply Windows Explorer changes..."
 	Write-Output "###########"
+	Write-Output " "
 }
 
 # Show verbose status
 Function ShowVerboseStatus {
-	Write-Output "Enabling Verbose Status..."
+	Write-Output "Turning on Verbose Status..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "VerboseStatus" -Type DWord -Value 1
-	Write-Output "Verbose Status has been enabled."
+	Write-Output "Verbose Status has been turned on."
 }
 
 # Hide verbose status 
 Function HideVerboseStatus {
-	Write-Output "Disabling Verbose Status..."
+	Write-Output "Turning off Verbose Status..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "VerboseStatus" -Type DWord -Value 0
-	Write-Output "Verbose Status has been disabled."
+	Write-Output "Verbose Status has been turned off."
 }
 
 # Enable use print screen key to open screen snipping
 Function EnablePrtScrToSnip {
+	Write-Output " "
 	Write-Output "Directing Print screen key to launch screen snipping..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 1
-	Write-Output "Print screen key is set to launch screen snip."
+	Write-Output "Print screen key has been directed to launch Snip window."
 	}
 	
 # Disable use print screen key to open screen snipping
 Function DisablePrtScrSnip {
-	Write-Output "Disabling Print screen key's ability to launch screen snip..."
+	Write-Output "Revoking Print screen key's ability to launch screen snip..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
-	Write-Output "Print screen key will now no longer launch screen snip."
+	Write-Output "Print screen key will now no longer launch snip window."
 }
 
 # Disable Sticky keys prompt
 Function DisableStickyKeys {
-	Write-Output "Disabling sticky keys prompt..."
+	Write-Output " "
+	Write-Output "Turning off sticky keys prompt..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
-	Write-Output "Disabled Sticky keys prompt."
+	Write-Output "Sticky keys prompt has been turned off."
 }
 
 # Enable Sticky keys prompt
 Function EnableStickyKeys {
-	Write-Output "Enaling sticky keys prompt..."
+	Write-Output "Turning on sticky keys prompt..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "510"
-	Write-Output "Sticky keys prompt has been enabled."
+	Write-Output "Sticky keys prompt has been turned on."
 }
 
 # Change default Explorer view to This PC
 Function SetExplorerThisPC {
+	Write-Output " "
 	Write-Output "Changing default File Explorer view to This PC..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -Type DWord -Value 1
 	Write-Output "Changed default File Explorer view to This PC."
@@ -388,6 +408,7 @@ Function SetExplorerQuickAccess {
 
 # Hide 3D Objects icon from This PC - The icon remains in personal folders and open/save dialogs
 Function Hide3DObjectsInThisPC {
+	Write-Output " "
 	Write-Output "Hiding 3D Objects icon from This PC..."
 	Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Recurse -ErrorAction SilentlyContinue
 	Write-Output "Hid 3D Objects icon from This PC."
@@ -404,6 +425,7 @@ Function Show3DObjectsInThisPC {
 
 # Hide 3D Objects icon from Explorer namespace - Hides the icon also from personal folders and open/save dialogs
 Function Hide3DObjectsInExplorer {
+	Write-Output " "
 	Write-Output "Hiding 3D Objects icon from Explorer namespace..."
 	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag")) {
 		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" -Force | Out-Null
@@ -426,6 +448,7 @@ Function Show3DObjectsInExplorer {
 
 # Hide Task View button
 Function HideTaskView {
+	Write-Output " "
 	Write-Output "Hiding Task View button from taskbar..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
 	Write-Output "Hid Task View button."
@@ -440,6 +463,7 @@ Function ShowTaskView {
 
 # Hide Cortana icon from taskbar
 Function HideCortanaIcon {
+	Write-Output " "
 	Write-Output "Hiding Cortana icon from taskbar..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
 	Write-Output "Cortana button has been hidden from taskbar."
@@ -454,6 +478,7 @@ Function ShowCortanaIcon {
 
 # Show Seconds in taskbar clock
 Function ShowSecondsInTaskbar {
+	Write-Output " "
 	Write-Output "Trying to show seconds in Taskbar clock..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
 	Write-Output "Made taskbar clock display seconds"
@@ -468,38 +493,45 @@ Function HideSecondsFromTaskbar {
 
 # Update status: Explorer changes done
 Function PrintEndExplorerChanges {	
+	Write-Output " "
 	Write-Output "###########"
 	Write-Output "Explorer changes have been applied."
 	Write-Output "###########"
+	Write-Output " "
 }
 
 
 ######### Features changes #########
 
 # Update status: Beginning features changes
-Function PrintStartFeaturesChanges {	
+Function PrintStartFeaturesChanges {
+	Write-Output " "	
+	Write-Output " "
 	Write-Output "###########"
 	Write-Output "Starting to apply Windows optional features changes..."
 	Write-Output "###########"
+	Write-Output " "
 }
 
 Function EnableWSL {
-	Write-Output "Enabling Windows Subsystem for Linux..."
+	Write-Output "Turning on Windows Subsystem for Linux..."
 	dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-	Write-Output "Windows Subsystem for Linux has been enabled."
+	Write-Output "Windows Subsystem for Linux has been turned on."
 }
 
 Function EnableVM {
-	Write-Output "Enabling Virtual Machine..."
+	Write-Output "Turning on Virtual Machine feature..."
 	dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
-	Write-Output "Virtual Machine has been enabled."
+	Write-Output "Virtual Machine feature has been turned on."
 }
 
 # Update status: Feature changes done
 Function PrintEndFeaturesChanges {	
+	Write-Output " "
 	Write-Output "###########"
 	Write-Output "Feature changes have been applied."
 	Write-Output "###########"
+	Write-Output " "
 }
 
 
@@ -508,13 +540,16 @@ Function PrintEndFeaturesChanges {
 
 # Update status: beginning security changes
 Function PrintStartSecurityChanges {
+	Write-Output " "
+	Write-Output " "
 	Write-Output "###########"
 	Write-Output "Starting to apply Security changes"
 	Write-Output "###########"
+	Write-Output " "
 }
 
 Function AutoLoginPostUpdate {
-	Write-Output "Enabling this PC to automatically login after Windows Update..."
+	Write-Output "Telling this PC to automatically login after Windows Update..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 1
 	Write-Output "This PC is now set to automatically login after a Windows Update restart."
 } 
@@ -530,44 +565,46 @@ Function StayOnLockscreenPostUpdate {
 # Use the tweak only if you have confirmed that your AV is compatible but unable to set the flag automatically or if you don't use any AV at all.
 # See https://support.microsoft.com/en-us/help/4072699/january-3-2018-windows-security-updates-and-antivirus-software for details.
 Function EnableMeltdownCompatFlag {
-	Write-Output "Enabling Meltdown (CVE-2017-5754) compatibility flag..."
+	Write-Output "Turning on Meltdown (CVE-2017-5754) compatibility flag..."
 	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat")) {
 		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat" | Out-Null
 	}
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat" -Name "cadca5fe-87d3-4b96-b7fb-a231484277cc" -Type DWord -Value 0
-	Write-Output "Meltdown (CVE-2017-5754) compatibility flag has been enabled."
+	Write-Output "Meltdown (CVE-2017-5754) compatibility flag has been turned on."
 }
 
 # Disable Meltdown (CVE-2017-5754) compatibility flag
 Function DisableMeltdownCompatFlag {
-	Write-Output "Disabling Meltdown (CVE-2017-5754) compatibility flag..."
+	Write-Output "Turning off Meltdown (CVE-2017-5754) compatibility flag..."
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat" -Name "cadca5fe-87d3-4b96-b7fb-a231484277cc" -ErrorAction SilentlyContinue
-	Write-Output "Meltdown (CVE-2017-5754) compatibility flag has been disabled."
+	Write-Output "Meltdown (CVE-2017-5754) compatibility flag has been turned off."
 }
 
 # Disable SMB1 and SMB2 
 Function DisableSMB {
-	Write-Output "Disabling Server Message Block v1 and v2..."
+	Write-Output "Turning off Server Message Block v1 and v2..."
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB1" -Type DWord -Value 0
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB2" -Type DWord -Value 0
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\NetBT\Parameters" -Name "SMBDeviceEnabled" -Type DWord -Value 0
-	Write-Output "Server Message Block v1 and v2 have been disabled."
+	Write-Output "Server Message Block v1 and v2 have been turned off."
 }
 
 # Enable SMB1 and SMB2 
 Function EnableSMB {
-	Write-Output "Enabling Server Message Block v1 and v2..."
+	Write-Output "Turning on Server Message Block v1 and v2..."
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB1" -Type DWord -Value 1
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB2" -Type DWord -Value 1
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\NetBT\Parameters" -Name "SMBDeviceEnabled" -Type DWord -Value 1
-	Write-Output "Server Message Block v1 and v2 have been enabled."
+	Write-Output "Server Message Block v1 and v2 have been turned on."
 }
 
 # Update status: security tweaks done
 Function PrintEndSecurityChanges {
+	Write-Output " "
 	Write-Output "###########"
 	Write-Output "Security changes have been applied."
 	Write-Output "###########"
+	Write-Output " "
 }
 
 
@@ -575,9 +612,12 @@ Function PrintEndSecurityChanges {
 ######### System changes #########
 
 Function PrintStartSystemChanges {
+	Write-Output " "
+	Write-Output " "
 	Write-Output "###########"
 	Write-Output "Starting system changes..."
 	Write-Output "###########"
+	Write-Output " "
 }
 
 # To delete Ultimate performance power plan (its safe to do so), you need to go to Control Panel\System and Security\Power Options, click on "Ultimate performance" and then click on "Delete this plan"
@@ -588,9 +628,11 @@ Function EnableUltimatePerf {
 }
 
 Function PrintEndSystemChanges {
+	Write-Output " "
 	Write-Output "###########"
 	Write-Output "System changes have been applied."
 	Write-Output "###########"
+	Write-Output " "
 }
 
 
@@ -599,9 +641,12 @@ Function PrintEndSystemChanges {
 
 # Update status: starting app changes
 Function PrintStartAppsChanges {
+	Write-Output " "
+	Write-Output " "
 	Write-Output "###########"
 	Write-Output "Starting to apply apps changes..."
 	Write-Output "###########"
+	Write-Output " "
 }
 
 # Debloat apps
@@ -645,10 +690,10 @@ Function DebloatApps {
 	 "Microsoft.ZuneMusic"
 	)
 	foreach ($Bloat in $Bloatware) {
-		Get-AppxPackage -Name $Bloat| Remove-AppxPackage
-        Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online
+		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
+        Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
         Write-Output "Removing $Bloat."}
-	Write-Output "UWP apps have been debloated."
+	Write-Output "Unnecessary apps have been removed from this PC."
 }
 
 # Install chocolatey
@@ -662,15 +707,17 @@ Function InstallChoco {
 # Install apps
 Function InstallApps {
 	Write-Output "Installing 7-zip..."
-	choco install 7zip -y
+	choco install 7zip -y --silent --limit-output
 	Write-Output "7-zip has been installed."
 }
 
 # Update status: app tweaks done
 Function PrintEndAppsChanges {
+	Write-Output " "
 	Write-Output "###########"
 	Write-Output "Apps changes have been applied."
 	Write-Output "###########"
+	Write-Output " "
 }
 
 
@@ -679,9 +726,11 @@ Function PrintEndAppsChanges {
 
 # Update status: Performing tasks after successful execution
 Function PrintEndTasksBegin{
+	Write-Output " "
 	Write-Output "###########"
 	Write-Output "Performing tasks after successful execution of scripts..."
 	Write-Output "###########"
+	Write-Output " "
 }
 	
 # Start Explorer.exe
@@ -693,9 +742,11 @@ Function StartExplorer {
 	
 # Update status: Script execution successful
 Function PrintEndEndTasks {
+	Write-Output " "
 	Write-Output "###########"
 	Write-Output "Script execution successful, all tasks have been performed successfully."
 	Write-Output "###########"
+	Write-Output " "
 }
 
 # Call the desired tweak functions
