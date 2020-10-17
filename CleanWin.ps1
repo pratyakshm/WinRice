@@ -40,6 +40,7 @@ $tweaks = @(
     "Hide3DObjectsInThisPC",       # "Show3DObjectsInThisPC",
 	"Hide3DObjectsInExplorer",     # "Show3DObjectsInExplorer",
 	"HideTaskView",                # "ShowTaskView",
+	"HideCortanaIcon",			   # "ShowCortanaIcon",
 	"ShowSecondsInTaskbar",        # "HideSecondsFromTaskbar",
 	"PrintEndExplorerChanges",
 
@@ -426,7 +427,7 @@ Function Show3DObjectsInExplorer {
 
 # Hide Task View button
 Function HideTaskView {
-	Write-Output "Hiding Task View button..."
+	Write-Output "Hiding Task View button from taskbar..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
 	Write-Output "Hid Task View button."
 }
@@ -436,6 +437,20 @@ Function ShowTaskView {
 	Write-Output "Showing Task View button..."
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -ErrorAction SilentlyContinue
 	Write-Output "Shown Task View button."
+}
+
+# Hide Cortana icon from taskbar
+Function HideCortanaIcon {
+	Write-Output "Hiding Cortana icon from taskbar..."
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
+	Write-Output "Cortana button has been hidden from taskbar."
+}
+
+# Show Cortana button in taskbar
+Function ShowCortanaIcon {
+	Write-Output "Show Cortana icon on taskbar..."
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
+	Write-Output "Cortana button has been shown on taskbar."
 }
 
 # Show Seconds in taskbar clock
