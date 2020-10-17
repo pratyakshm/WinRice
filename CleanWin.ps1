@@ -36,10 +36,11 @@ $tweaks = @(
 	"EnablePrtScrToSnip",		   # "DisablePrtScrSnip",
 	"DisableStickyKeys",           # "EnableStickyKeys",
 	"SetExplorerThisPC",           # "SetExplorerQuickAccess",
-    "Hide3DObjectsInThisPC",       # "Show3DObjectsInThisPC",
-	"Hide3DObjectsInExplorer",     # "Show3DObjectsInExplorer",
-	"HideTaskView",                # "ShowTaskView",
-	"HideCortanaIcon",			   # "ShowCortanaIcon",
+    "Hide3DObjectsInThisPC",       # "Restore3DObjectsInThisPC",
+	"Hide3DObjectsInExplorer",     # "Restore3DObjectsInExplorer",
+	"HideSearchBar",			   # "RestoreSearchBar"
+	"HideTaskView",                # "RestoreTaskView",
+	"HideCortana",			       # "RestoreCortana",
 	"ShowSecondsInTaskbar",        # "HideSecondsFromTaskbar",
 	"PrintEndExplorerChanges",
 
@@ -411,22 +412,22 @@ Function Hide3DObjectsInThisPC {
 	Write-Output " "
 	Write-Output "Hiding 3D Objects icon from This PC..."
 	Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Recurse -ErrorAction SilentlyContinue
-	Write-Output "Hid 3D Objects icon from This PC."
+	Write-Output "3D Objects has been hidden from This PC."
 }
 
-# Show 3D Objects icon in This PC
-Function Show3DObjectsInThisPC {
-	Write-Output "Showing 3D Objects icon in This PC..."
+# Restore 3D Objects icon in This PC
+Function Restore3DObjectsInThisPC {
+	Write-Output "Restoring 3D Objects icon in This PC..."
 	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}")) {
 		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" | Out-Null
 	}
-	Write-Output "Shown 3D objects icon in This PC."
+	Write-Output "3D objects has been restored in This PC."
 }
 
 # Hide 3D Objects icon from Explorer namespace - Hides the icon also from personal folders and open/save dialogs
 Function Hide3DObjectsInExplorer {
 	Write-Output " "
-	Write-Output "Hiding 3D Objects icon from Explorer namespace..."
+	Write-Output "Hiding 3D Objects from Explorer namespace..."
 	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag")) {
 		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" -Force | Out-Null
 	}
@@ -435,15 +436,31 @@ Function Hide3DObjectsInExplorer {
 		New-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" -Force | Out-Null
 	}
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" -Name "ThisPCPolicy" -Type String -Value "Hide"
-	Write-Output "Hid 3D Objects icon from Explorer."
+	Write-Output "3D Objects has been hidden from Explorer."
 }
 
-# Show 3D Objects icon in Explorer namespace
-Function Show3DObjectsInExplorer {
-	Write-Output "Showing 3D Objects icon in Explorer namespace..."
+# Restore 3D Objects icon in Explorer namespace
+Function Restore3DObjectsInExplorer {
+	Write-Output "Restoring 3D Objects icon in Explorer namespace..."
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
-	Write-Output "Shown 3D objects icon in Explorer namespace."
+	Write-Output "3D Objects has been restored to Explorer namespace."
+}
+
+# Hide Search bar from taskbar
+Function HideSearchBar {
+	Write-Output " "
+	Write-Output "Hiding search bar from taskbar..."
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 1
+	Write-Output "Searchbar has been hidden from taskbar."
+}
+
+# Restore Search bar to taskbar
+Function RestoreSearchBar {
+	Write-Output " "
+	Write-Output "Restoring search bar from taskbar..."
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
+	Write-Output "Searchbar has been restored to taskbar."
 }
 
 # Hide Task View button
@@ -451,29 +468,29 @@ Function HideTaskView {
 	Write-Output " "
 	Write-Output "Hiding Task View button from taskbar..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
-	Write-Output "Hid Task View button."
+	Write-Output "Task View button has been hidden from taskbar."
 }
 
-# Show Task View button
-Function ShowTaskView {
-	Write-Output "Showing Task View button..."
+# Restore Task View button
+Function RestoreTaskView {
+	Write-Output "Restoring Task View button..."
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -ErrorAction SilentlyContinue
-	Write-Output "Shown Task View button."
+	Write-Output "Task view icon has been restored to taskbar."
 }
 
 # Hide Cortana icon from taskbar
-Function HideCortanaIcon {
+Function HideCortana {
 	Write-Output " "
 	Write-Output "Hiding Cortana icon from taskbar..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
 	Write-Output "Cortana button has been hidden from taskbar."
 }
 
-# Show Cortana button in taskbar
-Function ShowCortanaIcon {
+# Restore Cortana button in taskbar
+Function RestoreCortana {
 	Write-Output "Show Cortana icon on taskbar..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
-	Write-Output "Cortana button has been shown on taskbar."
+	Write-Output "Cortana button has been restored to taskbar."
 }
 
 # Show Seconds in taskbar clock
@@ -481,14 +498,14 @@ Function ShowSecondsInTaskbar {
 	Write-Output " "
 	Write-Output "Trying to show seconds in Taskbar clock..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
-	Write-Output "Made taskbar clock display seconds"
+	Write-Output "Made taskbar clock display seconds."
 }
 
 # Hide Seconds in taskbar clock
 Function HideSecondsFromTaskbar {
-	Write-Output "Trying to hide seconds from Taskbar clock"
+	Write-Output "Trying to hide seconds from Taskbar clock..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 0
-	Write-Output "Made taskbar clock hide seconds"
+	Write-Output "Made taskbar clock hide seconds."
 }
 
 # Update status: Explorer changes done
