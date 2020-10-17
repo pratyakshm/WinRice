@@ -640,6 +640,8 @@ Function DebloatApps {
 	 "Microsoft.WindowsFeedbackHub" 
 	 "Microsoft.WindowsMaps" 
 	 "Microsoft.WindowsSoundRecorder" 
+	 "Microsoft.XboxApp"
+	 "Microsoft.XboxGamingOverlay"
 	 "Microsoft.YourPhone"
 	 "Microsoft.ZuneVideo"
 	 "Microsoft.ZuneMusic"
