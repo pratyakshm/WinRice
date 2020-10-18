@@ -7,8 +7,9 @@
 # Default preset
 $tweaks = @(
 
-### Tasks before beginning execution ###
+### Tasks ###
 	"CleanWin",
+	"Sleep",
 	
 ### Privacy Tweaks ###
 	"PrintPrivacyChanges",
@@ -17,6 +18,7 @@ $tweaks = @(
 	"DisableBackgroundApps",       # "EnableBackgroundApps",
 	"DisableLocationTracking",     # "EnableLocationTracking",
 	"DisableAdvertisingID",        # "EnableAdvertisingID",
+	"LessSleep",
 
 ### Service Tweaks ###
 	"PrintServicesChanges",
@@ -26,6 +28,7 @@ $tweaks = @(
 	"DisableAutorun",              # "EnableAutorun",
 	"DisableDefragmentation",      # "EnableDefragmentation",
 	"SetBIOSTimeUTC",              # "SetBIOSTimeLocal",
+	"LessSleep",
 
 ### Windows Explorer Changes ###
 	"PrintExplorerChanges",
@@ -39,33 +42,38 @@ $tweaks = @(
 	"HideTaskView",                # "RestoreTaskView",
 	"HideCortana",			       # "RestoreCortana",
 	"ShowSecondsInTaskbar",        # "HideSecondsFromTaskbar",
+	"LessSleep",
 
 ### Features changes ###
 	"PrintFeaturesChanges",
 	"EnableWSL",
 	"EnableVM",
+	"LessSleep",
 
 ### Security changes ###
 	"PrintSecurityChanges",
 	"AutoLoginPostUpdate", 		   # "StayOnLockscreenPostUpdate",
 	"DisableMeltdownCompatFlag",   # "EnableMeltdownCompatFlag",
 	"DisableSMB",				   # "EnableSMB",
+	"LessSleep",
 
 ### System changes ###
 	"PrintSystemChanges",
 	"EnableUltimatePerf",	
+	"LessSleep",
 
 ### Application changes ###
 	"PrintAppsChanges",
 	"InstallChoco",
 	"InstallApps",
 	"DebloatApps",
+	"LessSleep",
 
 ###  Tasks after successful run ###
 	"PrintEndTasksBegin",
 	"PrintEndEndTasks"
 )
-### Tasks before beginning execution ###
+### Tasks ###
 
 # CleanWin
 Function CleanWin {
@@ -74,10 +82,15 @@ Function CleanWin {
 	Write-Output "https://github.com/pratyakshm/CleanWin"
 	Write-Output "Version 0.3"
 	Write-Output "All rights reserved."
-	Start-Sleep 5s
 }
 
+Function Sleep {
+	Start-Sleep 5
+}
 
+Function LessSleep {
+	Start-Sleep 2
+}
 
 ######### Privacy Changes #########
 
