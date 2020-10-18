@@ -10,8 +10,14 @@ $tweaks = @(
 ### Tasks ###
 	"CleanWin",
 	"Sleep",
+
+### App changes ###
+	"PrintAppsChanges",
+	"InstallChoco",
+	"InstallApps",
+	"ClearScreen",
 	
-### Privacy Tweaks ###
+### Privacy changes ###
 	"PrintPrivacyChanges",
 	"DisableMapUpdates",	       # "EnableMapUpdates",
 	"DisableFeedback",		       # "EnableFeedback",
@@ -20,7 +26,7 @@ $tweaks = @(
 	"DisableAdvertisingID",        # "EnableAdvertisingID",
 	"LessSleep",
 
-### Service Tweaks ###
+### Service changes ###
 	"PrintServicesChanges",
 	"DisableAutoUpdates",		   # "EnableAutoUpdates",
 	"DisableLANP2P"                # "EnableLANP2P",
@@ -64,9 +70,6 @@ $tweaks = @(
 
 ### Application changes ###
 	"PrintAppsChanges",
-	"InstallChoco",
-	"InstallApps",
-	"ClearScreen",
 	"DebloatApps",
 	"LessSleep",
 
