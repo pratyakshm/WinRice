@@ -7,15 +7,17 @@
 # Default preset
 $tweaks = @(
 
-### Tasks ###
+### Maintenance Tasks ###
 	"CleanWin",
-	"Sleep",
+	"KindaSleep",
+	"ClearShell",
 
-### App changes ###
+### App changes - 1 ###
 	"PrintAppsChanges",
 	"InstallChoco",
 	"InstallApps",
-	"ClearScreen",
+	"ChangesDone",
+	"ClearShell",
 	
 ### Privacy changes ###
 	"PrintPrivacyChanges",
@@ -25,6 +27,8 @@ $tweaks = @(
 	"DisableLocationTracking",     # "EnableLocationTracking",
 	"DisableAdvertisingID",        # "EnableAdvertisingID",
 	"LessSleep",
+	"ChangesDone",
+	"ClearShell",
 
 ### Service changes ###
 	"PrintServicesChanges",
@@ -35,6 +39,8 @@ $tweaks = @(
 	"DisableDefragmentation",      # "EnableDefragmentation",
 	"SetBIOSTimeUTC",              # "SetBIOSTimeLocal",
 	"LessSleep",
+	"ChangesDone",
+	"ClearShell",
 
 ### Windows Explorer Changes ###
 	"PrintExplorerChanges",
@@ -49,12 +55,16 @@ $tweaks = @(
 	"HideCortana",			       # "RestoreCortana",
 	"ShowSecondsInTaskbar",        # "HideSecondsFromTaskbar",
 	"LessSleep",
+	"ChangesDone",
+	"ClearShell",
 
 ### Features changes ###
 	"PrintFeaturesChanges",
 	"EnableWSL",
 	"EnableVM",
 	"LessSleep",
+	"ChangesDone",
+	"ClearShell",
 
 ### Security changes ###
 	"PrintSecurityChanges",
@@ -62,39 +72,66 @@ $tweaks = @(
 	"DisableMeltdownCompatFlag",   # "EnableMeltdownCompatFlag",
 	"DisableSMB",				   # "EnableSMB",
 	"LessSleep",
+	"ChangesDone",
+	"ClearShell",
 
 ### System changes ###
 	"PrintSystemChanges",
 	"EnableUltimatePerf",	
 	"LessSleep",
+	"ChangesDone",
+	"ClearShell",
 
-### Application changes ###
+### App changes - 2 ###
 	"PrintAppsChanges",
 	"DebloatApps",
 	"LessSleep",
+	"ChangesDone",
+	"ClearShell",
 
 ###  Tasks after successful run ###
 	"PrintEndTasksBegin",
 	"PrintEndEndTasks"
 )
-### Tasks ###
+
+
+### Maintenance tasks ###
 
 # CleanWin
 Function CleanWin {
 	Write-Output " "
-	Write-Output "CleanWin by pratyakshm"
+	Write-Output "CleanWin version 0.3 by pratyakshm"
 	Write-Output "https://github.com/pratyakshm/CleanWin"
-	Write-Output "Version 0.3"
 	Write-Output "All rights reserved."
 }
 
-Function Sleep {
-	Start-Sleep 5
+# More sleep
+Function KindaSleep {
+	Start-Sleep 4
 }
 
+# Less sleep
 Function LessSleep {
-	Start-Sleep 2
+	Start-Sleep 3
 }
+
+# Clear the shell output
+Function ClearShell {
+	Write-Output "Clearing shell after waiting for 3 seconds..."
+	Start-Sleep 3
+	cls
+}
+
+# Changes performed
+Function ChangesDone {
+	Write-Output " "
+	Write-Output "---------------------------"
+	Write-Output "     CHANGES PERFORMED     "
+	Write-Output "---------------------------"
+	Write-Output " "
+	Start-Sleep 1
+}
+
 
 ######### Privacy Changes #########
 
@@ -687,14 +724,6 @@ Function InstallApps {
 	choco install 7zip -y --silent --limit-output
 	Write-Output "7-zip has been installed."
 }
-
-# Clear screen because chocolatey fills it lol
-Function ClearScreen {
-	Write-Output "Clearing this screen..."
-	Start-Sleep 1
-	cls
-}
-
 
 ######### Tasks after successful run #########
 
