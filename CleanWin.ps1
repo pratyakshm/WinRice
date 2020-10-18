@@ -523,14 +523,14 @@ Function ShowSecondsInTaskbar {
 	Write-Output " "
 	Write-Output "Trying to show seconds in Taskbar clock..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
-	Write-Output "Made taskbar clock display seconds."
+	Write-Output "Taskbar clock will now display seconds."
 }
 
 # Hide Seconds in taskbar clock
 Function HideSecondsFromTaskbar {
 	Write-Output "Trying to hide seconds from Taskbar clock..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 0
-	Write-Output "Made taskbar clock hide seconds."
+	Write-Output "Taskbar clock will no longer display seconds."
 }
 
 
