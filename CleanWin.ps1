@@ -66,6 +66,7 @@ $tweaks = @(
 	"PrintAppsChanges",
 	"InstallChoco",
 	"InstallApps",
+	"ClearScreen",
 	"DebloatApps",
 	"LessSleep",
 
@@ -682,6 +683,13 @@ Function InstallApps {
 	Write-Output "Installing 7-zip..."
 	choco install 7zip -y --silent --limit-output
 	Write-Output "7-zip has been installed."
+}
+
+# Clear screen because chocolatey fills it lol
+Function ClearScreen {
+	Write-Output "Clearing this screen..."
+	Start-Sleep 1
+	cls
 }
 
 
