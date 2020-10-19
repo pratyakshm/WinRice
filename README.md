@@ -1,81 +1,92 @@
 # Instructions
 
 ## How to run:
-1. Download **CleanWin.zip** from the latest [release tag](https://github.com/PratyakshM/CleanWin/releases/tag/0.2).
+1. Download **CleanWin.zip** from the latest [release tag](https://github.com/PratyakshM/CleanWin/releases/tag/0.6).
 2. Extract the contents of the ZIP file into your C: drive and launch **Start.bat**.    
 
 ## List of tasks:
 This section contains the list of tasks that CleanWin performs. They're grouped in the following categories (sorted by alphabetical order):
 <details>
 <summary>Apps</summary>
-List of apps removed:
-<br>3D Viewer        
-<br>Alarms and Clock
-<br>Cortana  
-<br>Camera  
-<br>Feedback Hub 
-<br>Get Help      
-<br>Get started  
-<br>Groove Music  
-<br>Mail and Calendar  
-<br>Messaging  
-<br>Maps  
-<br>Microsoft News  
-<br>Microsoft Solitaire Collection  
-<br>Mixed Reality Portal  
-<br>Movies & TV  
-<br>OneConnect  
-<br>Office  
-<br>Office Lens  
-<br>OneNote  
-<br>Paint 3D  
-<br>People  
-<br>Sway  
-<br>Skype  
-<br>Sticky Notes  
-<br>Whiteboard  
-<br>Your Phone  
-<br><br>List of apps installed:
-<br>7-zip
+List of apps removed by default:
+  <br>3D Viewer        
+  <br>Cortana  
+  <br>Feedback Hub 
+  <br>Get Help      
+  <br>Get started  
+  <br>Mail and Calendar  
+  <br>Messaging  
+  <br>Maps  
+  <br>Microsoft News  
+  <br>Microsoft Solitaire Collection  
+  <br>Movies & TV  
+  <br>OneConnect  
+  <br>OneNote  
+  <br>Paint 3D  
+  <br>People  
+  <br>Sway  
+  <br>Sticky Notes  
+  <br>Xbox
+  <br>Xbox Game bar
+  <br><br> List of apps removed (user-choice basis):
+  <br>Alarms
+  <br>Camera
+  <br>Groove Music
+  <br>Mixed Reality Portal
+  <br>Office
+  <br>Office Lens
+  <br>Skype
+  <br>Whiteboard
+  <br>Your Phone
+  <br><br>List of apps installed (user-choice basis):
+  <br>Chocolatey package manager
+  <br>7-zip
 </details>
 
 <details>
-<summary>Privacy</summary>
-Disable maps updates
-<br>Disable feedback
-<br>Disable advertising ID
-<br>Disable location tracking
-<br>Disable background apps
+ <summary>Privacy</summary>
+  Fully turn off all data collection/telemetry (level full, user-choice basis)
+  <br>Turn off maps updates
+  <br>Turn off feedback
+  <br>Turn off advertising ID
+  <br>Turn off location tracking
+  <br>Turn off background apps
 </details>
 
 <details>
 <summary>Security</summary>
-Enable automatic login when PC restarts after installing a Windows Update
-<br>Disable Server Message Block
-<br>Disable Meltdown compatibility flag
+  Turn on automatic login when PC restarts after installing a Windows Update
+  <br>Turn off Server Message Block
+  <br>Turn off Meltdown compatibility flag
 </details>   
 
 <details>
-<summary>Services</summary>
-Disable Windows Update delivery via P2P and LAN
-<br>Disable AutoPlay
-<br>Disable Autorun
-<br>Disable disk defragmentation
-<br>Set BIOS time to UTC
+ <summary>Services</summary>
+  Turn off automatic Windows updates (user-choice basis)
+  <br>Turn off Windows Update delivery via P2P and LAN
+  <br>Turn off AutoPlay
+  <br>Turn off Autorun
+  <br>Turn off disk defragmentation (user-choice basis)
+  <br>Set BIOS time to UTC
 </details>
 
 <details>
-<summary>Windows Explorer</summary>
-Disable Search Indexing when on battery power
-<br>Show verbose status
-<br>Use Print Screen key to open Snip & Sketch overlay
-<br>Hide language icon from taskbar
-<br>Disable sticky keys prompt
-<br>Set Explorer to open This PC instead of Quick access
-<br>Hide 3D Objects tabs from This PC and Quick Access
-<br>Hide task view icon from taskbar
-<br>Show all tray icons on taskbar
-<br>Show seconds in taskbar clock
+ <summary>Windows Explorer</summary>
+  Set Explorer to open This PC instead of Quick access
+  <br>Turn off sticky keys prompt
+  <br>Use Print Screen key to open Snip & Sketch overlay
+  <br>Hide 3D Objects tabs from This PC and Quick Access
+  <br>Hide task view icon from taskbar
+  <br>Hide Cortana icon from taskbar
+  <br>Hide search bar from taskbar
+  <br>Show seconds in taskbar clock (user-choice basis)
+  <br>Show verbose status
+</details>
+
+<details>
+ <summary>Windows optional features</summary>
+  Turn on Windows Subsystem for Linux (user-choice basis)
+  <br>Turn on Virtual Machine (user-choice basis)
 </details>
 
 ## Wiki:
