@@ -829,28 +829,112 @@ Function DebloatApps {
 
 Function RemoveMore {
 	Write-Output " "
-	$question = 'Do you want to remove Alarms, Camera, Groove Music, Mixed Reality Portal, Office, Office Lens, Skype, Whiteboard and Your Phone?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-	if ($decision -eq 0) 
 	{
-		Write-Output "Removing more apps..."
-		Get-AppxPackage "Microsoft.WindowsAlarms" | Remove-AppxPackage
-		Get-AppxPackage "Microsoft.WindowsCamera" | Remove-AppxPackage
-		Get-AppxPackage "Microsoft.ZuneMusic" | Remove-AppxPackage
-		Get-AppxPackage "Microsoft.MixedReality.Portal" | Remove-AppxPackage
-		Get-AppxPackage "Microsoft.Office.Lens" | Remove-AppxPackage
-		Get-AppxPackage "Microsoft.MicrosoftOfficeHub" | Remove-AppxPackage
-		Get-AppxPackage "Microsoft.SkypeApp" | Remove-AppxPackage
-		Get-AppxPackage "Microsoft.Whiteboard" | Remove-AppxPackage
-		Get-AppxPackage "Microsoft.YourPhone" | Remove-AppxPackage
-		Write-Output "Listed apps have been removed."
+		$question = 'Do you want to remove Alarms & Clock?'
+		$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+		$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) 
+		{	
+			Removing Alarms & Clock app...
+			Get-AppxPackage "Microsoft.WindowsAlarms" | Remove-AppxPackage
+			Write-Output "Alarms & Clock has been removed."
+		}
+		else
+		{
+			Alarms & Clock was not removed.
+		}
 	}
-	else
+	Write-Output " "
 	{
-	Write-Output "The listed apps were not removed."
+		$question = 'Do you want to remove Camera app?'
+		$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+		$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) 
+		{	
+			Removing Camera app...
+			Get-AppxPackage "Microsoft.WindowsCamera" | Remove-AppxPackage
+			Write-Output "Camera app has been removed."
+		}
+		else
+		{
+			Camera app was not removed.
+		}
+	}
+	Write-Output " "
+	{
+		$question = 'Do you want to remove Groove Music app?'
+		$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+		$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) 
+		{	
+			Removing Groove Music...
+			Get-AppxPackage "Microsoft.ZuneMusic" | Remove-AppxPackage
+			Write-Output "Groove Music has been removed."
+		}
+		else
+		{
+			Groove Music was not removed.
+		}
+	}
+	Write-Output " "
+	{
+		$question = 'Do you want to remove Office app?'
+		$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+		$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) 
+		{	
+			Removing Office...
+			Get-AppxPackage "MicrosoftOfficeHub" | Remove-AppxPackage
+			Write-Output "Office has been removed."
+		}
+		else
+		{
+			Office was not removed.
+		}
+	}
+	Write-Output " "
+	{
+		$question = 'Do you want to remove Skype app?'
+		$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+		$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) 
+		{	
+			Removing Skype...
+			Get-AppxPackage "Microsoft.SkypeApp" | Remove-AppxPackage
+			Write-Output "Skype has been removed."
+		}
+		else
+		{
+			Skype was not removed.
+		}
+	}
+	Write-Output " "
+	{
+		$question = 'Do you want to remove Your Phone?'
+		$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+		$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) 
+		{	
+			Removing Your Phone...
+			Get-AppxPackage "Microsoft.YourPhone" | Remove-AppxPackage
+			Write-Output "Your Phone has been removed."
+		}
+		else
+		{
+			Your Phone was not removed.
+		}
 	}
 }
 
