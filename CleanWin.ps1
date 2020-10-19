@@ -604,7 +604,7 @@ Function RestoreCortana {
 
 # Show Seconds in taskbar clock
 Function ShowSecondsInTaskbar {
-	$question = 'Do you want to have taskbar clock display seconds as well?'
+	$question = 'Do you want to have the taskbar clock display seconds?'
 	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
