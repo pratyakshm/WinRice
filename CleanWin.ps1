@@ -86,6 +86,7 @@ $tweaks = @(
 ### App changes - 2 ###
 	"PrintAppsChanges",
 	"DebloatApps",
+	"RemoveMore",
 	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
@@ -799,39 +800,57 @@ Function DebloatApps {
 	 "Microsoft.Getstarted" 
 	 "Microsoft.Messaging"
 	 "Microsoft.Microsoft3DViewer" 
-	 "Microsoft.MixedReality.Portal"
-	 "Microsoft.MicrosoftStickyNotes"  
+	 "Microsoft.MicsoftStickyNotes"  
 	 "Microsoft.MSPaint"
 	 "Microsoft.Office.OneNote"
-	 "Microsoft.MicrosoftOfficeHub"
 	 "Microsoft.MicrosoftSolitaireCollection" 
 	 "Microsoft.NetworkSpeedTest" 
 	 "Microsoft.News" 
-	 "Microsoft.Office.Lens" 
 	 "Microsoft.Office.Sway" 
 	 "Microsoft.OneConnect"
 	 "Microsoft.People" 
 	 "Microsoft.Print3D" 
-	 "Microsoft.SkypeApp" 
 	 "Microsoft.StorePurchaseApp" 
-	 "Microsoft.Whiteboard" 
-	 "Microsoft.WindowsAlarms"
-	 "Microsoft.WindowsCamera"
 	 "Microsoft.WindowsCommunicationsApps" 
 	 "Microsoft.WindowsFeedbackHub" 
 	 "Microsoft.WindowsMaps" 
 	 "Microsoft.WindowsSoundRecorder" 
 	 "Microsoft.XboxApp"
 	 "Microsoft.XboxGamingOverlay"
-	 "Microsoft.YourPhone"
 	 "Microsoft.ZuneVideo"
-	 "Microsoft.ZuneMusic"
 	)
 	foreach ($Bloat in $Bloatware) {
 		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
         Write-Output "Removing $Bloat."}
 	Write-Output "Unnecessary apps have been removed from this PC."
+}
+
+Function RemoveMore {
+	Write-Output " "
+	$question = 'Do you want to remove Alarms, Camera, Groove Music, Mixed Reality Portal, Office, Office Lens, Skype, Whiteboard and Your Phone?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+	if ($decision -eq 0) 
+	{
+		Write-Output "Removing more apps..."
+		Get-AppxPackage "Microsoft.WindowsAlarms" | Remove-AppxPackage
+		Get-AppxPackage "Microsoft.WindowsCamera" | Remove-AppxPackage
+		Get-AppxPackage "Microsoft.ZuneMusic" | Remove-AppxPackage
+		Get-AppxPackage "Microsoft.MixedReality.Portal" | Remove-AppxPackage
+		Get-AppxPackage "Microsoft.Office.Lens" | Remove-AppxPackage
+		Get-AppxPackage "Microsoft.MicrosoftOfficeHub" | Remove-AppxPackage
+		Get-AppxPackage "Microsoft.SkypeApp" | Remove-AppxPackage
+		Get-AppxPackage "Microsoft.Whiteboard" | Remove-AppxPackage
+		Get-AppxPackage "Microsoft.YourPhone" | Remove-AppxPackage
+		Write-Output "Listed apps have been removed."
+	}
+	else
+	{
+	The listed apps were not removed.
+	}
 }
 
 # Install chocolatey
