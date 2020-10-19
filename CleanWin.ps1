@@ -14,7 +14,6 @@ $tweaks = @(
 
 ### App changes - 1 ###
 	"PrintAppsChanges",
-	"InstallChoco",
 	"InstallApps",
 	"ChangesDone",
 	"ClearShell",
@@ -102,7 +101,7 @@ $tweaks = @(
 # CleanWin
 Function CleanWin {
 	Write-Output " "
-	Write-Output "CleanWin version 0.3 by pratyakshm"
+	Write-Output "CleanWin version 0.6 by pratyakshm"
 	Write-Output "https://github.com/pratyakshm/CleanWin"
 	Write-Output "All rights reserved."
 }
@@ -330,7 +329,7 @@ Function PrintServicesChanges {
 
 # Disable automatic updates
 Function DisableAutoUpdates {
-	$question = 'Do you want to turn off automatic Windows updates??'
+	$question = 'Do you want to turn off automatic Windows updates?'
 	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
@@ -613,6 +612,7 @@ Function RestoreCortana {
 
 # Show Seconds in taskbar clock
 Function ShowSecondsInTaskbar {
+	Write-Output " "
 	$question = 'Do you want to have the taskbar clock display seconds?'
 	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
@@ -651,7 +651,7 @@ Function PrintFeaturesChanges {
 }
 
 Function EnableWSL {
-	$question = 'Do you want turn on Windows Subsystem for Linux?'
+	$question = 'Do you want to turn on Windows Subsystem for Linux?'
 	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
@@ -668,7 +668,8 @@ Function EnableWSL {
 }
 
 Function EnableVM {
-	$question = 'Do you want turn on Virtual Machine? (hit yes if you turned on WSL)'
+	Write-Output " "
+	$question = 'Do you want to turn on Virtual Machine? (hit yes if you turned on WSL)'
 	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
@@ -853,20 +854,26 @@ Function RemoveMore {
 	}
 }
 
-# Install chocolatey
-Function InstallChoco {
-	Write-Output "Installing Chocolatey..."
-	Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-	choco install chocolatey-core.extension -y
-	Write-Output "Chocolatey has been installed."
-}
-
 # Install apps
 Function InstallApps {
-	Write-Output "Installing 7-zip..."
+	$question = 'Install 7-zip?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+	if ($decision -eq 0) {
+	Write-Output "Installing dependency: chocolatey..."
+	Set-ExecutionPolicy Bypass -Scope Process; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+	choco install chocolatey-core.extension -y
 	choco install 7zip -y --silent --limit-output
-	Write-Output "7-zip has been installed."
+	}
+	else
+	{
+	Write-Output "7-zip was not installed."
+	}
 }
+
+
 
 ######### Tasks after successful run #########
 
