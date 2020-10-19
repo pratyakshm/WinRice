@@ -604,10 +604,21 @@ Function RestoreCortana {
 
 # Show Seconds in taskbar clock
 Function ShowSecondsInTaskbar {
+	$question = 'Do you want to have taskbar clock display seconds as well?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+	if ($decision -eq 0) {
 	Write-Output " "
-	Write-Output "Trying to show seconds in Taskbar clock..."
+	Write-Output "Telling taskbar clock to display seconds..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
 	Write-Output "Taskbar clock will now display seconds."
+	}
+	else
+	{
+	"Taskbar clock was left as it is."
+	}
 }
 
 # Hide Seconds in taskbar clock
