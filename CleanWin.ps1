@@ -329,13 +329,24 @@ Function PrintServicesChanges {
 
 # Disable automatic updates
 Function DisableAutoUpdates {
-	Write-Output "Turning off automatic Windows updates..."
-	If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate")) {
-	  New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" | Out-Null
-	  New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" | Out-Null
-	  }
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name NoAutoUpdate -Type DWord -Value 1
-	Write-Output "Automatic Windows updates have been turned off."
+	$question = 'Do you want to turn off automatic Windows updates??'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+	if ($decision -eq 0) {
+		Write-Output "Turning off automatic Windows updates..."
+			If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate")) {
+	  		New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" | Out-Null
+	  		New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" | Out-Null
+	  		}
+		Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name NoAutoUpdate -Type DWord -Value 1
+		Write-Output "Automatic Windows updates have been turned off."
+	}
+	else
+	{
+	"Automatic Windows Updates were left as it is."
+	}
 }
 
 # Enable automatic updates
@@ -417,8 +428,6 @@ Function DisableDefragmentation {
 	{
 	"Automatic disk defragmentation was left as it is."
 	}
-}
-
 }
 
 # Enable scheduled defragmentation task
@@ -643,15 +652,37 @@ Function PrintFeaturesChanges {
 }
 
 Function EnableWSL {
-	Write-Output "Turning on Windows Subsystem for Linux..."
-	dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-	Write-Output "Windows Subsystem for Linux has been turned on."
+	$question = 'Do you want turn on Windows Subsystem for Linux?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+		Write-Output "Turning on Windows Subsystem for Linux..."
+		dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+		Write-Output "Windows Subsystem for Linux has been turned on."
+	}
+	else
+	{
+	"Windows Subsystem for Linux wasn't turned on."
+	}
 }
 
 Function EnableVM {
-	Write-Output "Turning on Virtual Machine feature..."
-	dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
-	Write-Output "Virtual Machine feature has been turned on."
+	$question = 'Do you want turn on Virtual Machine? (hit yes if you turned on WSL)'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+		Write-Output "Turning on Virtual Machine..."
+		dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+		Write-Output "Virtual Machine has been turned on."
+	}
+	else
+	{
+	"Virtual Machine wasn't turned on."
+	}
 }
 
 
