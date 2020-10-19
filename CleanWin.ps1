@@ -864,17 +864,19 @@ Function PrintEndTasksBegin{
 		
 # Update status: Script execution successful
 Function PrintEndEndTasks {
-	Write-Output " "
-	Write-Output " "
-	Write-Output " "
-	Write-Output "Script execution successful, this PC will give you 10 seconds before it restarts so you can save your work."
-	Start-Sleep 2
-	Write-Output "To cancel restart, please press Ctrl+C."
-	Start-Sleep 8
-	Write-Output "Restarting PC now!"
-	Start-Sleep 2
-	Restart-Computer
+	$question = 'CleanWin execution successful. Do you want to restart your PC now?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+	if ($decision -eq 0) {
+		Start-Sleep 1
+		Restart-Computer
+	}
+	else
+	{
+	"This PC will not automatically restart, however a restart is pending."
+	}
 }
-
 # Call the desired tweak functions
 $tweaks | ForEach { Invoke-Expression $_ }
