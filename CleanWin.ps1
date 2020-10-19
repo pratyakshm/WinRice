@@ -400,10 +400,25 @@ Function EnableAutorun {
 
 # Disable scheduled defragmentation task
 Function DisableDefragmentation {
-	Write-Output " "
-	Write-Output "Turning off scheduled defragmentation..."
-	Disable-ScheduledTask -TaskName "Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
-	Write-Output "Scheduled defragmentation has been turned off."
+	$message  = 'Disk Defragmentation'
+	$question = 'Do you want to turn off disk defragmentation?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+	if ($decision -eq 0)
+	{
+		Write-Output " "
+		Write-Output "Turning off scheduled defragmentation..."
+		Disable-ScheduledTask -TaskName "Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
+		Write-Output "Scheduled defragmentation has been turned off."
+	}
+	else
+	{
+	"Automatic disk defragmentation was left as it is."
+	}
+}
+
 }
 
 # Enable scheduled defragmentation task
