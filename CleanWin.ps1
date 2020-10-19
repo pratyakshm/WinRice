@@ -419,7 +419,6 @@ Function DisableDefragmentation {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 	if ($decision -eq 0)
 	{
-		Write-Output " "
 		Write-Output "Turning off scheduled defragmentation..."
 		Disable-ScheduledTask -TaskName "Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
 		Write-Output "Scheduled defragmentation has been turned off."
@@ -619,7 +618,6 @@ Function ShowSecondsInTaskbar {
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 	if ($decision -eq 0) {
-	Write-Output " "
 	Write-Output "Telling taskbar clock to display seconds..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
 	Write-Output "Taskbar clock will now display seconds."
