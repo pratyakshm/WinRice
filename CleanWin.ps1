@@ -850,7 +850,7 @@ Function RemoveMore {
 	}
 	else
 	{
-	The listed apps were not removed.
+	Write-Output "The listed apps were not removed."
 	}
 }
 
