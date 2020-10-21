@@ -85,7 +85,10 @@ $tweaks = @(
 ### App changes - 2 ###
 	"PrintAppsChanges",
 	"DebloatApps",
-	"RemoveMore",
+	"RemoveCamera",
+	"RemoveGrooveMusic",
+	"RemoveSkype",
+	"RemoveYourPhone",
 	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
@@ -153,8 +156,7 @@ Function DisableDataCollection {
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-	if ($decision -eq 0)
-	{
+	if ($decision -eq 0) {
     	Write-Output "Turning off Data collection..."
 		Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" -Name "AllowTelemetry" -Type DWord -Value 0
 		Set-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection" -Name "AllowTelemetry" -Type DWord -Value 0
@@ -179,8 +181,7 @@ Function DisableDataCollection {
 		Disable-ScheduledTask -TaskName "Microsoft\Windows\Windows Error Reporting\QueueReporting" | Out-Null
 		Write-Output "Data collection has been turned off."
 	}
-	else
-	{
+	else {
     "Data collection was not turned off."
 	}
 }
@@ -343,8 +344,7 @@ Function DisableAutoUpdates {
 		Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name NoAutoUpdate -Type DWord -Value 1
 		Write-Output "Automatic Windows updates have been turned off."
 	}
-	else
-	{
+	else {
 	"Automatic Windows Updates were left as it is."
 	}
 }
@@ -417,14 +417,12 @@ Function DisableDefragmentation {
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-	if ($decision -eq 0)
-	{
+	if ($decision -eq 0) {
 		Write-Output "Turning off scheduled defragmentation..."
 		Disable-ScheduledTask -TaskName "Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
 		Write-Output "Scheduled defragmentation has been turned off."
 	}
-	else
-	{
+	else {
 	"Automatic disk defragmentation was left as it is."
 	}
 }
@@ -623,8 +621,7 @@ Function ShowSecondsInTaskbar {
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
 	Write-Output "Taskbar clock will now display seconds."
 	}
-	else
-	{
+	else {
 	"Taskbar clock was left as it is."
 	}
 }
@@ -661,8 +658,7 @@ Function EnableWSL {
 		dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 		Write-Output "Windows Subsystem for Linux has been turned on."
 	}
-	else
-	{
+	else {
 	"Windows Subsystem for Linux wasn't turned on."
 	}
 }
@@ -679,8 +675,7 @@ Function EnableVM {
 		dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 		Write-Output "Virtual Machine has been turned on."
 	}
-	else
-	{
+	else {
 	"Virtual Machine wasn't turned on."
 	}
 }
@@ -803,6 +798,7 @@ Function DebloatApps {
 	 "Microsoft.Microsoft3DViewer" 
 	 "Microsoft.MicsoftStickyNotes"  
 	 "Microsoft.MSPaint"
+	 "Microsoft.MicrosoftOfficeHub"
 	 "Microsoft.Office.OneNote"
 	 "Microsoft.MicrosoftSolitaireCollection" 
 	 "Microsoft.NetworkSpeedTest" 
@@ -812,6 +808,7 @@ Function DebloatApps {
 	 "Microsoft.People" 
 	 "Microsoft.Print3D" 
 	 "Microsoft.StorePurchaseApp" 
+	 "Microsoft.WindowsAlarms"
 	 "Microsoft.WindowsCommunicationsApps" 
 	 "Microsoft.WindowsFeedbackHub" 
 	 "Microsoft.WindowsMaps" 
@@ -827,115 +824,72 @@ Function DebloatApps {
 	Write-Output "Unnecessary apps have been removed from this PC."
 }
 
-Function RemoveMore {
-	Write-Output " "
-	{
-		$question = 'Do you want to remove Alarms & Clock?'
-		$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-		$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) 
-		{	
-			Removing Alarms & Clock app...
-			Get-AppxPackage "Microsoft.WindowsAlarms" | Remove-AppxPackage
-			Write-Output "Alarms & Clock has been removed."
-		}
-		else
-		{
-			Alarms & Clock was not removed.
-		}
-	}
-	Write-Output " "
-	{
+Function RemoveCamera {
+		Write-Output " "
 		$question = 'Do you want to remove Camera app?'
 		$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
 		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 		$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) 
-		{	
+		if ($decision -eq 0) {	
 			Removing Camera app...
 			Get-AppxPackage "Microsoft.WindowsCamera" | Remove-AppxPackage
 			Write-Output "Camera app has been removed."
 		}
-		else
-		{
+		else {
 			Camera app was not removed.
 		}
-	}
-	Write-Output " "
-	{
+}
+
+Function RemoveGrooveMusic {
+		Write-Output " "
 		$question = 'Do you want to remove Groove Music app?'
 		$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
 		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 		$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) 
-		{	
+		if ($decision -eq 0) {	
 			Removing Groove Music...
 			Get-AppxPackage "Microsoft.ZuneMusic" | Remove-AppxPackage
 			Write-Output "Groove Music has been removed."
 		}
-		else
-		{
+		else {
 			Groove Music was not removed.
 		}
-	}
-	Write-Output " "
-	{
-		$question = 'Do you want to remove Office app?'
-		$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-		$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) 
-		{	
-			Removing Office...
-			Get-AppxPackage "MicrosoftOfficeHub" | Remove-AppxPackage
-			Write-Output "Office has been removed."
-		}
-		else
-		{
-			Office was not removed.
-		}
-	}
-	Write-Output " "
-	{
+}
+	
+Function RemoveSkype {
+		Write-Output " "
 		$question = 'Do you want to remove Skype app?'
 		$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
 		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 		$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) 
-		{	
+		if ($decision -eq 0) {	
 			Removing Skype...
 			Get-AppxPackage "Microsoft.SkypeApp" | Remove-AppxPackage
 			Write-Output "Skype has been removed."
 		}
-		else
-		{
+		else {
 			Skype was not removed.
 		}
-	}
-	Write-Output " "
-	{
+}
+
+Function RemoveYourPhone {
+		Write-Output " "
 		$question = 'Do you want to remove Your Phone?'
 		$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
 		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 		$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) 
-		{	
+		if ($decision -eq 0) {	
 			Removing Your Phone...
 			Get-AppxPackage "Microsoft.YourPhone" | Remove-AppxPackage
 			Write-Output "Your Phone has been removed."
 		}
-		else
-		{
+		else {
 			Your Phone was not removed.
 		}
-	}
 }
 
 # Install apps
@@ -968,8 +922,7 @@ Function PrintEndEndTasks {
 		Start-Sleep 1
 		Restart-Computer
 	}
-	else
-	{
+	else {
 	"This PC will not automatically restart, however a restart is pending."
 	}
 }
