@@ -940,21 +940,8 @@ Function RemoveMore {
 
 # Install apps
 Function InstallApps {
-	$question = 'Install 7-zip?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-	if ($decision -eq 0) {
-	Write-Output "Installing dependency: chocolatey..."
-	Set-ExecutionPolicy Bypass -Scope Process; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-	choco install chocolatey-core.extension -y
-	choco install 7zip -y --silent --limit-output
-	}
-	else
-	{
-	Write-Output "7-zip was not installed."
-	}
+	Write-Output "Installing 7-zip..."
+	winget install --id=7zip.7zip
 }
 
 
