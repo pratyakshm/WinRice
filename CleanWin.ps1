@@ -704,7 +704,7 @@ Function AutoLoginPostUpdate {
 Function StayOnLockscreenPostUpdate {
 	Write-Output " "
 	Write-Output "Telling this PC to not automatically login post a Windows Update reset."
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 0
+	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent"
 	Write-Output "This PC will now no longer automatically login to the most recent user account post a Windows Update restart."
 }
 
