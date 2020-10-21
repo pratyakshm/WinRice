@@ -352,7 +352,7 @@ Function DisableAutoUpdates {
 # Enable automatic updates
 Function EnableAutoUpdates {
 	Write-Output "Turning on automatic Windows updates..."
-	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -ErrorAction SilentlyContinue
+	Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -ErrorAction SilentlyContinue
 	Write-Output "Automatic Windows updates have been turned on."
 }
 
