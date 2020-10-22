@@ -95,4 +95,4 @@ List of apps removed by default:
 
 ## Discussion:
 Below are the links to my Telegram group & channel so you can receive updates on my work and discuss about CleanWin and technology in general!  
-[Channel](https://t.me/PratyakshProjects) | [Group](https://t.me/pratt_community)   
+[Channel](https://t.me/PratyakshProjects) | [Group](https://t.me/pratyakshchat)   
