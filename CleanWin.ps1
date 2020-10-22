@@ -123,6 +123,8 @@ Function LessSleep {
 
 # Clear the shell output
 Function ClearShell {
+	Write-Output " "
+	Write-Output " "
 	Write-Output "Clearing shell after waiting for 3 seconds..."
 	Start-Sleep 3
 	cls
