@@ -369,7 +369,8 @@ Function EnableAdvertisingID {
 # Disable Speech Recognition
 Function DisableSpeechRecognition {
 	Write-Output "Turning off online speech recognition..."
-	If (!(Test-Path "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy")) {
+	If (!(Test-Path "HKCU:\Software\Microsoft\Speech_OneCore\Settings")) {
+		New-Item -Path "HKCU:\Software\Microsoft\Speech_OneCore\Settings" | Out-Null
 		New-Item -Path "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy" | Out-Null
 	}
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy" -Name "HasAccepted" -Type DWord -Value 0
