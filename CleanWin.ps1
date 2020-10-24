@@ -1037,18 +1037,90 @@ Function Install7zip {
 	winget install --id=7zip.7zip
 }
 
-# Install VLC
-Function InstallVLC {
+# Install AnyDesk 
+Function InstallAnydesk {
 	Write-Output " "
-	$question = 'Do you want to install VLC?'
+	$question = 'Do you want to install AnyDesk?'
 	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
-			Write-Output "Installing VLC..."
-			winget install --id=VideoLAN.VLC
+			Write-Output "Installing AnyDesk..."
+			winget install --id=AnyDeskSoftwareGmbH.AnyDesk		
 		}
+}
+
+# Install OnlyOffice DesktopEditors
+Function InstallDesktopEditors {
+	Write-Output " "
+	$question = 'Do you want to install OnlyOffice Desktop Editors?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+			Write-Output "Installing OnlyOffice Desktop Editors..."
+			winget install --id=ONLYOFFICE.DesktopEditors	
+		}
+}
+
+# Install Firefox
+Function InstallFirefox {
+	Write-Output " "
+	$question = 'Do you want to install Mozilla Firefox?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+			Write-Output "Installing Mozilla Firefox..."
+			winget install --id=Mozilla.Firefox		
+		}
+}
+
+# Install JRE 
+Function InstallJRE {
+	Write-Output " "
+	$question = 'Do you want to install Java Runtime Environment?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+			Write-Output "Installing Java Runtime Environment..."
+			winget install --id=Oracle.JavaRuntimeEnvironment
+		}
+}
+
+# Install Notepad++
+Function InstallNotepadplusplus {
+	Write-Output " "
+	Write-Output " "
+	$question = 'Do you want to install Notepad++?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+			Write-Output "Installing Notepad++..."
+			winget install --id=Notepad++.Notepad++	
+		}
+}
+
+# Install OBS Studio
+Function InstallOBS {
+	Write-Output " "
+	$question = 'Do you want to install OBS Studio?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+			Write-Output "Installing OBS Studio..."
+			winget install --id=OBSProject.OBSStudio	
+		}
+	
 }
 
 # Install PowerToys
@@ -1064,18 +1136,18 @@ Function InstallPowerToys {
 			winget install --id=Microsoft.PowerToys
 		}
 }
-	
-# Install JRE 
-Function InstallJRE {
+
+# Install qBittorrent
+Function InstallqBittorrent {
 	Write-Output " "
-	$question = 'Do you want to install Java Runtime Environment?'
+	$question = 'Do you want to install qBittorrent?'
 	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
-			Write-Output "Installing Java Runtime Environment..."
-			winget install --id=Oracle.JavaRuntimeEnvironment
+			Write-Output "Installing qBittorrent..."
+			winget install --id=qBittorrent.qBittorrent
 		}
 }
 
@@ -1090,6 +1162,35 @@ Function InstallRufus {
 		if ($decision -eq 0) {
 			Write-Output "Installing Rufus..."
 			winget install --id=Rufus.Rufus
+		}
+}
+
+# Install Spotify
+Function InstallSpotify {
+	Write-Output " "
+	Write-Output " "
+	$question = 'Do you want to install Spotify?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+			Write-Output "Installing Spotify..."
+			winget install --id=Spotify.Spotify	
+		}
+}
+
+# Install VLC
+Function InstallVLC {
+	Write-Output " "
+	$question = 'Do you want to install VLC?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+			Write-Output "Installing VLC..."
+			winget install --id=VideoLAN.VLC
 		}
 }
 
@@ -1121,63 +1222,6 @@ Function InstallWDD {
 		}
 }
 
-# Install Firefox
-Function InstallFirefox {
-	Write-Output " "
-	$question = 'Do you want to install Mozilla Firefox?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing Mozilla Firefox..."
-			winget install --id=Mozilla.Firefox		
-		}
-}
-
-# Install AnyDesk 
-Function InstallAnydesk {
-	Write-Output " "
-	$question = 'Do you want to install AnyDesk?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing AnyDesk..."
-			winget install --id=AnyDeskSoftwareGmbH.AnyDesk		
-		}
-}
-
-Install OBS Studio
-Function InstallOBS {
-	Write-Output " "
-	$question = 'Do you want to install OBS Studio?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing OBS Studio..."
-			winget install --id=OBSProject.OBSStudio	
-		}
-	
-}
-
-# Install OnlyOffice DesktopEditors
-Function InstallDesktopEditors {
-	Write-Output " "
-	$question = 'Do you want to install OnlyOffice Desktop Editors?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing OnlyOffice Desktop Editors..."
-			winget install --id=ONLYOFFICE.DesktopEditors	
-		}
-}
-
 # Install Windows Terminal 
 Function InstallTerminal {
 	Write-Output " "
@@ -1192,48 +1236,6 @@ Function InstallTerminal {
 		}
 }
 
-# Install qBittorrent
-Function InstallqBittorrent {
-	Write-Output " "
-	$question = 'Do you want to install qBittorrent?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing qBittorrent..."
-			winget install --id=qBittorrent.qBittorrent
-		}
-}
-
-# Install Spotify
-Function InstallSpotify {
-	Write-Output " "
-	Write-Output " "
-	$question = 'Do you want to install Spotify?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing Spotify..."
-			winget install --id=Spotify.Spotify	
-		}
-}
-# Install Notepad++
-Function InstallNotepadplusplus {
-	Write-Output " "
-	Write-Output " "
-	$question = 'Do you want to install Notepad++?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing Notepad++..."
-			winget install --id=Notepad++.Notepad++	
-		}
-}
 
 
 ######### Tasks after successful run #########
