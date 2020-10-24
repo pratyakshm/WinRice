@@ -98,6 +98,8 @@ $tweaks = @(
 	"QCLS",
 	"InstallJRE",
 	"QCLS",
+	"InstallMSTeams",
+	"QCLS",
 	"InstallNotepadplusplus",
 	"QCLS",
 	"InstallOBS",
