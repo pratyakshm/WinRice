@@ -14,8 +14,8 @@ $tweaks = @(
 
 ### App changes - 1 ###
 	"PrintAppsChanges",
-	"InstallApps",
-	"InstallApps",
+	"InstallWinget",
+	"Install7zip",
 	"ChangesDone",
 	"ClearShell",
 	
@@ -999,8 +999,8 @@ Function InstallWinget {
 	Write-Output "Cleanup performed."
 }
 
-# Install apps
-Function InstallApps {
+# Install 7zip
+Function Install7zip {
 	Write-Output " "
 	Write-Output "Installing 7-zip..."
 	winget install --id=7zip.7zip
