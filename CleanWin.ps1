@@ -15,6 +15,7 @@ $tweaks = @(
 ### App changes - 1 ###
 	"PrintAppsChanges",
 	"InstallApps",
+	"InstallApps",
 	"ChangesDone",
 	"ClearShell",
 	
@@ -985,8 +986,22 @@ Function RemoveYourPhone {
 		}
 }
 
+# Install new DesktopAppInstaller to get winget compatibility
+Function InstallWinget {
+	Write-Output " "
+	Write-Output "Downloading Windows Package Manager..."
+	Invoke-WebRequest https://github.com/microsoft/winget-cli/releases/download/v.0.2.2521-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -O C:\WindowsPackageManager.appx
+	Write-Output "Installing Windows Package Manager..."
+	Add-AppxPackage "WindowsPackageManager.appx"
+	Write-Output "Windows Package Manager has been installed."
+	Write-Output "Cleaning up downloaded component..."
+	Remove-Item C:\WindowsPackageManager.appx
+	Write-Output "Cleanup performed."
+}
+
 # Install apps
 Function InstallApps {
+	Write-Output " "
 	Write-Output "Installing 7-zip..."
 	winget install --id=7zip.7zip
 }
