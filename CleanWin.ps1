@@ -108,6 +108,8 @@ $tweaks = @(
 	"QCLS",
 	"InstallRufus",
 	"QCLS",
+	"InstallSpotify",
+	"QCLS",
 	"InstallTerminal",
 	"QCLS",
 	"InstallVLC",
@@ -1204,6 +1206,20 @@ Function InstallqBittorrent {
 		}
 }
 
+# Install Spotify
+Function InstallSpotify {
+	Write-Output " "
+	Write-Output " "
+	$question = 'Do you want to install Spotify?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+			Write-Output "Installing Spotify..."
+			winget install --id=Spotify.Spotify	
+		}
+}
 # Install Notepad++
 Function InstallNotepadplusplus {
 	Write-Output " "
