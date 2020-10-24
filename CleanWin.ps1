@@ -1047,7 +1047,7 @@ Function InstallAnydesk {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 			Write-Output "Installing AnyDesk..."
-			winget install --id=AnyDeskSoftwareGmbH.AnyDesk		
+			winget install --id=AnyDeskSoftwareGmbH.AnyDesk --silent	
 		}
 }
 
@@ -1061,7 +1061,7 @@ Function InstallDesktopEditors {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 			Write-Output "Installing OnlyOffice Desktop Editors..."
-			winget install --id=ONLYOFFICE.DesktopEditors	
+			winget install --id=ONLYOFFICE.DesktopEditors --silent
 		}
 }
 
@@ -1075,7 +1075,7 @@ Function InstallFirefox {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 			Write-Output "Installing Mozilla Firefox..."
-			winget install --id=Mozilla.Firefox		
+			winget install --id=Mozilla.Firefox --silent	
 		}
 }
 
@@ -1089,7 +1089,7 @@ Function InstallJRE {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 			Write-Output "Installing Java Runtime Environment..."
-			winget install --id=Oracle.JavaRuntimeEnvironment
+			winget install --id=Oracle.JavaRuntimeEnvironment --silent
 		}
 }
 
@@ -1103,7 +1103,7 @@ Function Install MSTeams {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 			Write-Output "Installing Microsoft Teams..."
-			winget install --id=Microsoft.Teams
+			winget install --id=Microsoft.Teams --silent
 		}
 }
 # Install Notepad++
@@ -1117,7 +1117,7 @@ Function InstallNotepadplusplus {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 			Write-Output "Installing Notepad++..."
-			winget install --id=Notepad++.Notepad++	
+			winget install --id=Notepad++.Notepad++ --silent	
 		}
 }
 
@@ -1131,7 +1131,7 @@ Function InstallOBS {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 			Write-Output "Installing OBS Studio..."
-			winget install --id=OBSProject.OBSStudio	
+			winget install --id=OBSProject.OBSStudio --silent	
 		}
 	
 }
@@ -1146,7 +1146,7 @@ Function InstallPowerToys {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 			Write-Output "Installing PowerToys..."
-			winget install --id=Microsoft.PowerToys
+			winget install --id=Microsoft.PowerToys --silent
 		}
 }
 
@@ -1160,7 +1160,7 @@ Function InstallqBittorrent {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 			Write-Output "Installing qBittorrent..."
-			winget install --id=qBittorrent.qBittorrent
+			winget install --id=qBittorrent.qBittorrent --silent
 		}
 }
 
@@ -1174,7 +1174,7 @@ Function InstallRufus {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 			Write-Output "Installing Rufus..."
-			winget install --id=Rufus.Rufus
+			winget install --id=Rufus.Rufus --silent
 		}
 }
 
@@ -1189,7 +1189,7 @@ Function InstallSpotify {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 			Write-Output "Installing Spotify..."
-			winget install --id=Spotify.Spotify	
+			winget install --id=Spotify.Spotify --silent	
 		}
 }
 
@@ -1203,7 +1203,7 @@ Function InstallVLC {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 			Write-Output "Installing VLC..."
-			winget install --id=VideoLAN.VLC
+			winget install --id=VideoLAN.VLC --silent
 		}
 }
 
@@ -1217,7 +1217,7 @@ Function InstallVSCode {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 			Write-Output "Installing Visual Studio Code..."
-			winget install --id=Microsoft.VisualStudioCode
+			winget install --id=Microsoft.VisualStudioCode --silent
 		}
 }
 
@@ -1231,7 +1231,7 @@ Function InstallWDD {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 			Write-Output "Installing WinDynamicDesktop..."
-			winget install --id=t1m0thyj.WinDynamicDesktop
+			winget install --id=t1m0thyj.WinDynamicDesktop --silent
 		}
 }
 
@@ -1245,7 +1245,7 @@ Function InstallTerminal {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 			Write-Output "Installing Windows Terminal..."
-			winget install --id=Microsoft.WindowsTerminal
+			winget install --id=Microsoft.WindowsTerminal --silent
 		}
 }
 
