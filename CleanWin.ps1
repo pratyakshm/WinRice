@@ -58,7 +58,6 @@ $tweaks = @(
 ### Features changes ###
 	"PrintFeaturesChanges",
 	"EnableWSL",
-	"EnableVM",
 	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
@@ -793,31 +792,14 @@ Function EnableWSL {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 		Write-Output "Turning on Windows Subsystem for Linux..."
-		dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+		dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /all /NoRestart
+		Write-Output "Enabling dependencies..."
+		dism.exe /Online /Enable-Feature /FeatureName:VirtualMachinePlatform /All /NoRestart
+		dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V /All /NoRestart
+		Write-Output "Dependencies have been enabled."
 		Write-Output "Windows Subsystem for Linux has been turned on."
 	}
-	else {
-	"Windows Subsystem for Linux wasn't turned on."
-	}
 }
-
-Function EnableVM {
-	Write-Output " "
-	$question = 'Do you want to turn on Virtual Machine? (hit yes if you turned on WSL)'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-		Write-Output "Turning on Virtual Machine..."
-		dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
-		Write-Output "Virtual Machine has been turned on."
-	}
-	else {
-	"Virtual Machine wasn't turned on."
-	}
-}
-
 
 
 ######### Security changes #########
