@@ -156,12 +156,11 @@ Function KindaSleep {
 
 # Less sleep
 Function LessSleep {
-	Start-Sleep 3
+	Start-Sleep 1
 }
 
 # Clear the shell output
 Function ClearShell {
-	Write-Output " "
 	Write-Output " "
 	Write-Output "Clearing shell after waiting for 3 seconds..."
 	Start-Sleep 3
@@ -435,9 +434,9 @@ Function EnableAdvertisingID {
 
 # Disable Speech Recognition
 Function DisableSpeechRecognition {
+	Write-Output " "
 	Write-Output "Turning off online speech recognition..."
-	If (!(Test-Path "HKCU:\Software\Microsoft\Speech_OneCore\Settings")) {
-		New-Item -Path "HKCU:\Software\Microsoft\Speech_OneCore\Settings" | Out-Null
+	If (!(Test-Path "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy")) {
 		New-Item -Path "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy" | Out-Null
 	}
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy" -Name "HasAccepted" -Type DWord -Value 0
@@ -456,6 +455,7 @@ Function EnableSpeechRecognition {
 
 # Disable language list access for relevant content
 Function DisableLangRecommendation {
+	Write-Output " "
 	Write-Output "Telling Windows to not give websites access to your language list for recommending local content..."
 	If (!(Test-Path "HKCU:\Control Panel\International\User Profile")) {
 		New-Item -Path "HKCU:\Control Panel\International\User Profile" | Out-Null
@@ -927,7 +927,6 @@ Function PrintSystemChanges {
 Function EnableUltimatePerf {
 	Write-Output "Force enabling Ulimate performance power plan..."
 	powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
-	Write-Output "Ultimate Performance mode has been enabled. You can check it out under 'Control Panel\System and Security\Power Options'!"
 }
 
 
@@ -997,7 +996,7 @@ Function RemoveCamera {
 			Write-Output "Camera app has been removed."
 		}
 		else {
-			Camera app was not removed.
+			Write-Output "Camera app was not removed."
 		}
 }
 
@@ -1014,7 +1013,7 @@ Function RemoveGrooveMusic {
 			Write-Output "Groove Music has been removed."
 		}
 		else {
-			Groove Music was not removed.
+			Write-Output "Groove Music was not removed."
 		}
 }
 	
@@ -1031,7 +1030,7 @@ Function RemoveSkype {
 			Write-Output "Skype has been removed."
 		}
 		else {
-			Skype was not removed.
+			Write-Output "Skype was not removed."
 		}
 }
 
@@ -1048,7 +1047,7 @@ Function RemoveYourPhone {
 			Write-Output "Your Phone has been removed."
 		}
 		else {
-			Your Phone was not removed.
+			Write-Output "Your Phone was not removed."
 		}
 }
 
@@ -1061,7 +1060,7 @@ Function InstallWinget {
 	Add-AppxPackage "WindowsPackageManager.appx"
 	Write-Output "Windows Package Manager has been installed."
 	Write-Output "Deleting downloaded installer..."
-	Remove-Item C:\WindowsPackageManager.appx
+	Remove-Item WindowsPackageManager.appx
 	Write-Output "Deleted downloaded installer."
 }
 

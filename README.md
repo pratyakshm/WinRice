@@ -90,7 +90,7 @@ List of apps removed by default:
 </details>
 
 ## Wiki:
-[Click here](https://github.com/PratyakshM/CleanWin/wiki/Wiki) to visit the Wiki (contains detailed documentation).      
+[Click here](https://github.com/pratyakshm/CleanWin/wiki) to visit the Wiki (contains detailed documentation).      
 
 
 ## Discussion:
