@@ -95,7 +95,11 @@ $tweaks = @(
 	"QCLS",
 	"InstallAnydesk",
 	"QCLS",
+	"InstallAutoDark",
+	"QCLS",
 	"InstallDesktopEditors",
+	"QCLS",
+	"InstallDiscord",
 	"QCLS",
 	"InstallFirefox",
 	"QCLS",
@@ -1086,6 +1090,21 @@ Function ConfirmInstall {
  }
  until ($selection -match "y" -or $selection -match "n" -or $selection -match "q")
 }
+
+# Install Auto Dark Mode
+Function InstallAutoDark {
+	Write-Output " "
+	$question = 'Do you want to install Auto Dark Mode?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+			Write-Output "Installing Auto Dark Mode..."
+			winget install --id=Armin2208.WindowsAutoNightMode --silent	
+		}
+}
+
 
 # Install AnyDesk 
 Function InstallAnydesk {
