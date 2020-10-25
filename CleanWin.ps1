@@ -86,6 +86,8 @@ $tweaks = @(
 	"RemoveSkype",
 	"RemoveYourPhone",
 	"QCLS",
+	"ConfirmInstall",
+	"QCLS",
 	"InstallWinget",
 	"QCLS",
 	"Install7zip",
@@ -111,6 +113,8 @@ $tweaks = @(
 	"InstallRufus",
 	"QCLS",
 	"InstallSpotify",
+	"QCLS",
+	"InstallSteam",
 	"QCLS",
 	"InstallTerminal",
 	"QCLS",
@@ -1039,6 +1043,25 @@ Function Install7zip {
 	winget install --id=7zip.7zip
 }
 
+# Confirm App Installations
+Function ConfirmInstall {
+	do
+ {
+    Clear-Host
+    Write-Host "Do you want to proceed with app installations?"
+    Write-Host "Y: Press 'Y' to do this."
+    Write-Host "2: Press 'N' to skip this and end script execution."
+    $selection = Read-Host "Please make a selection."
+    switch ($selection)
+    {
+    'y' { 
+	}
+    'n' { Exit }
+    }
+ }
+ until ($selection -match "y" -or $selection -match "n" -or $selection -match "q")
+}
+
 # Install AnyDesk 
 Function InstallAnydesk {
 	Write-Output " "
@@ -1096,7 +1119,7 @@ Function InstallJRE {
 }
 
 # Install Microsoft Teams 
-Function Install MSTeams {
+Function InstallMSTeams {
 	Write-Output " "
 	$question = 'Do you want to install Microsoft Teams?'
 	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
@@ -1183,7 +1206,6 @@ Function InstallRufus {
 # Install Spotify
 Function InstallSpotify {
 	Write-Output " "
-	Write-Output " "
 	$question = 'Do you want to install Spotify?'
 	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
@@ -1192,6 +1214,20 @@ Function InstallSpotify {
 		if ($decision -eq 0) {
 			Write-Output "Installing Spotify..."
 			winget install --id=Spotify.Spotify --silent	
+		}
+}
+
+# Install Steam
+Function InstallSteam {
+	Write-Output " "
+	$question = 'Do you want to install Steam?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+			Write-Output "Installing Steam..."
+			winget install --id=Valve.Steam --silent	
 		}
 }
 
