@@ -207,6 +207,8 @@ Function OOShutup10Config {
 	./OOSU10.exe ooshutup10.cfg /quiet
 	Start-Sleep 1
 	Write-Output "Recommended O&OShutup10 settings were applied."
+	Remote-Item ooshutup10.cfg
+	Remove-Item OOSU10.exe
 	}
 	else {
 	Write-Output "Recommended O&OShutup10 settings were not applied."
