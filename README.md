@@ -1,7 +1,7 @@
 # Instructions
 
 ## How to run:
-1. Download **CleanWin-v0.6.zip** from the latest [release tag](https://github.com/PratyakshM/CleanWin/releases/tag/0.6).
+1. Download **CleanWin-v0.7.zip** from the latest [release tag](https://github.com/PratyakshM/CleanWin/releases/tag/0.7).
 2. Extract the contents of the ZIP file into your C: drive and launch **Start.bat**.    
 
 ## List of tasks:
@@ -9,7 +9,8 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 <details>
 <summary>Apps</summary>
 List of apps removed by default:
-  <br>3D Viewer        
+  <br>3D Viewer   
+  <br>Alarms
   <br>Cortana  
   <br>Feedback Hub 
   <br>Get Help      
@@ -19,38 +20,39 @@ List of apps removed by default:
   <br>Maps  
   <br>Microsoft News  
   <br>Microsoft Solitaire Collection  
+  <br>Mixed Reality Portal
   <br>Movies & TV  
   <br>OneConnect  
   <br>OneNote  
+  <br>Office
+  <br>Office Lens
   <br>Paint 3D  
   <br>People  
   <br>Sway  
   <br>Sticky Notes  
+  <br>Whiteboard
   <br>Xbox
   <br>Xbox Game bar
   <br><br> List of apps removed (user-choice basis):
-  <br>Alarms
   <br>Camera
   <br>Groove Music
-  <br>Mixed Reality Portal
-  <br>Office
-  <br>Office Lens
   <br>Skype
-  <br>Whiteboard
   <br>Your Phone
   <br><br>List of apps installed (user-choice basis):
   <br>Chocolatey package manager
-  <br>7-zip
+  <br>7-zip<br>AnyDesk<br>Auto Dark Mode<br>ONLYOffice Desktop Editors<br>Discord<br>Firefox<br>Java Runtime Environment<br>Microsoft Teams<br>Notepad++<br>OBS Studio<br>PowerToys<br>qBittorrent<br>Rufus<br>Spotify<br>Steam<br>Windows Terminal<br>VLC Media Player<br>Visual Studio Code<br>WinDynamicDesktop
 </details>
 
 <details>
  <summary>Privacy</summary>
-  Fully turn off all data collection/telemetry (level full, user-choice basis)
+  Fully turn off all data collection/telemetry (level full, optional)
+  <br>O&OShutup10 config (optional)
   <br>Turn off maps updates
   <br>Turn off feedback
   <br>Turn off advertising ID
   <br>Turn off location tracking
   <br>Turn off background apps
+  <br>Turn off speech recognition and access to language list for personalization
 </details>
 
 <details>
