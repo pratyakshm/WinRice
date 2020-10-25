@@ -14,6 +14,7 @@ $tweaks = @(
 	
 ### Privacy changes ###
 	"PrintPrivacyChanges",
+	"OOShutup10Config",
 	"DisableDataCollection", 	   # "EnableDataCollection",
 	"DisableMapUpdates",	       # "EnableMapUpdates",
 	"DisableFeedback",		       # "EnableFeedback",
@@ -188,6 +189,28 @@ Function PrintPrivacyChanges {
 	Write-Output "     PRIVACY CHANGES     "
 	Write-Output "-------------------------"
 	Write-Output " "
+}
+
+# Apply O&O Shutup10 Recommended Configuration (thanks to Chris Titus for the idea)
+Function OOShutup10Config {
+	Write-Output " "
+	$question = 'Do you want apply recommended O&OShutup10 settings?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+	if ($decision -eq 0) {
+	Write-Output "Applying recommended O&OShutup10 settings..."
+	Import-Module BitsTransfer
+	Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/cleanwin/master/ooshutup10.cfg" -Destination ooshutup10.cfg
+	Start-BitsTransfer -Source "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe" -Destination OOSU10.exe
+	./OOSU10.exe ooshutup10.cfg /quiet
+	Start-Sleep 1
+	Write-Output "Recommended O&OShutup10 settings were applied."
+	}
+	else {
+	Write-Output "Recommended O&OShutup10 settings were not applied."
+	}
 }
 
 # Disable data collection (hardening level - full)
@@ -753,7 +776,7 @@ Function ShowSecondsInTaskbar {
 	Write-Output "Taskbar clock will now display seconds."
 	}
 	else {
-	"Taskbar clock was left as it is."
+	Write-Host "Taskbar clock was left as it is."
 	}
 }
 
