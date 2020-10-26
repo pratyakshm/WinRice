@@ -98,6 +98,7 @@ $tweaks = @(
 	"InstallNotepadplusplus",
 	"InstallOBS",
 	"InstallPowerToys",
+	"InstallPython",
 	"InstallqBittorrent",
 	"InstallRufus",
 	"InstallSpotify",
@@ -1190,6 +1191,20 @@ Function InstallPowerToys {
 		if ($decision -eq 0) {
 			Write-Output "Installing PowerToys..."
 			winget install --id=Microsoft.PowerToys --silent
+		}
+}
+
+# Install Python
+Function InstallPython {
+	Write-Output " "
+	$question = 'Do you want to install Python?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+			Write-Output "Installing Python..."
+			winget install --id=Python.Python --silent
 		}
 }
 
