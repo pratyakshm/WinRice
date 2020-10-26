@@ -99,6 +99,7 @@ $tweaks = @(
 	"InstallOBS",
 	"InstallPowerToys",
 	"InstallPython",
+	"InstallRevo",
 	"InstallqBittorrent",
 	"InstallRufus",
 	"InstallSpotify",
@@ -1080,6 +1081,20 @@ Function InstallAnydesk {
 		}
 }
 
+# Install Bitwarden
+Function InstallBitwarden {
+	Write-Output " "
+	$question = 'Do you want to install Bitwarden (FOSS password manager)?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+			Write-Output "Installing Bitwarden..."
+			winget install --id=Bitwarden.Bitwarden --silent
+		}
+}
+
 # Install OnlyOffice DesktopEditors
 Function InstallDesktopEditors {
 	Write-Output " "
@@ -1134,6 +1149,20 @@ Function InstallJRE {
 		if ($decision -eq 0) {
 			Write-Output "Installing Java Runtime Environment..."
 			winget install --id=Oracle.JavaRuntimeEnvironment --silent
+		}
+}
+
+# Install Logitech Gaming Hub
+Function InstallLGHUB {
+	Write-Output " "
+	$question = 'Do you want to install Logitech Gaming Hub?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+			Write-Output "Installing Logitech Gaming Hubt..."
+			winget install --id=Logitech.LGH --silent
 		}
 }
 
@@ -1205,6 +1234,20 @@ Function InstallPython {
 		if ($decision -eq 0) {
 			Write-Output "Installing Python..."
 			winget install --id=Python.Python --silent
+		}
+}
+
+# Install Revo
+Function InstallRevo {
+	Write-Output " "
+	$question = 'Do you want to install Revo Uninstaller?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+			Write-Output "Installing Revo Uninstaller..."
+			winget install --id=RevoUninstaller.RevoUninstaller --silent
 		}
 }
 
@@ -1303,6 +1346,20 @@ Function InstallWDD {
 		if ($decision -eq 0) {
 			Write-Output "Installing WinDynamicDesktop..."
 			winget install --id=t1m0thyj.WinDynamicDesktop --silent
+		}
+}
+
+# Install WhatsApp
+Function InstallWhatsApp {
+	Write-Output " "
+	$question = 'Do you want to install WhatsApp?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+			Write-Output "Installing WhatsApp..."
+			winget install --id=WhatsApp.WhatsApp --silent
 		}
 }
 
