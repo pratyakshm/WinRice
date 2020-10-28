@@ -179,14 +179,7 @@ Function OOShutup10Config {
 
 # Disable data collection (hardening level - full)
 Function DisableDataCollection {
-	$message  = 'Data Collection'
-	$question = 'Do you want to turn off data collection?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-	if ($decision -eq 0) {
-    	Write-Output "Turning off Data collection..."
+		Write-Output "Turning off Data collection..."
 		Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" -Name "AllowTelemetry" -Type DWord -Value 0
 		Set-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection" -Name "AllowTelemetry" -Type DWord -Value 0
 		Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection" -Name "AllowTelemetry" -Type DWord -Value 0
@@ -239,10 +232,6 @@ Function DisableDataCollection {
 		}
 		Set-ItemProperty -Path "HKCU:\Control Panel\International\User Profile" -Name "HttpAcceptLanguageOptOut " -Type DWord -Value 1
 		Write-Output "Data collection was turned off."
-		}
-	else {
-    "Data collection was not turned off."
-	}
 }
 
 # Enable Data collection
