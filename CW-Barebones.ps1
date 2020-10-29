@@ -5,11 +5,10 @@
 #
 ##############
 # Default preset
-$tweaks = @(
+$tasks = @(
 
 ### Maintenance Tasks ###
 	"CleanWin",
-	"KindaSleep",
 	"ClearShell",
 	
 ### Privacy changes ###
@@ -23,8 +22,6 @@ $tweaks = @(
 	"DisableAdvertisingID",        # "EnableAdvertisingID",
 	"DisableSpeechRecognition",    # "EnableSpeechRecognition",
 	"DisableLangRecommendation",   # "EnableLangRecommendation",
-	"LessSleep",
-	"ChangesDone",
 	"ClearShell",
 
 ### Service changes ###
@@ -35,8 +32,6 @@ $tweaks = @(
 	"DisableAutorun",              # "EnableAutorun",
 	"DisableDefragmentation",      # "EnableDefragmentation",
 	"SetBIOSTimeUTC",              # "SetBIOSTimeLocal",
-	"LessSleep",
-	"ChangesDone",
 	"ClearShell",
 
 ### Windows Explorer Changes ###
@@ -51,15 +46,11 @@ $tweaks = @(
 	"HideTaskView",                # "RestoreTaskView",
 	"HideCortana",			       # "RestoreCortana",
 	"ShowSecondsInTaskbar",        # "HideSecondsFromTaskbar",
-	"LessSleep",
-	"ChangesDone",
 	"ClearShell",
 
 ### Features changes ###
 	"PrintFeaturesChanges",
 	"EnableWSL",
-	"LessSleep",
-	"ChangesDone",
 	"ClearShell",
 
 ### Security changes ###
@@ -67,29 +58,18 @@ $tweaks = @(
 	"AutoLoginPostUpdate", 		   # "StayOnLockscreenPostUpdate",
 	"DisableMeltdownCompatFlag",   # "EnableMeltdownCompatFlag",
 	"DisableSMB",				   # "EnableSMB",
-	"LessSleep",
-	"ChangesDone",
 	"ClearShell",
 
 ### System changes ###
 	"PrintSystemChanges",
 	"EnableUltimatePerf",	
-	"LessSleep",
-	"ChangesDone",
 	"ClearShell",
 
 ### App changes ###
 	"PrintAppsChanges",
 	"DebloatApps",
-	"ConfirmInstall",
 	"InstallWinget",
 	"Install7zip",
-	"InstallFirefox",
-	"InstallJRE",
-	"InstallTerminal",
-	"InstallVLC",
-	"LessSleep",
-	"ChangesDone",
 	"ClearShell",
 
 ###  Tasks after successful run ###
@@ -108,28 +88,14 @@ Function CleanWin {
 	Write-Output "All rights reserved."
 }
 
-# More sleep
-Function KindaSleep {
-	Start-Sleep 4
-}
-
-# Less sleep
-Function LessSleep {
-	Start-Sleep 1
-}
-
 # Clear the shell output
 Function ClearShell {
 	Write-Output " "
-	Write-Output "Clearing shell after waiting for 3 seconds..."
-	Start-Sleep 3
+	Write-Output "Clearing shell..."
+	Start-Sleep 1
 	Clear-Host
 }
 
-# Clear the shell output quickly
-Function QCLS {
-	Clear-Host
-}
 
 # Changes performed
 Function ChangesDone {
@@ -156,25 +122,13 @@ Function PrintPrivacyChanges {
 # Apply O&O Shutup10 Recommended Configuration (thanks to Chris Titus for the idea)
 Function OOShutup10Config {
 	Write-Output " "
-	$question = 'Do you want apply recommended O&OShutup10 settings?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-	if ($decision -eq 0) {
 	Write-Output "Applying recommended O&OShutup10 settings..."
 	Import-Module BitsTransfer
 	Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/cleanwin/master/ooshutup10.cfg" -Destination ooshutup10.cfg
 	Start-BitsTransfer -Source "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe" -Destination OOSU10.exe
 	./OOSU10.exe ooshutup10.cfg /quiet
-	Start-Sleep 1
 	Write-Output "Recommended O&OShutup10 settings were applied."
-	Remote-Item ooshutup10.cfg
-	Remove-Item OOSU10.exe
-	}
-	else {
-	Write-Output "Recommended O&OShutup10 settings were not applied."
-	}
+	Remote-Item ooshutup10.cfg OOSU10.exe
 }
 
 # Disable data collection (hardening level - full)
@@ -196,7 +150,6 @@ Function DisableDataCollection {
 		Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "EnableActivityFeed" -Type DWord -Value 0
 		Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "PublishUserActivities" -Type DWord -Value 0
 		Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "UploadUserActivities" -Type DWord -Value 0
-		
 		If (!(Test-Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent")) {
 			New-Item -Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent" -Force | Out-Null
 			}
@@ -424,7 +377,7 @@ Function EnableLangRecommendation {
 
 
 
-######### Service Tweaks #########
+######### Service Changes #########
 
 # Update status: services changes
 Function PrintServicesChanges {
@@ -438,23 +391,13 @@ Function PrintServicesChanges {
 
 # Disable automatic updates
 Function DisableAutoUpdates {
-	$question = 'Do you want to turn off automatic Windows updates?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-	if ($decision -eq 0) {
-		Write-Output "Turning off automatic Windows updates..."
-			If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate")) {
-	  		New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" | Out-Null
-	  		New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" | Out-Null
-	  		}
-		Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name NoAutoUpdate -Type DWord -Value 1
-		Write-Output "Automatic Windows updates have been turned off."
-	}
-	else {
-	"Automatic Windows Updates were left as it is."
-	}
+	Write-Output "Turning off automatic Windows updates..."
+	If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate")) {
+	  	New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" | Out-Null
+	  	New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" | Out-Null
+		}
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name NoAutoUpdate -Type DWord -Value 1
+	Write-Output "Automatic Windows updates have been turned off."
 }
 
 # Enable automatic updates
@@ -514,25 +457,14 @@ Function DisableAutorun {
 Function EnableAutorun {
 	Write-Output "Turning on Autorun for all drives..."
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoDriveTypeAutoRun" -ErrorAction SilentlyContinue
-		Write-Output "Autorun has been turned on."
+	Write-Output "Autorun has been turned on."
 }
 
 # Disable scheduled defragmentation task
 Function DisableDefragmentation {
-	$message  = 'Disk Defragmentation'
-	$question = 'Do you want to turn off disk defragmentation?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-	if ($decision -eq 0) {
-		Write-Output "Turning off scheduled defragmentation..."
-		Disable-ScheduledTask -TaskName "Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
-		Write-Output "Scheduled defragmentation has been turned off."
-	}
-	else {
-	"Automatic disk defragmentation was left as it is."
-	}
+	Write-Output "Turning off scheduled defragmentation..."
+	Disable-ScheduledTask -TaskName "Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
+	Write-Output "Scheduled defragmentation has been turned off."
 }
 
 # Enable scheduled defragmentation task
@@ -719,19 +651,9 @@ Function RestoreCortana {
 # Show Seconds in taskbar clock
 Function ShowSecondsInTaskbar {
 	Write-Output " "
-	$question = 'Do you want to have the taskbar clock display seconds?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-	if ($decision -eq 0) {
 	Write-Output "Telling taskbar clock to display seconds..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
 	Write-Output "Taskbar clock will now display seconds."
-	}
-	else {
-	Write-Host "Taskbar clock was left as it is."
-	}
 }
 
 # Hide Seconds in taskbar clock
@@ -756,20 +678,11 @@ Function PrintFeaturesChanges {
 }
 
 Function EnableWSL {
-	$question = 'Do you want to turn on Windows Subsystem for Linux?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
 		Write-Output "Turning on Windows Subsystem for Linux..."
 		dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /all /NoRestart
-		Write-Output "Enabling dependencies..."
 		dism.exe /Online /Enable-Feature /FeatureName:VirtualMachinePlatform /All /NoRestart
 		dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V /All /NoRestart
-		Write-Output "Dependencies have been enabled."
 		Write-Output "Windows Subsystem for Linux has been turned on."
-	}
 }
 
 
@@ -856,7 +769,7 @@ Function PrintSystemChanges {
 
 # To delete Ultimate performance power plan (its safe to do so), you need to go to Control Panel\System and Security\Power Options, click on "Ultimate performance" and then click on "Delete this plan"
 Function EnableUltimatePerf {
-	Write-Output "Force enabling Ulimate performance power plan..."
+	Write-Output "Enabling Ulimate performance power plan..."
 	powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
 }
 
@@ -925,14 +838,12 @@ Function DebloatApps {
 # Install new DesktopAppInstaller to get winget compatibility
 Function InstallWinget {
 	Write-Output " "
-	Write-Output "Downloading Windows Package Manager..."
-	Invoke-WebRequest https://github.com/microsoft/winget-cli/releases/download/v.0.2.2521-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -O C:\WindowsPackageManager.appx
 	Write-Output "Installing Windows Package Manager..."
-	Add-AppxPackage "WindowsPackageManager.appx"
-	Write-Output "Windows Package Manager has been installed."
+	Invoke-WebRequest https://github.com/microsoft/winget-cli/releases/download/v.0.2.2521-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -O C:\WindowsPackageManager.appx
+	Write-Output "Installation complete, cleaning up..."
 	Write-Output "Deleting downloaded installer..."
 	Remove-Item WindowsPackageManager.appx
-	Write-Output "Deleted downloaded installer."
+	Write-Output "Cleaned up."
 }
 
 # Install 7zip
@@ -941,83 +852,6 @@ Function Install7zip {
 	Write-Output "Installing 7-zip..."
 	winget install --id=7zip.7zip
 }
-
-# Confirm App Installations
-Function ConfirmInstall {
-	do
- {
-    Clear-Host
-    Write-Host "Do you want to proceed with app installations?"
-    Write-Host "Y: Press 'Y' to do this."
-    Write-Host "2: Press 'N' to skip this and end script execution."
-    $selection = Read-Host "Please make a selection."
-    switch ($selection)
-    {
-    'y' { 
-	}
-    'n' { Exit }
-    }
- }
- until ($selection -match "y" -or $selection -match "n" -or $selection -match "q")
-}
-
-
-# Install Firefox
-Function InstallFirefox {
-	Write-Output " "
-	$question = 'Do you want to install Mozilla Firefox?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing Mozilla Firefox..."
-			winget install --id=Mozilla.Firefox --silent	
-		}
-}
-
-# Install JRE 
-Function InstallJRE {
-	Write-Output " "
-	$question = 'Do you want to install Java Runtime Environment?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing Java Runtime Environment..."
-			winget install --id=Oracle.JavaRuntimeEnvironment --silent
-		}
-}
-
-# Install VLC
-Function InstallVLC {
-	Write-Output " "
-	$question = 'Do you want to install VLC?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing VLC..."
-			winget install --id=VideoLAN.VLC --silent
-		}
-}
-
-# Install Windows Terminal 
-Function InstallTerminal {
-	Write-Output " "
-	$question = 'Do you want to install Windows Terminal?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing Windows Terminal..."
-			winget install --id=Microsoft.WindowsTerminal --silent
-		}
-}
-
 
 
 ######### Tasks after successful run #########
@@ -1033,18 +867,9 @@ Function PrintEndTasksBegin{
 		
 # Update status: Script execution successful
 Function PrintEndEndTasks {
-	$question = 'CleanWin execution successful. Do you want to restart your PC now?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-	if ($decision -eq 0) {
-		Start-Sleep 1
+		Write-Output "Restarting this PC..."
+		Start-Sleep 2
 		Restart-Computer
-	}
-	else {
-	"This PC will not automatically restart, however a restart is pending."
-	}
 }
 # Call the desired tweak functions
-$tweaks | ForEach-Object { Invoke-Expression $_ }
+$tasks | ForEach-Object { Invoke-Expression $_ }
