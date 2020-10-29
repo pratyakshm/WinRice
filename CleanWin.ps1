@@ -5,11 +5,11 @@
 #
 ##############
 # Default preset
-$tweaks = @(
+$tasks = @(
 
 ### Maintenance Tasks ###
 	"CleanWin",
-	"KindaSleep",
+	"LessSleep",
 	"ClearShell",
 	
 ### Privacy changes ###
@@ -95,7 +95,6 @@ $tweaks = @(
 	"InstallFirefox",
 	"InstallJRE",
 	"InstallMSTeams",
-	"InstallNotepadplusplus",
 	"InstallOBS",
 	"InstallPowerToys",
 	"InstallPython",
@@ -123,14 +122,10 @@ $tweaks = @(
 # CleanWin
 Function CleanWin {
 	Write-Output " "
-	Write-Output "CleanWin version 0.7 by pratyakshm"
+	Write-Output "CleanWin v0.7.1 by pratyakshm"
 	Write-Output "https://github.com/pratyakshm/CleanWin"
 	Write-Output "All rights reserved."
-}
-
-# More sleep
-Function KindaSleep {
-	Start-Sleep 4
+	Write-Output "CleanWin is licensed under the MIT License: https://github.com/pratyakshm/CleanWin/blob/master/LICENSE"
 }
 
 # Less sleep
@@ -143,11 +138,6 @@ Function ClearShell {
 	Write-Output " "
 	Write-Output "Clearing shell after waiting for 3 seconds..."
 	Start-Sleep 3
-	Clear-Host
-}
-
-# Clear the shell output quickly
-Function QCLS {
 	Clear-Host
 }
 
@@ -176,24 +166,20 @@ Function PrintPrivacyChanges {
 # Apply O&O Shutup10 Recommended Configuration (thanks to Chris Titus for the idea)
 Function OOShutup10Config {
 	Write-Output " "
-	$question = 'Do you want apply recommended O&OShutup10 settings?'
+	$question = 'Do you want apply O&OShutup10 settings?'
 	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 	if ($decision -eq 0) {
-	Write-Output "Applying recommended O&OShutup10 settings..."
+	Write-Output "Applying O&OShutup10 settings..."
 	Import-Module BitsTransfer
 	Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/cleanwin/master/ooshutup10.cfg" -Destination ooshutup10.cfg
 	Start-BitsTransfer -Source "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe" -Destination OOSU10.exe
 	./OOSU10.exe ooshutup10.cfg /quiet
-	Start-Sleep 1
-	Write-Output "Recommended O&OShutup10 settings were applied."
 	Remote-Item ooshutup10.cfg
 	Remove-Item OOSU10.exe
-	}
-	else {
-	Write-Output "Recommended O&OShutup10 settings were not applied."
+	Write-Output "O&OShutup10 settings were applied."
 	}
 }
 
@@ -260,9 +246,6 @@ Function DisableDataCollection {
 		Set-ItemProperty -Path "HKCU:\Control Panel\International\User Profile" -Name "HttpAcceptLanguageOptOut " -Type DWord -Value 1
 		Write-Output "Data collection was turned off."
 		}
-	else {
-    "Data collection was not turned off."
-	}
 }
 
 # Enable Data collection
@@ -435,12 +418,12 @@ Function EnableSpeechRecognition {
 # Disable language list access for relevant content
 Function DisableLangRecommendation {
 	Write-Output " "
-	Write-Output "Telling Windows to not give websites access to your language list for recommending local content..."
+	Write-Output "Restricting websites from accessing your language list..."
 	If (!(Test-Path "HKCU:\Control Panel\International\User Profile")) {
 		New-Item -Path "HKCU:\Control Panel\International\User Profile" | Out-Null
 	}
 	Set-ItemProperty -Path "HKCU:\Control Panel\International\User Profile" -Name "HttpAcceptLanguageOptOut " -Type DWord -Value 1
-	Write-Output "Websites will now no longer be able to access your language list to provide you locally relevant content."
+	Write-Output "Websites have been restricted from accessing your language list."
 }
 
 # Enable language list access for relevant content
@@ -455,7 +438,7 @@ Function EnableLangRecommendation {
 
 
 
-######### Service Tweaks #########
+######### Service Changes #########
 
 # Update status: services changes
 Function PrintServicesChanges {
@@ -482,9 +465,6 @@ Function DisableAutoUpdates {
 	  		}
 		Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name NoAutoUpdate -Type DWord -Value 1
 		Write-Output "Automatic Windows updates have been turned off."
-	}
-	else {
-	"Automatic Windows Updates were left as it is."
 	}
 }
 
@@ -760,9 +740,6 @@ Function ShowSecondsInTaskbar {
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
 	Write-Output "Taskbar clock will now display seconds."
 	}
-	else {
-	Write-Host "Taskbar clock was left as it is."
-	}
 }
 
 # Hide Seconds in taskbar clock
@@ -794,12 +771,10 @@ Function EnableWSL {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
 		Write-Output "Turning on Windows Subsystem for Linux..."
-		dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /all /NoRestart
-		Write-Output "Enabling dependencies..."
-		dism.exe /Online /Enable-Feature /FeatureName:VirtualMachinePlatform /All /NoRestart
-		dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V /All /NoRestart
-		Write-Output "Dependencies have been enabled."
-		Write-Output "Windows Subsystem for Linux has been turned on."
+		dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /all /NoRestart /Quiet
+		dism.exe /Online /Enable-Feature /FeatureName:VirtualMachinePlatform /All /NoRestart /Quiet
+		dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V /All /NoRestart	/Quiet
+		Write-Output "Windows Subsystem for Linux has been turned on." 
 	}
 }
 
@@ -887,7 +862,7 @@ Function PrintSystemChanges {
 
 # To delete Ultimate performance power plan (its safe to do so), you need to go to Control Panel\System and Security\Power Options, click on "Ultimate performance" and then click on "Delete this plan"
 Function EnableUltimatePerf {
-	Write-Output "Force enabling Ulimate performance power plan..."
+	Write-Output "Turning on ultimate performance power plan..."
 	powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
 }
 
@@ -908,7 +883,7 @@ Function PrintAppsChanges {
 # Debloat apps
 Function DebloatApps {
 	# Prebuilt apps
-	Write-Output "Beginning removal of UWP apps..."
+	Write-Output "Beginning uninstallation of unnecesary apps..."
 	$Bloatware = @(
 	 "Microsoft.549981C3F5F10"
 	 "Microsoft.BingNews"
@@ -941,8 +916,8 @@ Function DebloatApps {
 	foreach ($Bloat in $Bloatware) {
 		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
-        Write-Output "Removing $Bloat."}
-	Write-Output "Unnecessary apps have been removed from this PC."
+        Write-Output "Uninstalling $Bloat."}
+	Write-Output "Unnecessary apps have been uninstalled from this PC."
 }
 
 Function RemoveCamera {
@@ -956,9 +931,6 @@ Function RemoveCamera {
 			Removing Camera app...
 			Get-AppxPackage "Microsoft.WindowsCamera" | Remove-AppxPackage
 			Write-Output "Camera app has been removed."
-		}
-		else {
-			Write-Output "Camera app was not removed."
 		}
 }
 
@@ -974,9 +946,6 @@ Function RemoveGrooveMusic {
 			Get-AppxPackage "Microsoft.ZuneMusic" | Remove-AppxPackage
 			Write-Output "Groove Music has been removed."
 		}
-		else {
-			Write-Output "Groove Music was not removed."
-		}
 }
 	
 Function RemoveSkype {
@@ -990,9 +959,6 @@ Function RemoveSkype {
 			Removing Skype...
 			Get-AppxPackage "Microsoft.SkypeApp" | Remove-AppxPackage
 			Write-Output "Skype has been removed."
-		}
-		else {
-			Write-Output "Skype was not removed."
 		}
 }
 
@@ -1008,9 +974,6 @@ Function RemoveYourPhone {
 			Get-AppxPackage "Microsoft.YourPhone" | Remove-AppxPackage
 			Write-Output "Your Phone has been removed."
 		}
-		else {
-			Write-Output "Your Phone was not removed."
-		}
 }
 
 # Install new DesktopAppInstaller to get winget compatibility
@@ -1018,12 +981,9 @@ Function InstallWinget {
 	Write-Output " "
 	Write-Output "Downloading Windows Package Manager..."
 	Invoke-WebRequest https://github.com/microsoft/winget-cli/releases/download/v.0.2.2521-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -O C:\WindowsPackageManager.appx
-	Write-Output "Installing Windows Package Manager..."
 	Add-AppxPackage "WindowsPackageManager.appx"
-	Write-Output "Windows Package Manager has been installed."
-	Write-Output "Deleting downloaded installer..."
 	Remove-Item WindowsPackageManager.appx
-	Write-Output "Deleted downloaded installer."
+	Write-Output "Windows Package Installer has been installed."
 }
 
 # Install 7zip
@@ -1039,8 +999,8 @@ Function ConfirmInstall {
  {
     Clear-Host
     Write-Host "Do you want to proceed with app installations?"
-    Write-Host "Y: Press 'Y' to do this."
-    Write-Host "2: Press 'N' to skip this and end script execution."
+    Write-Host "Y: Press 'Y' to proceed."
+    Write-Host "2: Press 'N' to skip and end CleanWin execution"
     $selection = Read-Host "Please make a selection."
     switch ($selection)
     {
@@ -1177,20 +1137,6 @@ Function InstallMSTeams {
 		if ($decision -eq 0) {
 			Write-Output "Installing Microsoft Teams..."
 			winget install --id=Microsoft.Teams --silent
-		}
-}
-# Install Notepad++
-Function InstallNotepadplusplus {
-	Write-Output " "
-	Write-Output " "
-	$question = 'Do you want to install Notepad++?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing Notepad++..."
-			winget install --id=Notepad++.Notepad++ --silent	
 		}
 }
 
@@ -1402,8 +1348,8 @@ Function PrintEndEndTasks {
 		Restart-Computer
 	}
 	else {
-	"This PC will not automatically restart, however a restart is pending."
+	Write-Output "This PC will not automatically restart, however a restart is pending."
 	}
 }
 # Call the desired tweak functions
-$tweaks | ForEach-Object { Invoke-Expression $_ }
+$tasks | ForEach-Object { Invoke-Expression $_ }
