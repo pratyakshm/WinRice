@@ -45,7 +45,7 @@ List of apps removed by default:
 
 <details>
  <summary>Privacy</summary>
-  Fully turn off all data collection/telemetry (level full, optional)
+  Turn off data collection/telemetry (level full, optional)
   <br>O&OShutup10 config (optional)
   <br>Turn off maps updates
   <br>Turn off feedback
