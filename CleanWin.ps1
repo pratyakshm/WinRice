@@ -80,34 +80,10 @@ $tasks = @(
 
 ### App changes ###
 	"PrintAppsChanges",
-	"DebloatApps",
-	"RemoveCamera",
-	"RemoveGrooveMusic",
-	"RemoveSkype",
-	"RemoveYourPhone",
-	"CleanupRegistry",
-	"ConfirmInstall",
-	"InstallWinget",
-	"Install7zip",
-	"InstallAnydesk",
-	"InstallAutoDark",
-	"InstallDesktopEditors",
-	"InstallDiscord",
-	"InstallFirefox",
-	"InstallJRE",
-	"InstallMSTeams",
-	"InstallOBS",
-	"InstallPowerToys",
-	"InstallPython",
-	"InstallRevo",
-	"InstallqBittorrent",
-	"InstallRufus",
-	"InstallSpotify",
-	"InstallSteam",
-	"InstallTerminal",
-	"InstallVLC",
-	"InstallVSCode",
-	"InstallWDD",
+	"DebloatApps", "RemoveCamera", "RemoveGrooveMusic",	"RemoveSkype",	"RemoveYourPhone",	"CleanupRegistry",
+	"ConfirmInstall", "InstallWinget",
+	"Install7zip", "InstallAutoDark", "InstallFirefox", "InstallJRE", "InstallOBS", "InstallPowerToys",	"InstallPython", "InstallRevo",	"InstallqBittorrent", "InstallRufus",
+	"InstallTerminal", "InstallVLC", "InstallVSCode", "InstallWDD",
 	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
@@ -1068,64 +1044,6 @@ Function InstallAutoDark {
 		}
 }
 
-
-# Install AnyDesk 
-Function InstallAnydesk {
-	Write-Output " "
-	$question = 'Do you want to install AnyDesk?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing AnyDesk..."
-			winget install --id=AnyDeskSoftwareGmbH.AnyDesk --silent	
-		}
-}
-
-# Install Bitwarden
-Function InstallBitwarden {
-	Write-Output " "
-	$question = 'Do you want to install Bitwarden (FOSS password manager)?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing Bitwarden..."
-			winget install --id=Bitwarden.Bitwarden --silent
-		}
-}
-
-# Install OnlyOffice DesktopEditors
-Function InstallDesktopEditors {
-	Write-Output " "
-	$question = 'Do you want to install OnlyOffice Desktop Editors?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing OnlyOffice Desktop Editors..."
-			winget install --id=ONLYOFFICE.DesktopEditors --silent
-		}
-}
-
-# Install Discord
-Function InstallDiscord {
-	Write-Output " "
-	$question = 'Do you want to install Discord?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing Discord..."
-			winget install --id=Discord.Discord --silent
-		}
-}
-
-
 # Install Firefox
 Function InstallFirefox {
 	Write-Output " "
@@ -1165,20 +1083,6 @@ Function InstallLGHUB {
 		if ($decision -eq 0) {
 			Write-Output "Installing Logitech Gaming Hubt..."
 			winget install --id=Logitech.LGH --silent
-		}
-}
-
-# Install Microsoft Teams 
-Function InstallMSTeams {
-	Write-Output " "
-	$question = 'Do you want to install Microsoft Teams?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing Microsoft Teams..."
-			winget install --id=Microsoft.Teams --silent
 		}
 }
 
@@ -1239,20 +1143,6 @@ Function InstallRevo {
 		}
 }
 
-# Install qBittorrent
-Function InstallqBittorrent {
-	Write-Output " "
-	$question = 'Do you want to install qBittorrent?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing qBittorrent..."
-			winget install --id=qBittorrent.qBittorrent --silent
-		}
-}
-
 # Install Rufus 
 Function InstallRufus {
 	Write-Output " "
@@ -1264,34 +1154,6 @@ Function InstallRufus {
 		if ($decision -eq 0) {
 			Write-Output "Installing Rufus..."
 			winget install --id=Rufus.Rufus --silent
-		}
-}
-
-# Install Spotify
-Function InstallSpotify {
-	Write-Output " "
-	$question = 'Do you want to install Spotify?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing Spotify..."
-			winget install --id=Spotify.Spotify --silent	
-		}
-}
-
-# Install Steam
-Function InstallSteam {
-	Write-Output " "
-	$question = 'Do you want to install Steam?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing Steam..."
-			winget install --id=Valve.Steam --silent	
 		}
 }
 
@@ -1334,20 +1196,6 @@ Function InstallWDD {
 		if ($decision -eq 0) {
 			Write-Output "Installing WinDynamicDesktop..."
 			winget install --id=t1m0thyj.WinDynamicDesktop --silent
-		}
-}
-
-# Install WhatsApp
-Function InstallWhatsApp {
-	Write-Output " "
-	$question = 'Do you want to install WhatsApp?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Output "Installing WhatsApp..."
-			winget install --id=WhatsApp.WhatsApp --silent
 		}
 }
 
