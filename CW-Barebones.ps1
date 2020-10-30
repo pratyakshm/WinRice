@@ -700,7 +700,7 @@ Function DebloatApps {
 Function InstallWinget {
 	Write-Output " "
 	Write-Output "Installing Windows Package Manager..."
-	Invoke-WebRequest https://github.com/microsoft/winget-cli/releases/download/v.0.2.2521-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -O C:\WindowsPackageManager.appx
+	Invoke-WebRequest https://github.com/microsoft/winget-cli/releases/download/v0.2.2941/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -O C:\WindowsPackageManager.appx
 	Remove-Item WindowsPackageManager.appx
 	Write-Output "Windows package manager has been installed."
 }
