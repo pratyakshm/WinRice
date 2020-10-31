@@ -438,11 +438,13 @@ Function DisableAutoUpdates {
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 	if ($decision -eq 0) {
 		Write-Host "Turning off automatic Windows updates..."
-			If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate")) {
-	  		New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" | Out-Null
-	  		New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" | Out-Null
+		$Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
+		$Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
+			If (!(Test-Path $Update1)) {
+	  		New-Item -Path $Update1 | Out-Null
+	  		New-Item -Path $Update2 | Out-Null
 	  		}
-		Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" -Name NoAutoUpdate -Type DWord -Value 1
+		Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
 		Write-Host "Automatic Windows updates have been turned off."
 	}
 }
@@ -458,19 +460,22 @@ Function EnableAutoUpdates {
 Function DisableLANP2P {
 	Write-Host " "
 	Write-Host "Turning off P2P and LAN updates..."
-	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization")) {
-		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization" | Out-Null
-		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" | Out-Null
-	}
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DownloadMode -Type DWord -Value 0
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DODownloadMode -Type DWord -Value 0
+	$LANP2P1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization"
+	$LANP2P2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"
+	If (!(Test-Path $LANP2P1)) {
+		New-Item -Path $LANP2P1 | Out-Null
+		New-Item -Path $LANP2P2 | Out-Null
+		}
+	Set-ItemProperty -Path $LANP2P2 -Name DownloadMode -Type DWord -Value 0
+	Set-ItemProperty -Path $LANP2P2 -Name DODownloadMode -Type DWord -Value 0
 	Write-Host "P2P and LAN updates have been turned off."
 }
 
 Function EnableLANP2P {
 	Write-Host "Turning on P2P and LAN updates..."
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DownloadMode -Type DWord -Value 3
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name DODownloadMode -Type DWord -Value 3
+	$LANP2P3 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"
+	Set-ItemProperty -Path $LANP2P3 -Name DownloadMode -Type DWord -Value 3
+	Set-ItemProperty -Path $LANP2P3 -Name DODownloadMode -Type DWord -Value 3
 	Write-Host "LAN and P2P updates have been turned on."
 }
 
@@ -493,10 +498,11 @@ Function EnableAutoplay {
 Function DisableAutorun {
 	Write-Host " "
 	Write-Host "Turning off Autorun for all drives..."
-	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer")) {
-		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" | Out-Null
-	}
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoDriveTypeAutoRun" -Type DWord -Value 255
+	$Autorun = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+	If (!(Test-Path $Autorun)) {
+		New-Item -Path $Autorun | Out-Null
+		}
+	Set-ItemProperty -Path $Autorun -Name "NoDriveTypeAutoRun" -Type DWord -Value 255
 	Write-Host "Autorun has been turned off for all drives."
 }
 
@@ -504,7 +510,7 @@ Function DisableAutorun {
 Function EnableAutorun {
 	Write-Host "Turning on Autorun for all drives..."
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoDriveTypeAutoRun" -ErrorAction SilentlyContinue
-		Write-Host "Autorun has been turned on."
+	Write-Host "Autorun has been turned on."
 }
 
 # Disable scheduled defragmentation task
@@ -519,10 +525,10 @@ Function DisableDefragmentation {
 		Write-Host "Turning off scheduled defragmentation..."
 		Disable-ScheduledTask -TaskName "Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
 		Write-Host "Scheduled defragmentation has been turned off."
-	}
+		}
 	else {
 	"Automatic disk defragmentation was left as it is."
-	}
+		}
 }
 
 # Enable scheduled defragmentation task
@@ -631,32 +637,37 @@ Function Hide3DObjectsInThisPC {
 # Restore 3D Objects icon in This PC
 Function Restore3DObjectsInThisPC {
 	Write-Host "Restoring 3D Objects icon in This PC..."
-	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}")) {
-		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" | Out-Null
-	}
-	Write-Host "3D objects has been restored in This PC."
+	$Restore3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
+	If (!(Test-Path $Restore3DObjects1)) {
+		New-Item -Path $Restore3DObjects1 | Out-Null
+		}
+	Write-Host "3D objects icon has been restored in This PC."
 }
 
 # Hide 3D Objects icon from Explorer namespace - Hides the icon also from personal folders and open/save dialogs
 Function Hide3DObjectsInExplorer {
 	Write-Host " "
 	Write-Host "Hiding 3D Objects from Explorer namespace..."
-	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag")) {
-		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" -Force | Out-Null
-	}
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" -Name "ThisPCPolicy" -Type String -Value "Hide"
-	If (!(Test-Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag")) {
-		New-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" -Force | Out-Null
-	}
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" -Name "ThisPCPolicy" -Type String -Value "Hide"
+	$Hide3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+	$Hide3DObjects2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+	If (!(Test-Path $Hide3DObjects1)) {
+		New-Item -Path $Hide3DObjects1 -Force | Out-Null
+		}
+	Set-ItemProperty -Path $Hide3DObjects1 -Name "ThisPCPolicy" -Type String -Value "Hide"
+	If (!(Test-Path $Hide3DObjects2)) {
+		New-Item -Path $Hide3DObjects2 -Force | Out-Null
+		}
+	Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
 	Write-Host "3D Objects has been hidden from Explorer."
 }
 
 # Restore 3D Objects icon in Explorer namespace
 Function Restore3DObjectsInExplorer {
 	Write-Host "Restoring 3D Objects icon in Explorer namespace..."
-	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
-	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
+	$Restore3DObjects2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+	$Restore3DObjects3 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+	Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
+	Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
 	Write-Host "3D Objects has been restored to Explorer namespace."
 }
 
@@ -718,7 +729,7 @@ Function ShowSecondsInTaskbar {
 	Write-Host "Telling taskbar clock to display seconds..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
 	Write-Host "Taskbar clock will now display seconds."
-	}
+		}
 }
 
 # Hide Seconds in taskbar clock
@@ -754,7 +765,7 @@ Function EnableWSL {
 		dism.exe /Online /Enable-Feature /FeatureName:VirtualMachinePlatform /All /NoRestart /Quiet
 		dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V /All /NoRestart	/Quiet
 		Write-Host "Windows Subsystem for Linux has been turned on." 
-	}
+		}
 }
 
 
@@ -791,10 +802,11 @@ Function StayOnLockscreenPostUpdate {
 Function EnableMeltdownCompatFlag {
 	Write-Host " "
 	Write-Host "Turning on Meltdown (CVE-2017-5754) compatibility flag..."
-	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat")) {
-		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat" | Out-Null
+	$MeltdownCompat = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat"
+	If (!(Test-Path $MeltdownCompat)) {
+		New-Item -Path $MeltdownCompat | Out-Null
 	}
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat" -Name "cadca5fe-87d3-4b96-b7fb-a231484277cc" -Type DWord -Value 0
+	Set-ItemProperty -Path $MeltdownCompat -Name "cadca5fe-87d3-4b96-b7fb-a231484277cc" -Type DWord -Value 0
 	Write-Host "Meltdown (CVE-2017-5754) compatibility flag has been turned on."
 }
 
@@ -810,19 +822,23 @@ Function DisableMeltdownCompatFlag {
 Function DisableSMB {
 	Write-Host " "
 	Write-Host "Turning off Server Message Block v1 and v2..."
-	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB1" -Type DWord -Value 0
-	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB2" -Type DWord -Value 0
-	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\NetBT\Parameters" -Name "SMBDeviceEnabled" -Type DWord -Value 0
+	$SMB1 = "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"
+	$SMB2 = "HKLM:\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"
+	Set-ItemProperty -Path $SMB1 -Name "SMB1" -Type DWord -Value 0
+	Set-ItemProperty -Path $SMB1 -Name "SMB2" -Type DWord -Value 0
+	Set-ItemProperty -Path $SMB2 -Name "SMBDeviceEnabled" -Type DWord -Value 0
 	Write-Host "Server Message Block v1 and v2 have been turned off."
 }
 
 # Enable SMB1 and SMB2 
 Function EnableSMB {
 	Write-Host " "
-	Write-Host "Turning on Server Message Block v1 and v2..."1
-	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB1" -Type DWord -Value 1
-	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB2" -Type DWord -Value 1
-	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\NetBT\Parameters" -Name "SMBDeviceEnabled" -Type DWord -Value 1
+	Write-Host "Turning on Server Message Block v1 and v2..."
+	$SMB1 = "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"
+	$SMB2 = "HKLM:\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"
+	Set-ItemProperty -Path $SMB1 -Name "SMB1" -Type DWord -Value 1
+	Set-ItemProperty -Path $SMB1 -Name "SMB2" -Type DWord -Value 1
+	Set-ItemProperty -Path $SMB2 -Name "SMBDeviceEnabled" -Type DWord -Value 1
 	Write-Host "Server Message Block v1 and v2 have been turned on."
 }
 
@@ -911,7 +927,7 @@ Function RemoveCamera {
 			Removing Camera app...
 			Get-AppxPackage "Microsoft.WindowsCamera" | Remove-AppxPackage
 			Write-Host "Camera app has been removed."
-		}
+			}
 }
 
 Function RemoveGrooveMusic {
@@ -925,7 +941,7 @@ Function RemoveGrooveMusic {
 			Removing Groove Music...
 			Get-AppxPackage "Microsoft.ZuneMusic" | Remove-AppxPackage
 			Write-Host "Groove Music has been removed."
-		}
+			}
 }
 	
 Function RemoveSkype {
@@ -939,7 +955,7 @@ Function RemoveSkype {
 			Removing Skype...
 			Get-AppxPackage "Microsoft.SkypeApp" | Remove-AppxPackage
 			Write-Host "Skype has been removed."
-		}
+			}
 }
 
 Function RemoveYourPhone {
@@ -953,7 +969,7 @@ Function RemoveYourPhone {
 			Removing Your Phone...
 			Get-AppxPackage "Microsoft.YourPhone" | Remove-AppxPackage
 			Write-Host "Your Phone has been removed."
-		}
+			}
 }
 
 Function CleanupRegistry {
@@ -1032,8 +1048,7 @@ Function ConfirmInstall {
     $selection = Read-Host "Please make a selection."
     switch ($selection)
     {
-    'y' { 
-	}
+    'y' { }
     'n' { "PrintEndEndTasks" }
     }
  }
@@ -1051,7 +1066,7 @@ Function InstallPowerToys {
 		if ($decision -eq 0) {
 			Write-Host "Installing PowerToys..."
 			winget install --id=Microsoft.PowerToys --silent
-		}
+			}
 }
 
 # Install Revo
@@ -1065,7 +1080,7 @@ Function InstallRevo {
 		if ($decision -eq 0) {
 			Write-Host "Installing Revo Uninstaller..."
 			winget install --id=RevoUninstaller.RevoUninstaller --silent
-		}
+			}
 }
 
 # Install VLC
@@ -1079,7 +1094,7 @@ Function InstallVLC {
 		if ($decision -eq 0) {
 			Write-Host "Installing VLC..."
 			winget install --id=VideoLAN.VLC --silent
-		}
+			}
 }
 
 ######### Tasks after successful run #########
@@ -1103,10 +1118,10 @@ Function PrintEndEndTasks {
 	if ($decision -eq 0) {
 		Start-Sleep 1
 		Restart-Computer
-	}
+		}
 	else {
 	Write-Host "This PC will not automatically restart, however a restart is pending."
-	}
+		}
 }
 # Call the desired tweak functions
 $tasks | ForEach-Object { Invoke-Expression $_ }
