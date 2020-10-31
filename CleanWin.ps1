@@ -17,6 +17,7 @@ $tasks = @(
 ### Privacy changes ###
 	"PrintPrivacyChanges",
 	"OOShutup10Config",
+	"TelemetryHosts"           # "UndoHosts",
 	"DisableTelemetry", 	   # "EnableDataCollection",
 	"DisableActivityHistory",
 	"DisableAdvertisingID",
@@ -171,6 +172,25 @@ Function OOShutup10Config {
 	Remote-Item ooshutup10.cfg OOSU10.exe
 	Write-Host "O&OShutup10 settings were applied."
 	}
+}
+
+# Run the hosts-telemetry.bat file to write telemetry IP addresses into the hosts file to implement block
+Function TelemetryHosts {
+	Write-Host " "
+	$question = 'Do you want to block telemetry IP addresses?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+	if ($decision -eq 0) {
+		./hosts-telemetry.bat
+	}
+}
+
+# Paste vanilla hosts file to revert telemetry IP blocks
+Function UndoHosts {
+	ren sample-hosts hosts 
+	move hosts C:\Windows\System32\drivers\etc
 }
 
 # Disable telemetry
