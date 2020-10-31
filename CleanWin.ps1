@@ -64,6 +64,10 @@ $tasks = @(
 ### Features changes ###
 	"PrintFeaturesChanges",
 	"EnableWSL",
+	"UninstallMathRecognizer",		# "InstallMathRecognizer"
+	"UninstallInternetExplorer",	# "InstallInternetExplorer"
+	"UninstallHelloFace",			# "InstallHelloFace"
+	"UninstallWorkFolders",			# "InstallWorkFolders"
 	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
@@ -827,6 +831,61 @@ Function EnableWSL {
 		Write-Host "Windows Subsystem for Linux has been turned on." 
 		}
 }
+
+# Uninstall Internet Explorer
+Function UninstallInternetExplorer {
+	Write-Host " "
+	Write-Host "Uninstalling Internet Explorer..."
+	Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -like "Internet-Explorer-Optional*" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
+	Get-WindowsCapability -Online | Where-Object { $_.Name -like "Browser.InternetExplorer*" } | Remove-WindowsCapability -Online | Out-Null
+	Write-Host "Internet Explorer has been uninstalled."
+}
+
+# Install Internet Explorer
+Function InstallInternetExplorer {
+	Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -like "Internet-Explorer-Optional*" } | Enable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
+	Get-WindowsCapability -Online | Where-Object { $_.Name -like "Browser.InternetExplorer*" } | Add-WindowsCapability -Online | Out-Null
+}
+
+# Uninstall Work Folders Client - Not applicable to Server
+Function UninstallWorkFolders {
+	Write-Host " "
+	Write-Host "Uninstalling Work Folders Client..."
+	Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "WorkFolders-Client" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
+	Write-Host "Work Folders has been uninstalled."
+}
+
+# Install Work Folders Client
+Function InstallWorkFolders {
+	Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "WorkFolders-Client" } | Enable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
+}
+
+# Uninstall Windows Hello Face
+Function UninstallHelloFace {
+	Write-Host " "
+	Write-Host "Uninstalling Windows Hello Face..."
+	Get-WindowsCapability -Online | Where-Object { $_.Name -like "Hello.Face*" } | Remove-WindowsCapability -Online | Out-Null
+	Write-Host "Hello Face has been uninstalled."
+}
+
+# Install Windows Hello Face
+Function InstallHelloFace {
+	Get-WindowsCapability -Online | Where-Object { $_.Name -like "Hello.Face*" } | Add-WindowsCapability -Online | Out-Null
+}
+
+# Uninstall Math Recognizer
+Function UninstallMathRecognizer {
+	Write-Host " "
+	Write-Host "Uninstalling Math Recognizer..."
+	Get-WindowsCapability -Online | Where-Object { $_.Name -like "MathRecognizer*" } | Remove-WindowsCapability -Online | Out-Null
+	Write-Host "Math Recognizer has been uninstalled."
+}
+
+# Install Math Recognizer - Not applicable to Server
+Function InstallMathRecognizer {
+	Get-WindowsCapability -Online | Where-Object { $_.Name -like "MathRecognizer*" } | Add-WindowsCapability -Online | Out-Null
+}
+
 
 
 ######### Security changes #########
