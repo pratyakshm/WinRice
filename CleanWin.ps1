@@ -11,6 +11,8 @@ $tasks = @(
 	"CleanWin",
 	"LessSleep",
 	"ClearShell",
+	"SystemRestore",
+	"ClearShell",
 	
 ### Privacy changes ###
 	"PrintPrivacyChanges",
@@ -104,6 +106,16 @@ Function CleanWin {
 	Write-Host "https://github.com/pratyakshm/CleanWin"
 	Write-Host "CleanWin is licensed under the MIT License: https://github.com/pratyakshm/CleanWin/blob/master/LICENSE"
 	Write-Host "All rights reserved."
+}
+
+# Create a system restore point
+Function SystemRestore {
+	Write-Host " "
+	$SystemRestore = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore"
+	Set-ItemProperty -Path $SystemRestore -Name "SystemRestorePointCreationFrequency" -Type DWord -Value 0
+	Checkpoint-Computer -Description "CleanWin" -RestorePointType MODIFY_SETTINGS
+	Set-ItemProperty -Path $SystemRestore -Name "SystemRestorePointCreationFrequency" -Type DWord -Value 1440
+	Write-Host "System restore point has been created."
 }
 
 # Less sleep
