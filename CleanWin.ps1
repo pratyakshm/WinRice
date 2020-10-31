@@ -84,7 +84,7 @@ $tasks = @(
 	"PrintAppsChanges",
 	"DebloatApps", "RemoveCamera", "RemoveGrooveMusic",	"RemoveSkype",	"RemoveYourPhone",	"CleanupRegistry",
 	"ConfirmInstall", "InstallWinget",
-	"Install7zip", "InstallAutoDark", "InstallFirefox", "InstallJRE", "InstallOBS", "InstallPowerToys",	"InstallPython", "InstallRevo",	"InstallqBittorrent", "InstallRufus",
+	"Install7zip", "InstallAutoDark", "InstallFirefox", "IrfanView", "InstallJRE", "InstallOBS", "InstallPowerToys",	"InstallPython", "InstallRevo",	"InstallqBittorrent", "InstallRufus",
 	"InstallTerminal", "InstallVLC", "InstallVSCode", "InstallWDD",
 	"LessSleep",
 	"ChangesDone",
@@ -888,6 +888,7 @@ Function DebloatApps {
 	 "Microsoft.WindowsCommunicationsApps" 
 	 "Microsoft.WindowsFeedbackHub" 
 	 "Microsoft.WindowsMaps" 
+	 "Microsoft.Windows.Photos"
 	 "Microsoft.WindowsSoundRecorder" 
 	 "Microsoft.XboxApp"
 	 "Microsoft.XboxGamingOverlay"
@@ -1061,6 +1062,20 @@ Function InstallFirefox {
 		}
 }
 
+# Install IrfanView
+Function InstallIrfanView {
+	Write-Host " "
+	$question = 'Do you want to install IrfanView (photo viewer)?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+			Write-Host "Installing IrfanView..."
+			winget install --id=IrfanSkiljan.IrfanView --silent	
+		}
+}
+
 # Install JRE 
 Function InstallJRE {
 	Write-Host " "
@@ -1115,20 +1130,6 @@ Function InstallPowerToys {
 		if ($decision -eq 0) {
 			Write-Host "Installing PowerToys..."
 			winget install --id=Microsoft.PowerToys --silent
-		}
-}
-
-# Install Python
-Function InstallPython {
-	Write-Host " "
-	$question = 'Do you want to install Python?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Host "Installing Python..."
-			winget install --id=Python.Python --silent
 		}
 }
 
