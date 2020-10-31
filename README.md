@@ -33,14 +33,20 @@ List of apps removed by default:
   <br>Whiteboard
   <br>Xbox
   <br>Xbox Game bar
-  <br><br> List of apps removed (user-choice basis):
+  <br><br> List of apps removed (optionalk):
   <br>Camera
   <br>Groove Music
   <br>Skype
   <br>Your Phone
-  <br><br>List of apps installed (user-choice basis):
+  <br><br>List of apps installed (optional):
   <br>Chocolatey package manager
   <br>7-zip<br>AnyDesk<br>Auto Dark Mode<br>ONLYOffice Desktop Editors<br>Discord<br>Firefox<br>Java Runtime Environment<br>Microsoft Teams<br>Notepad++<br>OBS Studio<br>PowerToys<br>qBittorrent<br>Rufus<br>Spotify<br>Steam<br>Windows Terminal<br>VLC Media Player<br>Visual Studio Code<br>WinDynamicDesktop
+</details>
+
+<details>
+ <summary>Optional features</summary>
+  Turn on Windows Subsystem for Linux (optional)
+  <br>Turn on Virtual Machine (optional)
 </details>
 
 <details>
@@ -64,11 +70,11 @@ List of apps removed by default:
 
 <details>
  <summary>Services</summary>
-  Turn off automatic Windows updates (user-choice basis)
+  Turn off automatic Windows updates (optional)
   <br>Turn off Windows Update delivery via P2P and LAN
   <br>Turn off AutoPlay
   <br>Turn off Autorun
-  <br>Turn off disk defragmentation (user-choice basis)
+  <br>Turn off disk defragmentation (optional)
   <br>Set BIOS time to UTC
 </details>
 
@@ -81,14 +87,8 @@ List of apps removed by default:
   <br>Hide task view icon from taskbar
   <br>Hide Cortana icon from taskbar
   <br>Hide search bar from taskbar
-  <br>Show seconds in taskbar clock (user-choice basis)
+  <br>Show seconds in taskbar clock (optional)
   <br>Show verbose status
-</details>
-
-<details>
- <summary>Windows optional features</summary>
-  Turn on Windows Subsystem for Linux (user-choice basis)
-  <br>Turn on Virtual Machine (user-choice basis)
 </details>
 
 ## Wiki:
