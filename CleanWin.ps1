@@ -39,6 +39,7 @@ $tasks = @(
 	"DisableAutorun",              # "EnableAutorun",
 	"DisableDefragmentation",      # "EnableDefragmentation",
 	"SetBIOSTimeUTC",              # "SetBIOSTimeLocal",
+	"DisableServices",			   # "EnableServices",
 	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
@@ -483,6 +484,7 @@ Function DisableLANP2P {
 	Write-Host "P2P and LAN updates have been turned off."
 }
 
+# Enable LAN-P2P update bits delivery
 Function EnableLANP2P {
 	Write-Host "Turning on P2P and LAN updates..."
 	$LANP2P3 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"
@@ -565,7 +567,33 @@ Function SetBIOSTimeLocal {
 	Write-Host "BIOS time has been set to Local time."
 }
 
+# Disable unnecessary services 
+Function DisableServices {
+	Write-Host "Disabling unnecessary services..."
+	Set-Service RetailDemo -StartupType Disabled -ErrorAction SilentlyContinue
+	Set-Service "diagnosticshub.standardcollector.service" -StartupType Disabled -ErrorAction SilentlyContinue
+	Set-Service MapsBroker  -StartupType Disabled -ErrorAction SilentlyContinue
+	Set-Service NetTcpPortSharing  -StartupType Disabled -ErrorAction SilentlyContinue
+	Set-Service RemoteAccess -StartupType Disabled -ErrorAction SilentlyContinue 
+	Set-Service RemoteRegistry -StartupType Disabled -ErrorAction SilentlyContinue 
+	Set-Service SharedAccess -StartupType Disabled -ErrorAction SilentlyContinue 
+	Set-Service StorSvc -StartupType Disabled -ErrorAction SilentlyContinue 
+	Set-Service TrkWks -StartupType Disabled -ErrorAction SilentlyContinue 
+	Write-Host "Unnecessary services have been disabled."
+}
 
+# Enable unnecessary services
+Function EnableServices {
+	Set-Service RetailDemo -StartupType Automatic -ErrorAction SilentlyContinue
+	Set-Service "diagnosticshub.standardcollector.service" -StartupType Automatic -ErrorAction SilentlyContinue
+	Set-Service MapsBroker  -StartupType Automatic -ErrorAction SilentlyContinue
+	Set-Service NetTcpPortSharing  -StartupType Automatic -ErrorAction SilentlyContinue
+	Set-Service RemoteAccess -StartupType Automatic -ErrorAction SilentlyContinue 
+	Set-Service RemoteRegistry -StartupType Automatic -ErrorAction SilentlyContinue 
+	Set-Service SharedAccess -StartupType Automatic -ErrorAction SilentlyContinue 
+	Set-Service StorSvc -StartupType Automatic -ErrorAction SilentlyContinue 
+	Set-Service TrkWks -StartupType Automatic -ErrorAction SilentlyContinue 
+}
 
 ######### Explorer changes #########
 
