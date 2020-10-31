@@ -82,10 +82,9 @@ $tasks = @(
 
 ### App changes ###
 	"PrintAppsChanges",
-	"DebloatApps", "RemoveCamera", "RemoveGrooveMusic",	"RemoveSkype",	"RemoveYourPhone",	"CleanupRegistry",
+	"DebloatApps", "RemoveCamera", "RemoveGrooveMusic", "RemoveSkype", "RemoveYourPhone", "CleanupRegistry",
 	"ConfirmInstall", "InstallWinget",
-	"Install7zip", "InstallAutoDark", "InstallFirefox", "IrfanView", "InstallJRE", "InstallOBS", "InstallPowerToys",	"InstallPython", "InstallRevo",	"InstallqBittorrent", "InstallRufus",
-	"InstallTerminal", "InstallVLC", "InstallVSCode", "InstallWDD",
+	"Install7zip", "InstallIrfanView", "InstallPowerToys", "InstallRevo", "InstallVLC",
 	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
@@ -115,8 +114,8 @@ Function LessSleep {
 # Clear the shell output
 Function ClearShell {
 	Write-Host " "
-	Write-Host "Clearing shell after waiting for 3 seconds..."
-	Start-Sleep 3
+	Write-Host "Clearing shell..."
+	Start-Sleep 2
 	Clear-Host
 }
 
@@ -1015,6 +1014,13 @@ Function Install7zip {
 	winget install --id=7zip.7zip
 }
 
+# Install IrfanView
+Function InstallIrfanView { 
+	Write-Host " "
+	Write-Host "Installing IrfanView..."
+	winget install --id=IrfanSkiljan.IrfanView
+}
+
 # Confirm App Installations
 Function ConfirmInstall {
 	do
@@ -1028,95 +1034,10 @@ Function ConfirmInstall {
     {
     'y' { 
 	}
-    'n' { Exit }
+    'n' { "PrintEndEndTasks" }
     }
  }
  until ($selection -match "y" -or $selection -match "n" -or $selection -match "q")
-}
-
-# Install Auto Dark Mode
-Function InstallAutoDark {
-	Write-Host " "
-	$question = 'Do you want to install Auto Dark Mode?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Host "Installing Auto Dark Mode..."
-			winget install --id=Armin2208.WindowsAutoNightMode --silent	
-		}
-}
-
-# Install Firefox
-Function InstallFirefox {
-	Write-Host " "
-	$question = 'Do you want to install Mozilla Firefox?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Host "Installing Mozilla Firefox..."
-			winget install --id=Mozilla.Firefox --silent	
-		}
-}
-
-# Install IrfanView
-Function InstallIrfanView {
-	Write-Host " "
-	$question = 'Do you want to install IrfanView (photo viewer)?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Host "Installing IrfanView..."
-			winget install --id=IrfanSkiljan.IrfanView --silent	
-		}
-}
-
-# Install JRE 
-Function InstallJRE {
-	Write-Host " "
-	$question = 'Do you want to install Java Runtime Environment?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Host "Installing Java Runtime Environment..."
-			winget install --id=Oracle.JavaRuntimeEnvironment --silent
-		}
-}
-
-# Install Logitech Gaming Hub
-Function InstallLGHUB {
-	Write-Host " "
-	$question = 'Do you want to install Logitech Gaming Hub?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Host "Installing Logitech Gaming Hubt..."
-			winget install --id=Logitech.LGH --silent
-		}
-}
-
-# Install OBS Studio
-Function InstallOBS {
-	Write-Host " "
-	$question = 'Do you want to install OBS Studio?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Host "Installing OBS Studio..."
-			winget install --id=OBSProject.OBSStudio --silent	
-		}
-	
 }
 
 # Install PowerToys
@@ -1147,20 +1068,6 @@ Function InstallRevo {
 		}
 }
 
-# Install Rufus 
-Function InstallRufus {
-	Write-Host " "
-	$question = 'Do you want to install Rufus?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Host "Installing Rufus..."
-			winget install --id=Rufus.Rufus --silent
-		}
-}
-
 # Install VLC
 Function InstallVLC {
 	Write-Host " "
@@ -1174,50 +1081,6 @@ Function InstallVLC {
 			winget install --id=VideoLAN.VLC --silent
 		}
 }
-
-# Install Visual Studio Code
-Function InstallVSCode {
-	Write-Host " "
-	$question = 'Do you want to install Visual Studio Code?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Host "Installing Visual Studio Code..."
-			winget install --id=Microsoft.VisualStudioCode --silent
-		}
-}
-
-# Install WDD
-Function InstallWDD {
-	Write-Host " "
-	$question = 'Do you want to install WinDynamicDesktop?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Host "Installing WinDynamicDesktop..."
-			winget install --id=t1m0thyj.WinDynamicDesktop --silent
-		}
-}
-
-# Install Windows Terminal 
-Function InstallTerminal {
-	Write-Host " "
-	$question = 'Do you want to install Windows Terminal?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Host "Installing Windows Terminal..."
-			winget install --id=Microsoft.WindowsTerminal --silent
-		}
-}
-
-
 
 ######### Tasks after successful run #########
 
