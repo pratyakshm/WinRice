@@ -68,6 +68,7 @@ $tasks = @(
 	"UninstallInternetExplorer",	# "InstallInternetExplorer"
 	"UninstallHelloFace",			# "InstallHelloFace"
 	"UninstallWorkFolders",			# "InstallWorkFolders"
+	"InstalldotNET3",				# "UninstalldotNET3",
 	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
@@ -887,6 +888,24 @@ Function InstallMathRecognizer {
 }
 
 
+# Install dotNET 3.5
+Function InstalldotNET3 {
+	$question = 'Do you want to turn on dotNET 3.5?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+		if ($decision -eq 0) {
+		Write-Host "Turning on dotNET 3.5"
+		Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "NetFx3" } | Enable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
+		Write-Host "dotNET 3.5 has been turned on." 
+		}
+}
+
+# Uninstall dotNET 3.5
+Function UninstalldotNET3 {
+	Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "NetFx3" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
+}
 
 ######### Security changes #########
 
