@@ -174,7 +174,8 @@ Function OOShutup10Config {
 	Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/cleanwin/master/ooshutup10.cfg" -Destination ooshutup10.cfg
 	Start-BitsTransfer -Source "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe" -Destination OOSU10.exe
 	./OOSU10.exe ooshutup10.cfg /quiet
-	Remote-Item ooshutup10.cfg OOSU10.exe
+	Remove-Item ooshutup10.cfg
+	Remvoe-Item OOSU10.exe
 	Write-Host "O&OShutup10 settings were applied."
 	}
 }
@@ -1178,7 +1179,7 @@ Function InstallIrfanView {
 # Confirm App Installations
 Function ConfirmInstall {
 	do
- {
+   {
     Clear-Host
     Write-Host "Do you want to proceed with app installations?"
     Write-Host "Y: Press 'Y' to proceed."
