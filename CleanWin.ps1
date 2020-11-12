@@ -4,10 +4,13 @@
 # Author: PratyakshM <pratyakshm@protonmail.com>
 #
 ##############
+
+
 # Default preset
 $tasks = @(
 
 ### Maintenance Tasks ###
+	"Setup",
 	"CleanWin",
 	"LessSleep",
 	"ClearShell",
@@ -115,9 +118,15 @@ Function CleanWin {
 	Write-Host "All rights reserved."
 }
 
+# Set ExecutionPolicy to Unrestricted for session
+Function Setup {
+	Set-ExecutionPolicy Unrestricted -Scope Process
+}
+
 # Create a system restore point
 Function SystemRestore {
 	Write-Host " "
+	Write-Host "Creating a system restore point..."
 	$SystemRestore = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore"
 	Set-ItemProperty -Path $SystemRestore -Name "SystemRestorePointCreationFrequency" -Type DWord -Value 0
 	Checkpoint-Computer -Description "CleanWin" -RestorePointType MODIFY_SETTINGS
