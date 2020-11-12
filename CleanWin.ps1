@@ -171,11 +171,11 @@ Function OOShutup10Config {
 	if ($decision -eq 0) {
 	Write-Host "Applying O&OShutup10 settings..."
 	Import-Module BitsTransfer
-	Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/cleanwin/master/ooshutup10.cfg" -Destination ooshutup10.cfg
-	Start-BitsTransfer -Source "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe" -Destination OOSU10.exe
+	Start-BitsTransfer -Source "https://dl.pratyakshm.cf/0:down/CDN/ooshutup10.cfg" -Destination ooshutup10.cfg
+	Start-BitsTransfer -Source "https://dl.pratyakshm.cf/0:down/CDN/OOSU10.exe" -Destination OOSU10.exe
 	./OOSU10.exe ooshutup10.cfg /quiet
 	Remove-Item ooshutup10.cfg
-	Remvoe-Item OOSU10.exe
+	Remove-Item OOSU10.exe
 	Write-Host "O&OShutup10 settings were applied."
 	}
 }
@@ -189,12 +189,16 @@ Function TelemetryHosts {
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 	if ($decision -eq 0) {
+		Start-BitsTransfer -Source "https://dl.pratyakshm.cf/0:down/CDN/hosts-telemetry.bat" -Destination hoststelemetry.bat
 		./hosts-telemetry.bat
+		Remove-Item hosts-telemetry.bat
 	}
 }
 
 # Paste vanilla hosts file to revert telemetry IP blocks
 Function UndoHosts {
+	Import-Module BitsTransfer
+	Start-BitsTransfer -Source "ttps://dl.pratyakshm.cf/0:down/CDN/sample-hosts" -Destination sample-hosts
 	ren sample-hosts hosts 
 	move hosts C:\Windows\System32\drivers\etc
 }
