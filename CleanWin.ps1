@@ -109,7 +109,7 @@ $tasks = @(
 # CleanWin
 Function CleanWin {
 	Write-Host " "
-	Write-Host "CleanWin v0.7.5 by pratyakshm"
+	Write-Host "CleanWin v0.7.1 by pratyakshm"
 	Write-Host "https://github.com/pratyakshm/CleanWin"
 	Write-Host "CleanWin is licensed under the MIT License: https://github.com/pratyakshm/CleanWin/blob/master/LICENSE"
 	Write-Host "All rights reserved."
@@ -189,18 +189,20 @@ Function TelemetryHosts {
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 	if ($decision -eq 0) {
-		Start-BitsTransfer -Source "https://dl.pratyakshm.cf/0:down/CDN/hosts-telemetry.bat" -Destination hoststelemetry.bat
-		./hosts-telemetry.bat
-		Remove-Item hosts-telemetry.bat
+	Import-Module BitsTransfer
+    Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/CleanWin/staging/files/hosts-telemetry.bat" -Destination hoststelemetry.bat
+    ./hoststelemetry.bat /quiet
+    Remove-Item hoststelemetry.bat
+    Write-Host "Telemetry IP addresses have been blocked using the hosts file."
 	}
 }
 
 # Paste vanilla hosts file to revert telemetry IP blocks
 Function UndoHosts {
 	Import-Module BitsTransfer
-	Start-BitsTransfer -Source "ttps://dl.pratyakshm.cf/0:down/CDN/sample-hosts" -Destination sample-hosts
-	ren sample-hosts hosts 
-	move hosts C:\Windows\System32\drivers\etc
+    Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/CleanWin/staging/files/sample-hosts" -Destination sample-hosts
+	Rename-Item sample-hosts hosts 
+	Move-Item hosts C:\Windows\System32\drivers\etc
 }
 
 # Disable telemetry
