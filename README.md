@@ -1,8 +1,8 @@
 # Instructions
 
 ## How to run:
-1. Download **CleanWin-v0.7.zip** from the latest [release tag](https://github.com/PratyakshM/CleanWin/releases/tag/0.7).
-2. Extract the contents of the ZIP file into your C: drive and launch **Start.bat**.    
+1. Download the latest executable (Normal or GUI variant) from the latest [Release](https://github.com/pratyakshm/CleanWin/releases/tag/0.7.1).
+2. Launch the executable and give it administrator privileges once it asks.
 
 ## List of tasks:
 This section contains the list of tasks that CleanWin performs. They're grouped in the following categories (sorted by alphabetical order):
@@ -33,20 +33,26 @@ List of apps removed by default:
   <br>Whiteboard
   <br>Xbox
   <br>Xbox Game bar
-  <br><br> List of apps removed (optionalk):
+  <br><br> List of apps removed (optional):
   <br>Camera
   <br>Groove Music
   <br>Skype
   <br>Your Phone
-  <br><br>List of apps installed (optional):
-  <br>Chocolatey package manager
-  <br>7-zip<br>AnyDesk<br>Auto Dark Mode<br>ONLYOffice Desktop Editors<br>Discord<br>Firefox<br>Java Runtime Environment<br>Microsoft Teams<br>Notepad++<br>OBS Studio<br>PowerToys<br>qBittorrent<br>Rufus<br>Spotify<br>Steam<br>Windows Terminal<br>VLC Media Player<br>Visual Studio Code<br>WinDynamicDesktop
+  <br><br>List of apps installed:
+  <br>Windows Package Manager
+  <br>7-zip<br>Microsoft PowerToys (optional)<br>Revo Uninstaller (optional)<br>VLC Media Player (optional)
 </details>
 
 <details>
  <summary>Optional features</summary>
   Turn on Windows Subsystem for Linux (optional)
+  <br>Turn on Hyper-V (optional)
   <br>Turn on Virtual Machine (optional)
+  <br>Turn on dotNET 3.5 (optional)
+  <br>Turn off Internet Explorer
+  <br>Turn off Math Recognizer 
+  <br>Turn off Windows Hello Face
+  <br>Turn off Work Folders
 </details>
 
 <details>

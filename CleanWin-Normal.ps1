@@ -114,7 +114,7 @@ Function CleanWin {
 	Write-Host " "
 	Write-Host "CleanWin v0.7.1 by pratyakshm"
 	Write-Host "https://github.com/pratyakshm/CleanWin"
-	Write-Host "CleanWin is licensed under the MIT License: https://github.com/pratyakshm/CleanWin/blob/master/LICENSE"
+	Write-Host "CleanWin is licensed under the MIT License: https://github.com/pratyakshm/CleanWin/blob/main/LICENSE"
 	Write-Host "All rights reserved."
 }
 
