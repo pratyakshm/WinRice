@@ -99,6 +99,8 @@ $tasks = @(
 	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
+	"EnterpriseUpgrade",
+	"ClearShell",
 
 ###  Tasks after successful run ###
 	"PrintEndTasksBegin",
@@ -1197,6 +1199,19 @@ Function Winstall {
 		winget install $App
 		}
 	}
+}
+
+Function EnterpriseUpgrade {
+	Write-Host" "
+	$question = 'Do you want to upgrade to Windows 10 Enterprise? (your data will remain unaffected)'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+	if ($decision -eq 0) {	
+		Write-Host "haha Windows 10 Enterprise upgrade goes brrr..."
+		Start https://bit.ly/2PR9PRp
+		}
 }
 
 ######### Tasks after successful run #########
