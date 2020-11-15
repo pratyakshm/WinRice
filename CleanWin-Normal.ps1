@@ -13,6 +13,7 @@ $tasks = @(
 	"Setup",
 	"CleanWin",
 	"LessSleep",
+	"ProductInformation",
 	"ClearShell",
 	"SystemRestore",
 	"ClearShell",
@@ -122,6 +123,19 @@ Function CleanWin {
 # Set ExecutionPolicy to Unrestricted for session
 Function Setup {
 	Set-ExecutionPolicy Unrestricted -Scope Process
+}
+
+# Product Information 
+Function ProductInformation {
+	Write-Host " "
+	Write-Host "Checking system info..."
+	Get-ComputerInfo -Property Windows*
+	if([System.IntPtr]::Size -eq 4){
+		"Windows.OSArchitecture         : 32-bit"
+	}
+	else{
+		"Windows.OSArchitecture         : 64-bit"
+	}
 }
 
 # Create a system restore point
