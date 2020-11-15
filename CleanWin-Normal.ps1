@@ -13,6 +13,8 @@ $tasks = @(
 	"Setup",
 	"CleanWin",
 	"LessSleep",
+	"ProductInformation",
+	"NetworkStatus",
 	"ClearShell",
 	"SystemRestore",
 	"ClearShell",
@@ -123,6 +125,33 @@ Function CleanWin {
 Function Setup {
 	Set-ExecutionPolicy Unrestricted -Scope Process
 }
+
+# Product Information 
+Function ProductInformation {
+	Write-Host " "
+	Write-Host "Checking system info..."
+	Get-ComputerInfo -Property Windows*
+	if([System.IntPtr]::Size -eq 4){
+		"Windows.OSArchitecture         : 32-bit"
+	}
+	else{
+		"Windows.OSArchitecture         : 64-bit"
+	}
+}
+
+# Checks internet connection
+Function NetworkStatus {
+	Write-Host " "
+	Write-Host "Checking network status..."
+	$result = Test-NetConnection bing.com 
+	if( $result.PingSucceeded ) {
+	  Write-Host "This PC is currently online."
+		} 
+	else {
+	  Write-Host "This PC is currently offline."
+		}
+}
+
 
 # Create a system restore point
 Function SystemRestore {
