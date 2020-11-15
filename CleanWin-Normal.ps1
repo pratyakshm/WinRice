@@ -95,8 +95,7 @@ $tasks = @(
 ### App changes ###
 	"PrintAppsChanges",
 	"DebloatApps", "RemoveCamera", "RemoveGrooveMusic", "RemoveSkype", "RemoveYourPhone", "CleanupRegistry",
-	"ConfirmInstall", "InstallWinget",
-	"Install7zip", "InstallIrfanView", "InstallPowerToys", "InstallRevo", "InstallVLC",
+	"ConfirmInstall", "InstallWinget", "Install7zip", "Winstall", 
 	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
@@ -1184,71 +1183,20 @@ Function Install7zip {
 	winget install --id=7zip.7zip
 }
 
-# Install IrfanView
-Function InstallIrfanView { 
+# Install apps from winstall file (the winstall.txt file must be on the same directory where CleanWin is)
+Function Winstall {
 	Write-Host " "
-	Write-Host "Installing IrfanView..."
-	winget install --id=IrfanSkiljan.IrfanView
-}
-
-# Confirm App Installations
-Function ConfirmInstall {
-	do
-   {
-    Clear-Host
-    Write-Host "Do you want to proceed with app installations?"
-    Write-Host "Y: Press 'Y' to proceed."
-    Write-Host "2: Press 'N' to skip and end CleanWin execution"
-    $selection = Read-Host "Please make a selection."
-    switch ($selection)
-    {
-    'y' { }
-    'n' { "PrintEndEndTasks" }
-    }
- }
- until ($selection -match "y" -or $selection -match "n" -or $selection -match "q")
-}
-
-# Install PowerToys
-Function InstallPowerToys {
-	Write-Host " "
-	$question = 'Do you want to install PowerToys?'
+	$question = 'Do you want to install apps using the winstall.txt file?'
 	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Host "Installing PowerToys..."
-			winget install --id=Microsoft.PowerToys --silent
-			}
-}
-
-# Install Revo
-Function InstallRevo {
-	Write-Host " "
-	$question = 'Do you want to install Revo Uninstaller?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Host "Installing Revo Uninstaller..."
-			winget install --id=RevoUninstaller.RevoUninstaller --silent
-			}
-}
-
-# Install VLC
-Function InstallVLC {
-	Write-Host " "
-	$question = 'Do you want to install VLC?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {
-			Write-Host "Installing VLC..."
-			winget install --id=VideoLAN.VLC --silent
-			}
+	if ($decision -eq 0) {	
+		Get-Content 'winstall.txt' | Foreach-Object {
+		$App = $_.Split('=')
+		winget install $App
+		}
+	}
 }
 
 ######### Tasks after successful run #########
