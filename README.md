@@ -1,7 +1,7 @@
 # Instructions
 
 ## How to run:
-1. Download the latest executable (Normal or GUI variant) from the latest [Release](https://github.com/pratyakshm/CleanWin/releases/tag/0.7.1).
+1. Download executable (CLI or GUI variant) from the latest [Release](https://github.com/pratyakshm/CleanWin/releases/tag/0.3.2).
 2. Launch the executable and give it administrator privileges once it asks.
 
 ## List of tasks:
