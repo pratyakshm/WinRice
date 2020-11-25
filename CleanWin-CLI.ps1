@@ -648,7 +648,6 @@ Function DisableServices {
 	Set-Service RemoteAccess -StartupType Disabled -ErrorAction SilentlyContinue 
 	Set-Service RemoteRegistry -StartupType Disabled -ErrorAction SilentlyContinue 
 	Set-Service SharedAccess -StartupType Disabled -ErrorAction SilentlyContinue 
-	Set-Service StorSvc -StartupType Disabled -ErrorAction SilentlyContinue 
 	Set-Service TrkWks -StartupType Disabled -ErrorAction SilentlyContinue 
 	Write-Host "Unnecessary services have been disabled."
 }
@@ -662,7 +661,6 @@ Function EnableServices {
 	Set-Service RemoteAccess -StartupType Automatic -ErrorAction SilentlyContinue 
 	Set-Service RemoteRegistry -StartupType Automatic -ErrorAction SilentlyContinue 
 	Set-Service SharedAccess -StartupType Automatic -ErrorAction SilentlyContinue 
-	Set-Service StorSvc -StartupType Automatic -ErrorAction SilentlyContinue 
 	Set-Service TrkWks -StartupType Automatic -ErrorAction SilentlyContinue 
 }
 
