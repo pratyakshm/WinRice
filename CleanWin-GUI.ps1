@@ -527,7 +527,7 @@ $ErrorActionPreference = 'SilentlyContinue'
         New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
         
         Write-Host "Uninstalling bloatware..."
-        DebloatAll
+        DebloatApps
 })
 
 $RemoveBloatRegkeys.Add_Click( { 
