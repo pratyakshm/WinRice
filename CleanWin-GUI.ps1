@@ -27,57 +27,6 @@ If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
     }
 }
 
-#Unnecessary Windows 10 AppX apps that will be removed by the blacklist.
-$global:Bloatware = @(
-    "Microsoft.549981C3F5F10"
-    "Microsoft.BingNews"
-    "Microsoft.BingWeather" 
-    "Microsoft.GetHelp" 
-    "Microsoft.Getstarted" 
-    "Microsoft.Messaging"
-    "Microsoft.Microsoft3DViewer" 
-    "Microsoft.MicsoftStickyNotes"  
-    "Microsoft.MSPaint"
-    "Microsoft.MicrosoftOfficeHub"
-    "Microsoft.Office.OneNote"
-    "Microsoft.MicrosoftSolitaireCollection" 
-    "Microsoft.NetworkSpeedTest" 
-    "Microsoft.News" 
-    "Microsoft.Office.Sway" 
-    "Microsoft.OneConnect"
-    "Microsoft.People" 
-    "Microsoft.Print3D" 
-    "Microsoft.StorePurchaseApp" 
-    "Microsoft.WindowsAlarms"
-    "Microsoft.WindowsCommunicationsApps" 
-    "Microsoft.WindowsFeedbackHub" 
-    "Microsoft.WindowsMaps" 
-    "Microsoft.Windows.Photos"
-    "Microsoft.WindowsSoundRecorder" 
-    "Microsoft.XboxApp"
-    "Microsoft.XboxGamingOverlay"
-    "Microsoft.ZuneVideo"
-
-    #Sponsored Windows 10 AppX Apps
-    #Add sponsored/featured apps to remove in the "*AppName*" format
-    "EclipseManager"
-    "ActiproSoftwareLLC"
-    "AdobeSystemsIncorporated.AdobePhotoshopExpress"
-    "Duolingo-LearnLanguagesforFree"
-    "PandoraMediaInc"
-    "CandyCrush"
-    "BubbleWitch3Saga"
-    "Wunderlist"
-    "Flipboard"
-    "Twitter"
-    "Facebook"
-    "Spotify"                                          
-    "Minecraft"
-    "Royal Revolt"
-    "Sway"                                             
-    "Dolby"                                             
-)
-
 # import library code - located relative to this script
 Function dotInclude() {
     Param(
@@ -97,9 +46,6 @@ Function dotInclude() {
 
 # Override built-in blacklist/whitelist with user defined lists
 dotInclude 'CleanWin-CustomLists.ps1'
-
-#convert to regular expression to allow for the super-useful -match operator
-$global:BloatwareRegex = $global:Bloatware -join '|'
 
 
 # This form was created using POSHGUI.com  a free online gui designer for PowerShell
@@ -515,19 +461,42 @@ $RemoveBlacklist.Add_Click( {
 
 $RemoveAllBloatware.Add_Click( { 
 $ErrorActionPreference = 'SilentlyContinue'
-        Function DebloatApps {
-            #This function finds any AppX/AppXProvisioned package and uninstalls it.
-            #Also, to note - This does NOT remove essential system services/software/etc such as .NET framework installations, Cortana, Edge, etc.
-            Get-AppxPackage | Remove-AppxPackage
-            Get-AppxProvisionedPackage -Online | Remove-AppxProvisionedPackage -Online
-            Get-AppxPackage -AllUsers | Remove-AppxPackage
-        }
-
-        #Creates a PSDrive to be able to access the 'HKCR' tree
-        New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
-        
-        Write-Host "Uninstalling bloatware..."
-        DebloatApps
+            Write-Host "Beginning uninstallation of unnecesary apps..."
+            $Bloatware = @(
+             "Microsoft.549981C3F5F10"
+             "Microsoft.BingNews"
+             "Microsoft.BingWeather" 
+             "Microsoft.GetHelp" 
+             "Microsoft.Getstarted" 
+             "Microsoft.Messaging"
+             "Microsoft.Microsoft3DViewer" 
+             "Microsoft.MicsoftStickyNotes"  
+             "Microsoft.MSPaint"
+             "Microsoft.MicrosoftOfficeHub"
+             "Microsoft.Office.OneNote"
+             "Microsoft.MicrosoftSolitaireCollection" 
+             "Microsoft.NetworkSpeedTest" 
+             "Microsoft.News" 
+             "Microsoft.Office.Sway" 
+             "Microsoft.OneConnect"
+             "Microsoft.People" 
+             "Microsoft.Print3D" 
+             "Microsoft.StorePurchaseApp" 
+             "Microsoft.WindowsAlarms"
+             "Microsoft.WindowsCommunicationsApps" 
+             "Microsoft.WindowsFeedbackHub" 
+             "Microsoft.WindowsMaps" 
+             "Microsoft.WindowsSoundRecorder" 
+             "Microsoft.XboxApp"
+             "Microsoft.XboxGamingOverlay"
+             "Microsoft.ZuneVideo"
+            )
+            foreach ($Bloat in $Bloatware) {
+                Get-AppxPackage -Name $Bloat| Remove-AppxPackage | Out-Null
+                Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
+                Write-Host "Uninstalling $Bloat."}
+            Write-Host "Bloatware has been uninstalled."
+            Clear-Host
 })
 
 $RemoveBloatRegkeys.Add_Click( { 
