@@ -44,9 +44,6 @@ Function dotInclude() {
     }
 }
 
-# Override built-in blacklist/whitelist with user defined lists
-dotInclude 'CleanWin-CustomLists.ps1'
-
 
 # This form was created using POSHGUI.com  a free online gui designer for PowerShell
 Add-Type -AssemblyName System.Windows.Forms
@@ -83,14 +80,14 @@ $RemoveBloatRegkeys.Location = New-Object System.Drawing.Point(150, 35)
 $RemoveBloatRegkeys.Font = 'Microsoft Sans Serif,10'
 
 $CustomizeBlacklists = New-Object System.Windows.Forms.Button
-$CustomizeBlacklists.Text = "Customize blacklist"
+$CustomizeBlacklists.Text = "Edit CleanWin-AppsList"
 $CustomizeBlacklists.Width = 140
 $CustomizeBlacklists.Height = 40
 $CustomizeBlacklists.Location = New-Object System.Drawing.Point(10, 75)
 $CustomizeBlacklists.Font = 'Microsoft Sans Serif,10'
 
 $RemoveBlacklist = New-Object System.Windows.Forms.Button
-$RemoveBlacklist.Text = "Remove bloatware from blacklist"
+$RemoveBlacklist.Text = "Uninstall apps using CleanWin-AppsList"
 $RemoveBlacklist.Width = 140
 $RemoveBlacklist.Height = 40
 $RemoveBlacklist.Location = New-Object System.Drawing.Point(150, 75)
@@ -339,108 +336,249 @@ Start-Transcript -OutputDirectory "${CWFolder}"
 
 #### APPS ####
 $CustomizeBlacklists.Add_Click( {
-        $CustomizeForm = New-Object System.Windows.Forms.Form
-        $CustomizeForm.ClientSize = '600,400'
-        $CustomizeForm.Text = "Customize whitelist and blacklist"
-        $CustomizeForm.TopMost = $false
-        $CustomizeForm.AutoScroll = $true
+	Add-Type -AssemblyName PresentationCore, PresentationFramework
 
-        $SaveList = New-Object System.Windows.Forms.Button
-        $SaveList.Text = "Save customized whitelist and blacklist to CleanWin-CustomLists.ps1"
-        $SaveList.AutoSize = $true
-        $SaveList.Location = New-Object System.Drawing.Point(200, 5)
-        $CustomizeForm.controls.Add($SaveList)
+	#region Variables
+	# ArrayList containing the UWP apps to remove
+	$AppxPackages = New-Object -TypeName System.Collections.ArrayList($null)
 
-        $SaveList.Add_Click( {
-                $ErrorActionPreference = 'SilentlyContinue'
+	# List of UWP apps that won't be recommended for removal
+	$UncheckedAppxPackages = @(
+		# AMD Radeon UWP panel
+		"AdvancedMicroDevicesInc*",
 
-                '$global:Bloatware = @(' | Out-File -FilePath $PSScriptRoot\CleanWin-CustomLists.ps1 -Append -Encoding utf8
-                @($CustomizeForm.controls) | ForEach {
-                    if ($_ -is [System.Windows.Forms.CheckBox] -and $_.Enabled -and $_.Checked) {
-                        "    ""$($_.Text)""" | Out-File -FilePath $PSScriptRoot\CleanWin-CustomLists.ps1 -Append -Encoding utf8
-                    }
-                }
-                ')' | Out-File -FilePath $PSScriptRoot\CleanWin-CustomLists.ps1 -Append -Encoding utf8
+		# Intel Graphics Control Center
+		"AppUp.IntelGraphicsControlPanel",
+		"AppUp.IntelGraphicsExperience",
 
-                #Over-ride the white/blacklist with the newly saved custom list
-                dotInclude CleanWin-CustomLists.ps1
+		# Sticky Notes
+		"Microsoft.MicrosoftStickyNotes",
 
-                #convert to regular expression to allow for the super-useful -match operator
-                $global:BloatwareRegex = $global:Bloatware -join '|'
-            })
+		# Screen Sketch
+		"Microsoft.ScreenSketch",
 
-        Function AddAppToCustomizeForm() {
-            Param(
-                [Parameter(Mandatory)]
-                [int] $position,
-                [Parameter(Mandatory)]
-                [string] $appName,
-                [Parameter(Mandatory)]
-                [bool] $enabled,
-                [Parameter(Mandatory)]
-                [bool] $checked,
+		# Photos (and Video Editor)
+		"Microsoft.Windows.Photos",
+		"Microsoft.Photos.MediaEngineDLC",
 
-                [string] $notes
-            )
+		# Calculator
+		"Microsoft.WindowsCalculator",
 
-            $label = New-Object System.Windows.Forms.Label
-            $label.Location = New-Object System.Drawing.Point(2, (30 + $position * 16))
-            $label.Text = $notes
-            $label.Width = 300
-            $label.Height = 16
-            $Label.TextAlign = [System.Drawing.ContentAlignment]::TopRight
-            $CustomizeForm.controls.Add($label)
+		# Xbox Identity Provider
+		"Microsoft.XboxIdentityProvider",
 
-            $Checkbox = New-Object System.Windows.Forms.CheckBox
-            $Checkbox.Text = $appName
-            $Checkbox.Location = New-Object System.Drawing.Point(320, (30 + $position * 16))
-            $Checkbox.Autosize = 1;
-            $Checkbox.Checked = $checked
-            $Checkbox.Enabled = $enabled
-            $CustomizeForm.controls.Add($CheckBox)
-        }
+		# Xbox TCUI
+		"Microsoft.Xbox.TCUI",
+
+		# Xbox Speech To Text Overlay
+		"Microsoft.XboxSpeechToTextOverlay",
+
+		# Xbox Game Bar
+		"Microsoft.XboxGamingOverlay",
+
+		# Xbox Game Bar Plugin
+		"Microsoft.XboxGameOverlay",
+
+		# NVIDIA Control Panel
+		"NVIDIACorp.NVIDIAControlPanel",
+
+		# Realtek Audio Console
+		"RealtekSemiconductorCorp.RealtekAudioControl"
+	)
+
+	# UWP apps that won't be shown in the form
+	$ExcludedAppxPackages = @(
+		# Microsoft Desktop App Installer
+		"Microsoft.DesktopAppInstaller",
+
+		# Store Experience Host
+		"Microsoft.StorePurchaseApp",
+
+		# Microsoft Store
+		"Microsoft.WindowsStore",
+
+		# Web Media Extensions
+		"Microsoft.WebMediaExtensions"
+	)
+	#endregion Variables
+
+	#region XAML Markup
+	[xml]$XAML = '
+	<Window
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		Name="Window"
+		MinHeight="450" MinWidth="400"
+		SizeToContent="Width" WindowStartupLocation="CenterScreen"
+		TextOptions.TextFormattingMode="Display" SnapsToDevicePixels="True"
+		FontFamily="Segoe UI" FontSize="12" ShowInTaskbar="False">
+		<Window.Resources>
+			<Style TargetType="StackPanel">
+				<Setter Property="Orientation" Value="Horizontal"/>
+			</Style>
+			<Style TargetType="CheckBox">
+				<Setter Property="Margin" Value="10, 10, 5, 10"/>
+				<Setter Property="IsChecked" Value="True"/>
+			</Style>
+			<Style TargetType="TextBlock">
+				<Setter Property="Margin" Value="5, 10, 10, 10"/>
+			</Style>
+			<Style TargetType="Button">
+				<Setter Property="Margin" Value="20"/>
+				<Setter Property="Padding" Value="10"/>
+			</Style>
+		</Window.Resources>
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<Grid Grid.Row="0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<StackPanel Grid.Column="1" Orientation="Horizontal">
+					<CheckBox Name="CheckboxRemoveAll" IsChecked="False"/>
+					<TextBlock Name="TextblockRemoveAll"/>
+				</StackPanel>
+			</Grid>
+			<ScrollViewer Name="Scroll" Grid.Row="1"
+				HorizontalScrollBarVisibility="Disabled"
+				VerticalScrollBarVisibility="Auto">
+				<StackPanel Name="PanelContainer" Orientation="Vertical"/>
+			</ScrollViewer>
+			<Button Name="Button" Grid.Row="2"/>
+		</Grid>
+	</Window>
+	'
+	#endregion XAML Markup
+
+	$Reader = (New-Object -TypeName System.Xml.XmlNodeReader -ArgumentList $XAML)
+	$Form = [Windows.Markup.XamlReader]::Load($Reader)
+	$XAML.SelectNodes("//*[@*[contains(translate(name(.),'n','N'),'Name')]]") | ForEach-Object -Process {
+		Set-Variable -Name ($_.Name) -Value $Form.FindName($_.Name) -Scope Global
+	}
 
 
-        $Installed = @( (Get-AppxPackage).Name )
-        $Online = @( (Get-AppxProvisionedPackage -Online).DisplayName )
-        $AllUsers = @( (Get-AppxPackage -AllUsers).Name )
-        [int]$checkboxCounter = 0
+	#region Functions
+	function Get-CheckboxClicked
+	{
+		[CmdletBinding()]
+		param
+		(
+			[Parameter(
+				Mandatory = $true,
+				ValueFromPipeline = $true
+			)]
+			[ValidateNotNull()]
+			$CheckBox
+		)
 
-        ForEach ( $item in $global:Bloatware ) {
-            $string = ""
-            if ( $null -notmatch $Installed -and $Installed -cmatch $item) { $string += "Installed" }
-            if ( $null -notmatch $AllUsers -and $AllUsers -cmatch $item) { $string += " AllUsers" }
-            if ( $null -notmatch $Online -and $Online -cmatch $item) { $string += " Online" }
-            AddAppToCustomizeForm $checkboxCounter $item $true $true $string
-            ++$checkboxCounter
-        }
-        ForEach ( $item in $AllUsers ) {
-            $string = "NEW   AllUsers"
-            if ( $null -notmatch $global:BloatwareRegex -and $item -cmatch $global:BloatwareRegex ) { continue }
-            if ( $null -notmatch $Installed -and $Installed -cmatch $item) { $string += " Installed" }
-            if ( $null -notmatch $Online -and $Online -cmatch $item) { $string += " Online" }
-            AddAppToCustomizeForm $checkboxCounter $item $true $true $string
-            ++$checkboxCounter
-        }
-        ForEach ( $item in $Installed ) {
-            $string = "NEW   Installed"
-            if ( $null -notmatch $global:BloatwareRegex -and $item -cmatch $global:BloatwareRegex ) { continue }
-            if ( $null -notmatch $AllUsers -and $AllUsers -cmatch $item) { continue }
-            if ( $null -notmatch $Online -and $Online -cmatch $item) { $string += " Online" }
-            AddAppToCustomizeForm $checkboxCounter $item $true $true $string
-            ++$checkboxCounter
-        }
-        ForEach ( $item in $Online ) {
-            $string = "NEW   Online "
-            if ( $null -notmatch $global:BloatwareRegex -and $item -cmatch $global:BloatwareRegex ) { continue }
-            if ( $null -notmatch $Installed -and $Installed -cmatch $item) { continue }
-            if ( $null -notmatch $AllUsers -and $AllUsers -cmatch $item) { continue }
-            AddAppToCustomizeForm $checkboxCounter $item $true $true $string
-            ++$checkboxCounter
-        }
-        [void]$CustomizeForm.ShowDialog()
+		$AppxName = $CheckBox.Parent.Children[1].Text
+		if ($CheckBox.IsChecked)
+		{
+			[void]$AppxPackages.Add($AppxName)
+		}
+		else
+		{
+			[void]$AppxPackages.Remove($AppxName)
+		}
+		if ($AppxPackages.Count -gt 0)
+		{
+			$Button.IsEnabled = $true
+		}
+		else
+		{
+			$Button.IsEnabled = $false
+		}
+	}
 
-    })
+	function DeleteButton
+	{
+		[void]$Window.Close()
+		$OFS = "|"
+		if ($CheckboxRemoveAll.IsChecked)
+		{   
+            Write-Host "Removing $AppxPackages"
+			Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage -AllUsers
+		}
+		else
+		{  
+            Write-Host "Removing $AppxPackages"
+			Get-AppxPackage -PackageTypeFilter Bundle | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage
+		}
+		$OFS = " "
+	}
+
+	function Add-AppxControl
+	{
+		[CmdletBinding()]
+		param
+		(
+			[Parameter(
+				Mandatory = $true,
+				ValueFromPipeline = $true
+			)]
+			[ValidateNotNull()]
+			[string]
+			$AppxName
+		)
+
+		$CheckBox = New-Object -TypeName System.Windows.Controls.CheckBox
+		$CheckBox.Add_Click({Get-CheckboxClicked -CheckBox $_.Source})
+
+		$TextBlock = New-Object -TypeName System.Windows.Controls.TextBlock
+		$TextBlock.Text = $AppxName
+
+		$StackPanel = New-Object -TypeName System.Windows.Controls.StackPanel
+		[void]$StackPanel.Children.Add($CheckBox)
+		[void]$StackPanel.Children.Add($TextBlock)
+
+		[void]$PanelContainer.Children.Add($StackPanel)
+
+		if ($UncheckedAppxPackages.Contains($AppxName))
+		{
+			$CheckBox.IsChecked = $false
+			# Exit function, item is not checked
+			return
+		}
+
+		# If package checked, add to the array list to uninstall
+		[void]$AppxPackages.Add($AppxName)
+	}
+	#endregion Functions
+
+	#region Events Handlers
+    
+	# Window Loaded Event
+	$Window.Add_Loaded({
+		$OFS = "|"
+		(Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cnotmatch $ExcludedAppxPackages}).Name | ForEach-Object -Process {
+			Add-AppxControl -AppxName $_
+		}
+		$OFS = " "
+
+		$TextblockRemoveAll.Text = "Remove for All Users"
+		$Window.Title = "CleanWin-AppsList"
+		$Button.Content = "Uninstall"
+	})
+
+	# Button Click Event
+	$Button.Add_Click({DeleteButton})
+	#endregion Events Handlers
+
+	if (Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cnotmatch ($ExcludedAppxPackages -join "|")})
+	{
+		# Display the dialog box
+		$Form.ShowDialog() | Out-Null
+	}
+	else
+	{
+		Write-Host "Nothing to display."
+	}
+})
 
 
 $RemoveBlacklist.Add_Click( { 
