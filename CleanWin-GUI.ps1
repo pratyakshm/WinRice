@@ -351,20 +351,41 @@ $CustomizeBlacklists.Add_Click( {
 		"AppUp.IntelGraphicsControlPanel",
 		"AppUp.IntelGraphicsExperience",
 
-		# Sticky Notes
+		# Calculator
+		"Microsoft.WindowsCalculator",
+
+        # Debian - WSL
+        "TheDebianProject.DebianGNULinux",
+
+        # Microsoft Office
+        "Microsoft.Office.Desktop.OneNote",
+        "Microsoft.Office.Desktop.Word",
+        "Microsoft.Office.Desktop",
+        "Microsoft.Office.Desktop.Outlook",
+        "Microsoft.Office.Desktop.Excel",
+        "Microsoft.Office.Desktop.Access",
+        "Microsoft.Office.Desktop.PowerPoint",
+
+        # Microsoft Store
+        "Microsoft.WindowsStore",
+
+		# NVIDIA Control Panel
+		"NVIDIACorp.NVIDIAControlPanel",
+
+        # Photos (and Video Editor)
+		"Microsoft.Windows.Photos",
+		"Microsoft.Photos.MediaEngineDLC",
+
+		# Realtek Audio Console
+		"RealtekSemiconductorCorp.RealtekAudioControl",
+
+        # Sticky Notes
 		"Microsoft.MicrosoftStickyNotes",
 
 		# Screen Sketch
 		"Microsoft.ScreenSketch",
 
-		# Photos (and Video Editor)
-		"Microsoft.Windows.Photos",
-		"Microsoft.Photos.MediaEngineDLC",
-
-		# Calculator
-		"Microsoft.WindowsCalculator",
-
-		# Xbox Identity Provider
+        # Xbox Identity Provider
 		"Microsoft.XboxIdentityProvider",
 
 		# Xbox TCUI
@@ -377,25 +398,14 @@ $CustomizeBlacklists.Add_Click( {
 		"Microsoft.XboxGamingOverlay",
 
 		# Xbox Game Bar Plugin
-		"Microsoft.XboxGameOverlay",
+		"Microsoft.XboxGameOverlay"
 
-		# NVIDIA Control Panel
-		"NVIDIACorp.NVIDIAControlPanel",
-
-		# Realtek Audio Console
-		"RealtekSemiconductorCorp.RealtekAudioControl"
 	)
 
 	# UWP apps that won't be shown in the form
 	$ExcludedAppxPackages = @(
 		# Microsoft Desktop App Installer
 		"Microsoft.DesktopAppInstaller",
-
-		# Store Experience Host
-		"Microsoft.StorePurchaseApp",
-
-		# Microsoft Store
-		"Microsoft.WindowsStore",
 
 		# Web Media Extensions
 		"Microsoft.WebMediaExtensions"
@@ -551,7 +561,7 @@ $CustomizeBlacklists.Add_Click( {
 	#endregion Functions
 
 	#region Events Handlers
-    
+
 	# Window Loaded Event
 	$Window.Add_Loaded({
 		$OFS = "|"
