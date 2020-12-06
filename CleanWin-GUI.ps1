@@ -53,7 +53,7 @@ Add-Type -AssemblyName System.Windows.Forms
 
 $Form = New-Object System.Windows.Forms.Form
 $Form.ClientSize = '800,500'
-$Form.Text = "The CleanWin Project - version 0.7.1"
+$Form.Text = "The CleanWin Project - version 0.3.3"
 $Form.TopMost = $false
 
 ############### C L E A N U P ############################
