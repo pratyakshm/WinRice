@@ -254,18 +254,33 @@ $HideVerboseStatus.Height = 40
 $HideVerboseStatus.Location = New-Object System.Drawing.Point(460,195)
 $HideVerboseStatus.Font = 'Microsoft Sans Serif,10'
 
+$DisableBlurLockScreen = New-Object System.Windows.Forms.Button
+$DisableBlurLockScreen.Text = "Turn off blur in lock screen"
+$DisableBlurLockScreen.Width = 140
+$DisableBlurLockScreen.Height = 40
+$DisableBlurLockScreen.Location = New-Object System.Drawing.Point(320,235)
+$DisableBlurLockScreen.Font = 'Microsoft Sans Serif,10'
+
+$EnableBlurLockScreen = New-Object System.Windows.Forms.Button
+$EnableBlurLockScreen.Text = "Turn on blur in lock screen"
+$EnableBlurLockScreen.Width = 140
+$EnableBlurLockScreen.Height = 40
+$EnableBlurLockScreen.Location = New-Object System.Drawing.Point(460,235)
+$EnableBlurLockScreen.Font = 'Microsoft Sans Serif,10'
+
+
 $ShowSeconds = New-Object System.Windows.Forms.Button
 $ShowSeconds.Text = "Show Seconds in Taskbar"
 $ShowSeconds.Width = 140
 $ShowSeconds.Height = 40
-$ShowSeconds.Location = New-Object System.Drawing.Point(320,235)
+$ShowSeconds.Location = New-Object System.Drawing.Point(320,275)
 $ShowSeconds.Font = 'Microsoft Sans Serif,10'
 
 $HideSeconds = New-Object System.Windows.Forms.Button
 $HideSeconds.Text = "Hide Seconds in Taskbar"
 $HideSeconds.Width = 140
 $HideSeconds.Height = 40
-$HideSeconds.Location = New-Object System.Drawing.Point(460,235)
+$HideSeconds.Location = New-Object System.Drawing.Point(460,275)
 $HideSeconds.Font = 'Microsoft Sans Serif,10'
 
 
@@ -276,35 +291,35 @@ $Label6.Text = "                      Services"
 $Label6.AutoSize = $true
 $Label6.Width = 25
 $Label6.Height = 10
-$Label6.Location = New-Object System.Drawing.Point(320,290)
+$Label6.Location = New-Object System.Drawing.Point(320,330)
 $Label6.Font = 'Microsoft Sans Serif,12,style=Bold' 
 
 $DisableAutoUpdates = New-Object System.Windows.Forms.Button
 $DisableAutoUpdates.Text = "Disable automatic updates"
 $DisableAutoUpdates.Width = 140
 $DisableAutoUpdates.Height = 40
-$DisableAutoUpdates.Location = New-Object System.Drawing.Point(320,315)
+$DisableAutoUpdates.Location = New-Object System.Drawing.Point(320,355)
 $DisableAutoUpdates.Font = 'Microsoft Sans Serif,10'
 
 $EnableAutoUpdates = New-Object System.Windows.Forms.Button
 $EnableAutoUpdates.Text = "Enable automatic updates"
 $EnableAutoUpdates.Width = 140
 $EnableAutoUpdates.Height = 40
-$EnableAutoUpdates.Location = New-Object System.Drawing.Point(460,315)
+$EnableAutoUpdates.Location = New-Object System.Drawing.Point(460,355)
 $EnableAutoUpdates.Font = 'Microsoft Sans Serif,10'
 
 $DisableDefrag = New-Object System.Windows.Forms.Button
 $DisableDefrag.Text = "Disable defragmentation"
 $DisableDefrag.Width = 140
 $DisableDefrag.Height = 40
-$DisableDefrag.Location = New-Object System.Drawing.Point(320,355)
+$DisableDefrag.Location = New-Object System.Drawing.Point(320,395)
 $DisableDefrag.Font = 'Microsoft Sans Serif,10'
 
 $EnableDefrag = New-Object System.Windows.Forms.Button
 $EnableDefrag.Text = "Enable defragmentation"
 $EnableDefrag.Width = 140
 $EnableDefrag.Height = 40
-$EnableDefrag.Location = New-Object System.Drawing.Point(460,355)
+$EnableDefrag.Location = New-Object System.Drawing.Point(460,395)
 $EnableDefrag.Font = 'Microsoft Sans Serif,10'
 
 $Label7 = New-Object System.Windows.Forms.Label
@@ -312,15 +327,15 @@ $Label7.Text = "CleanWin is FOSS, and shall only be downloaded from https://gith
 $Label7.AutoSize = $true
 $Label7.Width = 25
 $Label7.Height = 10
-$Label7.Location = New-Object System.Drawing.Point(10,450)
+$Label7.Location = New-Object System.Drawing.Point(10,480)
 $Label7.Font = 'Microsoft Sans Serif,8,style=Monospace' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label4, $Label5, $Label6, $label7, $RemoveAllBloatware, 
 $CustomizeBlacklists, $RemoveBloatRegkeys, $RemoveBlacklist, $InstallNet35, $InstallWSL, 
 $UninstallBloatFeatures, $OOShutup10, $DisableDataCollection, $DisableTelemetry, $HostsTelemetry,
 $EnableDataCollection, $EnableTelemetry, $CleanExplorer, $DisableStickyKeys, 
-$EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $ShowSeconds, $UndoCleanExplorer, 
-$EnableStickyKeys, $DisablePrtScrForSnip, $Show3DObjects, $HideVerboseStatus,  $HideSeconds, 
+$EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, $UndoCleanExplorer, 
+$EnableStickyKeys, $DisablePrtScrForSnip, $Show3DObjects, $HideVerboseStatus,  $EnableBlurLockScreen, $HideSeconds, 
 $DisableAutoUpdates, $DisableDefrag, $EnableAutoUpdates, $EnableDefrag))
 
 $CWFolder = "C:\Temp\CleanWin"
@@ -776,6 +791,19 @@ $HideVerboseStatus.Add_Click( {
         Write-Host "Verbose status has been turned off."
 })
 
+$DisableBlurLockScreen.Add_Click( {
+    $ErrorActionPreference = 'SilentlyContinue'
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "DisableAcrylicBackgroundOnLogon" -Type DWord -Value 1
+        Write-Host "Background blur in lock screen has been turned off." 
+})
+
+$EnableBlurLockScreen.Add_Click( {
+    $ErrorActionPreference = 'SilentlyContinue'
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "DisableAcrylicBackgroundOnLogon" -Type DWord -Value 0
+        Write-Host "Background blur in lock screen has been turned on." 
+})
+
+
 $ShowSeconds.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
         Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
@@ -816,6 +844,7 @@ $Show3DObjects.Add_Click( {
         Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy"
         Write-Host "3D objects has been restored."
 })
+
 $EnablePrtScrForSnip.Add_Click( {
         Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 1
         Write-Host "Print screen key is now set to launch Screen Snip."
