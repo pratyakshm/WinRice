@@ -1113,6 +1113,27 @@ Function DebloatApps {
 	 "Microsoft.XboxApp"
 	 "Microsoft.XboxGamingOverlay"
 	 "Microsoft.ZuneVideo"
+
+	#Sponsored Windows 10 AppX Apps
+    #Add sponsored/featured apps to remove in the "*AppName*" format
+    "*EclipseManager*"
+    "*ActiproSoftwareLLC*"
+    "*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
+    "*Duolingo-LearnLanguagesforFree*"
+    "*PandoraMediaInc*"
+    "*CandyCrush*"
+    "*BubbleWitch3Saga*"
+    "*Wunderlist*"
+    "*Flipboard*"
+    "*Twitter*"
+    "*Facebook*"
+    "*Spotify*"
+    "*Minecraft*"
+    "*Royal Revolt*"
+    "*Sway*"
+    "*Speed Test*"
+	"*Dolby*"
+	
 	)
 	foreach ($Bloat in $Bloatware) {
 		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 

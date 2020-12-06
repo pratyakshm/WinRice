@@ -653,6 +653,27 @@ $ErrorActionPreference = 'SilentlyContinue'
              "Microsoft.XboxApp"
              "Microsoft.XboxGamingOverlay"
              "Microsoft.ZuneVideo"
+
+            #Sponsored Windows 10 AppX Apps
+            #Add sponsored/featured apps to remove in the "*AppName*" format
+            "*EclipseManager*"
+            "*ActiproSoftwareLLC*"
+            "*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
+            "*Duolingo-LearnLanguagesforFree*"
+            "*PandoraMediaInc*"
+            "*CandyCrush*"
+            "*BubbleWitch3Saga*"
+            "*Wunderlist*"
+            "*Flipboard*"
+            "*Twitter*"
+            "*Facebook*"
+            "*Spotify*"
+            "*Minecraft*"
+            "*Royal Revolt*"
+            "*Sway*"
+            "*Speed Test*"
+            "*Dolby*"
+
             )
             foreach ($Bloat in $Bloatware) {
                 Get-AppxPackage -Name $Bloat| Remove-AppxPackage | Out-Null
@@ -829,7 +850,7 @@ $Hide3DObjects.Add_Click( {
             New-Item -Path $Hide3DObjects2 -Force | Out-Null
             }
         Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
-        Remove-Item -Path $3DObjects3 -Recurse
+        Remove-Item -Path $Hide3DObjects3 -Recurse
         Write-Host "3D Objects has been hidden."
 })
 
