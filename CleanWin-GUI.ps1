@@ -62,36 +62,36 @@ $Label2.Text = "                        Cleanup"
 $Label2.AutoSize = $true
 $Label2.Width = 25
 $Label2.Height = 10
-$Label2.Location = New-Object System.Drawing.Point(10, 10)
-$Label2.Font = 'Microsoft Sans Serif,12,style=Bold'
+$Label2.Location = New-Object System.Drawing.Point(10, 8)
+$Label2.Font = 'Segoe UI,12,style=Bold'
 
 $RemoveAllBloatware = New-Object System.Windows.Forms.Button
 $RemoveAllBloatware.Text = "Remove all bloatware"
 $RemoveAllBloatware.Width = 140
 $RemoveAllBloatware.Height = 40
 $RemoveAllBloatware.Location = New-Object System.Drawing.Point(10, 35)
-$RemoveAllBloatware.Font = 'Microsoft Sans Serif,10'
+$RemoveAllBloatware.Font = 'Segoe UI,10'
 
 $RemoveBloatRegkeys = New-Object System.Windows.Forms.Button
 $RemoveBloatRegkeys.Text = "Remove bloatware regkeys"
 $RemoveBloatRegkeys.Width = 140
 $RemoveBloatRegkeys.Height = 40
 $RemoveBloatRegkeys.Location = New-Object System.Drawing.Point(150, 35)
-$RemoveBloatRegkeys.Font = 'Microsoft Sans Serif,10'
+$RemoveBloatRegkeys.Font = 'Segoe UI,10'
 
 $CustomizeBlacklists = New-Object System.Windows.Forms.Button
 $CustomizeBlacklists.Text = "Edit CleanWin-AppsList"
 $CustomizeBlacklists.Width = 140
 $CustomizeBlacklists.Height = 40
 $CustomizeBlacklists.Location = New-Object System.Drawing.Point(10, 75)
-$CustomizeBlacklists.Font = 'Microsoft Sans Serif,10'
+$CustomizeBlacklists.Font = 'Segoe UI,10'
 
 $RemoveBlacklist = New-Object System.Windows.Forms.Button
 $RemoveBlacklist.Text = "Uninstall apps using CleanWin-AppsList"
 $RemoveBlacklist.Width = 140
 $RemoveBlacklist.Height = 40
 $RemoveBlacklist.Location = New-Object System.Drawing.Point(150, 75)
-$RemoveBlacklist.Font = 'Microsoft Sans Serif,10'
+$RemoveBlacklist.Font = 'Segoe UI,10'
 
 ############# O P T I O N A L  F E A T U R E S ################
 $Label3 = New-Object System.Windows.Forms.Label
@@ -99,29 +99,29 @@ $Label3.Text = '                Optional Features'
 $Label3.AutoSize = $true
 $Label3.Width = 25
 $Label3.Height = 10
-$Label3.Location = New-Object System.Drawing.Point(10,130)
-$Label3.Font = 'Microsoft Sans Serif,12,style=Bold'
+$Label3.Location = New-Object System.Drawing.Point(10,128)
+$Label3.Font = 'Segoe UI,12,style=Bold'
 
 $InstallNet35 = New-Object System.Windows.Forms.Button
 $InstallNet35.Text = "Install dotNET 3.5"
 $InstallNet35.Width = 140
 $InstallNet35.Height = 40
 $InstallNet35.Location = New-Object System.Drawing.Point(10,155)
-$InstallNet35.Font = 'Microsoft Sans Serif,10'
+$InstallNet35.Font = 'Segoe UI,10'
 
 $InstallWSL = New-Object System.Windows.Forms.Button
 $InstallWSL.Text = "Install WSL"
 $InstallWSL.Width = 140
 $InstallWSL.Height = 40
 $InstallWSL.Location = New-Object System.Drawing.Point(10,195)
-$InstallWSL.Font = 'Microsoft Sans Serif,10'
+$InstallWSL.Font = 'Segoe UI,10'
 
 $UninstallBloatFeatures = New-Object System.Windows.Forms.Button
 $UninstallBloatFeatures.Text = "Uninstall bloat features"
 $UninstallBloatFeatures.Width = 140
 $UninstallBloatFeatures.Height = 40 
 $UninstallBloatFeatures.Location = New-Object System.Drawing.Point(150,155)
-$UninstallBloatFeatures.Font = 'Microsoft Sans Serif,10'
+$UninstallBloatFeatures.Font = 'Segoe UI,10'
 
 ####################### P R I V A C Y ##########################
 $Label4 = New-Object System.Windows.Forms.Label
@@ -129,50 +129,50 @@ $Label4.Text = "                        Privacy"
 $Label4.AutoSize = $true
 $Label4.Width = 25
 $Label4.Height = 10
-$Label4.Location = New-Object System.Drawing.Point(10,250)
-$Label4.Font = 'Microsoft Sans Serif,12,style=Bold'
+$Label4.Location = New-Object System.Drawing.Point(10,248)
+$Label4.Font = 'Segoe UI,12,style=Bold'
 
 $OOShutup10 = New-Object System.Windows.Forms.Button
 $OOShutup10.Text = 'Apply O&OShutup10 config'
 $OOShutup10.Width = 140
 $OOShutup10.Height = 40
 $OOShutup10.Location = New-Object System.Drawing.Point(10, 275)
-$OOShutup10.Font = 'Microsoft Sans Serif,10'
+$OOShutup10.Font = 'Segoe UI,10'
 
 $HostsTelemetry = New-Object System.Windows.Forms.Button
 $HostsTelemetry.Text = 'Block telemetry using hosts'
 $HostsTelemetry.Width = 140
 $HostsTelemetry.Height = 40
 $HostsTelemetry.Location = New-Object System.Drawing.Point(150, 275)
-$HostsTelemetry.Font = 'Microsoft Sans Serif,10'
+$HostsTelemetry.Font = 'Segoe UI,10'
 
 $DisableDataCollection = New-Object System.Windows.Forms.Button
 $DisableDataCollection.Text = "Disable Data collection"
 $DisableDataCollection.Width = 140
 $DisableDataCollection.Height = 40
 $DisableDataCollection.Location = New-Object System.Drawing.Point(10,315)
-$DisableDataCollection.Font = 'Microsoft Sans Serif,10'
+$DisableDataCollection.Font = 'Segoe UI,10'
 
 $EnableDataCollection = New-Object System.Windows.Forms.Button
 $EnableDataCollection.Text = "Enable Data collection"
 $EnableDataCollection.Width = 140
 $EnableDataCollection.Height = 40
 $EnableDataCollection.Location = New-Object System.Drawing.Point(150,315)
-$EnableDataCollection.Font = 'Microsoft Sans Serif,10'
+$EnableDataCollection.Font = 'Segoe UI,10'
 
 $DisableTelemetry = New-Object System.Windows.Forms.Button 
 $DisableTelemetry.Text = "Disable Telemetry"
 $DisableTelemetry.Width = 140
 $DisableTelemetry.Height = 40
 $DisableTelemetry.Location = New-Object System.Drawing.Point(10, 355)
-$DisableTelemetry.Font = 'Microsoft Sans Serif,10'
+$DisableTelemetry.Font = 'Segoe UI,10'
 
 $EnableTelemetry = New-Object System.Windows.Forms.Button 
 $EnableTelemetry.Text = "Enable Telemetry"
 $EnableTelemetry.Width = 140
 $EnableTelemetry.Height = 40
 $EnableTelemetry.Location = New-Object System.Drawing.Point(150, 355)
-$EnableTelemetry.Font = 'Microsoft Sans Serif,10'
+$EnableTelemetry.Font = 'Segoe UI,10'
 
 ############## W I N D O W S  E X P L O R E R #################
 
@@ -181,92 +181,92 @@ $Label5.Text = "                Windows Explorer"
 $Label5.AutoSize = $true
 $Label5.Width = 25
 $Label5.Height = 10
-$Label5.Location = New-Object System.Drawing.Point(320,10)
-$Label5.Font = 'Microsoft Sans Serif,12,style=Bold' 
+$Label5.Location = New-Object System.Drawing.Point(320,8)
+$Label5.Font = 'Segoe UI,12,style=Bold' 
 
 $CleanExplorer = New-Object System.Windows.Forms.Button
 $CleanExplorer.Text = "Clean Windows Explorer"
 $CleanExplorer.Width = 140
 $CleanExplorer.Height = 40
 $CleanExplorer.Location = New-Object System.Drawing.Point(320,35)
-$CleanExplorer.Font = 'Microsoft Sans Serif,10'
+$CleanExplorer.Font = 'Segoe UI,10'
 
 $UndoCleanExplorer = New-Object System.Windows.Forms.Button
 $UndoCleanExplorer.Text = "Revert Clean Windows Explorer"
 $UndoCleanExplorer.Width = 140
 $UndoCleanExplorer.Height = 40 
 $UndoCleanExplorer.Location = New-Object System.Drawing.Point(460,35)
-$UndoCleanExplorer.Font = 'Microsoft Sans Serif,10'
+$UndoCleanExplorer.Font = 'Segoe UI,10'
 
 $DisableStickyKeys = New-Object System.Windows.Forms.Button
 $DisableStickyKeys.Text = "Disable Sticky keys"
 $DisableStickyKeys.Width = 140
 $DisableStickyKeys.Height = 40
 $DisableStickyKeys.Location = New-Object System.Drawing.Point(320,75)
-$DisableStickyKeys.Font = 'Microsoft Sans Serif,10'
+$DisableStickyKeys.Font = 'Segoe UI,10'
 
 $EnableStickyKeys = New-Object System.Windows.Forms.Button
 $EnableStickyKeys.Text = "Enable Sticky keys"
 $EnableStickyKeys.Width = 140
 $EnableStickyKeys.Height = 40
 $EnableStickyKeys.Location = New-Object System.Drawing.Point(460,75)
-$EnableStickyKeys.Font = 'Microsoft Sans Serif,10'
+$EnableStickyKeys.Font = 'Segoe UI,10'
 
 $EnablePrtScrForSnip = New-Object System.Windows.Forms.Button
 $EnablePrtScrForSnip.Text = "Use PrtScr to open Screen Snip"
 $EnablePrtScrForSnip.Width = 140
 $EnablePrtScrForSnip.Height = 40
 $EnablePrtScrForSnip.Location = New-Object System.Drawing.Point(320,115)
-$EnablePrtScrForSnip.Font = 'Microsoft Sans Serif,10'
+$EnablePrtScrForSnip.Font = 'Segoe UI,10'
 
 $DisablePrtScrForSnip = New-Object System.Windows.Forms.Button
 $DisablePrtScrForSnip.Text = "Don't use PrtScr to open Screen snip"
 $DisablePrtScrForSnip.Width = 140
 $DisablePrtScrForSnip.Height = 40
 $DisablePrtScrForSnip.Location = New-Object System.Drawing.Point(460,115)
-$DisablePrtScrForSnip.Font = 'Microsoft Sans Serif,10'
+$DisablePrtScrForSnip.Font = 'Segoe UI,10'
 
 $Hide3DObjects = New-Object System.Windows.Forms.Button
 $Hide3DObjects.Text = "Hide 3D objects"
 $Hide3DObjects.Width = 140
 $Hide3DObjects.Height = 40
 $Hide3DObjects.Location = New-Object System.Drawing.Point(320,155)
-$Hide3DObjects.Font = 'Microsoft Sans Serif,10'
+$Hide3DObjects.Font = 'Segoe UI,10'
 
 $Show3DObjects = New-Object System.Windows.Forms.Button
 $Show3DObjects.Text = "Restore 3D objects"
 $Show3DObjects.Width = 140
 $Show3DObjects.Height = 40
 $Show3DObjects.Location = New-Object System.Drawing.Point(460,155)
-$Show3DObjects.Font = 'Microsoft Sans Serif,10'
+$Show3DObjects.Font = 'Segoe UI,10'
 
 $ShowVerboseStatus = New-Object System.Windows.Forms.Button
 $ShowVerboseStatus.Text = "Show verbose status"
 $ShowVerboseStatus.Width = 140
 $ShowVerboseStatus.Height = 40
 $ShowVerboseStatus.Location = New-Object System.Drawing.Point(320,195)
-$ShowVerboseStatus.Font = 'Microsoft Sans Serif,10'
+$ShowVerboseStatus.Font = 'Segoe UI,10'
 
 $HideVerboseStatus = New-Object System.Windows.Forms.Button
 $HideVerboseStatus.Text = "Hide verbose status"
 $HideVerboseStatus.Width = 140
 $HideVerboseStatus.Height = 40
 $HideVerboseStatus.Location = New-Object System.Drawing.Point(460,195)
-$HideVerboseStatus.Font = 'Microsoft Sans Serif,10'
+$HideVerboseStatus.Font = 'Segoe UI,10'
 
 $DisableBlurLockScreen = New-Object System.Windows.Forms.Button
 $DisableBlurLockScreen.Text = "Turn off blur in lock screen"
 $DisableBlurLockScreen.Width = 140
 $DisableBlurLockScreen.Height = 40
 $DisableBlurLockScreen.Location = New-Object System.Drawing.Point(320,235)
-$DisableBlurLockScreen.Font = 'Microsoft Sans Serif,10'
+$DisableBlurLockScreen.Font = 'Segoe UI,10'
 
 $EnableBlurLockScreen = New-Object System.Windows.Forms.Button
 $EnableBlurLockScreen.Text = "Turn on blur in lock screen"
 $EnableBlurLockScreen.Width = 140
 $EnableBlurLockScreen.Height = 40
 $EnableBlurLockScreen.Location = New-Object System.Drawing.Point(460,235)
-$EnableBlurLockScreen.Font = 'Microsoft Sans Serif,10'
+$EnableBlurLockScreen.Font = 'Segoe UI,10'
 
 
 $ShowSeconds = New-Object System.Windows.Forms.Button
@@ -274,14 +274,14 @@ $ShowSeconds.Text = "Show Seconds in Taskbar"
 $ShowSeconds.Width = 140
 $ShowSeconds.Height = 40
 $ShowSeconds.Location = New-Object System.Drawing.Point(320,275)
-$ShowSeconds.Font = 'Microsoft Sans Serif,10'
+$ShowSeconds.Font = 'Segoe UI,10'
 
 $HideSeconds = New-Object System.Windows.Forms.Button
 $HideSeconds.Text = "Hide Seconds in Taskbar"
 $HideSeconds.Width = 140
 $HideSeconds.Height = 40
 $HideSeconds.Location = New-Object System.Drawing.Point(460,275)
-$HideSeconds.Font = 'Microsoft Sans Serif,10'
+$HideSeconds.Font = 'Segoe UI,10'
 
 
 
@@ -291,36 +291,36 @@ $Label6.Text = "                      Services"
 $Label6.AutoSize = $true
 $Label6.Width = 25
 $Label6.Height = 10
-$Label6.Location = New-Object System.Drawing.Point(320,330)
-$Label6.Font = 'Microsoft Sans Serif,12,style=Bold' 
+$Label6.Location = New-Object System.Drawing.Point(320,328)
+$Label6.Font = 'Segoe UI,12,style=Bold' 
 
 $DisableAutoUpdates = New-Object System.Windows.Forms.Button
 $DisableAutoUpdates.Text = "Disable automatic updates"
 $DisableAutoUpdates.Width = 140
 $DisableAutoUpdates.Height = 40
 $DisableAutoUpdates.Location = New-Object System.Drawing.Point(320,355)
-$DisableAutoUpdates.Font = 'Microsoft Sans Serif,10'
+$DisableAutoUpdates.Font = 'Segoe UI,10'
 
 $EnableAutoUpdates = New-Object System.Windows.Forms.Button
 $EnableAutoUpdates.Text = "Enable automatic updates"
 $EnableAutoUpdates.Width = 140
 $EnableAutoUpdates.Height = 40
 $EnableAutoUpdates.Location = New-Object System.Drawing.Point(460,355)
-$EnableAutoUpdates.Font = 'Microsoft Sans Serif,10'
+$EnableAutoUpdates.Font = 'Segoe UI,10'
 
 $DisableDefrag = New-Object System.Windows.Forms.Button
 $DisableDefrag.Text = "Disable defragmentation"
 $DisableDefrag.Width = 140
 $DisableDefrag.Height = 40
 $DisableDefrag.Location = New-Object System.Drawing.Point(320,395)
-$DisableDefrag.Font = 'Microsoft Sans Serif,10'
+$DisableDefrag.Font = 'Segoe UI,10'
 
 $EnableDefrag = New-Object System.Windows.Forms.Button
 $EnableDefrag.Text = "Enable defragmentation"
 $EnableDefrag.Width = 140
 $EnableDefrag.Height = 40
 $EnableDefrag.Location = New-Object System.Drawing.Point(460,395)
-$EnableDefrag.Font = 'Microsoft Sans Serif,10'
+$EnableDefrag.Font = 'Segoe UI,10'
 
 $Label7 = New-Object System.Windows.Forms.Label
 $Label7.Text = "CleanWin is FOSS, and shall only be downloaded from https://github.com/pratyakshm/CleanWin"
@@ -328,7 +328,7 @@ $Label7.AutoSize = $true
 $Label7.Width = 25
 $Label7.Height = 10
 $Label7.Location = New-Object System.Drawing.Point(10,480)
-$Label7.Font = 'Microsoft Sans Serif,8,style=Monospace' 
+$Label7.Font = 'Segoe UI,8,style=Monospace' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label4, $Label5, $Label6, $label7, $RemoveAllBloatware, 
 $CustomizeBlacklists, $RemoveBloatRegkeys, $RemoveBlacklist, $InstallNet35, $InstallWSL, 
