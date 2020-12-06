@@ -53,6 +53,7 @@ $tasks = @(
 ### Windows Explorer Changes ###
 	"PrintExplorerChanges",
 	"ShowVerboseStatus",           # "HideVerboseStatus",
+	"TransparentLockScreen",	   # "BlurLockScreen",
 	"EnablePrtScrToSnip",		   # "DisablePrtScrSnip",
 	"DisableStickyKeys",           # "EnableStickyKeys",
 	"SetExplorerThisPC",           # "SetExplorerQuickAccess",
@@ -689,6 +690,29 @@ Function HideVerboseStatus {
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "VerboseStatus" -Type DWord -Value 0
 	Write-Host "Verbose Status has been turned off."
 }
+
+# Disable lock screen blur 
+Function TransparentLockScreen {
+	Write-Host " "
+	$question = 'Do you want to turn off background blur in lock screen?'
+	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+	if ($decision -eq 0) {
+	Write-Host "Turning off background blur in lock screen..."
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "DisableAcrylicBackgroundOnLogon" -Type DWord -Value 1
+	Write-Host "Background blur in lock screen has been turned off." 
+	}
+	else {}
+}
+
+Function BlurLockScreen {
+	Write-Host "Turning on background blur in lock screen..."
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "DisableAcrylicBackgroundOnLogon" -Type DWord -Value 0
+	Write-Host "Background blur in lock screen has been turned on."
+}
+
 
 # Enable use print screen key to open screen snipping
 Function EnablePrtScrToSnip {
