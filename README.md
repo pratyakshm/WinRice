@@ -8,7 +8,7 @@
 This section contains the list of tasks that CleanWin performs. They're grouped in the following categories (sorted by alphabetical order):
 <details>
 <summary>Apps & Features</summary>
-List of apps removed by default:
+Apps removed (default):
   <br>3D Viewer   
   <br>Alarms
   <br>Cortana  
@@ -33,12 +33,12 @@ List of apps removed by default:
   <br>Whiteboard
   <br>Xbox
   <br>Xbox Game bar
-  <br><br> List of apps removed (optional):
+  <br><br>Apps removed (optional):
   <br>Camera
   <br>Groove Music
   <br>Skype
   <br>Your Phone
-  <br><br>List of apps installed:
+  <br><br>Apps installed:
   <br>Windows Package Manager
   <br>7-zip<br>Microsoft PowerToys (optional)<br>Revo Uninstaller (optional)<br>VLC Media Player (optional)
   <br><br>Optional features:
@@ -54,7 +54,8 @@ List of apps removed by default:
 
 <details>
  <summary>Privacy & Security</summary>
-  Turn off data collection/telemetry (level full, optional)
+  Privacy:
+  <br>Turn off data collection/telemetry (level full, optional)
   <br>O&OShutup10 config (optional)
   <br>Turn off maps updates
   <br>Turn off feedback
@@ -63,18 +64,31 @@ List of apps removed by default:
   <br>Turn off background apps
   <br>Turn off speech recognition and access to language list for personalization
   <br>Turn on automatic login when PC restarts after installing a Windows Update
+  <br><br>Security:
   <br>Turn off Server Message Block
   <br>Turn off Meltdown compatibility flag
 </details>
 
 <details>
- <summary>Services</summary>
-  Turn off automatic Windows updates (optional)
+ <summary>Tasks & Services</summary>
+  Services:
+  <br>Turn off automatic Windows updates (optional)
   <br>Turn off Windows Update delivery via P2P and LAN
   <br>Turn off AutoPlay
   <br>Turn off Autorun
   <br>Turn off disk defragmentation (optional)
   <br>Set BIOS time to UTC
+  <br><br>Tasks:
+  <br>Turn off Consolidator
+  <br>Turn off DmClient
+  <br>Turn off DmClientOnScenarioDownload
+  <br>Turn off Disk Diagnostics Data Collector
+  <br>Turn off Disk Defragmentation (optional)
+  <br>Turn off Feedback Notifications task
+  <br>Turn off Microsoft Compatibility Appraiser
+  <br>Turn off ProgramDataUpdater
+  <br>Turn off QueueReporting
+  <br>Turn off UsbCeip
 </details>
 
 <details>
