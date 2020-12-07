@@ -1029,7 +1029,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 
 $EnableDataCollection.Add_Click( { 
-        $ErrorActionPreference = 'SilentlyContinue'
+    $ErrorActionPreference = 'SilentlyContinue'
 
 	# Enable advertising ID
         $Advertising = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
@@ -1058,7 +1058,7 @@ $EnableDataCollection.Add_Click( {
 	# Enable location tracking
         $Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
         $Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
-        If (!(Test-Path )) {
+        If (!(Test-Path $Location1)) {
             New-Item -Path $Location1 -Force | Out-Null
             }
         Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Allow"
@@ -1078,7 +1078,7 @@ $EnableDataCollection.Add_Click( {
 
 	# Enable speech recognition
         $Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
-        If (!(Test-Path )) {
+        If (!(Test-Path $Speech)) {
             New-Item -Path $Speech | Out-Null
             }
         Set-ItemProperty -Path $Speech -Name "HasAccepted" -Type DWord -Value 1
@@ -1115,6 +1115,28 @@ $EnableDataCollection.Add_Click( {
         Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
     
     Write-Host "Data collection has been enabled."
+})
+
+$DisableTelemetry.Add_Click( {
+    $ErrorActionPreference = 'SilentlyContinue'
+    $Telemetry = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
+    Set-ItemProperty -Path $Telemetry -Name "AllowCommericalDataPipeline" -Type DWord -Value 1
+    Set-ItemProperty -Path $Telemetry -Name "AllowDeviceNameInTelemetry" -Type DWord -Value 0
+    Set-ItemProperty -Path $Telemetry -Name "AllowTelemetry" -Type DWord -Value 0
+    Set-ItemProperty -Path $Telemetry -Name "DoNotShowFeedbackNotifications" -Type DWord -Value 1
+    Set-ItemProperty -Path $Telemetry -Name "LimitEnhancedDiagnosticDataWindowsAnalytics" -Type DWord -Value 0
+    Write-Host "Telemetry has been turned off."
+})
+
+$EnableTelemetry.Add_Click( {
+    $ErrorActionPreference = 'SilentlyContinue'
+    $Telemetry = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
+    Remove-ItemProperty -Path $Telemetry -Name "AllowTelemetry"
+    Remove-ItemProperty -Path $Telemetry -Name "AllowCommericalDataPipeline"
+    Remove-ItemProperty -Path $Telemetry -Name "DoNotShowFeedbackNotifications"
+    Remove-ItemProperty -Path $Telemetry -Name "LimitEnhancedDiagnosticDataWindowsAnalytics"
+    Remove-ItemProperty -Path $Telemetry -Name "AllowDeviceNameInTelemetry"
+    Write-Host "Telemetry has been turned on."
 })
 
 $OOShutup10.Add_Click( {
