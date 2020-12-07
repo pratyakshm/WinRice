@@ -1,4 +1,4 @@
-# Instructions
+# Brief documentation
 
 ## How to run:
 1. Download executable (CLI or GUI variant) from the latest [Release](https://github.com/pratyakshm/CleanWin/releases/tag/0.3.2).
