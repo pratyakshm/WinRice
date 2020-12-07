@@ -7,7 +7,7 @@
 ## List of tasks:
 This section contains the list of tasks that CleanWin performs. They're grouped in the following categories (sorted by alphabetical order):
 <details>
-<summary>Apps</summary>
+<summary>Apps & Features</summary>
 List of apps removed by default:
   <br>3D Viewer   
   <br>Alarms
@@ -41,11 +41,8 @@ List of apps removed by default:
   <br><br>List of apps installed:
   <br>Windows Package Manager
   <br>7-zip<br>Microsoft PowerToys (optional)<br>Revo Uninstaller (optional)<br>VLC Media Player (optional)
-</details>
-
-<details>
- <summary>Optional features</summary>
-  Turn on Windows Subsystem for Linux (optional)
+  <br><br>Optional features:
+  <br>Turn on Windows Subsystem for Linux (optional)
   <br>Turn on Hyper-V (optional)
   <br>Turn on Virtual Machine (optional)
   <br>Turn on dotNET 3.5 (optional)
@@ -56,7 +53,7 @@ List of apps removed by default:
 </details>
 
 <details>
- <summary>Privacy</summary>
+ <summary>Privacy & Security</summary>
   Turn off data collection/telemetry (level full, optional)
   <br>O&OShutup10 config (optional)
   <br>Turn off maps updates
@@ -65,14 +62,10 @@ List of apps removed by default:
   <br>Turn off location tracking
   <br>Turn off background apps
   <br>Turn off speech recognition and access to language list for personalization
-</details>
-
-<details>
-<summary>Security</summary>
-  Turn on automatic login when PC restarts after installing a Windows Update
+  <br>Turn on automatic login when PC restarts after installing a Windows Update
   <br>Turn off Server Message Block
   <br>Turn off Meltdown compatibility flag
-</details>   
+</details>
 
 <details>
  <summary>Services</summary>
@@ -97,10 +90,22 @@ List of apps removed by default:
   <br>Show verbose status
 </details>
 
-## Wiki:
-[Click here](https://github.com/pratyakshm/CleanWin/wiki) to visit the Wiki (contains detailed documentation).      
+## Antivirus reports
+**Scanned by [VirusTotal](https://www.virustotal.com/)**
+- [CleanWin-CLI report](https://www.virustotal.com/gui/file/e5505dd3c00595a682478c981a4a42c4b8b24bde8b492a2c32d38cc94aca1716/detection)
+- [CleanWin-GUI report](https://www.virustotal.com/gui/file/9a5c899ac2b267837546f85abcac51dd10354c30d29011fe1e24aabcb3a6b8ec/detection)   
 
+If doubtful, I encourage everyone to manually grab the most recent version .ps1 files of CleanWin and get them manually scanned using [VirusTotal](https://www.virustotal.com/) (Recommended) or their antivirus provider of choice.
+
+## Microsoft Docs
+- [Windows 10 Release Information](https://docs.microsoft.com/en-us/windows/release-information/)
+- [Windows 10 20H2 Update - Known Issues tracker](https://docs.microsoft.com/en-us/windows/release-information/status-windows-10-20h2)
+
+-------------------------------------------------------------
+
+## Wiki:
+To view detailed documentation, please [visit the Wiki](https://github.com/pratyakshm/CleanWin/wiki).
 
 ## Discussion:
 Below are the links to my Telegram group & channel so you can receive updates on my work and discuss about CleanWin and technology in general!  
-[Channel](https://t.me/PratyakshProjects) | [Group](https://t.me/pratyakshchat)   
+[Channel](https://t.me/PratyakshProjects) | [Group](https://t.me/PratyakshChat)   
