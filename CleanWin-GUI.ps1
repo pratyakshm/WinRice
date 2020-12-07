@@ -174,6 +174,7 @@ $EnableTelemetry.Height = 40
 $EnableTelemetry.Location = New-Object System.Drawing.Point(150, 355)
 $EnableTelemetry.Font = 'Segoe UI,10'
 
+
 ############## W I N D O W S  E X P L O R E R #################
 
 $Label5 = New-Object System.Windows.Forms.Label
@@ -322,18 +323,44 @@ $EnableDefrag.Height = 40
 $EnableDefrag.Location = New-Object System.Drawing.Point(460,395)
 $EnableDefrag.Font = 'Segoe UI,10'
 
+
+################ MAINTENANCE ##############
+
 $Label7 = New-Object System.Windows.Forms.Label
-$Label7.Text = "CleanWin is FOSS, and shall only be downloaded from https://github.com/pratyakshm/CleanWin"
+$Label7.Text = "                   Maintenance"
 $Label7.AutoSize = $true
 $Label7.Width = 25
 $Label7.Height = 10
-$Label7.Location = New-Object System.Drawing.Point(10,480)
-$Label7.Font = 'Segoe UI,8,style=Monospace' 
+$Label7.Location = New-Object System.Drawing.Point(10,418)
+$Label7.Font = 'Segoe UI,12,style=Bold'
 
-$Form.controls.AddRange(@( $Label2, $Label3, $Label4, $Label5, $Label6, $label7, $RemoveAllBloatware, 
+$RestartComputer = New-Object System.Windows.Forms.Button 
+$RestartComputer.Text = "Restart this PC"
+$RestartComputer.Width = 140
+$RestartComputer.Height = 40
+$RestartComputer.Location = New-Object System.Drawing.Point(10, 445)
+$RestartComputer.Font = 'Segoe UI,10'
+
+$RestartExplorer = New-Object System.Windows.Forms.Button 
+$RestartExplorer.Text = "Restart Windows Explorer"
+$RestartExplorer.Width = 140
+$RestartExplorer.Height = 40
+$RestartExplorer.Location = New-Object System.Drawing.Point(150, 445)
+$RestartExplorer.Font = 'Segoe UI,10'
+
+
+$Label8 = New-Object System.Windows.Forms.Label
+$Label8.Text = "CleanWin is FOSS, and shall only be downloaded from https://github.com/pratyakshm/CleanWin"
+$Label8.AutoSize = $true
+$Label8.Width = 25
+$Label8.Height = 10
+$Label8.Location = New-Object System.Drawing.Point(10,500)
+$Label8.Font = 'Segoe UI,8,style=Monospace' 
+
+$Form.controls.AddRange(@( $Label2, $Label3, $Label4, $Label5, $Label6, $label7, $Label8, $RemoveAllBloatware, 
 $CustomizeBlacklists, $RemoveBloatRegkeys, $RemoveBlacklist, $InstallNet35, $InstallWSL, 
 $UninstallBloatFeatures, $OOShutup10, $DisableDataCollection, $DisableTelemetry, $HostsTelemetry,
-$EnableDataCollection, $EnableTelemetry, $CleanExplorer, $DisableStickyKeys, 
+$EnableDataCollection, $EnableTelemetry, $RestartComputer, $RestartExplorer, $CleanExplorer, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, $UndoCleanExplorer, 
 $EnableStickyKeys, $DisablePrtScrForSnip, $Show3DObjects, $HideVerboseStatus,  $EnableBlurLockScreen, $HideSeconds, 
 $DisableAutoUpdates, $DisableDefrag, $EnableAutoUpdates, $EnableDefrag))
@@ -686,6 +713,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 $RemoveBloatRegkeys.Add_Click( { 
 $ErrorActionPreference = 'SilentlyContinue'
 $Keys = @(
+        Write-Host "Removing bloatware registry keys..."
          New-PSDrive  HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
         #Remove Background Tasks
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
@@ -1163,6 +1191,14 @@ $DisableDefrag.Add_Click( {
 $EnableDefrag.Add_Click( {
     Enable-ScheduledTask -TaskName "Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
     Write-Host "Disk defragmentation has been enabled."
+})
+
+$RestartComputer.Add_Click( {
+    Restart-Computer -Force
+})
+
+$RestartExplorer.Add_Click( {
+    Stop-Process -ProcessName explorer
 })
 
 [void]$Form.ShowDialog()
