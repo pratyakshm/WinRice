@@ -174,6 +174,19 @@ $EnableTelemetry.Height = 40
 $EnableTelemetry.Location = New-Object System.Drawing.Point(150, 355)
 $EnableTelemetry.Font = 'Segoe UI,10'
 
+$FullBandwidth = New-Object System.Windows.Forms.Button 
+$FullBandwidth.Text = "Release Bandwidth"
+$FullBandwidth.Width = 140
+$FullBandwidth.Height = 40
+$FullBandwidth.Location = New-Object System.Drawing.Point(10, 395)
+$FullBandwidth.Font = 'Segoe UI,10'
+
+$ReserveBandwidth = New-Object System.Windows.Forms.Button 
+$ReserveBandwidth.Text = "Reserve Bandwidth"
+$ReserveBandwidth.Width = 140
+$ReserveBandwidth.Height = 40
+$ReserveBandwidth.Location = New-Object System.Drawing.Point(150, 395)
+$ReserveBandwidth.Font = 'Segoe UI,10'
 
 ############## W I N D O W S  E X P L O R E R #################
 
@@ -331,21 +344,21 @@ $Label7.Text = "                   Maintenance"
 $Label7.AutoSize = $true
 $Label7.Width = 25
 $Label7.Height = 10
-$Label7.Location = New-Object System.Drawing.Point(10,418)
+$Label7.Location = New-Object System.Drawing.Point(10,450)
 $Label7.Font = 'Segoe UI,12,style=Bold'
 
 $RestartComputer = New-Object System.Windows.Forms.Button 
 $RestartComputer.Text = "Restart this PC"
 $RestartComputer.Width = 140
 $RestartComputer.Height = 40
-$RestartComputer.Location = New-Object System.Drawing.Point(10, 445)
+$RestartComputer.Location = New-Object System.Drawing.Point(10, 478)
 $RestartComputer.Font = 'Segoe UI,10'
 
 $RestartExplorer = New-Object System.Windows.Forms.Button 
 $RestartExplorer.Text = "Restart Windows Explorer"
 $RestartExplorer.Width = 140
 $RestartExplorer.Height = 40
-$RestartExplorer.Location = New-Object System.Drawing.Point(150, 445)
+$RestartExplorer.Location = New-Object System.Drawing.Point(150, 478)
 $RestartExplorer.Font = 'Segoe UI,10'
 
 
@@ -354,13 +367,13 @@ $Label8.Text = "CleanWin is FOSS, and shall only be downloaded from https://gith
 $Label8.AutoSize = $true
 $Label8.Width = 25
 $Label8.Height = 10
-$Label8.Location = New-Object System.Drawing.Point(10,500)
+$Label8.Location = New-Object System.Drawing.Point(10,538)
 $Label8.Font = 'Segoe UI,8,style=Monospace' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label4, $Label5, $Label6, $label7, $Label8, $RemoveAllBloatware, 
 $CustomizeBlacklists, $RemoveBloatRegkeys, $RemoveBlacklist, $InstallNet35, $InstallWSL, 
 $UninstallBloatFeatures, $OOShutup10, $DisableDataCollection, $DisableTelemetry, $HostsTelemetry,
-$EnableDataCollection, $EnableTelemetry, $RestartComputer, $RestartExplorer, $CleanExplorer, $DisableStickyKeys, 
+$EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, $UndoCleanExplorer, 
 $EnableStickyKeys, $DisablePrtScrForSnip, $Show3DObjects, $HideVerboseStatus,  $EnableBlurLockScreen, $HideSeconds, 
 $DisableAutoUpdates, $DisableDefrag, $EnableAutoUpdates, $EnableDefrag))
@@ -1033,7 +1046,7 @@ $EnableDataCollection.Add_Click( {
 
 	# Enable advertising ID
         $Advertising = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
-        Remove-ItemProperty -Path $Advertising -Name "DisabledByGroupPolicy" -ErrorAction SilentlyContinue
+        Remove-ItemProperty -Path $Advertising -Name "DisabledByGroupPolicy"
 
 	# Enable activity history
         $ActivityHistory = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
@@ -1140,23 +1153,38 @@ $EnableTelemetry.Add_Click( {
 })
 
 $OOShutup10.Add_Click( {
-        $ErrorActionPreference = 'SilentlyContinue'
-	    Import-Module BitsTransfer
-	    Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/CleanWin/main/files/ooshutup10.cfg" -Destination ooshutup10.cfg
-	    Start-BitsTransfer -Source "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe" -Destination OOSU10.exe
-	    ./OOSU10.exe ooshutup10.cfg /quiet
-        Remove-Item ooshutup10.cfg
-        Remove-Item  OOSU10.exe
-        Write-Host "O&OShutup10 settings have been applied."
+    $ErrorActionPreference = 'SilentlyContinue'
+	Import-Module BitsTransfer
+	Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/CleanWin/main/files/ooshutup10.cfg" -Destination ooshutup10.cfg
+	Start-BitsTransfer -Source "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe" -Destination OOSU10.exe
+    ./OOSU10.exe ooshutup10.cfg /quiet
+    Remove-Item ooshutup10.cfg
+    Remove-Item  OOSU10.exe
+    Write-Host "O&OShutup10 settings have been applied."
     })
 
 $HostsTelemetry.Add_Click( {
-        $ErrorActionPreference = 'SilentlyContinue'
-        Import-Module BitsTransfer
-        Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/CleanWin/main/files/hosts-telemetry.bat" -Destination hoststelemetry.bat
-        ./hoststelemetry.bat /quiet
-        Remove-Item hoststelemetry.bat
-        Write-Host "Telemetry IP addresses have been blocked using the hosts file."
+    $ErrorActionPreference = 'SilentlyContinue'
+    Import-Module BitsTransfer
+    Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/CleanWin/main/files/hosts-telemetry.bat" -Destination hoststelemetry.bat
+    ./hoststelemetry.bat /quiet
+    Remove-Item hoststelemetry.bat
+    Write-Host "Telemetry IP addresses have been blocked using the hosts file."
+})
+
+$FullBandwidth.Add_Click( {
+    $ErrorActionPreference = 'SilentlyContinue'
+    $Bandwidth = "HKLM:\SOFTWARE\Policies\Microsoft\Psched"
+    New-Item -Path $Bandwidth -ItemType Directory -Force
+    Set-ItemProperty -Path $Bandwidth -Name "NonBestEffortLimit" -Type DWord -Value 0
+    Write-Host "Full bandwidth has been released."
+})
+
+$ReserveBandwidth.Add_Click({
+    $ErrorActionPreference = 'SilentlyContinue'
+    $Bandwidth = "HKLM:\SOFTWARE\Policies\Microsoft\Psched"
+    Remove-ItemProperty -Path $Bandwidth -Name "NonBestEffortLimit"
+    Write-Host "Bandwidth has been reset back to Microsoft defaults."
 })
 
 ####################################
@@ -1164,25 +1192,26 @@ $HostsTelemetry.Add_Click( {
 ####################################
 
 $InstallNet35.Add_Click( {
-        DISM /Online /Enable-Feature /FeatureName:NetFx3 /All /NoRestart /Quiet
-        Write-Host "dotNET 3.5 has been installed."
+    DISM /Online /Enable-Feature /FeatureName:NetFx3 /All /NoRestart /Quiet
+    Write-Host "dotNET 3.5 has been installed."
     } )
 
 $InstallWSL.Add_Click( {
-        dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /all /NoRestart /Quiet
-		dism.exe /Online /Enable-Feature /FeatureName:VirtualMachinePlatform /All /NoRestart /Quiet
-        dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V /All /NoRestart	/Quiet
-        Write-Host "WIndows Subsystem for Linux has been enabled."
+    dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /all /NoRestart /Quiet
+	dism.exe /Online /Enable-Feature /FeatureName:VirtualMachinePlatform /All /NoRestart /Quiet
+    dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V /All /NoRestart	/Quiet
+    Write-Host "WIndows Subsystem for Linux has been enabled."
 })
 
 $UninstallBloatFeatures.Add_Click( {
-        Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -like "Internet-Explorer-Optional*" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
-        Get-WindowsCapability -Online | Where-Object { $_.Name -like "Browser.InternetExplorer*" } | Remove-WindowsCapability -Online | Out-Null	Get-WindowsCapability -Online | Where-Object { $_.Name -like "MathRecognizer*" } | Remove-WindowsCapability -Online | Out-Null
-        Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "WorkFolders-Client" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
-        Get-WindowsCapability -Online | Where-Object { $_.Name -like "Hello.Face*" } | Remove-WindowsCapability -Online | Out-Null
-        Get-WindowsCapability -Online | Where-Object { $_.Name -like "MathRecognizer*" } | Remove-WindowsCapability -Online | Out-Null
-        Write-Host "Bloatware features have been uninstalled."
+    Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -like "Internet-Explorer-Optional*" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
+    Get-WindowsCapability -Online | Where-Object { $_.Name -like "Browser.InternetExplorer*" } | Remove-WindowsCapability -Online | Out-Null	Get-WindowsCapability -Online | Where-Object { $_.Name -like "MathRecognizer*" } | Remove-WindowsCapability -Online | Out-Null
+    Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "WorkFolders-Client" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
+    Get-WindowsCapability -Online | Where-Object { $_.Name -like "Hello.Face*" } | Remove-WindowsCapability -Online | Out-Null
+    Get-WindowsCapability -Online | Where-Object { $_.Name -like "MathRecognizer*" } | Remove-WindowsCapability -Online | Out-Null
+    Write-Host "Bloatware features have been uninstalled."
 })
+
 ##############################
 ##### S E R V I C E S ########
 ##############################
