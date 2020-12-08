@@ -3,21 +3,16 @@
 $ErrorActionPreference = 'SilentlyContinue'
 
 $Button = [System.Windows.MessageBoxButton]::YesNoCancel
-$ErrorIco = [System.Windows.MessageBoxImage]::Error
-$Ask = "Do you want to elevate CleanWin?
-
-        Select 'Yes' to elevate
-
-        Select 'No' if you don't want to elevate
-        
-        Select 'Cancel' to stop run."
+$ErrorIco = [System.Windows.MessageBoxImage]::Warning
+$Ask = "Do you want to elevate CleanWin? This is compulsory to ensure proper usage."
 
 If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]'Administrator')) {
-    $Prompt = [System.Windows.MessageBox]::Show($Ask, "Run as an Administrator or not?", $Button, $ErrorIco) 
+    $Prompt = [System.Windows.MessageBox]::Show($Ask, "Elevation request", $Button, $ErrorIco) 
     Switch ($Prompt) {
         #This will setup Windows 10
         Yes {
-            Write-Host "You didn't run this script as an as administrator. It'll self elevate and continue."
+            Write-Host "CleanWin has been elevated. Launching GUI..."
+            Start-Sleep 1
             Start-Process PowerShell.exe -ArgumentList ("-NoProfile -ExecutionPolicy Bypass -File `"{0}`"" -f $PSCommandPath) -Verb RunAs
             Exit
          }
