@@ -52,7 +52,7 @@ Add-Type -AssemblyName System.Windows.Forms
 ### BEGIN GUI ###
 
 $Form = New-Object System.Windows.Forms.Form
-$Form.ClientSize = '620,570'
+$Form.ClientSize = '610,565'
 $Form.Text = "CleanWin v0.3.3"
 $Form.TopMost = $false
 
@@ -93,12 +93,12 @@ $RemoveBlacklist.Height = 45
 $RemoveBlacklist.Location = New-Object System.Drawing.Point(150, 77)
 $RemoveBlacklist.Font = 'Segoe UI,10'
 
-$InstallNet35 = New-Object System.Windows.Forms.Button
-$InstallNet35.Text = "Install dotNET 3.5"
-$InstallNet35.Width = 140
-$InstallNet35.Height = 40
-$InstallNet35.Location = New-Object System.Drawing.Point(10,122)
-$InstallNet35.Font = 'Segoe UI,10'
+$InstallWinget = New-Object System.Windows.Forms.Button
+$InstallWinget.Text = "Install WinGet"
+$InstallWinget.Width = 140
+$InstallWinget.Height = 40
+$InstallWinget.Location = New-Object System.Drawing.Point(10,122)
+$InstallWinget.Font = 'Segoe UI,10'
 
 $InstallWSL = New-Object System.Windows.Forms.Button
 $InstallWSL.Text = "Install WSL"
@@ -107,11 +107,18 @@ $InstallWSL.Height = 40
 $InstallWSL.Location = New-Object System.Drawing.Point(150,122)
 $InstallWSL.Font = 'Segoe UI,10'
 
+$InstallNet35 = New-Object System.Windows.Forms.Button
+$InstallNet35.Text = "Install dotNET 3.5"
+$InstallNet35.Width = 140
+$InstallNet35.Height = 40
+$InstallNet35.Location = New-Object System.Drawing.Point(10,162)
+$InstallNet35.Font = 'Segoe UI,10'
+
 $UninstallBloatFeatures = New-Object System.Windows.Forms.Button
 $UninstallBloatFeatures.Text = "Uninstall bloat features"
 $UninstallBloatFeatures.Width = 140
 $UninstallBloatFeatures.Height = 40 
-$UninstallBloatFeatures.Location = New-Object System.Drawing.Point(10,162)
+$UninstallBloatFeatures.Location = New-Object System.Drawing.Point(150,162)
 $UninstallBloatFeatures.Font = 'Segoe UI,10'
 
 ####################### P R I V A C Y ##########################
@@ -389,7 +396,7 @@ $Label7.Location = New-Object System.Drawing.Point(10,538)
 $Label7.Font = 'Segoe UI,8,style=Monospace' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label6, $Label7, $RemoveAllBloatware, 
-$CustomizeBlacklists, $RemoveBloatRegkeys, $RemoveBlacklist, $InstallNet35, $InstallWSL, 
+$CustomizeBlacklists, $RemoveBloatRegkeys, $RemoveBlacklist, $InstallWinget, $InstallNet35, $InstallWSL, 
 $UninstallBloatFeatures, $OOShutup10, $DisableDataCollection, $DisableTelemetry, $HostsTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, $UndoCleanExplorer, 
@@ -782,6 +789,13 @@ $Keys = @(
         Remove-Item $Key -Recurse
     }
     Write-Host "Bloatware keys have been removed."
+})
+
+$InstallWinget.Add_Click( {
+    Invoke-WebRequest https://github.com/microsoft/winget-cli/releases/download/v0.2.2941/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -O C:\WindowsPackageManager.appx
+	Add-AppxPackage "WindowsPackageManager.appx"
+	Remove-Item WindowsPackageManager.appx
+	Write-Host "Windows Package Manager has been installed."
 })
 
 $InstallNet35.Add_Click( {
