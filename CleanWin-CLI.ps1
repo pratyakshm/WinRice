@@ -83,7 +83,6 @@ $tasks = @(
 	"PrintSecurityChanges",
 	"AutoLoginPostUpdate", 		   # "StayOnLockscreenPostUpdate",
 	"DisableMeltdownCompatFlag",   # "EnableMeltdownCompatFlag",
-	"DisableSMB",				   # "EnableSMB",
 	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
@@ -1023,31 +1022,6 @@ Function DisableMeltdownCompatFlag {
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat" -Name "cadca5fe-87d3-4b96-b7fb-a231484277cc" -ErrorAction SilentlyContinue
 	Write-Host "Meltdown (CVE-2017-5754) compatibility flag has been turned off."
 }
-
-# Disable SMB1 and SMB2 
-Function DisableSMB {
-	Write-Host " "
-	Write-Host "Turning off Server Message Block v1 and v2..."
-	$SMB1 = "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"
-	$SMB2 = "HKLM:\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"
-	Set-ItemProperty -Path $SMB1 -Name "SMB1" -Type DWord -Value 0
-	Set-ItemProperty -Path $SMB1 -Name "SMB2" -Type DWord -Value 0
-	Set-ItemProperty -Path $SMB2 -Name "SMBDeviceEnabled" -Type DWord -Value 0
-	Write-Host "Server Message Block v1 and v2 have been turned off."
-}
-
-# Enable SMB1 and SMB2 
-Function EnableSMB {
-	Write-Host " "
-	Write-Host "Turning on Server Message Block v1 and v2..."
-	$SMB1 = "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"
-	$SMB2 = "HKLM:\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"
-	Set-ItemProperty -Path $SMB1 -Name "SMB1" -Type DWord -Value 1
-	Set-ItemProperty -Path $SMB1 -Name "SMB2" -Type DWord -Value 1
-	Set-ItemProperty -Path $SMB2 -Name "SMBDeviceEnabled" -Type DWord -Value 1
-	Write-Host "Server Message Block v1 and v2 have been turned on."
-}
-
 
 
 ######### System changes #########
