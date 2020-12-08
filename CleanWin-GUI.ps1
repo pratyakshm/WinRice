@@ -61,57 +61,57 @@ $Label2 = New-Object System.Windows.Forms.Label
 $Label2.Text = "               Apps and Features"
 $Label2.AutoSize = $true
 $Label2.Width = 25
-$Label2.Height = 10
+$Label2.Height = 15
 $Label2.Location = New-Object System.Drawing.Point(10, 8)
 $Label2.Font = 'Segoe UI,12,style=Bold'
 
 $RemoveAllBloatware = New-Object System.Windows.Forms.Button
 $RemoveAllBloatware.Text = "Remove all bloatware"
 $RemoveAllBloatware.Width = 140
-$RemoveAllBloatware.Height = 40
-$RemoveAllBloatware.Location = New-Object System.Drawing.Point(10, 35)
+$RemoveAllBloatware.Height = 43
+$RemoveAllBloatware.Location = New-Object System.Drawing.Point(10, 34)
 $RemoveAllBloatware.Font = 'Segoe UI,10'
 
 $RemoveBloatRegkeys = New-Object System.Windows.Forms.Button
 $RemoveBloatRegkeys.Text = "Remove bloatware regkeys"
 $RemoveBloatRegkeys.Width = 140
-$RemoveBloatRegkeys.Height = 40
-$RemoveBloatRegkeys.Location = New-Object System.Drawing.Point(150, 35)
+$RemoveBloatRegkeys.Height = 43
+$RemoveBloatRegkeys.Location = New-Object System.Drawing.Point(150, 34)
 $RemoveBloatRegkeys.Font = 'Segoe UI,10'
 
 $CustomizeBlacklists = New-Object System.Windows.Forms.Button
 $CustomizeBlacklists.Text = "Edit CleanWin-AppsList"
 $CustomizeBlacklists.Width = 140
-$CustomizeBlacklists.Height = 40
-$CustomizeBlacklists.Location = New-Object System.Drawing.Point(10, 75)
+$CustomizeBlacklists.Height = 45
+$CustomizeBlacklists.Location = New-Object System.Drawing.Point(10, 77)
 $CustomizeBlacklists.Font = 'Segoe UI,10'
 
 $RemoveBlacklist = New-Object System.Windows.Forms.Button
 $RemoveBlacklist.Text = "Uninstall apps using CleanWin-AppsList"
 $RemoveBlacklist.Width = 140
-$RemoveBlacklist.Height = 40
-$RemoveBlacklist.Location = New-Object System.Drawing.Point(150, 75)
+$RemoveBlacklist.Height = 45
+$RemoveBlacklist.Location = New-Object System.Drawing.Point(150, 77)
 $RemoveBlacklist.Font = 'Segoe UI,10'
 
 $InstallNet35 = New-Object System.Windows.Forms.Button
 $InstallNet35.Text = "Install dotNET 3.5"
 $InstallNet35.Width = 140
 $InstallNet35.Height = 40
-$InstallNet35.Location = New-Object System.Drawing.Point(10,115)
+$InstallNet35.Location = New-Object System.Drawing.Point(10,122)
 $InstallNet35.Font = 'Segoe UI,10'
 
 $InstallWSL = New-Object System.Windows.Forms.Button
 $InstallWSL.Text = "Install WSL"
 $InstallWSL.Width = 140
 $InstallWSL.Height = 40
-$InstallWSL.Location = New-Object System.Drawing.Point(150,115)
+$InstallWSL.Location = New-Object System.Drawing.Point(150,122)
 $InstallWSL.Font = 'Segoe UI,10'
 
 $UninstallBloatFeatures = New-Object System.Windows.Forms.Button
 $UninstallBloatFeatures.Text = "Uninstall bloat features"
 $UninstallBloatFeatures.Width = 140
 $UninstallBloatFeatures.Height = 40 
-$UninstallBloatFeatures.Location = New-Object System.Drawing.Point(10,155)
+$UninstallBloatFeatures.Location = New-Object System.Drawing.Point(10,162)
 $UninstallBloatFeatures.Font = 'Segoe UI,10'
 
 ####################### P R I V A C Y ##########################
@@ -120,63 +120,63 @@ $Label3.Text = "                        Privacy"
 $Label3.AutoSize = $true
 $Label3.Width = 25
 $Label3.Height = 10
-$Label3.Location = New-Object System.Drawing.Point(10,205)
+$Label3.Location = New-Object System.Drawing.Point(10,210)
 $Label3.Font = 'Segoe UI,12,style=Bold'
 
 $OOShutup10 = New-Object System.Windows.Forms.Button
 $OOShutup10.Text = 'Apply O&OShutup10 config'
 $OOShutup10.Width = 140
-$OOShutup10.Height = 40
-$OOShutup10.Location = New-Object System.Drawing.Point(10, 235)
+$OOShutup10.Height = 45
+$OOShutup10.Location = New-Object System.Drawing.Point(10, 240)
 $OOShutup10.Font = 'Segoe UI,10'
 
 $HostsTelemetry = New-Object System.Windows.Forms.Button
 $HostsTelemetry.Text = 'Block telemetry using hosts'
 $HostsTelemetry.Width = 140
-$HostsTelemetry.Height = 40
-$HostsTelemetry.Location = New-Object System.Drawing.Point(150, 235)
+$HostsTelemetry.Height = 45
+$HostsTelemetry.Location = New-Object System.Drawing.Point(150, 240)
 $HostsTelemetry.Font = 'Segoe UI,10'
 
 $DisableDataCollection = New-Object System.Windows.Forms.Button
 $DisableDataCollection.Text = "Disable Data collection"
 $DisableDataCollection.Width = 140
 $DisableDataCollection.Height = 40
-$DisableDataCollection.Location = New-Object System.Drawing.Point(10,275)
+$DisableDataCollection.Location = New-Object System.Drawing.Point(10,285)
 $DisableDataCollection.Font = 'Segoe UI,10'
 
 $EnableDataCollection = New-Object System.Windows.Forms.Button
 $EnableDataCollection.Text = "Enable Data collection"
 $EnableDataCollection.Width = 140
 $EnableDataCollection.Height = 40
-$EnableDataCollection.Location = New-Object System.Drawing.Point(150,275)
+$EnableDataCollection.Location = New-Object System.Drawing.Point(150,285)
 $EnableDataCollection.Font = 'Segoe UI,10'
 
 $DisableTelemetry = New-Object System.Windows.Forms.Button 
 $DisableTelemetry.Text = "Disable Telemetry"
 $DisableTelemetry.Width = 140
 $DisableTelemetry.Height = 40
-$DisableTelemetry.Location = New-Object System.Drawing.Point(10, 315)
+$DisableTelemetry.Location = New-Object System.Drawing.Point(10, 325)
 $DisableTelemetry.Font = 'Segoe UI,10'
 
 $EnableTelemetry = New-Object System.Windows.Forms.Button 
 $EnableTelemetry.Text = "Enable Telemetry"
 $EnableTelemetry.Width = 140
 $EnableTelemetry.Height = 40
-$EnableTelemetry.Location = New-Object System.Drawing.Point(150, 315)
+$EnableTelemetry.Location = New-Object System.Drawing.Point(150, 325)
 $EnableTelemetry.Font = 'Segoe UI,10'
 
 $FullBandwidth = New-Object System.Windows.Forms.Button 
 $FullBandwidth.Text = "Release Bandwidth"
 $FullBandwidth.Width = 140
 $FullBandwidth.Height = 40
-$FullBandwidth.Location = New-Object System.Drawing.Point(10, 355)
+$FullBandwidth.Location = New-Object System.Drawing.Point(10, 365)
 $FullBandwidth.Font = 'Segoe UI,10'
 
 $ReserveBandwidth = New-Object System.Windows.Forms.Button 
 $ReserveBandwidth.Text = "Reserve Bandwidth"
 $ReserveBandwidth.Width = 140
 $ReserveBandwidth.Height = 40
-$ReserveBandwidth.Location = New-Object System.Drawing.Point(150, 355)
+$ReserveBandwidth.Location = New-Object System.Drawing.Point(150, 365)
 $ReserveBandwidth.Font = 'Segoe UI,10'
 
 ############## W I N D O W S  E X P L O R E R #################
