@@ -52,8 +52,8 @@ Add-Type -AssemblyName System.Windows.Forms
 ### BEGIN GUI ###
 
 $Form = New-Object System.Windows.Forms.Form
-$Form.ClientSize = '800,500'
-$Form.Text = "The CleanWin Project - version 0.3.3"
+$Form.ClientSize = '620,570'
+$Form.Text = "CleanWin v0.3.3"
 $Form.TopMost = $false
 
 ############### APPS AND FEATURES ############################
@@ -292,7 +292,7 @@ $HideSeconds.Font = 'Segoe UI,10'
 
 ############# S E R V I C E S  C H A N G E S ###################
 $Label5 = New-Object System.Windows.Forms.Label
-$Label5.Text = "                      Services"
+$Label5.Text = "             Tasks and Services"
 $Label5.AutoSize = $true
 $Label5.Width = 25
 $Label5.Height = 10
@@ -316,31 +316,44 @@ $EnableAutoUpdates.Font = 'Segoe UI,10'
 $DisableDefrag = New-Object System.Windows.Forms.Button
 $DisableDefrag.Text = "Disable defragmentation"
 $DisableDefrag.Width = 140
-$DisableDefrag.Height = 40
+$DisableDefrag.Height = 44
 $DisableDefrag.Location = New-Object System.Drawing.Point(320,395)
 $DisableDefrag.Font = 'Segoe UI,10'
 
 $EnableDefrag = New-Object System.Windows.Forms.Button
 $EnableDefrag.Text = "Enable defragmentation"
 $EnableDefrag.Width = 140
-$EnableDefrag.Height = 40
+$EnableDefrag.Height = 44
 $EnableDefrag.Location = New-Object System.Drawing.Point(460,395)
 $EnableDefrag.Font = 'Segoe UI,10'
 
 $DisableServices = New-Object System.Windows.Forms.Button
-$DisableServices.Text = "Disable useless services"
+$DisableServices.Text = "Disable unnecessary services"
 $DisableServices.Width = 140
 $DisableServices.Height = 40
-$DisableServices.Location = New-Object System.Drawing.Point(320,435)
+$DisableServices.Location = New-Object System.Drawing.Point(320,439)
 $DisableServices.Font = 'Segoe UI,10'
 
 $EnableServices = New-Object System.Windows.Forms.Button
-$EnableServices.Text = "Enable useless services"
+$EnableServices.Text = "Enable unnecessary services"
 $EnableServices.Width = 140
 $EnableServices.Height = 40
-$EnableServices.Location = New-Object System.Drawing.Point(460,435)
+$EnableServices.Location = New-Object System.Drawing.Point(460,439)
 $EnableServices.Font = 'Segoe UI,10'
 
+$DisableTasks = New-Object System.Windows.Forms.Button
+$DisableTasks.Text = "Disable unnecessary tasks"
+$DisableTasks.Width = 140
+$DisableTasks.Height = 40
+$DisableTasks.Location = New-Object System.Drawing.Point(320,479)
+$DisableTasks.Font = 'Segoe UI,10'
+
+$EnableTasks = New-Object System.Windows.Forms.Button
+$EnableTasks.Text = "Enable unnecessary tasks"
+$EnableTasks.Width = 140
+$EnableTasks.Height = 40
+$EnableTasks.Location = New-Object System.Drawing.Point(460,479)
+$EnableTasks.Font = 'Segoe UI,10'
 
 ################ MAINTENANCE ##############
 
@@ -381,7 +394,7 @@ $UninstallBloatFeatures, $OOShutup10, $DisableDataCollection, $DisableTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, $UndoCleanExplorer, 
 $EnableStickyKeys, $DisablePrtScrForSnip, $Show3DObjects, $HideVerboseStatus,  $EnableBlurLockScreen, $HideSeconds, 
-$DisableAutoUpdates, $DisableDefrag, $EnableAutoUpdates, $EnableDefrag, $DisableServices, $EnableServices))
+$DisableAutoUpdates, $DisableDefrag, $EnableAutoUpdates, $EnableDefrag, $DisableServices, $EnableServices, $DisableTasks, $EnableTasks))
 
 $CWFolder = "C:\Temp\CleanWin"
 If (Test-Path $CWFolder) {
@@ -1014,11 +1027,11 @@ $ErrorActionPreference = 'SilentlyContinue'
     $Feedback4 = "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
     If (!(Test-Path $Feedback1)) {
         New-Item -Path $Feedback1 -Force | Out-Null
-        }
+    }
     Set-ItemProperty -Path $Feedback1 -Name "NumberOfSIUFInPeriod" -Type DWord -Value 1
     If (!(Test-Path $Feedback2)) {
         New-Item -Path $Feedback2 -Force | Out-Null
-        }
+    }
     Set-ItemProperty -Path $Feedback2 -Name "DoNotShowFeedbackNotifications" -Type DWord -Value 1
     Disable-ScheduledTask -TaskName $Feedback3 -ErrorAction SilentlyContinue | Out-Null
     Disable-ScheduledTask -TaskName $Feedback4 -ErrorAction SilentlyContinue | Out-Null
@@ -1027,14 +1040,14 @@ $ErrorActionPreference = 'SilentlyContinue'
     Get-ChildItem -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications" -Exclude "Microsoft.Windows.Cortana*" | ForEach-Object {
         Set-ItemProperty -Path $_.PsPath -Name "Disabled" -Type DWord -Value 1
         Set-ItemProperty -Path $_.PsPath -Name "DisabledByUser" -Type DWord -Value 1
-        }
+    }
     
     # Disable Location Tracking
     $Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
     $Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
     If (!(Test-Path $Location1)) {
         New-Item -Path $Location1 -Force | Out-Null
-        }
+    }
     Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Deny"
     Set-ItemProperty -Path $Location2 -Name "SensorPermissionState" -Type DWord -Value 0
     
@@ -1085,7 +1098,7 @@ $EnableDataCollection.Add_Click( {
     $Feedback = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
     If (!(Test-Path $Feedback )) {
         New-Item $Feedback -Force | Out-Null
-        }
+    }
     Remove-ItemProperty -Path $Feedback -Name "NumberOfSIUFInPeriod"
 
 	# Enable language list
@@ -1100,7 +1113,7 @@ $EnableDataCollection.Add_Click( {
     $Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
     If (!(Test-Path $Location1)) {
         New-Item -Path $Location1 -Force | Out-Null
-        }
+    }
     Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Allow"
     Set-ItemProperty -Path $Location2 -Name "SensorPermissionState" -Type DWord -Value 1
         
@@ -1120,7 +1133,7 @@ $EnableDataCollection.Add_Click( {
     $Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
     If (!(Test-Path $Speech)) {
         New-Item -Path $Speech | Out-Null
-        }
+    }
     Set-ItemProperty -Path $Speech -Name "HasAccepted" -Type DWord -Value 1
 	
 	# Enable Tailored Experiences
@@ -1215,9 +1228,9 @@ $ReserveBandwidth.Add_Click({
 })
 
 
-##############################
-##### S E R V I C E S ########
-##############################
+############################################
+#####  T A S K S & S E R V I C E S ########
+###########################################
 
 $DisableAutoUpdates.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
@@ -1271,6 +1284,31 @@ $EnableServices.Add_Click( {
     Write-Host "Unnecessary services have been enabled."
 })
 
+$DisableTasks.Add_Click( {
+    Disable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" | Out-Null
+	Disable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\ProgramDataUpdater" | Out-Null
+	Disable-ScheduledTask -TaskName "Microsoft\Windows\Autochk\Proxy" | Out-Null
+	Disable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" | Out-Null
+	Disable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" | Out-Null
+	Disable-ScheduledTask -TaskName "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" | Out-Null
+	Disable-ScheduledTask -TaskName "Microsoft\Windows\Windows Error Reporting\QueueReporting" | Out-Null
+	Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
+    Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
+    Write-Host "Unnecessary tasks have been disabled."
+})
+
+$EnableTasks.Add_Click( {
+    Enable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" | Out-Null
+	Enable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\ProgramDataUpdater" | Out-Null
+	Enable-ScheduledTask -TaskName "Microsoft\Windows\Autochk\Proxy" | Out-Null
+	Enable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" | Out-Null
+	Enable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" | Out-Null
+	Enable-ScheduledTask -TaskName "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" | Out-Null
+	Enable-ScheduledTask -TaskName "Microsoft\Windows\Windows Error Reporting\QueueReporting" | Out-Null
+	Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
+    Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
+    Write-Host "Unnecessary tasks have been enabled."
+})
 
 ##############################
 ##### MAINTENANCE ########
