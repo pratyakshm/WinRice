@@ -336,6 +336,20 @@ $EnableDefrag.Height = 40
 $EnableDefrag.Location = New-Object System.Drawing.Point(460,395)
 $EnableDefrag.Font = 'Segoe UI,10'
 
+$DisableServices = New-Object System.Windows.Forms.Button
+$DisableServices.Text = "Disable useless services"
+$DisableServices.Width = 140
+$DisableServices.Height = 40
+$DisableServices.Location = New-Object System.Drawing.Point(320,435)
+$DisableServices.Font = 'Segoe UI,10'
+
+$EnableServices = New-Object System.Windows.Forms.Button
+$EnableServices.Text = "Enable useless services"
+$EnableServices.Width = 140
+$EnableServices.Height = 40
+$EnableServices.Location = New-Object System.Drawing.Point(460,435)
+$EnableServices.Font = 'Segoe UI,10'
+
 
 ################ MAINTENANCE ##############
 
@@ -376,7 +390,7 @@ $UninstallBloatFeatures, $OOShutup10, $DisableDataCollection, $DisableTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, $UndoCleanExplorer, 
 $EnableStickyKeys, $DisablePrtScrForSnip, $Show3DObjects, $HideVerboseStatus,  $EnableBlurLockScreen, $HideSeconds, 
-$DisableAutoUpdates, $DisableDefrag, $EnableAutoUpdates, $EnableDefrag))
+$DisableAutoUpdates, $DisableDefrag, $EnableAutoUpdates, $EnableDefrag, $DisableServices, $EnableServices))
 
 $CWFolder = "C:\Temp\CleanWin"
 If (Test-Path $CWFolder) {
@@ -1243,6 +1257,35 @@ $EnableDefrag.Add_Click( {
     Enable-ScheduledTask -TaskName "Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
     Write-Host "Disk defragmentation has been enabled."
 })
+
+$DisableServices.Add_Click( {
+	Set-Service RetailDemo -StartupType Disabled -ErrorAction SilentlyContinue
+	Set-Service "diagnosticshub.standardcollector.service" -StartupType Disabled -ErrorAction SilentlyContinue
+	Set-Service MapsBroker  -StartupType Disabled -ErrorAction SilentlyContinue
+	Set-Service NetTcpPortSharing  -StartupType Disabled -ErrorAction SilentlyContinue
+	Set-Service RemoteAccess -StartupType Disabled -ErrorAction SilentlyContinue 
+	Set-Service RemoteRegistry -StartupType Disabled -ErrorAction SilentlyContinue 
+	Set-Service SharedAccess -StartupType Disabled -ErrorAction SilentlyContinue 
+	Set-Service TrkWks -StartupType Disabled -ErrorAction SilentlyContinue 
+	Write-Host "Unnecessary services have been disabled."
+})
+
+$EnableServices.Add_Click( {
+	Set-Service RetailDemo -StartupType Automatic -ErrorAction SilentlyContinue
+	Set-Service "diagnosticshub.standardcollector.service" -StartupType Automatic -ErrorAction SilentlyContinue
+	Set-Service MapsBroker  -StartupType Automatic -ErrorAction SilentlyContinue
+	Set-Service NetTcpPortSharing  -StartupType Automatic -ErrorAction SilentlyContinue
+	Set-Service RemoteAccess -StartupType Automatic -ErrorAction SilentlyContinue 
+	Set-Service RemoteRegistry -StartupType Automatic -ErrorAction SilentlyContinue 
+	Set-Service SharedAccess -StartupType Automatic -ErrorAction SilentlyContinue 
+    Set-Service TrkWks -StartupType Automatic -ErrorAction SilentlyContinue 
+    Write-Host "Unnecessary services have been enabled."
+})
+
+##############################
+##### MAINTENANEC ########
+##############################
+
 
 $RestartComputer.Add_Click( {
     Restart-Computer -Force
