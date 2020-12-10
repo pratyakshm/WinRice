@@ -2,8 +2,8 @@
 
 ![Minimum Supported PowerShell Version](https://img.shields.io/badge/PowerShell-5.1-brightgreen.svg?style=flat-square)
 ![Stars](https://img.shields.io/github/stars/pratyakshm/CleanWin?style=flat-square)
-![Downloads](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=brightgreen&logoColor=brightgreen&style=flat-square)
-![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)
+[![Downloads](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=brightgreen&logoColor=brightgreen&style=flat-square)](https://github.com/pratyakshm/CleanWin/releases)
+[![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)](https://github.com/pratyakshm/CleanWin/releases/tag/0.3.2)
 ![Latest release](https://img.shields.io/github/release-date/pratyakshm/CleanWin?style=flat-square)
 
 ## How to run:
