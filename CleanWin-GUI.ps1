@@ -588,11 +588,13 @@ $CustomizeBlacklists.Add_Click( {
         {   
             Write-Host "Removing $AppxPackages"
             Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage -AllUsers
+            Write-Host "Done."
         }
         else
         {  
             Write-Host "Removing $AppxPackages"
             Get-AppxPackage -PackageTypeFilter Bundle | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage
+            Write-Host "Done."
         }
         $OFS = " "
     }
@@ -693,10 +695,11 @@ $ErrorActionPreference = 'SilentlyContinue'
              "Microsoft.Getstarted" 
              "Microsoft.Messaging"
              "Microsoft.Microsoft3DViewer" 
-             "Microsoft.MicsoftStickyNotes"  
+             "Microsoft.MicrosoftStickyNotes"  
              "Microsoft.MSPaint"
              "Microsoft.MicrosoftOfficeHub"
              "Microsoft.Office.OneNote"
+             "Microsoft.MixedReality.Portal"
              "Microsoft.MicrosoftSolitaireCollection" 
              "Microsoft.NetworkSpeedTest" 
              "Microsoft.News" 
@@ -738,8 +741,10 @@ $ErrorActionPreference = 'SilentlyContinue'
             foreach ($Bloat in $Bloatware) {
                 Get-AppxPackage -Name $Bloat| Remove-AppxPackage | Out-Null
                 Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
-                Write-Host "Uninstalling $Bloat."}
-            Write-Host "Bloatware has been uninstalled."
+                Write-Host "Removing $Bloat."}
+            Write-Host "Done."
+            Write-Host "Removing Office WebApps shortcuts..."
+            Write-Host "Done."
             Clear-Host
 })
 
