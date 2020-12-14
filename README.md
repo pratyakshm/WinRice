@@ -2,12 +2,12 @@
 
 ![Minimum Supported PowerShell Version](https://img.shields.io/badge/PowerShell-5.1-brightgreen.svg?style=flat-square)
 ![Stars](https://img.shields.io/github/stars/pratyakshm/CleanWin?style=flat-square)
-![Downloads](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=brightgreen&logoColor=brightgreen&style=flat-square)
-![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)
+[![Downloads](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=brightgreen&logoColor=brightgreen&style=flat-square)](https://github.com/pratyakshm/CleanWin/releases/tag/v0.3.3)
+[![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)](https://github.com/pratyakshm/CleanWin/releases/tag/0.3.3)
 ![Latest release](https://img.shields.io/github/release-date/pratyakshm/CleanWin?style=flat-square)
 
 ## How to run:
-1. Download executable (CLI or GUI variant) from the latest [Release](https://github.com/pratyakshm/CleanWin/releases/tag/0.3.2).
+1. Download executable (CLI or GUI variant) from the latest [Release](https://github.com/pratyakshm/CleanWin/releases/tag/v0.3.3).
 2. Launch the executable and give it administrator privileges once it asks.
 
 ## List of tasks:
@@ -106,6 +106,7 @@ Apps removed (default):
   <br>Hide task view icon from taskbar
   <br>Hide Cortana icon from taskbar
   <br>Hide search bar from taskbar
+  <br>Turn off blur in lock screen
   <br>Show seconds in taskbar clock (optional)
   <br>Show verbose status
 </details>
