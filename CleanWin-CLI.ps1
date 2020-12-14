@@ -96,7 +96,7 @@ $tasks = @(
 
 ### App changes ###
 	"PrintAppsChanges",
-	"DebloatApps", "RemoveCamera", "RemoveGrooveMusic", "RemoveSkype", "RemoveYourPhone", "CleanupRegistry",
+	"DebloatApps", "CleanupRegistry",
 	"ConfirmInstall", "InstallWinget", "Install7zip", "Winstall", 
 	"LessSleep",
 	"ChangesDone",
@@ -1078,14 +1078,18 @@ Function DebloatApps {
 	 "Microsoft.OneConnect"
 	 "Microsoft.People" 
 	 "Microsoft.Print3D" 
+	 "Microsoft.SkypeApp"
 	 "Microsoft.StorePurchaseApp" 
 	 "Microsoft.WindowsAlarms"
+	 "Microsoft.WindowsCamera"
 	 "Microsoft.WindowsCommunicationsApps" 
 	 "Microsoft.WindowsFeedbackHub" 
 	 "Microsoft.WindowsMaps" 
 	 "Microsoft.WindowsSoundRecorder" 
 	 "Microsoft.XboxApp"
 	 "Microsoft.XboxGamingOverlay"
+	 "Microsoft.YourPhone"
+	 "Microsoft.ZuneMusic"
 	 "Microsoft.ZuneVideo"
 
 	#Sponsored Windows 10 AppX Apps
@@ -1114,62 +1118,6 @@ Function DebloatApps {
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
         Write-Host "Uninstalling $Bloat."}
 	Write-Host "Unnecessary apps have been uninstalled from this PC."
-}
-
-Function RemoveCamera {
-		Write-Host " "
-		$question = 'Do you want to remove Camera app?'
-		$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-		$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {	
-			Removing Camera app...
-			Get-AppxPackage "Microsoft.WindowsCamera" | Remove-AppxPackage
-			Write-Host "Camera app has been removed."
-			}
-}
-
-Function RemoveGrooveMusic {
-		Write-Host " "
-		$question = 'Do you want to remove Groove Music app?'
-		$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-		$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {	
-			Removing Groove Music...
-			Get-AppxPackage "Microsoft.ZuneMusic" | Remove-AppxPackage
-			Write-Host "Groove Music has been removed."
-			}
-}
-	
-Function RemoveSkype {
-		Write-Host " "
-		$question = 'Do you want to remove Skype app?'
-		$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-		$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {	
-			Removing Skype...
-			Get-AppxPackage "Microsoft.SkypeApp" | Remove-AppxPackage
-			Write-Host "Skype has been removed."
-			}
-}
-
-Function RemoveYourPhone {
-		Write-Host " "
-		$question = 'Do you want to remove Your Phone?'
-		$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-		$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-		if ($decision -eq 0) {	
-			Removing Your Phone...
-			Get-AppxPackage "Microsoft.YourPhone" | Remove-AppxPackage
-			Write-Host "Your Phone has been removed."
-			}
 }
 
 Function CleanupRegistry {
