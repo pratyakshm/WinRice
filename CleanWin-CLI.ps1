@@ -71,7 +71,6 @@ $tasks = @(
 	"PrintFeaturesChanges",
 	"EnableWSL",
 	"UninstallMathRecognizer",		# "InstallMathRecognizer"
-	"UninstallInternetExplorer",	# "InstallInternetExplorer"
 	"UninstallHelloFace",			# "InstallHelloFace"
 	"UninstallWorkFolders",			# "InstallWorkFolders"
 	"InstalldotNET3",				# "UninstalldotNET3",
@@ -898,21 +897,6 @@ Function EnableWSL {
 		dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V /All /NoRestart	/Quiet
 		Write-Host "Windows Subsystem for Linux has been turned on." 
 		}
-}
-
-# Uninstall Internet Explorer
-Function UninstallInternetExplorer {
-	Write-Host " "
-	Write-Host "Uninstalling Internet Explorer..."
-	Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -like "Internet-Explorer-Optional*" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
-	Get-WindowsCapability -Online | Where-Object { $_.Name -like "Browser.InternetExplorer*" } | Remove-WindowsCapability -Online | Out-Null
-	Write-Host "Internet Explorer has been uninstalled."
-}
-
-# Install Internet Explorer
-Function InstallInternetExplorer {
-	Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -like "Internet-Explorer-Optional*" } | Enable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
-	Get-WindowsCapability -Online | Where-Object { $_.Name -like "Browser.InternetExplorer*" } | Add-WindowsCapability -Online | Out-Null
 }
 
 # Uninstall Work Folders Client - Not applicable to Server
