@@ -75,18 +75,18 @@ $RemoveBloatRegkeys.Location = New-Object System.Drawing.Point(150, 34)
 $RemoveBloatRegkeys.Font = 'Segoe UI,10'
 
 $CustomizeBlacklists = New-Object System.Windows.Forms.Button
-$CustomizeBlacklists.Text = "Edit CleanWin-AppsList"
+$CustomizeBlacklists.Text = "Uninstall selective apps"
 $CustomizeBlacklists.Width = 140
 $CustomizeBlacklists.Height = 45
 $CustomizeBlacklists.Location = New-Object System.Drawing.Point(10, 77)
 $CustomizeBlacklists.Font = 'Segoe UI,10'
 
-$RemoveBlacklist = New-Object System.Windows.Forms.Button
-$RemoveBlacklist.Text = "Uninstall apps using CleanWin-AppsList"
-$RemoveBlacklist.Width = 140
-$RemoveBlacklist.Height = 45
-$RemoveBlacklist.Location = New-Object System.Drawing.Point(150, 77)
-$RemoveBlacklist.Font = 'Segoe UI,10'
+$Placehold = New-Object System.Windows.Forms.Button
+$Placehold.Text = "Placehold"
+$Placehold.Width = 140
+$Placehold.Height = 45
+$Placehold.Location = New-Object System.Drawing.Point(150, 77)
+$Placehold.Font = 'Segoe UI,10'
 
 $InstallWinget = New-Object System.Windows.Forms.Button
 $InstallWinget.Text = "Install WinGet"
@@ -391,7 +391,7 @@ $Label7.Location = New-Object System.Drawing.Point(10,538)
 $Label7.Font = 'Segoe UI,8,style=Monospace' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label6, $Label7, $RemoveAllBloatware, 
-$CustomizeBlacklists, $RemoveBloatRegkeys, $RemoveBlacklist, $InstallWinget, $InstallNet35, $InstallWSL, 
+$CustomizeBlacklists, $RemoveBloatRegkeys, $Placehold, $InstallWinget, $InstallNet35, $InstallWSL, 
 $UninstallBloatFeatures, $OOShutup10, $DisableDataCollection, $DisableTelemetry, $HostsTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, $UndoCleanExplorer, 
@@ -666,23 +666,6 @@ $CustomizeBlacklists.Add_Click( {
         Write-Host "Nothing to display."
     }
 })
-
-
-$RemoveBlacklist.Add_Click( { 
-        $ErrorActionPreference = 'SilentlyContinue'
-        Function CWBlacklist {
-            Write-Host "Requesting removal of $global:BloatwareRegex"
-            Write-Host "--- This may take a while - please be patient ---"
-            Get-AppxPackage | Where-Object Name -cmatch $global:BloatwareRegex | Remove-AppxPackage
-            Write-Host "...now starting the silent ProvisionedPackage bloatware removal..."
-            Get-AppxProvisionedPackage -Online | Where-Object DisplayName -cmatch $global:BloatwareRegex | Remove-AppxProvisionedPackage -Online
-            Write-Host "...and the final cleanup..."
-            Get-AppxPackage -AllUsers | Where-Object Name -cmatch $global:BloatwareRegex | Remove-AppxPackage
-        }
-        Write-Host "`n`n`n`n`n`n`n`n`n`n`n`n`n`n`n`n`nRemoving blacklisted Bloatware.`n"
-        CWBlacklist
-        Write-Host "Bloatware removed!"
-    })
 
 $RemoveAllBloatware.Add_Click( { 
 $ErrorActionPreference = 'SilentlyContinue'
