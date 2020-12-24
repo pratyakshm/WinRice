@@ -43,6 +43,8 @@ Function dotInclude() {
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
+Write-Host "Note: The GUI window might hang for an extended period of time while its performing a task."
+
 ### BEGIN GUI ###
 
 $Form = New-Object System.Windows.Forms.Form
@@ -67,7 +69,7 @@ $RemoveAllBloatware.Location = New-Object System.Drawing.Point(10, 34)
 $RemoveAllBloatware.Font = 'Segoe UI,10'
 
 $CustomizeBlacklists = New-Object System.Windows.Forms.Button
-$CustomizeBlacklists.Text = "Uninstall selective apps"
+$CustomizeBlacklists.Text = "Uninstall apps selectively"
 $CustomizeBlacklists.Width = 140
 $CustomizeBlacklists.Height = 45
 $CustomizeBlacklists.Location = New-Object System.Drawing.Point(150, 34)
@@ -404,7 +406,7 @@ Else {
     New-Item -Path "${CWFolder}" -ItemType Directory
 }
 
-Start-Transcript -OutputDirectory "${CWFolder}"
+Start-Transcript -OutputDirectory "${CWFolder}" | Out-Null 
 
 #### BUTTONS CODE ###
 
@@ -585,13 +587,13 @@ $CustomizeBlacklists.Add_Click( {
         $OFS = "|"
         if ($CheckboxRemoveAll.IsChecked)
         {   
-            Write-Host "Removing $AppxPackages"
+            Write-Host "Removing $AppxPackages..."
             Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage -AllUsers
             Write-Host "Done."
         }
         else
         {  
-            Write-Host "Removing $AppxPackages"
+            Write-Host "Removing $AppxPackages..."
             Get-AppxPackage -PackageTypeFilter Bundle | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage
             Write-Host "Done."
         }
@@ -646,8 +648,8 @@ $CustomizeBlacklists.Add_Click( {
         }
         $OFS = " "
     
-        $TextblockRemoveAll.Text = "Remove for All Users"
-        $Window.Title = "CleanWin-AppsList"
+        $TextblockRemoveAll.Text = "Remove for all users"
+        $Window.Title = "Uninstall apps selectively"
         $Button.Content = "Uninstall"
     })
     
