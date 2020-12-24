@@ -66,12 +66,12 @@ $RemoveAllBloatware.Height = 43
 $RemoveAllBloatware.Location = New-Object System.Drawing.Point(10, 34)
 $RemoveAllBloatware.Font = 'Segoe UI,10'
 
-$RemoveBloatRegkeys = New-Object System.Windows.Forms.Button
-$RemoveBloatRegkeys.Text = "Remove bloatware regkeys"
-$RemoveBloatRegkeys.Width = 140
-$RemoveBloatRegkeys.Height = 43
-$RemoveBloatRegkeys.Location = New-Object System.Drawing.Point(150, 34)
-$RemoveBloatRegkeys.Font = 'Segoe UI,10'
+$placehold2 = New-Object System.Windows.Forms.Button
+$placehold2.Text = "Placehold 2"
+$placehold2.Width = 140
+$placehold2.Height = 43
+$placehold2.Location = New-Object System.Drawing.Point(150, 34)
+$placehold2.Font = 'Segoe UI,10'
 
 $CustomizeBlacklists = New-Object System.Windows.Forms.Button
 $CustomizeBlacklists.Text = "Uninstall selective apps"
@@ -390,7 +390,7 @@ $Label7.Location = New-Object System.Drawing.Point(10,538)
 $Label7.Font = 'Segoe UI,8,style=Monospace' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label6, $Label7, $RemoveAllBloatware, 
-$CustomizeBlacklists, $RemoveBloatRegkeys, $Placehold, $InstallWinget, $InstallNet35, $InstallWSL, 
+$CustomizeBlacklists, $placehold2, $Placehold, $InstallWinget, $InstallNet35, $InstallWSL, 
 $UninstallBloatFeatures, $OOShutup10, $DisableDataCollection, $DisableTelemetry, $HostsTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, $UndoCleanExplorer, 
@@ -668,113 +668,108 @@ $CustomizeBlacklists.Add_Click( {
 
 $RemoveAllBloatware.Add_Click( { 
 $ErrorActionPreference = 'SilentlyContinue'
-            Write-Host "Beginning uninstallation of unnecesary apps..."
-            $Bloatware = @(
-             "Microsoft.549981C3F5F10"
-             "Microsoft.BingNews"
-             "Microsoft.BingWeather" 
-             "Microsoft.GetHelp" 
-             "Microsoft.Getstarted" 
-             "Microsoft.Messaging"
-             "Microsoft.Microsoft3DViewer" 
-             "Microsoft.MicrosoftStickyNotes"  
-             "Microsoft.MSPaint"
-             "Microsoft.MicrosoftOfficeHub"
-             "Microsoft.Office.OneNote"
-             "Microsoft.MixedReality.Portal"
-             "Microsoft.MicrosoftSolitaireCollection" 
-             "Microsoft.NetworkSpeedTest" 
-             "Microsoft.News" 
-             "Microsoft.Office.Sway" 
-             "Microsoft.OneConnect"
-             "Microsoft.People" 
-             "Microsoft.Print3D" 
-             "Microsoft.StorePurchaseApp" 
-             "Microsoft.WindowsAlarms"
-             "Microsoft.WindowsCommunicationsApps" 
-             "Microsoft.WindowsFeedbackHub" 
-             "Microsoft.WindowsMaps" 
-             "Microsoft.WindowsSoundRecorder" 
-             "Microsoft.XboxApp"
-             "Microsoft.XboxGamingOverlay"
-             "Microsoft.ZuneVideo"
+    Write-Host "Beginning uninstallation of unnecesary apps..."
+    $Bloatware = @(
+        "Microsoft.549981C3F5F10"
+        "Microsoft.BingNews"
+        "Microsoft.BingWeather" 
+        "Microsoft.GetHelp" 
+        "Microsoft.Getstarted" 
+        "Microsoft.Messaging"
+        "Microsoft.Microsoft3DViewer" 
+        "Microsoft.MicrosoftStickyNotes"  
+        "Microsoft.MSPaint"
+        "Microsoft.MicrosoftOfficeHub"
+        "Microsoft.Office.OneNote"
+        "Microsoft.MixedReality.Portal"
+        "Microsoft.MicrosoftSolitaireCollection" 
+        "Microsoft.NetworkSpeedTest" 
+        "Microsoft.News" 
+        "Microsoft.Office.Sway" 
+        "Microsoft.OneConnect"
+        "Microsoft.People" 
+        "Microsoft.Print3D" 
+        "Microsoft.StorePurchaseApp" 
+        "Microsoft.WindowsAlarms"
+        "Microsoft.WindowsCommunicationsApps" 
+        "Microsoft.WindowsFeedbackHub" 
+        "Microsoft.WindowsMaps" 
+        "Microsoft.WindowsSoundRecorder" 
+        "Microsoft.XboxApp"
+        "Microsoft.XboxGamingOverlay"
+        "Microsoft.ZuneVideo"
 
-            #Sponsored Windows 10 AppX Apps
-            #Add sponsored/featured apps to remove in the "*AppName*" format
-            "*EclipseManager*"
-            "*ActiproSoftwareLLC*"
-            "*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
-            "*Duolingo-LearnLanguagesforFree*"
-            "*PandoraMediaInc*"
-            "*CandyCrush*"
-            "*BubbleWitch3Saga*"
-            "*Wunderlist*"
-            "*Flipboard*"
-            "*Twitter*"
-            "*Facebook*"
-            "*Spotify*"
-            "*Minecraft*"
-            "*Royal Revolt*"
-            "*Sway*"
-            "*Speed Test*"
-            "*Dolby*"
-
-            )
-            foreach ($Bloat in $Bloatware) {
-                Get-AppxPackage -Name $Bloat| Remove-AppxPackage | Out-Null
-                Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
-                Write-Host "Removing $Bloat."}
-            Write-Host "Done."
-            Write-Host "Removing Office WebApps shortcuts..."
-            Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
-            Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
-            Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
-            Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Word.lnk"
-            Write-Host "Done."
-            Clear-Host
-})
-
-$RemoveBloatRegkeys.Add_Click( { 
-$ErrorActionPreference = 'SilentlyContinue'
-$Keys = @(
-    Write-Host "Removing bloatware registry keys..."
-    New-PSDrive  HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
-    #Remove Background Tasks
-    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
-    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
-    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
-    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
-            
-    #Windows File
-    "HKCR:\Extensions\ContractId\Windows.File\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
-            
-    #Registry keys to delete if they aren't uninstalled by RemoveAppXPackage/RemoveAppXProvisionedPackage
-    "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
-    "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
-    "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
-            
-    #Scheduled Tasks to delete
-    "HKCR:\Extensions\ContractId\Windows.PreInstalledConfigTask\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
-            
-    #Windows Protocol Keys
-    "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
-    "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
-               
-    #Windows Share Target
-    "HKCR:\Extensions\ContractId\Windows.ShareTarget\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
-    )
+        #Sponsored Windows 10 AppX Apps
+        #Add sponsored/featured apps to remove in the "*AppName*" format
+        "*EclipseManager*"
+        "*ActiproSoftwareLLC*"
+        "*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
+        "*Duolingo-LearnLanguagesforFree*"
+        "*PandoraMediaInc*"
+        "*CandyCrush*"
+        "*BubbleWitch3Saga*"
+        "*Wunderlist*"
+        "*Flipboard*"
+        "*Twitter*"
+        "*Facebook*"
+        "*Spotify*"
+        "*Minecraft*"
+        "*Royal Revolt*"
+        "*Sway*"
+        "*Speed Test*"
+        "*Dolby*"
+        )
+    foreach ($Bloat in $Bloatware) {
+    Get-AppxPackage -Name $Bloat| Remove-AppxPackage | Out-Null
+    Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
+    Write-Host "Removing $Bloat."}
+    Write-Host "Done."
+    Write-Host "Removing Office WebApps shortcuts..."
+    Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
+    Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
+    Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
+    Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Word.lnk"
+    $Keys = @(
+        Write-Host "Removing bloatware registry keys..."
+        New-PSDrive  HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
+        #Remove Background Tasks
+        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
+        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
+        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
+        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
+        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
+                
+        #Windows File
+        "HKCR:\Extensions\ContractId\Windows.File\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+                
+        #Registry keys to delete if they aren't uninstalled by RemoveAppXPackage/RemoveAppXProvisionedPackage
+        "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
+        "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+        "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
+        "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
+        "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
+                
+        #Scheduled Tasks to delete
+        "HKCR:\Extensions\ContractId\Windows.PreInstalledConfigTask\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
+                
+        #Windows Protocol Keys
+        "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+        "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
+        "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
+        "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
+                
+        #Windows Share Target
+        "HKCR:\Extensions\ContractId\Windows.ShareTarget\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+        )
         
     #This writes the output of each key it is removing and also removes the keys listed above.
     ForEach ($Key in $Keys) {
         Remove-Item $Key -Recurse
     }
     Write-Host "Bloatware keys have been removed."
+            Write-Host "Done."
+            Clear-Host
 })
 
 $InstallWinget.Add_Click( {
