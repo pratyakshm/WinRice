@@ -60,7 +60,7 @@ $Label2.Location = New-Object System.Drawing.Point(10, 8)
 $Label2.Font = 'Segoe UI,12,style=Bold'
 
 $RemoveAllBloatware = New-Object System.Windows.Forms.Button
-$RemoveAllBloatware.Text = "Remove all bloatware"
+$RemoveAllBloatware.Text = "Remove all bloat apps"
 $RemoveAllBloatware.Width = 140
 $RemoveAllBloatware.Height = 45
 $RemoveAllBloatware.Location = New-Object System.Drawing.Point(10, 34)
@@ -773,10 +773,10 @@ $ErrorActionPreference = 'SilentlyContinue'
 })
 
 $InstallWinget.Add_Click( {
-    Invoke-WebRequest https://github.com/microsoft/winget-cli/releases/download/v0.2.2941/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -O C:\WindowsPackageManager.appx
-	Add-AppxPackage "WindowsPackageManager.appx"
-	Remove-Item WindowsPackageManager.appx
-	Write-Host "Windows Package Manager has been installed."
+    Invoke-WebRequest https://github.com/microsoft/winget-cli/releases/download/v0.2.2941-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -o C:\WinGet-CLI-v0.2.2941-preview.appxbundle | Out-Null 
+	Add-AppxPackage C:\WinGet-CLI-v0.2.2941-preview.appxbundle
+	Remove-Item C:\WinGet-CLI-v0.2.2941-preview.appxbundle
+	Write-Host "WinGet has been installed."
 })
 
 $InstallNet35.Add_Click( {
