@@ -61,19 +61,19 @@ $Label2.Height = 15
 $Label2.Location = New-Object System.Drawing.Point(10, 8)
 $Label2.Font = 'Segoe UI,12,style=Bold'
 
-$RemoveAllBloatware = New-Object System.Windows.Forms.Button
-$RemoveAllBloatware.Text = "Remove all bloat apps"
-$RemoveAllBloatware.Width = 140
-$RemoveAllBloatware.Height = 45
-$RemoveAllBloatware.Location = New-Object System.Drawing.Point(10, 34)
-$RemoveAllBloatware.Font = 'Segoe UI,10'
+$UninstallAllBloatApps = New-Object System.Windows.Forms.Button
+$UninstallAllBloatApps.Text = "Uninstall all bloat apps"
+$UninstallAllBloatApps.Width = 140
+$UninstallAllBloatApps.Height = 45
+$UninstallAllBloatApps.Location = New-Object System.Drawing.Point(10, 34)
+$UninstallAllBloatApps.Font = 'Segoe UI,10'
 
-$CustomizeBlacklists = New-Object System.Windows.Forms.Button
-$CustomizeBlacklists.Text = "Uninstall apps selectively"
-$CustomizeBlacklists.Width = 140
-$CustomizeBlacklists.Height = 45
-$CustomizeBlacklists.Location = New-Object System.Drawing.Point(150, 34)
-$CustomizeBlacklists.Font = 'Segoe UI,10'
+$UninstallAppsSelectively = New-Object System.Windows.Forms.Button
+$UninstallAppsSelectively.Text = "Uninstall apps selectively"
+$UninstallAppsSelectively.Width = 140
+$UninstallAppsSelectively.Height = 45
+$UninstallAppsSelectively.Location = New-Object System.Drawing.Point(150, 34)
+$UninstallAppsSelectively.Font = 'Segoe UI,10'
 
 $Placehold = New-Object System.Windows.Forms.Button
 $Placehold.Text = "Placehold"
@@ -391,8 +391,8 @@ $Label7.Height = 10
 $Label7.Location = New-Object System.Drawing.Point(10,538)
 $Label7.Font = 'Segoe UI,8,style=Monospace' 
 
-$Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label6, $Label7, $RemoveAllBloatware, 
-$CustomizeBlacklists, $placehold2, $Placehold, $InstallWinget, $InstallNet35, $InstallWSL, 
+$Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label6, $Label7, $UninstallAllBloatApps, 
+$UninstallAppsSelectively, $placehold2, $Placehold, $InstallWinget, $InstallNet35, $InstallWSL, 
 $UninstallBloatFeatures, $OOShutup10, $DisableDataCollection, $DisableTelemetry, $HostsTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, $UndoCleanExplorer, 
@@ -411,7 +411,7 @@ Start-Transcript -OutputDirectory "${CWFolder}" | Out-Null
 #### BUTTONS CODE ###
 
 #### APPS ####
-$CustomizeBlacklists.Add_Click( {
+$UninstallAppsSelectively.Add_Click( {
     Add-Type -AssemblyName PresentationCore, PresentationFramework
 
     #region Variables
@@ -668,7 +668,7 @@ $CustomizeBlacklists.Add_Click( {
     }
 })
 
-$RemoveAllBloatware.Add_Click( { 
+$UninstallAllBloatApps.Add_Click( { 
 $ErrorActionPreference = 'SilentlyContinue'
     Write-Host "Beginning uninstallation of unnecesary apps..."
     $Bloatware = @(
