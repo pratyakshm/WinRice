@@ -40,7 +40,6 @@ Function dotInclude() {
 }
 
 
-# This form was created using POSHGUI.com  a free online gui designer for PowerShell
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
