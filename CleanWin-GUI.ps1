@@ -58,63 +58,49 @@ $Label2.Text = "               Apps and Features"
 $Label2.AutoSize = $true
 $Label2.Width = 25
 $Label2.Height = 15
-$Label2.Location = New-Object System.Drawing.Point(10, 8)
+$Label2.Location = New-Object System.Drawing.Point(10, 10)
 $Label2.Font = 'Segoe UI,12,style=Bold'
 
 $UninstallAllBloatApps = New-Object System.Windows.Forms.Button
 $UninstallAllBloatApps.Text = "Uninstall all bloat apps"
 $UninstallAllBloatApps.Width = 140
 $UninstallAllBloatApps.Height = 45
-$UninstallAllBloatApps.Location = New-Object System.Drawing.Point(10, 34)
+$UninstallAllBloatApps.Location = New-Object System.Drawing.Point(10, 38)
 $UninstallAllBloatApps.Font = 'Segoe UI,10'
 
 $UninstallAppsSelectively = New-Object System.Windows.Forms.Button
 $UninstallAppsSelectively.Text = "Uninstall apps selectively"
 $UninstallAppsSelectively.Width = 140
 $UninstallAppsSelectively.Height = 45
-$UninstallAppsSelectively.Location = New-Object System.Drawing.Point(150, 34)
+$UninstallAppsSelectively.Location = New-Object System.Drawing.Point(150, 38)
 $UninstallAppsSelectively.Font = 'Segoe UI,10'
-
-$Placehold = New-Object System.Windows.Forms.Button
-$Placehold.Text = "Placehold"
-$Placehold.Width = 140
-$Placehold.Height = 45
-$Placehold.Location = New-Object System.Drawing.Point(10, 78)
-$Placehold.Font = 'Segoe UI,10'
-
-$placehold2 = New-Object System.Windows.Forms.Button
-$placehold2.Text = "Placehold 2"
-$placehold2.Width = 140
-$placehold2.Height = 45
-$placehold2.Location = New-Object System.Drawing.Point(150, 78)
-$placehold2.Font = 'Segoe UI,10'
 
 $InstallWinget = New-Object System.Windows.Forms.Button
 $InstallWinget.Text = "Install WinGet"
 $InstallWinget.Width = 140
-$InstallWinget.Height = 40
-$InstallWinget.Location = New-Object System.Drawing.Point(10,122)
+$InstallWinget.Height = 45
+$InstallWinget.Location = New-Object System.Drawing.Point(10,83)
 $InstallWinget.Font = 'Segoe UI,10'
+
+$Winstall = New-Object System.Windows.Forms.Button
+$Winstall.Text = "Winstall"
+$Winstall.Width = 140
+$Winstall.Height = 45
+$Winstall.Location = New-Object System.Drawing.Point(150, 83)
+$Winstall.Font = 'Segoe UI,10'
 
 $InstallWSL = New-Object System.Windows.Forms.Button
 $InstallWSL.Text = "Install WSL"
 $InstallWSL.Width = 140
-$InstallWSL.Height = 40
-$InstallWSL.Location = New-Object System.Drawing.Point(150,122)
+$InstallWSL.Height = 45
+$InstallWSL.Location = New-Object System.Drawing.Point(150,128)
 $InstallWSL.Font = 'Segoe UI,10'
-
-$InstallNet35 = New-Object System.Windows.Forms.Button
-$InstallNet35.Text = "Install dotNET 3.5"
-$InstallNet35.Width = 140
-$InstallNet35.Height = 40
-$InstallNet35.Location = New-Object System.Drawing.Point(10,162)
-$InstallNet35.Font = 'Segoe UI,10'
 
 $UninstallBloatFeatures = New-Object System.Windows.Forms.Button
 $UninstallBloatFeatures.Text = "Uninstall bloat features"
 $UninstallBloatFeatures.Width = 140
-$UninstallBloatFeatures.Height = 40 
-$UninstallBloatFeatures.Location = New-Object System.Drawing.Point(150,162)
+$UninstallBloatFeatures.Height = 45
+$UninstallBloatFeatures.Location = New-Object System.Drawing.Point(10,128)
 $UninstallBloatFeatures.Font = 'Segoe UI,10'
 
 ####################### P R I V A C Y ##########################
@@ -123,63 +109,63 @@ $Label3.Text = "                        Privacy"
 $Label3.AutoSize = $true
 $Label3.Width = 25
 $Label3.Height = 10
-$Label3.Location = New-Object System.Drawing.Point(10,210)
+$Label3.Location = New-Object System.Drawing.Point(10,181)
 $Label3.Font = 'Segoe UI,12,style=Bold'
 
 $OOShutup10 = New-Object System.Windows.Forms.Button
 $OOShutup10.Text = 'Apply O&OShutup10 config'
 $OOShutup10.Width = 140
 $OOShutup10.Height = 45
-$OOShutup10.Location = New-Object System.Drawing.Point(10, 240)
+$OOShutup10.Location = New-Object System.Drawing.Point(10, 210)
 $OOShutup10.Font = 'Segoe UI,10'
 
 $HostsTelemetry = New-Object System.Windows.Forms.Button
 $HostsTelemetry.Text = 'Block telemetry using hosts'
 $HostsTelemetry.Width = 140
 $HostsTelemetry.Height = 45
-$HostsTelemetry.Location = New-Object System.Drawing.Point(150, 240)
+$HostsTelemetry.Location = New-Object System.Drawing.Point(150, 210)
 $HostsTelemetry.Font = 'Segoe UI,10'
 
 $DisableDataCollection = New-Object System.Windows.Forms.Button
 $DisableDataCollection.Text = "Disable Data collection"
 $DisableDataCollection.Width = 140
 $DisableDataCollection.Height = 40
-$DisableDataCollection.Location = New-Object System.Drawing.Point(10,285)
+$DisableDataCollection.Location = New-Object System.Drawing.Point(10,255)
 $DisableDataCollection.Font = 'Segoe UI,10'
 
 $EnableDataCollection = New-Object System.Windows.Forms.Button
 $EnableDataCollection.Text = "Enable Data collection"
 $EnableDataCollection.Width = 140
 $EnableDataCollection.Height = 40
-$EnableDataCollection.Location = New-Object System.Drawing.Point(150,285)
+$EnableDataCollection.Location = New-Object System.Drawing.Point(150,255)
 $EnableDataCollection.Font = 'Segoe UI,10'
 
 $DisableTelemetry = New-Object System.Windows.Forms.Button 
 $DisableTelemetry.Text = "Disable Telemetry"
 $DisableTelemetry.Width = 140
 $DisableTelemetry.Height = 40
-$DisableTelemetry.Location = New-Object System.Drawing.Point(10, 325)
+$DisableTelemetry.Location = New-Object System.Drawing.Point(10, 295)
 $DisableTelemetry.Font = 'Segoe UI,10'
 
 $EnableTelemetry = New-Object System.Windows.Forms.Button 
 $EnableTelemetry.Text = "Enable Telemetry"
 $EnableTelemetry.Width = 140
 $EnableTelemetry.Height = 40
-$EnableTelemetry.Location = New-Object System.Drawing.Point(150, 325)
+$EnableTelemetry.Location = New-Object System.Drawing.Point(150, 295)
 $EnableTelemetry.Font = 'Segoe UI,10'
 
 $FullBandwidth = New-Object System.Windows.Forms.Button 
 $FullBandwidth.Text = "Release Bandwidth"
 $FullBandwidth.Width = 140
 $FullBandwidth.Height = 40
-$FullBandwidth.Location = New-Object System.Drawing.Point(10, 365)
+$FullBandwidth.Location = New-Object System.Drawing.Point(10, 335)
 $FullBandwidth.Font = 'Segoe UI,10'
 
 $ReserveBandwidth = New-Object System.Windows.Forms.Button 
 $ReserveBandwidth.Text = "Reserve Bandwidth"
 $ReserveBandwidth.Width = 140
 $ReserveBandwidth.Height = 40
-$ReserveBandwidth.Location = New-Object System.Drawing.Point(150, 365)
+$ReserveBandwidth.Location = New-Object System.Drawing.Point(150, 335)
 $ReserveBandwidth.Font = 'Segoe UI,10'
 
 ############## W I N D O W S  E X P L O R E R #################
@@ -275,7 +261,6 @@ $EnableBlurLockScreen.Width = 140
 $EnableBlurLockScreen.Height = 40
 $EnableBlurLockScreen.Location = New-Object System.Drawing.Point(460,235)
 $EnableBlurLockScreen.Font = 'Segoe UI,10'
-
 
 $ShowSeconds = New-Object System.Windows.Forms.Button
 $ShowSeconds.Text = "Show Seconds in Taskbar"
@@ -392,7 +377,7 @@ $Label7.Location = New-Object System.Drawing.Point(10,538)
 $Label7.Font = 'Segoe UI,8,style=Monospace' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label6, $Label7, $UninstallAllBloatApps, 
-$UninstallAppsSelectively, $placehold2, $Placehold, $InstallWinget, $InstallNet35, $InstallWSL, 
+$UninstallAppsSelectively, $InstallWinget ,$Winstall, $InstallWSL, 
 $UninstallBloatFeatures, $OOShutup10, $DisableDataCollection, $DisableTelemetry, $HostsTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, $UndoCleanExplorer, 
@@ -779,6 +764,13 @@ $InstallWinget.Add_Click( {
 	Add-AppxPackage C:\WinGet-CLI-v0.2.2941-preview.appxbundle
 	Remove-Item C:\WinGet-CLI-v0.2.2941-preview.appxbundle
 	Write-Host "WinGet has been installed."
+})
+
+$Winstall.Add_Click( {
+    Get-Content 'winstall.txt' | Foreach-Object {
+		$App = $_.Split('=')
+		winget install $App
+    }
 })
 
 $InstallNet35.Add_Click( {
