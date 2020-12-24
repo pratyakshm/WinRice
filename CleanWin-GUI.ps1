@@ -62,30 +62,30 @@ $Label2.Font = 'Segoe UI,12,style=Bold'
 $RemoveAllBloatware = New-Object System.Windows.Forms.Button
 $RemoveAllBloatware.Text = "Remove all bloatware"
 $RemoveAllBloatware.Width = 140
-$RemoveAllBloatware.Height = 43
+$RemoveAllBloatware.Height = 45
 $RemoveAllBloatware.Location = New-Object System.Drawing.Point(10, 34)
 $RemoveAllBloatware.Font = 'Segoe UI,10'
-
-$placehold2 = New-Object System.Windows.Forms.Button
-$placehold2.Text = "Placehold 2"
-$placehold2.Width = 140
-$placehold2.Height = 43
-$placehold2.Location = New-Object System.Drawing.Point(150, 34)
-$placehold2.Font = 'Segoe UI,10'
 
 $CustomizeBlacklists = New-Object System.Windows.Forms.Button
 $CustomizeBlacklists.Text = "Uninstall selective apps"
 $CustomizeBlacklists.Width = 140
 $CustomizeBlacklists.Height = 45
-$CustomizeBlacklists.Location = New-Object System.Drawing.Point(10, 77)
+$CustomizeBlacklists.Location = New-Object System.Drawing.Point(150, 34)
 $CustomizeBlacklists.Font = 'Segoe UI,10'
 
 $Placehold = New-Object System.Windows.Forms.Button
 $Placehold.Text = "Placehold"
 $Placehold.Width = 140
 $Placehold.Height = 45
-$Placehold.Location = New-Object System.Drawing.Point(150, 77)
+$Placehold.Location = New-Object System.Drawing.Point(10, 78)
 $Placehold.Font = 'Segoe UI,10'
+
+$placehold2 = New-Object System.Windows.Forms.Button
+$placehold2.Text = "Placehold 2"
+$placehold2.Width = 140
+$placehold2.Height = 45
+$placehold2.Location = New-Object System.Drawing.Point(150, 78)
+$placehold2.Font = 'Segoe UI,10'
 
 $InstallWinget = New-Object System.Windows.Forms.Button
 $InstallWinget.Text = "Install WinGet"
