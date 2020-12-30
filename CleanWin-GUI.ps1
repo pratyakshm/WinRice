@@ -572,15 +572,19 @@ $UninstallAppsSelectively.Add_Click( {
         $OFS = "|"
         if ($CheckboxRemoveAll.IsChecked)
         {   
+            Invoke-Item C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
             Write-Host "Removing $AppxPackages..."
             Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage -AllUsers
             Write-Host "Done."
+            Exit
         }
         else
         {  
+            Invoke-Item C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
             Write-Host "Removing $AppxPackages..."
             Get-AppxPackage -PackageTypeFilter Bundle | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage
             Write-Host "Done."
+            Exit
         }
         $OFS = " "
     }
