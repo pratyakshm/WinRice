@@ -991,10 +991,11 @@ Function DebloatApps {
 	 "Microsoft.Getstarted" 
 	 "Microsoft.Messaging"
 	 "Microsoft.Microsoft3DViewer" 
-	 "Microsoft.MicsoftStickyNotes"  
+	 "Microsoft.MicrosoftStickyNotes"  
 	 "Microsoft.MSPaint"
 	 "Microsoft.MicrosoftOfficeHub"
 	 "Microsoft.Office.OneNote"
+	 "Microsoft.MixedReality.Portal"
 	 "Microsoft.MicrosoftSolitaireCollection" 
 	 "Microsoft.NetworkSpeedTest" 
 	 "Microsoft.News" 
@@ -1041,8 +1042,12 @@ Function DebloatApps {
 	foreach ($Bloat in $Bloatware) {
 		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
-		Write-Host "Done."
 	}
+	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
+    Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
+    Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
+    Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Word.lnk"
+	Write-Host "Done."
 }
 
 Function CleanupRegistry {
