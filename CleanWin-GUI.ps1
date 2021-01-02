@@ -43,7 +43,14 @@ Function dotInclude() {
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
-Write-Host "Note: The GUI window might hang for an extended period of time while its performing a task."
+Function screen {
+    Clear-Host
+    Start-Sleep 1
+    Write-Host "                                        CleanWin v0.3.4"
+    Write-Warning "The GUI window might hang for extended periods of time while it's performing a task."
+}
+
+screen
 
 ### BEGIN GUI ###
 
@@ -755,16 +762,16 @@ $ErrorActionPreference = 'SilentlyContinue'
         Remove-Item $Key -Recurse
     }
     Write-Host "Bloatware keys have been removed."
-            Write-Host "Done."
-            Clear-Host
+    Write-Host "Done."
+    "screen"
 })
 
 $InstallChoco.Add_Click( {
 	Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 	choco install chocolatey-core.extension -y
-	Write-Host "Chocolatey has been installed"
+	Write-Host "Chocolatey has been installed."
 	Start-Sleep 1
-	Clear-Host
+	"screen"
 })
 
 $ChocInstall.Add_Click( {
@@ -772,6 +779,7 @@ $ChocInstall.Add_Click( {
 		$App = $_.Split('=')
 		choco install $App
     }
+    Write-Host "Done."
 })
 
 $InstallNet35.Add_Click( {
