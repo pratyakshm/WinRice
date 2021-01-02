@@ -880,6 +880,7 @@ Function InstallMathRecognizer {
 
 # Install dotNET 3.5
 Function InstalldotNET3 {
+	Write-Host " "
 	$question = 'Do you want to turn on dotNET 3.5?'
 	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
