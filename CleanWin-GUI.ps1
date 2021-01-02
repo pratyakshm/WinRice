@@ -733,7 +733,7 @@ $ErrorActionPreference = 'SilentlyContinue'
         Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
     }
-    
+
     Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
     Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
     Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
@@ -773,8 +773,7 @@ $ErrorActionPreference = 'SilentlyContinue'
         
     #This writes the output of each key it is removing and also removes the keys listed above.
     ForEach ($Key in $Keys) {
-        Remove-Item $Key -Recurse
-    }   
+        Remove-Item $Key -Recurse 
     }
     "screen"
     Write-Host "Done."
