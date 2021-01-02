@@ -161,6 +161,7 @@ Function SystemRestore {
 	Checkpoint-Computer -Description "CleanWin" -RestorePointType MODIFY_SETTINGS
 	Set-ItemProperty -Path $SystemRestore -Name "SystemRestorePointCreationFrequency" -Type DWord -Value 1440
 	Write-Host "Done."
+	Clear-Host
 }
 
 # Less sleep
