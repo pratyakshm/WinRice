@@ -552,6 +552,7 @@ Function DisableDefragmentation {
 
 # Enable scheduled defragmentation task
 Function EnableDefragmentation {
+	Write-Host " "
 	Write-Host "Turning on scheduled defragmentation..."
 	Enable-ScheduledTask -TaskName "Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
 	Write-Host "Done."
@@ -574,7 +575,8 @@ Function SetBIOSTimeLocal {
 
 # Disable unnecessary services 
 Function DisableServices {
-	Write-Host "Disabling unnecessary services..."
+	Write-Host " "
+	Write-Host "Turning off unnecessary services..."
 	Set-Service RetailDemo -StartupType Disabled -ErrorAction SilentlyContinue
 	Set-Service "diagnosticshub.standardcollector.service" -StartupType Disabled -ErrorAction SilentlyContinue
 	Set-Service MapsBroker  -StartupType Disabled -ErrorAction SilentlyContinue
@@ -821,7 +823,7 @@ Function PrintFeaturesChanges {
 }
 
 Function EnableWSL {
-	$question = 'Do you want to turn on Windows Subsystem for Linux?'
+	$question = 'Do you want to install WSL?'
 	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
@@ -959,6 +961,7 @@ Function PrintSystemChanges {
 Function EnableUltimatePerf {
 	Write-Host "Turning on ultimate performance power plan..."
 	powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
+	Write-Host " "
 	Write-Host "Done."
 }
 
