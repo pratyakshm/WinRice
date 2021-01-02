@@ -817,7 +817,7 @@ $InstallWSL.Add_Click( {
 })
 
 $UninstallBloatFeatures.Add_Click( {
-    Write-Host "Removing unwanted features..."
+    Write-Host "Uninstalling unnecessary features..."
     Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "WorkFolders-Client" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
     Get-WindowsCapability -Online | Where-Object { $_.Name -like "Hello.Face*" } | Remove-WindowsCapability -Online | Out-Null
     Get-WindowsCapability -Online | Where-Object { $_.Name -like "MathRecognizer*" } | Remove-WindowsCapability -Online | Out-Null
