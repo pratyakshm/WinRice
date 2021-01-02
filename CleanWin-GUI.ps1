@@ -767,10 +767,11 @@ $ErrorActionPreference = 'SilentlyContinue'
     #This writes the output of each key it is removing and also removes the keys listed above.
     ForEach ($Key in $Keys) {
         Remove-Item $Key -Recurse
+    }   
     }
-    Write-Host "Done."
     "screen"
-    }
+    Write-Host "Done."
+
 })
 
 $InstallChoco.Add_Click( {
