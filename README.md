@@ -7,20 +7,23 @@
 ![Latest release](https://img.shields.io/github/release-date/pratyakshm/CleanWin?style=flat-square)
 
 ## How to run:
-1. Download executable (CLI or GUI variant) from the latest [Release](https://github.com/pratyakshm/CleanWin/releases/tag/v0.3.3).
-2. Launch the executable and give it administrator privileges once it asks.
+1. Read the full documentation properly before proceeding. 
+2. Dwnload the latest release from the [Releases page](https://github.com/pratyakshm/CleanWin/releases), unzip it and run. (Ignore SmartScreen errors, these might get fixed in a future release).   
+3. Launch the executable and give it administrator privileges once it asks.
 
 ## List of tasks:
 This section contains the list of tasks that CleanWin performs. They're grouped in the following categories (sorted by alphabetical order):
 <details>
 <summary>Apps & Features</summary>
-Apps removed (default):
+Apps removed:   
   <br>3D Viewer   
   <br>Alarms
   <br>Cortana  
+  <br>Camera
   <br>Feedback Hub 
   <br>Get Help      
   <br>Get started  
+  <br>Groove Music 
   <br>Mail and Calendar  
   <br>Messaging  
   <br>Maps  
@@ -34,25 +37,20 @@ Apps removed (default):
   <br>Office Lens
   <br>Paint 3D  
   <br>People  
-  <br>Sway  
+  <br>Sway
+  <br>Snip & Sketch
   <br>Sticky Notes  
+  <br>Skype
   <br>Whiteboard
   <br>Xbox
   <br>Xbox Game bar
-  <br><br>Apps removed (optional):
-  <br>Camera
-  <br>Groove Music
-  <br>Skype
   <br>Your Phone
   <br><br>Apps installed:
   <br>Windows Package Manager
-  <br>7-zip<br>Microsoft PowerToys (optional)<br>Revo Uninstaller (optional)<br>VLC Media Player (optional)
+  <br>7-zip
   <br><br>Optional features:
-  <br>Turn on Windows Subsystem for Linux (optional)
-  <br>Turn on Hyper-V (optional)
-  <br>Turn on Virtual Machine (optional)
-  <br>Turn on dotNET 3.5 (optional)
-  <br>Turn off Internet Explorer
+  <br>Turn on WSL (optional)
+  <br>CLI-only: Turn on dotNET 3.5 (optional)
   <br>Turn off Math Recognizer 
   <br>Turn off Windows Hello Face
   <br>Turn off Work Folders
@@ -71,7 +69,6 @@ Apps removed (default):
   <br>Turn off speech recognition and access to language list for personalization
   <br>Turn on automatic login when PC restarts after installing a Windows Update
   <br><br>Security:
-  <br>Turn off Server Message Block
   <br>Turn off Meltdown compatibility flag
 </details>
 
@@ -105,6 +102,7 @@ Apps removed (default):
   <br>Hide 3D Objects tabs from This PC and Quick Access
   <br>Hide task view icon from taskbar
   <br>Hide Cortana icon from taskbar
+  <br>Hide Meet now button from tray 
   <br>Hide search bar from taskbar
   <br>Turn off blur in lock screen
   <br>Show seconds in taskbar clock (optional)
