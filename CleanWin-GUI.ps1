@@ -783,7 +783,7 @@ $InstallChoco.Add_Click( {
 $ChocInstall.Add_Click( {
     Get-Content 'ChocInstall.txt' | Foreach-Object {
 		$App = $_.Split('=')
-		choco install $App
+		choco install $App -Y
     }
     Write-Host "Done."
 })
