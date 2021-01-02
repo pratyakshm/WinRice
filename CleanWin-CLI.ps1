@@ -105,7 +105,7 @@ $tasks = @(
 	"ClearShell",
 
 ###  Tasks after successful run ###
-	"RestartPC",
+	"RestartPC"
 )
 
 
@@ -1100,6 +1100,7 @@ Function DebloatApps {
 		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
 		Write-Host "Done."
+	}
 }
 
 Function CleanupRegistry {
