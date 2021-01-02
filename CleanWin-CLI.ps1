@@ -93,7 +93,7 @@ $tasks = @(
 ### App changes ###
 	"PrintAppsChanges",
 	"DebloatApps", "CleanupRegistry",
-	"ConfirmInstall", "InstallChoco", "Install7zip", "ChocInstall", 
+	"InstallChoco", "Install7zip", "ChocInstall", 
 	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
