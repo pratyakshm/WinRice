@@ -82,12 +82,12 @@ $InstallChoco.Height = 45
 $InstallChoco.Location = New-Object System.Drawing.Point(10,83)
 $InstallChoco.Font = 'Segoe UI,10'
 
-$Winstall = New-Object System.Windows.Forms.Button
-$Winstall.Text = "Winstall"
-$Winstall.Width = 140
-$Winstall.Height = 45
-$Winstall.Location = New-Object System.Drawing.Point(150, 83)
-$Winstall.Font = 'Segoe UI,10'
+$ChocInstall = New-Object System.Windows.Forms.Button
+$ChocInstall.Text = "ChocInstall"
+$ChocInstall.Width = 140
+$ChocInstall.Height = 45
+$ChocInstall.Location = New-Object System.Drawing.Point(150, 83)
+$ChocInstall.Font = 'Segoe UI,10'
 
 $InstallWSL = New-Object System.Windows.Forms.Button
 $InstallWSL.Text = "Install WSL"
@@ -377,7 +377,7 @@ $Label7.Location = New-Object System.Drawing.Point(10,538)
 $Label7.Font = 'Segoe UI,8,style=Monospace' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label6, $Label7, $UninstallAllBloatApps, 
-$UninstallAppsSelectively, $InstallChoco ,$Winstall, $InstallWSL, 
+$UninstallAppsSelectively, $InstallChoco ,$ChocInstall, $InstallWSL, 
 $UninstallBloatFeatures, $OOShutup10, $DisableDataCollection, $DisableTelemetry, $HostsTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, $UndoCleanExplorer, 
@@ -761,10 +761,11 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 $InstallChoco.Add_Click( {
     Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))	Add-AppxPackage C:\WinGet-CLI-v0.2.2941-preview.appxbundle
+    Clear-Host
 })
 
-$Winstall.Add_Click( {
-    Get-Content 'Winstall.txt' | Foreach-Object {
+$ChocInstall.Add_Click( {
+    Get-Content 'ChocInstall.txt' | Foreach-Object {
 		$App = $_.Split('=')
 		choco install $App
     }
