@@ -1049,8 +1049,8 @@ Function DebloatApps {
 	"*Dolby*"
 	
 	)
+	Write-Host "Uninstalling unnecessary apps..."
 	foreach ($Bloat in $Bloatware) {
-		Write-Host "Uninstalling unnecessary apps..."
 		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
 		Write-Host "Done."
