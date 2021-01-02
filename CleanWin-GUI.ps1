@@ -760,8 +760,11 @@ $ErrorActionPreference = 'SilentlyContinue'
 })
 
 $InstallChoco.Add_Click( {
-    Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))	Add-AppxPackage C:\WinGet-CLI-v0.2.2941-preview.appxbundle
-    Clear-Host
+	Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+	choco install chocolatey-core.extension -y
+	Write-Host "Chocolatey has been installed"
+	Start-Sleep 1
+	Clear-Host
 })
 
 $ChocInstall.Add_Click( {
