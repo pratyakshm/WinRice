@@ -1062,9 +1062,10 @@ $ErrorActionPreference = 'SilentlyContinue'
 }
 
 Function CleanupRegistry {
-    $Keys = @(
-
-		Write-Host "Cleaning up registry..."
+$ErrorActionPreference = 'SilentlyContinue'
+	Write-Host "Cleaning up registry..."
+    	$Keys = @(
+		
 		New-PSDrive HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
         #Remove Background Tasks
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
