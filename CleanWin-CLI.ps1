@@ -16,7 +16,6 @@ $tasks = @(
 	"LessSleep",
 	"ProductInformation",
 	"ClearShell",
-	"SystemRestore",
 	"ClearShell",
 	
 ### Privacy changes ###
@@ -134,18 +133,6 @@ Function ProductInformation {
 	else{
 		"Windows.OSArchitecture         : 64-bit"
 	}
-}
-
-# Create a system restore point
-Function SystemRestore {
-	Write-Host " "
-	Write-Host "Creating a system restore point..."
-	$SystemRestore = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore"
-	Set-ItemProperty -Path $SystemRestore -Name "SystemRestorePointCreationFrequency" -Type DWord -Value 0
-	Checkpoint-Computer -Description "CleanWin" -RestorePointType MODIFY_SETTINGS
-	Set-ItemProperty -Path $SystemRestore -Name "SystemRestorePointCreationFrequency" -Type DWord -Value 1440
-	Write-Host "Done."
-	Clear-Host
 }
 
 # Less sleep
@@ -1054,7 +1041,7 @@ Function DebloatApps {
 
 Function CleanupRegistry {
     $Keys = @(
-		
+
 		Write-Host "Cleaning up registry..."
 		New-PSDrive HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
         #Remove Background Tasks
