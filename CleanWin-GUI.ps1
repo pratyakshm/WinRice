@@ -59,7 +59,10 @@ $Form.ClientSize = '610,565'
 $Form.Text = "CleanWin v0.3.4"
 $Form.TopMost = $false
 
+
+
 ############### APPS AND FEATURES ############################
+
 $Label2 = New-Object System.Windows.Forms.Label
 $Label2.Text = "               Apps and Features"
 $Label2.AutoSize = $true
@@ -110,7 +113,10 @@ $UninstallBloatFeatures.Height = 45
 $UninstallBloatFeatures.Location = New-Object System.Drawing.Point(10,128)
 $UninstallBloatFeatures.Font = 'Segoe UI,10'
 
-####################### P R I V A C Y ##########################
+
+
+####################### PRIVACY & SECURITY ##########################
+
 $Label3 = New-Object System.Windows.Forms.Label
 $Label3.Text = "                        Privacy"
 $Label3.AutoSize = $true
@@ -175,7 +181,9 @@ $ReserveBandwidth.Height = 40
 $ReserveBandwidth.Location = New-Object System.Drawing.Point(150, 335)
 $ReserveBandwidth.Font = 'Segoe UI,10'
 
-############## W I N D O W S  E X P L O R E R #################
+
+
+############## WINDOWS EXPLORER #################
 
 $Label4 = New-Object System.Windows.Forms.Label
 $Label4.Text = "                Windows Explorer"
@@ -285,7 +293,8 @@ $HideSeconds.Font = 'Segoe UI,10'
 
 
 
-############# S E R V I C E S  C H A N G E S ###################
+############# TASKS & SERVICES ###################
+
 $Label5 = New-Object System.Windows.Forms.Label
 $Label5.Text = "             Tasks and Services"
 $Label5.AutoSize = $true
@@ -349,6 +358,8 @@ $EnableTasks.Width = 140
 $EnableTasks.Height = 40
 $EnableTasks.Location = New-Object System.Drawing.Point(460,479)
 $EnableTasks.Font = 'Segoe UI,10'
+
+
 
 ################ MAINTENANCE ##############
 
