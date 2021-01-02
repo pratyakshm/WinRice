@@ -716,15 +716,11 @@ $ErrorActionPreference = 'SilentlyContinue'
     foreach ($Bloat in $Bloatware) {
     Get-AppxPackage -Name $Bloat| Remove-AppxPackage | Out-Null
     Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
-    Write-Host "Removing $Bloat."}
-    Write-Host "Done."
-    Write-Host "Removing Office WebApps shortcuts..."
     Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
     Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
     Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
     Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Word.lnk"
     $Keys = @(
-        Write-Host "Removing bloatware registry keys..."
         New-PSDrive  HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
         #Remove Background Tasks
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
@@ -761,17 +757,16 @@ $ErrorActionPreference = 'SilentlyContinue'
     ForEach ($Key in $Keys) {
         Remove-Item $Key -Recurse
     }
-    Write-Host "Bloatware keys have been removed."
     Write-Host "Done."
     "screen"
 })
 
 $InstallChoco.Add_Click( {
+    Write-Host "Installing Chocolatey package manager..."
 	Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 	choco install chocolatey-core.extension -y
-	Write-Host "Chocolatey has been installed."
+	Write-Host "Done."
 	Start-Sleep 1
-	"screen"
 })
 
 $ChocInstall.Add_Click( {
@@ -783,22 +778,25 @@ $ChocInstall.Add_Click( {
 })
 
 $InstallNet35.Add_Click( {
+    Write-Host "Installing dotNET 3.5..."
     DISM /Online /Enable-Feature /FeatureName:NetFx3 /All /NoRestart /Quiet
-    Write-Host "dotNET 3.5 has been installed."
+    Write-Host "Done."
 })
 
 $InstallWSL.Add_Click( {
+    Write-Host "Installing WSL..."
     dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /all /NoRestart /Quiet
 	dism.exe /Online /Enable-Feature /FeatureName:VirtualMachinePlatform /All /NoRestart /Quiet
     dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V /All /NoRestart	/Quiet
-    Write-Host "WIndows Subsystem for Linux has been enabled."
+    Write-Host "Done."
 })
 
 $UninstallBloatFeatures.Add_Click( {
+    Write-Host "Removing unwated features..."
     Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "WorkFolders-Client" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
     Get-WindowsCapability -Online | Where-Object { $_.Name -like "Hello.Face*" } | Remove-WindowsCapability -Online | Out-Null
     Get-WindowsCapability -Online | Where-Object { $_.Name -like "MathRecognizer*" } | Remove-WindowsCapability -Online | Out-Null
-    Write-Host "Bloatware features have been uninstalled."
+    Write-Host "Done."
 })
 
 
@@ -809,7 +807,8 @@ $UninstallBloatFeatures.Add_Click( {
 $CleanExplorer.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
 
-   
+    Write-Host "Cleaning up Windows Explorer..."
+
     # Sets default explorer view to This PC
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -Type DWord -Value 1
 
@@ -837,12 +836,15 @@ $ErrorActionPreference = 'SilentlyContinue'
 
     # Show seconds in taskbar clock
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
+    
+    Write-Host "Done."
 
-    Write-Host "Windows Explorer has been cleaned up."
 })
 
 $UndoCleanExplorer.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
+
+    Write-Host "Reverting changes..."
 
     # Enable Sticky keys prompt
     Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "510"
@@ -872,45 +874,49 @@ $UndoCleanExplorer.Add_Click( {
     # Hide seconds from taskbar clock
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
 
-    Write-Host "Reverted Clean Windows Explorer changes."
+    # Restart explorer.exe to reflect changes immeditately and then provide 2 seconds of breathing time
+    Stop-Process -ProcessName explorer
+    Start-Sleep 2
+
+    Write-Host "Done."
 
 })
 
 $ShowVerboseStatus.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "VerboseStatus" -Type DWord -Value 1
-    Write-Host "Verbose status has been turned on."
+    Write-Host "Done."
 })
 
 $HideVerboseStatus.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "VerboseStatus" -Type DWord -Value 0
-    Write-Host "Verbose status has been turned off."
+    Write-Host "Done."
 })
 
 $DisableBlurLockScreen.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "DisableAcrylicBackgroundOnLogon" -Type DWord -Value 1
-    Write-Host "Background blur in lock screen has been turned off." 
+    Write-Host "Done." 
 })
 
 $EnableBlurLockScreen.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "DisableAcrylicBackgroundOnLogon" -Type DWord -Value 0
-    Write-Host "Background blur in lock screen has been turned on." 
+    Write-Host "Done." 
 })
 
 
 $ShowSeconds.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
-    Write-Host "Taskbar clock will now display seconds."
+    Write-Host "Done."
 })
 
 $HideSeconds.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 0
-    Write-Host "Taskbar clock will no longer display seconds."
+    Write-Host "Done."
 })
 
 $Hide3DObjects.Add_Click( {
@@ -927,7 +933,7 @@ $Hide3DObjects.Add_Click( {
         }
     Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
     Remove-Item -Path $Hide3DObjects3 -Recurse
-    Write-Host "3D Objects has been hidden."
+    Write-Host "Done."
 })
 
 $Show3DObjects.Add_Click( {
@@ -939,27 +945,27 @@ $Show3DObjects.Add_Click( {
         }
     Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy"
     Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy"
-    Write-Host "3D objects has been restored."
+    Write-Host "Done."
 })
 
 $EnablePrtScrForSnip.Add_Click( {
     Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 1
-    Write-Host "Print screen key is now set to launch Screen Snip."
+    Write-Host "Done."
 })
 
 $DisablePrtScrForSnip.Add_Click( {
     Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
-    Write-Host "Print screen key will no longer launch Screen Snip."
+    Write-Host "Done."
 })
 
 $DisableStickyKeys.Add_Click( {
     Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
-    Write-Host "Sticky keys prompt is turned on."
+    Write-Host "Done."
 })
 
 $EnableStickyKeys.Add_Click( {
-        Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "510"
-        Write-Host "Sticky keys prompt is turned on."
+    Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "510"
+    Write-Host "Done."
 })
 
 
@@ -969,6 +975,8 @@ $EnableStickyKeys.Add_Click( {
 $DisableDataCollection.Add_Click( { 
 $ErrorActionPreference = 'SilentlyContinue'
 
+    Write-Host "Turning off data collection..."
+    
 	# Disable suggestions and bloatware auto-install
 	$Suggestions1 = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
 	$Suggestions2 = "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
@@ -1073,12 +1081,14 @@ $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path $Suggestions1 -Name "SoftLandingEnabled" -Type DWord -Value 0
     Set-ItemProperty -Path $Suggestions1 -Name "SubscribedContent" -Type DWord -Value 0
     
-    Write-Host "Data collection has been disabled."
+    Write-Host "Done."
 })
 
 
 $EnableDataCollection.Add_Click( { 
     $ErrorActionPreference = 'SilentlyContinue'
+
+    Write-Host "Turning on data collection..."
 
 	# Enable advertising ID
     $Advertising = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
@@ -1163,7 +1173,7 @@ $EnableDataCollection.Add_Click( {
     Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
     Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
     
-    Write-Host "Data collection has been enabled."
+    Write-Host "Data collection turned on."
 })
 
 $DisableTelemetry.Add_Click( {
@@ -1174,18 +1184,19 @@ $DisableTelemetry.Add_Click( {
     Set-ItemProperty -Path $Telemetry -Name "AllowTelemetry" -Type DWord -Value 0
     Set-ItemProperty -Path $Telemetry -Name "DoNotShowFeedbackNotifications" -Type DWord -Value 1
     Set-ItemProperty -Path $Telemetry -Name "LimitEnhancedDiagnosticDataWindowsAnalytics" -Type DWord -Value 0
-    Write-Host "Telemetry has been turned off."
+    Write-Host "Done."
 })
 
 $EnableTelemetry.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
+    Write-Host "Turning on telemetry..."
     $Telemetry = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
     Remove-ItemProperty -Path $Telemetry -Name "AllowTelemetry"
     Remove-ItemProperty -Path $Telemetry -Name "AllowCommericalDataPipeline"
     Remove-ItemProperty -Path $Telemetry -Name "DoNotShowFeedbackNotifications"
     Remove-ItemProperty -Path $Telemetry -Name "LimitEnhancedDiagnosticDataWindowsAnalytics"
     Remove-ItemProperty -Path $Telemetry -Name "AllowDeviceNameInTelemetry"
-    Write-Host "Telemetry has been turned on."
+    Write-Host "Done."
 })
 
 $OOShutup10.Add_Click( {
@@ -1196,7 +1207,7 @@ $OOShutup10.Add_Click( {
     ./OOSU10.exe ooshutup10.cfg /quiet
     Remove-Item ooshutup10.cfg
     Remove-Item  OOSU10.exe
-    Write-Host "O&OShutup10 settings have been applied."
+    Write-Host "Done."
     })
 
 $HostsTelemetry.Add_Click( {
@@ -1205,7 +1216,7 @@ $HostsTelemetry.Add_Click( {
     Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/CleanWin/main/files/hosts-telemetry.bat" -Destination hoststelemetry.bat
     ./hoststelemetry.bat /quiet
     Remove-Item hoststelemetry.bat
-    Write-Host "Telemetry IP addresses have been blocked using the hosts file."
+    Write-Host "Done."
 })
 
 $FullBandwidth.Add_Click( {
@@ -1213,14 +1224,14 @@ $FullBandwidth.Add_Click( {
     $Bandwidth = "HKLM:\SOFTWARE\Policies\Microsoft\Psched"
     New-Item -Path $Bandwidth -ItemType Directory -Force
     Set-ItemProperty -Path $Bandwidth -Name "NonBestEffortLimit" -Type DWord -Value 0
-    Write-Host "Full bandwidth has been released."
+    Write-Host "Done."
 })
 
 $ReserveBandwidth.Add_Click({
     $ErrorActionPreference = 'SilentlyContinue'
     $Bandwidth = "HKLM:\SOFTWARE\Policies\Microsoft\Psched"
     Remove-ItemProperty -Path $Bandwidth -Name "NonBestEffortLimit"
-    Write-Host "Bandwidth has been reset back to Microsoft defaults."
+    Write-Host "Done."
 })
 
 
@@ -1237,23 +1248,23 @@ $ErrorActionPreference = 'SilentlyContinue'
           New-Item -Path $Update2 | Out-Null
           }
     Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
-    Write-Host "Automatic Windows updates have been disabled."
+    Write-Host "Done."
 })
 
 $EnableAutoUpdates.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
     Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Recurse -ErrorAction SilentlyContinue 
-    Write-Host "Automatic Windows updates have been enabled."
+    Write-Host "Done."
 })
 
 $DisableDefrag.Add_Click( {
     Disable-ScheduledTask -TaskName "Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
-    Write-Host "Disk defragmentation has been disabled."
+    Write-Host "Done."
 })
 
 $EnableDefrag.Add_Click( {
     Enable-ScheduledTask -TaskName "Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
-    Write-Host "Disk defragmentation has been enabled."
+    Write-Host "Done."
 })
 
 $DisableServices.Add_Click( {
@@ -1265,7 +1276,7 @@ $DisableServices.Add_Click( {
 	Set-Service RemoteRegistry -StartupType Disabled -ErrorAction SilentlyContinue 
 	Set-Service SharedAccess -StartupType Disabled -ErrorAction SilentlyContinue 
 	Set-Service TrkWks -StartupType Disabled -ErrorAction SilentlyContinue 
-	Write-Host "Unnecessary services have been disabled."
+	Write-Host "Done."
 })
 
 $EnableServices.Add_Click( {
@@ -1277,7 +1288,7 @@ $EnableServices.Add_Click( {
 	Set-Service RemoteRegistry -StartupType Automatic -ErrorAction SilentlyContinue 
 	Set-Service SharedAccess -StartupType Automatic -ErrorAction SilentlyContinue 
     Set-Service TrkWks -StartupType Automatic -ErrorAction SilentlyContinue 
-    Write-Host "Unnecessary services have been enabled."
+    Write-Host "Done."
 })
 
 $DisableTasks.Add_Click( {
@@ -1290,7 +1301,7 @@ $DisableTasks.Add_Click( {
 	Disable-ScheduledTask -TaskName "Microsoft\Windows\Windows Error Reporting\QueueReporting" | Out-Null
 	Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
     Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
-    Write-Host "Unnecessary tasks have been disabled."
+    Write-Host "Done."
 })
 
 $EnableTasks.Add_Click( {
@@ -1303,7 +1314,7 @@ $EnableTasks.Add_Click( {
 	Enable-ScheduledTask -TaskName "Microsoft\Windows\Windows Error Reporting\QueueReporting" | Out-Null
 	Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
     Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
-    Write-Host "Unnecessary tasks have been enabled."
+    Write-Host "Done."
 })
 
 ##############################
