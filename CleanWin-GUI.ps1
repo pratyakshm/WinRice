@@ -49,7 +49,7 @@ Write-Host "Note: The GUI window might hang for an extended period of time while
 
 $Form = New-Object System.Windows.Forms.Form
 $Form.ClientSize = '610,565'
-$Form.Text = "CleanWin v0.3.3"
+$Form.Text = "CleanWin v0.3.4"
 $Form.TopMost = $false
 
 ############### APPS AND FEATURES ############################
