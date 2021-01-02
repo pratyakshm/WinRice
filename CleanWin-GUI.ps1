@@ -590,13 +590,13 @@ $UninstallAppsSelectively.Add_Click( {
         $OFS = "|"
         if ($CheckboxRemoveAll.IsChecked)
         {   
-            Write-Host "Removing $AppxPackages..."
+            Write-Host "Uninstalling selected apps..."
             Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage -AllUsers
             Write-Host "Done."
         }
         else
         {  
-            Write-Host "Removing $AppxPackages..."
+            Write-Host "Uninstalling selected apps..."
             Get-AppxPackage -PackageTypeFilter Bundle | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage
             Write-Host "Done."
         }
