@@ -775,6 +775,9 @@ $ErrorActionPreference = 'SilentlyContinue'
     ForEach ($Key in $Keys) {
         Remove-Item $Key -Recurse 
     }
+    Import-Module BitsTransfer
+    Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/CleanWin/main/files/UninstallOneDrive.bat" -Destination UninstallOD.bat
+    ./UninstallOD.bat /quiet
     "screen"
     Write-Host "Done."
 
