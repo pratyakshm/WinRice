@@ -696,6 +696,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     "Microsoft.People" 
     "Microsoft.Print3D" 
     "Microsoft.SkypeApp"
+    "Microsoft.ScreenSketch"
     "Microsoft.StorePurchaseApp" 
     "Microsoft.WindowsAlarms"
     "Microsoft.WindowsCamera"
@@ -1119,7 +1120,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path $Suggestions2 -Name "ShowSyncProviderNotifications" -Type DWord -Value 0
     Set-ItemProperty -Path $Suggestions1 -Name "SoftLandingEnabled" -Type DWord -Value 0
     Set-ItemProperty -Path $Suggestions1 -Name "SubscribedContent" -Type DWord -Value 0
-    
+
     Write-Host "Done."
 })
 
