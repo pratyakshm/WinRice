@@ -92,12 +92,12 @@ $InstallChoco.Height = 45
 $InstallChoco.Location = New-Object System.Drawing.Point(10,83)
 $InstallChoco.Font = 'Segoe UI,10'
 
-$ChocInstall = New-Object System.Windows.Forms.Button
-$ChocInstall.Text = "ChocInstall"
-$ChocInstall.Width = 140
-$ChocInstall.Height = 45
-$ChocInstall.Location = New-Object System.Drawing.Point(150, 83)
-$ChocInstall.Font = 'Segoe UI,10'
+$ChocoInstall = New-Object System.Windows.Forms.Button
+$ChocoInstall.Text = "ChocInstall"
+$ChocoInstall.Width = 140
+$ChocoInstall.Height = 45
+$ChocoInstall.Location = New-Object System.Drawing.Point(150, 83)
+$ChocoInstall.Font = 'Segoe UI,10'
 
 $InstallWSL = New-Object System.Windows.Forms.Button
 $InstallWSL.Text = "Install WSL"
@@ -395,7 +395,7 @@ $Label7.Location = New-Object System.Drawing.Point(10,538)
 $Label7.Font = 'Segoe UI,8,style=Monospace' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label6, $Label7, $UninstallAllBloatApps, 
-$UninstallAppsSelectively, $InstallChoco ,$ChocInstall, $InstallWSL, 
+$UninstallAppsSelectively, $InstallChoco ,$ChocoInstall, $InstallWSL, 
 $UninstallBloatFeatures, $OOShutup10, $DisableDataCollection, $DisableTelemetry, $HostsTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, $UndoCleanExplorer, 
@@ -793,12 +793,13 @@ $InstallChoco.Add_Click( {
 	Start-Sleep 1
 })
 
-$ChocInstall.Add_Click( {
+$ChocoInstall.Add_Click( {
     Get-Content 'ChocInstall.txt' | Foreach-Object {
-		$App = $_.Split('=')
+        $App = $_.Split('=')
+        Write-Host "Installing $App..."
 		choco install $App -Y
     }
-    Write-Host "Done."
+    Write-Host "ChocInstall has finished the jobs."
 })
 
 $InstallNet35.Add_Click( {
