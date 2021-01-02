@@ -75,12 +75,12 @@ $UninstallAppsSelectively.Height = 45
 $UninstallAppsSelectively.Location = New-Object System.Drawing.Point(150, 38)
 $UninstallAppsSelectively.Font = 'Segoe UI,10'
 
-$InstallWinget = New-Object System.Windows.Forms.Button
-$InstallWinget.Text = "Install WinGet"
-$InstallWinget.Width = 140
-$InstallWinget.Height = 45
-$InstallWinget.Location = New-Object System.Drawing.Point(10,83)
-$InstallWinget.Font = 'Segoe UI,10'
+$InstallChoco = New-Object System.Windows.Forms.Button
+$InstallChoco.Text = "Install Chocolatey"
+$InstallChoco.Width = 140
+$InstallChoco.Height = 45
+$InstallChoco.Location = New-Object System.Drawing.Point(10,83)
+$InstallChoco.Font = 'Segoe UI,10'
 
 $Winstall = New-Object System.Windows.Forms.Button
 $Winstall.Text = "Winstall"
@@ -377,7 +377,7 @@ $Label7.Location = New-Object System.Drawing.Point(10,538)
 $Label7.Font = 'Segoe UI,8,style=Monospace' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label6, $Label7, $UninstallAllBloatApps, 
-$UninstallAppsSelectively, $InstallWinget ,$Winstall, $InstallWSL, 
+$UninstallAppsSelectively, $InstallChoco ,$Winstall, $InstallWSL, 
 $UninstallBloatFeatures, $OOShutup10, $DisableDataCollection, $DisableTelemetry, $HostsTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, $UndoCleanExplorer, 
@@ -759,17 +759,14 @@ $ErrorActionPreference = 'SilentlyContinue'
             Clear-Host
 })
 
-$InstallWinget.Add_Click( {
-    Invoke-WebRequest https://github.com/microsoft/winget-cli/releases/download/v0.2.2941-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -o C:\WinGet-CLI-v0.2.2941-preview.appxbundle | Out-Null 
-	Add-AppxPackage C:\WinGet-CLI-v0.2.2941-preview.appxbundle
-	Remove-Item C:\WinGet-CLI-v0.2.2941-preview.appxbundle
-	Write-Host "WinGet has been installed."
+$InstallChoco.Add_Click( {
+    Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))	Add-AppxPackage C:\WinGet-CLI-v0.2.2941-preview.appxbundle
 })
 
 $Winstall.Add_Click( {
-    Get-Content 'winstall.txt' | Foreach-Object {
+    Get-Content 'Winstall.txt' | Foreach-Object {
 		$App = $_.Split('=')
-		winget install $App
+		choco install $App
     }
 })
 
