@@ -1063,6 +1063,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 Function CleanupRegistry {
 $ErrorActionPreference = 'SilentlyContinue'
+	Write-Host " "
 	Write-Host "Cleaning up registry..."
     	$Keys = @(
 		
