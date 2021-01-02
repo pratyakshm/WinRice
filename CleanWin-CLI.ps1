@@ -992,7 +992,7 @@ Function PrintAppsChanges {
 # Debloat apps
 Function DebloatApps {
 	# Prebuilt apps
-	Write-Host "Beginning uninstallation of unnecesary apps..."
+	Write-Host "Uninstalling unnecessary apps..."
 	$Bloatware = @(
 	 "Microsoft.549981C3F5F10"
 	 "Microsoft.BingNews"
@@ -1046,9 +1046,8 @@ Function DebloatApps {
     "*Sway*"
     "*Speed Test*"
 	"*Dolby*"
-	
 	)
-	Write-Host "Uninstalling unnecessary apps..."
+	
 	foreach ($Bloat in $Bloatware) {
 		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
