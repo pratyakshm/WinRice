@@ -991,6 +991,8 @@ Function PrintAppsChanges {
 
 # Debloat apps
 Function DebloatApps {
+$ErrorActionPreference = 'SilentlyContinue'
+
 	# Prebuilt apps
 	Write-Host "Uninstalling unnecessary apps..."
 	$Bloatware = @(
@@ -1047,7 +1049,7 @@ Function DebloatApps {
     "*Speed Test*"
 	"*Dolby*"
 	)
-	
+
 	foreach ($Bloat in $Bloatware) {
 		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
