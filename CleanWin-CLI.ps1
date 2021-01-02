@@ -1117,7 +1117,7 @@ Function ChocInstall {
 }
 
 Function EnterpriseUpgrade {
-	Write-Host" "
+	Write-Host " "
 	$question = 'Do you want to upgrade to Windows 10 Enterprise? (your data will remain unaffected)'
 	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
