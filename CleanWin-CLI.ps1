@@ -22,8 +22,6 @@ $tasks = @(
 	
 ### Privacy changes ###
 	"PrintPrivacyChanges",
-	"OOShutup10Config",
-	"TelemetryHosts"           # "UndoHosts",
 	"DisableTelemetry", 	   # "EnableDataCollection",
 	"DisableActivityHistory",
 	"DisableAdvertisingID",
@@ -197,51 +195,6 @@ Function PrintPrivacyChanges {
 	Write-Host "     PRIVACY CHANGES     "
 	Write-Host "-------------------------"
 	Write-Host " "
-}
-
-# Apply O&O Shutup10 Recommended Configuration (thanks to Chris Titus for the idea)
-Function OOShutup10Config {
-	Write-Host " "
-	$question = 'Do you want apply O&OShutup10 settings?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-	if ($decision -eq 0) {
-	Write-Host "Applying O&OShutup10 settings..."
-	Import-Module BitsTransfer
-	Start-BitsTransfer -Source "https://dl.pratyakshm.cf/0:down/CDN/ooshutup10.cfg" -Destination ooshutup10.cfg
-	Start-BitsTransfer -Source "https://dl.pratyakshm.cf/0:down/CDN/OOSU10.exe" -Destination OOSU10.exe
-	./OOSU10.exe ooshutup10.cfg /quiet
-	Remove-Item ooshutup10.cfg
-	Remove-Item OOSU10.exe
-	Write-Host "Done."
-	}
-}
-
-# Run the hosts-telemetry.bat file to write telemetry IP addresses into the hosts file to implement block
-Function TelemetryHosts {
-	Write-Host " "
-	$question = 'Do you want to block telemetry IP addresses?'
-	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-	if ($decision -eq 0) {
-	Import-Module BitsTransfer
-    Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/CleanWin/staging/files/hosts-telemetry.bat" -Destination hoststelemetry.bat
-    ./hoststelemetry.bat /quiet
-    Remove-Item hoststelemetry.bat
-    Write-Host "Done."
-	}
-}
-
-# Paste vanilla hosts file to revert telemetry IP blocks
-Function UndoHosts {
-	Import-Module BitsTransfer
-    Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/CleanWin/staging/files/sample-hosts" -Destination sample-hosts
-	Rename-Item sample-hosts hosts 
-	Move-Item hosts C:\Windows\System32\drivers\etc
 }
 
 # Disable telemetry
