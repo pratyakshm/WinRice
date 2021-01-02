@@ -778,6 +778,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     Import-Module BitsTransfer
     Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/CleanWin/main/files/UninstallOneDrive.bat" -Destination UninstallOD.bat
     ./UninstallOD.bat
+    Remove-Item UninstallOD.bat
     "screen"
     Write-Host "Done."
 
@@ -868,7 +869,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     # Restart Windows Explorer once done
     Stop-Process -ProcessName explorer
     Start-Sleep 5
-    
+
     Write-Host "Done."
 
 })
