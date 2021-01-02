@@ -110,6 +110,7 @@ $tasks = @(
 
 # CleanWin
 Function CleanWin {
+	Clear-Host
 	Write-Host " "
 	Write-Host "CleanWin v0.3.4 by pratyakshm"
 	Write-Host "https://github.com/pratyakshm/CleanWin"
