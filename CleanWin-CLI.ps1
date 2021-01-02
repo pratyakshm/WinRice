@@ -16,7 +16,6 @@ $tasks = @(
 	"LessSleep",
 	"ProductInformation",
 	"ClearShell",
-	"ClearShell",
 	
 ### Privacy changes ###
 	"PrintPrivacyChanges",
@@ -59,6 +58,7 @@ $tasks = @(
 	"HideSearchBar",			   # "RestoreSearchBar"
 	"HideTaskView",                # "RestoreTaskView",
 	"HideCortana",			       # "RestoreCortana",
+	"HideMeetNow",				   # "RestoreMeetNow",
 	"ShowSecondsInTaskbar",        # "HideSecondsFromTaskbar",
 	"LessSleep",
 	"ChangesDone",
@@ -768,8 +768,28 @@ Function HideCortana {
 
 # Restore Cortana button in taskbar
 Function RestoreCortana {
-	Write-Host "Show Cortana icon on taskbar..."
+	Write-Host "Showing Cortana icon on taskbar..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
+	Write-Host "Done."
+}
+
+# Hide Meet Now icon from tray
+Function HideMeetNow {
+	Write-Host "Hiding Meet now icon from tray..."
+	$Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+	$Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1
+	Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
+	Write-Host "Done."
+}
+
+# Restore Meet Now icon on tray
+Function RestoreMeetNow {
+	Write-Host "Restoring Meet now icon in tray..."
+	$Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+	$Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 0
+	Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 0
 	Write-Host "Done."
 }
 
@@ -868,13 +888,13 @@ Function InstallMathRecognizer {
 # Install dotNET 3.5
 Function InstalldotNET3 {
 	Write-Host " "
-	$question = 'Do you want to turn on dotNET 3.5?'
+	$question = 'Do you want to install dotNET 3.5?'
 	$choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
 	$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
 	$decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
 		if ($decision -eq 0) {
-		Write-Host "Turning on dotNET 3.5"
+		Write-Host "Installing dotNET 3.5..."
 		Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "NetFx3" } | Enable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
 		Write-Host "Done."
 		}
