@@ -1054,7 +1054,7 @@ Function DebloatApps {
 
 Function CleanupRegistry {
     $Keys = @(
-            
+		New-PSDrive HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
         #Remove Background Tasks
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
