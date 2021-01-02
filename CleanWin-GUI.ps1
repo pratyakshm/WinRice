@@ -1244,6 +1244,7 @@ $OOShutup10.Add_Click( {
 	Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/CleanWin/main/files/ooshutup10.cfg" -Destination ooshutup10.cfg
 	Start-BitsTransfer -Source "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe" -Destination OOSU10.exe
     ./OOSU10.exe ooshutup10.cfg /quiet
+    taskkill /f /im OOSU10.exe
     Remove-Item ooshutup10.cfg
     Remove-Item  OOSU10.exe
     Write-Host "Done."
