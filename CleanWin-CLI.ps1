@@ -1132,7 +1132,7 @@ Function ChocInstall {
 	if ($decision -eq 0) {	
 		Get-Content 'ChocInstall.txt' | Foreach-Object {
 		$App = $_.Split('=')
-		choco install $App
+		choco install $App -Y
 		}
 	}
 }
