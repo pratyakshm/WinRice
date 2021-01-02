@@ -770,6 +770,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     }
     Write-Host "Done."
     "screen"
+    }
 })
 
 $InstallChoco.Add_Click( {
