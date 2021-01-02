@@ -777,7 +777,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     }
     Import-Module BitsTransfer
     Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/CleanWin/main/files/UninstallOneDrive.bat" -Destination UninstallOD.bat
-    ./UninstallOD.bat /quiet
+    ./UninstallOD.bat
     "screen"
     Write-Host "Done."
 
@@ -865,6 +865,10 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1 -ErrorAction SilentlyContinue
 	Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
 
+    # Restart Windows Explorer once done
+    Stop-Process -ProcessName explorer
+    Start-Sleep 5
+    
     Write-Host "Done."
 
 })
