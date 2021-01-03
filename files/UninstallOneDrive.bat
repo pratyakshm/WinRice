@@ -1,3 +1,9 @@
+# CleanWin v0.3.4
+# This file is a part of the CleanWin software
+# Copyright (c) 2021 PratyakshM <pratyakshm@protonmail.com>
+# All rights reserved.
+
+
 cls
 echo.
 timeout /t 2 /nobreak > NUL

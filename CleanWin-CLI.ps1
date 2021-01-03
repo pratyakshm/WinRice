@@ -1,11 +1,6 @@
-##############
-#
-# CleanWin
-# Author: PratyakshM <pratyakshm@protonmail.com>
-# CleanWin CLI has gone under maintenance mode until further announcement.
-#
-##############
-
+# This file is a part of the CleanWin software
+# Copyright (c) 2021 PratyakshM <pratyakshm@protonmail.com>
+# All rights reserved.
 
 # Default preset
 $tasks = @(

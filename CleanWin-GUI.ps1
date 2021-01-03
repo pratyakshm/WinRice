@@ -1,3 +1,9 @@
+# CleanWin v0.3.4
+# This file is a part of the CleanWin software
+# Copyright (c) 2021 PratyakshM <pratyakshm@protonmail.com>
+# All rights reserved.
+
+
 #This will self elevate the script so with a UAC prompt since this script needs to be run as an Administrator in order to function properly.
 
 $ErrorActionPreference = 'SilentlyContinue'
