@@ -8,8 +8,8 @@
 
 ## How to run:
 1. Read the full documentation properly before proceeding. 
-2. Dwnload the latest release from the [Releases page](https://github.com/pratyakshm/CleanWin/releases), unzip it and run. (Ignore SmartScreen errors, these might get fixed in a future release).   
-3. Launch the executable and give it administrator privileges once it asks.
+2. Download the latest release from the [Releases page](https://github.com/pratyakshm/CleanWin/releases), unzip it and run what you want between CLI/GUI. 
+   -   (Ignore SmartScreen errors, these might get fixed in a future release).   
 
 ## List of tasks:
 This section contains the list of tasks that CleanWin performs. They're grouped in the following categories (sorted by alphabetical order):
@@ -17,10 +17,11 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 <summary>Apps & Features</summary>
 Apps removed:   
   <br>3D Viewer   
-  <br>Alarms
+  <br>Alarms & Clock
   <br>Cortana  
   <br>Camera
   <br>Feedback Hub 
+  <br>Films & TV  
   <br>Get Help      
   <br>Get started  
   <br>Groove Music 
@@ -30,30 +31,33 @@ Apps removed:
   <br>Microsoft News  
   <br>Microsoft Solitaire Collection  
   <br>Mixed Reality Portal
-  <br>Movies & TV  
+  <br>Network Speed Test
   <br>OneConnect  
   <br>OneNote  
   <br>Office
   <br>Office Lens
   <br>Paint 3D  
+  <br>Print 3D
   <br>People  
   <br>Sway
   <br>Snip & Sketch
   <br>Sticky Notes  
   <br>Skype
+  <br>Voice Recorder
   <br>Whiteboard
+  <br>Weather
   <br>Xbox
   <br>Xbox Game bar
   <br>Your Phone
   <br><br>Apps installed:
-  <br>Windows Package Manager
-  <br>7-zip
+  <br>Chocolatey Package Manager
+  <br>7zip
   <br><br>Optional features:
-  <br>Turn on WSL (optional)
+  <br>Install WSL (optional)
   <br>CLI-only: Turn on dotNET 3.5 (optional)
-  <br>Turn off Math Recognizer 
-  <br>Turn off Windows Hello Face
-  <br>Turn off Work Folders
+  <br>Uninstall Math Recognizer 
+  <br>Uninstall Windows Hello Face
+  <br>Uninstall Work Folders
 </details>
 
 <details>
@@ -96,17 +100,18 @@ Apps removed:
 
 <details>
  <summary>Windows Explorer</summary>
-  Set Explorer to open This PC instead of Quick access
-  <br>Turn off sticky keys prompt
-  <br>Use Print Screen key to open Snip & Sketch overlay
-  <br>Hide 3D Objects tabs from This PC and Quick Access
+ One click Cleanup Explorer
+   <br>Hide 3D Objects tabs from This PC and Quick Access
   <br>Hide task view icon from taskbar
   <br>Hide Cortana icon from taskbar
   <br>Hide Meet now button from tray 
   <br>Hide search bar from taskbar
-  <br>Turn off blur in lock screen
-  <br>Show seconds in taskbar clock (optional)
+  <br>Set This PC as default view
+   <br>Show seconds in taskbar clock
   <br>Show verbose status
+  <br>Turn off sticky keys prompt
+   <br>Turn off blur in lock screen
+  <br>Use Print Screen key to open Snip & Sketch overlay
 </details>
 
 ## Antivirus reports
