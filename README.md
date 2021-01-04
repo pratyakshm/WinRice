@@ -5,6 +5,7 @@
 [![Downloads](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=brightgreen&logoColor=brightgreen&style=flat-square)](https://github.com/pratyakshm/CleanWin/releases)
 [![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)](https://github.com/pratyakshm/CleanWin/releases/tag/v0.3.3)
 ![Latest release](https://img.shields.io/github/release-date/pratyakshm/CleanWin?style=flat-square)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-brightgreen)](https://paypal.me/pratyakshm)
 
 ## How to run:
 1. Read the full documentation properly before proceeding. 
@@ -130,6 +131,5 @@ If doubtful, I encourage everyone to manually grab the most recent version .ps1 
 ## Wiki:
 To view detailed documentation, please [visit the Wiki](https://github.com/pratyakshm/CleanWin/wiki).
 
-## Discussion:
-Below are the links to my Telegram group & channel so you can receive updates on my work and discuss about CleanWin and technology in general!  
-[Channel](https://t.me/PratyakshProjects) | [Group](https://t.me/PratyakshChat)   
+## Support the development
+[<img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" width="190" height="80">](https://paypal.me/pratyakshm)
