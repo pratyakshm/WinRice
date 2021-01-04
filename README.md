@@ -5,7 +5,7 @@
 [![Downloads](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=brightgreen&logoColor=brightgreen&style=flat-square)](https://github.com/pratyakshm/CleanWin/releases)
 [![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)](https://github.com/pratyakshm/CleanWin/releases/tag/v0.3.3)
 ![Latest release](https://img.shields.io/github/release-date/pratyakshm/CleanWin?style=flat-square)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-brightgreen)](https://paypal.me/pratyakshm)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-important?style=flat-square)](https://paypal.me/pratyakshm)
 
 ## How to run:
 1. Read the full documentation properly before proceeding. 
