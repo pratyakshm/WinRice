@@ -132,4 +132,4 @@ If doubtful, I encourage everyone to manually grab the most recent version .ps1 
 To view detailed documentation, please [visit the Wiki](https://github.com/pratyakshm/CleanWin/wiki).
 
 ## Support the development
-[<img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" width="190" height="80">](https://paypal.me/pratyakshm)
+[<img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" width="190" height="80">](http://bit.ly/paypalpratyakshm)
