@@ -115,13 +115,6 @@ Apps removed:
   <br>Use Print Screen key to open Snip & Sketch overlay
 </details>
 
-## Antivirus reports
-**Scanned by [VirusTotal](https://www.virustotal.com/)**
-- [CleanWin-CLI report](https://www.virustotal.com/gui/file/e5505dd3c00595a682478c981a4a42c4b8b24bde8b492a2c32d38cc94aca1716/detection)
-- [CleanWin-GUI report](https://www.virustotal.com/gui/file/9a5c899ac2b267837546f85abcac51dd10354c30d29011fe1e24aabcb3a6b8ec/detection)   
-
-If doubtful, I encourage everyone to manually grab the most recent version .ps1 files of CleanWin and get them manually scanned using [VirusTotal](https://www.virustotal.com/) (Recommended) or their antivirus provider of choice.
-
 ## Microsoft Docs
 - [Windows 10 Release Information](https://docs.microsoft.com/en-us/windows/release-information/)
 - [Windows 10 20H2 Update - Known Issues tracker](https://docs.microsoft.com/en-us/windows/release-information/status-windows-10-20h2)
