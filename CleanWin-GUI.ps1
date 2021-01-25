@@ -1313,26 +1313,45 @@ $EnableDefrag.Add_Click( {
 })
 
 $DisableServices.Add_Click( {
-	Set-Service RetailDemo -StartupType Disabled -ErrorAction SilentlyContinue
-	Set-Service "diagnosticshub.standardcollector.service" -StartupType Disabled -ErrorAction SilentlyContinue
-	Set-Service MapsBroker  -StartupType Disabled -ErrorAction SilentlyContinue
-	Set-Service NetTcpPortSharing  -StartupType Disabled -ErrorAction SilentlyContinue
-	Set-Service RemoteAccess -StartupType Disabled -ErrorAction SilentlyContinue 
-	Set-Service RemoteRegistry -StartupType Disabled -ErrorAction SilentlyContinue 
-	Set-Service SharedAccess -StartupType Disabled -ErrorAction SilentlyContinue 
-	Set-Service TrkWks -StartupType Disabled -ErrorAction SilentlyContinue 
+$ErrorActionPreference = 'SilentlyContinue'
+    
+    # Stop the services
+    Stop-Service RetailDemo | Out-Null
+    Stop-Service "diagnosticshub.standardcollector.service" | Out-Null
+    Stop-Service MapsBroker | Out-Null
+    Stop-Service NetTcpPortSharing | Out-Null
+    Stop-Service RemoteAccess | Out-Null
+    Stop-Service RemoteRegistry | Out-Null
+    Stop-Service SharedAccess | Out-Null
+    Stop-Service TrkWks | Out-Null
+    Stop-Service SysMain | Out-Null
+
+    #Set services startup type to disabled
+    Set-Service RetailDemo -StartupType Disabled
+    Set-Service "diagnosticshub.standardcollector.service" -StartupType Disabled
+	Set-Service MapsBroker  -StartupType Disabled
+	Set-Service NetTcpPortSharing  -StartupType Disabled
+	Set-Service RemoteAccess -StartupType Disabled
+	Set-Service RemoteRegistry -StartupType Disabled 
+	Set-Service SharedAccess -StartupType Disabled
+    Set-Service TrkWks -StartupType Disabled 
+    Set-Service SysMain -StartupType Disabled
+
 	Write-Host "Done."
 })
 
 $EnableServices.Add_Click( {
-	Set-Service RetailDemo -StartupType Automatic -ErrorAction SilentlyContinue
-	Set-Service "diagnosticshub.standardcollector.service" -StartupType Automatic -ErrorAction SilentlyContinue
-	Set-Service MapsBroker  -StartupType Automatic -ErrorAction SilentlyContinue
-	Set-Service NetTcpPortSharing  -StartupType Automatic -ErrorAction SilentlyContinue
-	Set-Service RemoteAccess -StartupType Automatic -ErrorAction SilentlyContinue 
-	Set-Service RemoteRegistry -StartupType Automatic -ErrorAction SilentlyContinue 
-	Set-Service SharedAccess -StartupType Automatic -ErrorAction SilentlyContinue 
-    Set-Service TrkWks -StartupType Automatic -ErrorAction SilentlyContinue 
+$ErrorActionPreference = 'SilentlyContinue'
+
+	Set-Service RetailDemo -StartupType Automatic
+	Set-Service "diagnosticshub.standardcollector.service" -StartupType Automatic
+	Set-Service MapsBroker -StartupType Automatic
+	Set-Service NetTcpPortSharing -StartupType Automatic
+	Set-Service RemoteAccess -StartupType Automatic 
+	Set-Service RemoteRegistry -StartupType Automatic
+	Set-Service SharedAccess -StartupType Automatic
+    Set-Service TrkWks -StartupType Automatic
+    Set-Service SysMain -StartupType Automatic
     Write-Host "Done."
 })
 
