@@ -429,18 +429,9 @@ $UninstallAppsSelectively.Add_Click( {
     
     # List of UWP apps that won't be recommended for removal
     $UncheckedAppxPackages = @(
-        # AMD Radeon UWP panel
-        "AdvancedMicroDevicesInc*",
-    
-        # Intel Graphics Control Center
-        "AppUp.IntelGraphicsControlPanel",
-        "AppUp.IntelGraphicsExperience",
     
         # Calculator
         "Microsoft.WindowsCalculator",
-    
-        # Debian - WSL
-        "TheDebianProject.DebianGNULinux",
     
         # Microsoft Office
         "Microsoft.Office.Desktop.OneNote",
@@ -454,21 +445,9 @@ $UninstallAppsSelectively.Add_Click( {
         # Microsoft Store
         "Microsoft.WindowsStore",
     
-        # NVIDIA Control Panel
-        "NVIDIACorp.NVIDIAControlPanel",
-    
         # Photos (and Video Editor)
         "Microsoft.Windows.Photos",
         "Microsoft.Photos.MediaEngineDLC",
-    
-        # Realtek Audio Console
-        "RealtekSemiconductorCorp.RealtekAudioControl",
-    
-        # Sticky Notes
-        "Microsoft.MicrosoftStickyNotes",
-    
-        # Screen Sketch
-        "Microsoft.ScreenSketch",
     
         # Xbox Identity Provider
         "Microsoft.XboxIdentityProvider",
