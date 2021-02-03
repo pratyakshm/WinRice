@@ -785,11 +785,6 @@ $ChocInstall.Add_Click( {
     Write-Host "ChocInstall has finished the jobs."
 })
 
-$InstallNet35.Add_Click( {
-    Write-Host "Installing dotNET 3.5..."
-    DISM /Online /Enable-Feature /FeatureName:NetFx3 /All /NoRestart /Quiet
-    Write-Host "Done."
-})
 
 $InstallWSL.Add_Click( {
     Write-Host "Installing WSL..."
