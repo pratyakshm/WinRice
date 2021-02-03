@@ -1,4 +1,4 @@
-# CleanWin v0.3.4
+# CleanWin v0.3.5
 # This file is a part of the CleanWin software
 # Copyright (c) 2021 PratyakshM <pratyakshm@protonmail.com>
 # All rights reserved.
@@ -52,7 +52,7 @@ Add-Type -AssemblyName System.Windows.Forms
 Function screen {
     Clear-Host
     Start-Sleep 1
-    Write-Host "                                        CleanWin v0.3.4"
+    Write-Host "                                        CleanWin v0.3.5"
     Write-Warning "The GUI window might freeze for an extended period of time while it's performing a task."
 }
 
@@ -62,7 +62,7 @@ screen
 
 $Form = New-Object System.Windows.Forms.Form
 $Form.ClientSize = '610,480'
-$Form.Text = "CleanWin v0.3.4"
+$Form.Text = "CleanWin v0.3.5"
 $Form.TopMost = $false
 
 
