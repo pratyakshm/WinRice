@@ -326,10 +326,9 @@ $Label7.Location = New-Object System.Drawing.Point(10,450)
 $Label7.Font = 'Segoe UI,6,style=Monospace' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label6, $Label7, $UninstallAllBloatApps, 
-$UninstallAppsSelectively, $InstallChoco ,$ChocInstall, $InstallWSL, 
-$UninstallBloatFeatures, $DisableDataCollection, $DisableTelemetry,
-$EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $DisableStickyKeys, 
-$EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, $RevertExplorerChanges, 
+$UninstallAppsSelectively, $InstallChoco ,$ChocInstall, $InstallWSL, $UninstallBloatFeatures, $DisableDataCollection, $DisableTelemetry,
+$EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $RevertExplorerChanges, $DisableStickyKeys, 
+$EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, 
 $DisableAutoUpdates, $EnableAutoUpdates, $DisableServices, $EnableServices, $DisableTasks, $EnableTasks))
 
 $CWFolder = "C:\Temp\CleanWin"
