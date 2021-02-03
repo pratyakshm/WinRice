@@ -1254,27 +1254,6 @@ $EnableTelemetry.Add_Click( {
     Write-Host "Done."
 })
 
-$OOShutup10.Add_Click( {
-    $ErrorActionPreference = 'SilentlyContinue'
-	Import-Module BitsTransfer
-	Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/CleanWin/main/files/ooshutup10.cfg" -Destination ooshutup10.cfg
-	Start-BitsTransfer -Source "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe" -Destination OOSU10.exe
-    ./OOSU10.exe ooshutup10.cfg /quiet
-    taskkill /f /im OOSU10.exe
-    Remove-Item ooshutup10.cfg
-    Remove-Item  OOSU10.exe
-    Write-Host "Done."
-    })
-
-$HostsTelemetry.Add_Click( {
-    $ErrorActionPreference = 'SilentlyContinue'
-    Import-Module BitsTransfer
-    Start-BitsTransfer -Source "https://raw.githubusercontent.com/pratyakshm/CleanWin/main/files/hosts-telemetry.bat" -Destination hoststelemetry.bat
-    ./hoststelemetry.bat /quiet
-    Remove-Item hoststelemetry.bat
-    Write-Host "Done."
-})
-
 $FullBandwidth.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
     $Bandwidth = "HKLM:\SOFTWARE\Policies\Microsoft\Psched"
