@@ -186,14 +186,14 @@ $Label4.Font = 'Segoe UI,12,style=Bold'
 $CleanExplorer = New-Object System.Windows.Forms.Button
 $CleanExplorer.Text = "Clean Windows Explorer"
 $CleanExplorer.Width = 140
-$CleanExplorer.Height = 40
+$CleanExplorer.Height = 43
 $CleanExplorer.Location = New-Object System.Drawing.Point(320,35)
 $CleanExplorer.Font = 'Segoe UI,10'
 
 $RevertExplorerChanges = New-Object System.Windows.Forms.Button
-$RevertExplorerChanges.Text = "Revert Clean Windows Explorer"
+$RevertExplorerChanges.Text = "Revert Windows Explorer tweaks"
 $RevertExplorerChanges.Width = 140
-$RevertExplorerChanges.Height = 40 
+$RevertExplorerChanges.Height = 43
 $RevertExplorerChanges.Location = New-Object System.Drawing.Point(460,35)
 $RevertExplorerChanges.Font = 'Segoe UI,10'
 
@@ -201,42 +201,42 @@ $DisableStickyKeys = New-Object System.Windows.Forms.Button
 $DisableStickyKeys.Text = "Disable Sticky keys"
 $DisableStickyKeys.Width = 140
 $DisableStickyKeys.Height = 40
-$DisableStickyKeys.Location = New-Object System.Drawing.Point(320,75)
+$DisableStickyKeys.Location = New-Object System.Drawing.Point(320,78)
 $DisableStickyKeys.Font = 'Segoe UI,10'
 
 $EnablePrtScrForSnip = New-Object System.Windows.Forms.Button
 $EnablePrtScrForSnip.Text = "Use PrtScr to open Screen Snip"
 $EnablePrtScrForSnip.Width = 140
 $EnablePrtScrForSnip.Height = 40
-$EnablePrtScrForSnip.Location = New-Object System.Drawing.Point(460,75)
+$EnablePrtScrForSnip.Location = New-Object System.Drawing.Point(460,78)
 $EnablePrtScrForSnip.Font = 'Segoe UI,10'
 
 $Hide3DObjects = New-Object System.Windows.Forms.Button
 $Hide3DObjects.Text = "Hide 3D objects"
 $Hide3DObjects.Width = 140
 $Hide3DObjects.Height = 40
-$Hide3DObjects.Location = New-Object System.Drawing.Point(460,115)
+$Hide3DObjects.Location = New-Object System.Drawing.Point(460,118)
 $Hide3DObjects.Font = 'Segoe UI,10'
 
 $ShowVerboseStatus = New-Object System.Windows.Forms.Button
 $ShowVerboseStatus.Text = "Show Verbose status"
 $ShowVerboseStatus.Width = 140
 $ShowVerboseStatus.Height = 40
-$ShowVerboseStatus.Location = New-Object System.Drawing.Point(320,115)
+$ShowVerboseStatus.Location = New-Object System.Drawing.Point(320,118)
 $ShowVerboseStatus.Font = 'Segoe UI,10'
 
 $ShowSeconds = New-Object System.Windows.Forms.Button
 $ShowSeconds.Text = "Show seconds in taskbar"
 $ShowSeconds.Width = 140
 $ShowSeconds.Height = 40
-$ShowSeconds.Location = New-Object System.Drawing.Point(320,155)
+$ShowSeconds.Location = New-Object System.Drawing.Point(320,158)
 $ShowSeconds.Font = 'Segoe UI,10'
 
 $DisableBlurLockScreen = New-Object System.Windows.Forms.Button
 $DisableBlurLockScreen.Text = "Disable blur in lock screen"
 $DisableBlurLockScreen.Width = 140
 $DisableBlurLockScreen.Height = 40
-$DisableBlurLockScreen.Location = New-Object System.Drawing.Point(460,155)
+$DisableBlurLockScreen.Location = New-Object System.Drawing.Point(460,158)
 $DisableBlurLockScreen.Font = 'Segoe UI,10'
 
 ############# TASKS & SERVICES ###################
