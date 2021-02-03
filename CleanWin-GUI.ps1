@@ -61,7 +61,7 @@ screen
 ### BEGIN GUI ###
 
 $Form = New-Object System.Windows.Forms.Form
-$Form.ClientSize = '610,565'
+$Form.ClientSize = '610,480'
 $Form.Text = "CleanWin v0.3.4"
 $Form.TopMost = $false
 
@@ -126,63 +126,49 @@ $Label3.Text = "                        Privacy"
 $Label3.AutoSize = $true
 $Label3.Width = 25
 $Label3.Height = 10
-$Label3.Location = New-Object System.Drawing.Point(10,181)
+$Label3.Location = New-Object System.Drawing.Point(10,190)
 $Label3.Font = 'Segoe UI,12,style=Bold'
-
-$OOShutup10 = New-Object System.Windows.Forms.Button
-$OOShutup10.Text = 'Apply O&OShutup10 config'
-$OOShutup10.Width = 140
-$OOShutup10.Height = 45
-$OOShutup10.Location = New-Object System.Drawing.Point(10, 210)
-$OOShutup10.Font = 'Segoe UI,10'
-
-$HostsTelemetry = New-Object System.Windows.Forms.Button
-$HostsTelemetry.Text = 'Block telemetry using hosts'
-$HostsTelemetry.Width = 140
-$HostsTelemetry.Height = 45
-$HostsTelemetry.Location = New-Object System.Drawing.Point(150, 210)
-$HostsTelemetry.Font = 'Segoe UI,10'
 
 $DisableDataCollection = New-Object System.Windows.Forms.Button
 $DisableDataCollection.Text = "Disable Data collection"
 $DisableDataCollection.Width = 140
 $DisableDataCollection.Height = 40
-$DisableDataCollection.Location = New-Object System.Drawing.Point(10,255)
+$DisableDataCollection.Location = New-Object System.Drawing.Point(10,220)
 $DisableDataCollection.Font = 'Segoe UI,10'
 
 $EnableDataCollection = New-Object System.Windows.Forms.Button
 $EnableDataCollection.Text = "Enable Data collection"
 $EnableDataCollection.Width = 140
 $EnableDataCollection.Height = 40
-$EnableDataCollection.Location = New-Object System.Drawing.Point(150,255)
+$EnableDataCollection.Location = New-Object System.Drawing.Point(150,220)
 $EnableDataCollection.Font = 'Segoe UI,10'
 
 $DisableTelemetry = New-Object System.Windows.Forms.Button 
 $DisableTelemetry.Text = "Disable Telemetry"
 $DisableTelemetry.Width = 140
 $DisableTelemetry.Height = 40
-$DisableTelemetry.Location = New-Object System.Drawing.Point(10, 295)
+$DisableTelemetry.Location = New-Object System.Drawing.Point(10, 260)
 $DisableTelemetry.Font = 'Segoe UI,10'
 
 $EnableTelemetry = New-Object System.Windows.Forms.Button 
 $EnableTelemetry.Text = "Enable Telemetry"
 $EnableTelemetry.Width = 140
 $EnableTelemetry.Height = 40
-$EnableTelemetry.Location = New-Object System.Drawing.Point(150, 295)
+$EnableTelemetry.Location = New-Object System.Drawing.Point(150, 260)
 $EnableTelemetry.Font = 'Segoe UI,10'
 
 $FullBandwidth = New-Object System.Windows.Forms.Button 
 $FullBandwidth.Text = "Release Bandwidth"
 $FullBandwidth.Width = 140
 $FullBandwidth.Height = 40
-$FullBandwidth.Location = New-Object System.Drawing.Point(10, 335)
+$FullBandwidth.Location = New-Object System.Drawing.Point(10, 300)
 $FullBandwidth.Font = 'Segoe UI,10'
 
 $ReserveBandwidth = New-Object System.Windows.Forms.Button 
 $ReserveBandwidth.Text = "Reserve Bandwidth"
 $ReserveBandwidth.Width = 140
 $ReserveBandwidth.Height = 40
-$ReserveBandwidth.Location = New-Object System.Drawing.Point(150, 335)
+$ReserveBandwidth.Location = New-Object System.Drawing.Point(150, 300)
 $ReserveBandwidth.Font = 'Segoe UI,10'
 
 
@@ -204,12 +190,12 @@ $CleanExplorer.Height = 40
 $CleanExplorer.Location = New-Object System.Drawing.Point(320,35)
 $CleanExplorer.Font = 'Segoe UI,10'
 
-$UndoCleanExplorer = New-Object System.Windows.Forms.Button
-$UndoCleanExplorer.Text = "Revert Clean Windows Explorer"
-$UndoCleanExplorer.Width = 140
-$UndoCleanExplorer.Height = 40 
-$UndoCleanExplorer.Location = New-Object System.Drawing.Point(460,35)
-$UndoCleanExplorer.Font = 'Segoe UI,10'
+$RevertExplorerChanges = New-Object System.Windows.Forms.Button
+$RevertExplorerChanges.Text = "Revert Clean Windows Explorer"
+$RevertExplorerChanges.Width = 140
+$RevertExplorerChanges.Height = 40 
+$RevertExplorerChanges.Location = New-Object System.Drawing.Point(460,35)
+$RevertExplorerChanges.Font = 'Segoe UI,10'
 
 $DisableStickyKeys = New-Object System.Windows.Forms.Button
 $DisableStickyKeys.Text = "Disable Sticky keys"
@@ -218,84 +204,40 @@ $DisableStickyKeys.Height = 40
 $DisableStickyKeys.Location = New-Object System.Drawing.Point(320,75)
 $DisableStickyKeys.Font = 'Segoe UI,10'
 
-$EnableStickyKeys = New-Object System.Windows.Forms.Button
-$EnableStickyKeys.Text = "Enable Sticky keys"
-$EnableStickyKeys.Width = 140
-$EnableStickyKeys.Height = 40
-$EnableStickyKeys.Location = New-Object System.Drawing.Point(460,75)
-$EnableStickyKeys.Font = 'Segoe UI,10'
-
 $EnablePrtScrForSnip = New-Object System.Windows.Forms.Button
 $EnablePrtScrForSnip.Text = "Use PrtScr to open Screen Snip"
 $EnablePrtScrForSnip.Width = 140
 $EnablePrtScrForSnip.Height = 40
-$EnablePrtScrForSnip.Location = New-Object System.Drawing.Point(320,115)
+$EnablePrtScrForSnip.Location = New-Object System.Drawing.Point(460,75)
 $EnablePrtScrForSnip.Font = 'Segoe UI,10'
-
-$DisablePrtScrForSnip = New-Object System.Windows.Forms.Button
-$DisablePrtScrForSnip.Text = "Don't use PrtScr to open Screen snip"
-$DisablePrtScrForSnip.Width = 140
-$DisablePrtScrForSnip.Height = 40
-$DisablePrtScrForSnip.Location = New-Object System.Drawing.Point(460,115)
-$DisablePrtScrForSnip.Font = 'Segoe UI,10'
 
 $Hide3DObjects = New-Object System.Windows.Forms.Button
 $Hide3DObjects.Text = "Hide 3D objects"
 $Hide3DObjects.Width = 140
 $Hide3DObjects.Height = 40
-$Hide3DObjects.Location = New-Object System.Drawing.Point(320,155)
+$Hide3DObjects.Location = New-Object System.Drawing.Point(460,115)
 $Hide3DObjects.Font = 'Segoe UI,10'
 
-$Show3DObjects = New-Object System.Windows.Forms.Button
-$Show3DObjects.Text = "Restore 3D objects"
-$Show3DObjects.Width = 140
-$Show3DObjects.Height = 40
-$Show3DObjects.Location = New-Object System.Drawing.Point(460,155)
-$Show3DObjects.Font = 'Segoe UI,10'
-
 $ShowVerboseStatus = New-Object System.Windows.Forms.Button
-$ShowVerboseStatus.Text = "Show verbose status"
+$ShowVerboseStatus.Text = "Show Verbose status"
 $ShowVerboseStatus.Width = 140
 $ShowVerboseStatus.Height = 40
-$ShowVerboseStatus.Location = New-Object System.Drawing.Point(320,195)
+$ShowVerboseStatus.Location = New-Object System.Drawing.Point(320,115)
 $ShowVerboseStatus.Font = 'Segoe UI,10'
 
-$HideVerboseStatus = New-Object System.Windows.Forms.Button
-$HideVerboseStatus.Text = "Hide verbose status"
-$HideVerboseStatus.Width = 140
-$HideVerboseStatus.Height = 40
-$HideVerboseStatus.Location = New-Object System.Drawing.Point(460,195)
-$HideVerboseStatus.Font = 'Segoe UI,10'
-
-$DisableBlurLockScreen = New-Object System.Windows.Forms.Button
-$DisableBlurLockScreen.Text = "Turn off blur in lock screen"
-$DisableBlurLockScreen.Width = 140
-$DisableBlurLockScreen.Height = 40
-$DisableBlurLockScreen.Location = New-Object System.Drawing.Point(320,235)
-$DisableBlurLockScreen.Font = 'Segoe UI,10'
-
-$EnableBlurLockScreen = New-Object System.Windows.Forms.Button
-$EnableBlurLockScreen.Text = "Turn on blur in lock screen"
-$EnableBlurLockScreen.Width = 140
-$EnableBlurLockScreen.Height = 40
-$EnableBlurLockScreen.Location = New-Object System.Drawing.Point(460,235)
-$EnableBlurLockScreen.Font = 'Segoe UI,10'
-
 $ShowSeconds = New-Object System.Windows.Forms.Button
-$ShowSeconds.Text = "Show Seconds in Taskbar"
+$ShowSeconds.Text = "Show seconds in taskbar"
 $ShowSeconds.Width = 140
 $ShowSeconds.Height = 40
-$ShowSeconds.Location = New-Object System.Drawing.Point(320,275)
+$ShowSeconds.Location = New-Object System.Drawing.Point(320,155)
 $ShowSeconds.Font = 'Segoe UI,10'
 
-$HideSeconds = New-Object System.Windows.Forms.Button
-$HideSeconds.Text = "Hide Seconds in Taskbar"
-$HideSeconds.Width = 140
-$HideSeconds.Height = 40
-$HideSeconds.Location = New-Object System.Drawing.Point(460,275)
-$HideSeconds.Font = 'Segoe UI,10'
-
-
+$DisableBlurLockScreen = New-Object System.Windows.Forms.Button
+$DisableBlurLockScreen.Text = "Disable blur in lock screen"
+$DisableBlurLockScreen.Width = 140
+$DisableBlurLockScreen.Height = 40
+$DisableBlurLockScreen.Location = New-Object System.Drawing.Point(460,155)
+$DisableBlurLockScreen.Font = 'Segoe UI,10'
 
 ############# TASKS & SERVICES ###################
 
@@ -304,65 +246,50 @@ $Label5.Text = "             Tasks and Services"
 $Label5.AutoSize = $true
 $Label5.Width = 25
 $Label5.Height = 10
-$Label5.Location = New-Object System.Drawing.Point(320,328)
+$Label5.Location = New-Object System.Drawing.Point(320,218)
 $Label5.Font = 'Segoe UI,12,style=Bold' 
 
 $DisableAutoUpdates = New-Object System.Windows.Forms.Button
 $DisableAutoUpdates.Text = "Disable automatic updates"
 $DisableAutoUpdates.Width = 140
 $DisableAutoUpdates.Height = 40
-$DisableAutoUpdates.Location = New-Object System.Drawing.Point(320,355)
+$DisableAutoUpdates.Location = New-Object System.Drawing.Point(320,245)
 $DisableAutoUpdates.Font = 'Segoe UI,10'
 
 $EnableAutoUpdates = New-Object System.Windows.Forms.Button
 $EnableAutoUpdates.Text = "Enable automatic updates"
 $EnableAutoUpdates.Width = 140
 $EnableAutoUpdates.Height = 40
-$EnableAutoUpdates.Location = New-Object System.Drawing.Point(460,355)
+$EnableAutoUpdates.Location = New-Object System.Drawing.Point(460,245)
 $EnableAutoUpdates.Font = 'Segoe UI,10'
-
-$DisableDefrag = New-Object System.Windows.Forms.Button
-$DisableDefrag.Text = "Disable defragmentation"
-$DisableDefrag.Width = 140
-$DisableDefrag.Height = 44
-$DisableDefrag.Location = New-Object System.Drawing.Point(320,395)
-$DisableDefrag.Font = 'Segoe UI,10'
-
-$EnableDefrag = New-Object System.Windows.Forms.Button
-$EnableDefrag.Text = "Enable defragmentation"
-$EnableDefrag.Width = 140
-$EnableDefrag.Height = 44
-$EnableDefrag.Location = New-Object System.Drawing.Point(460,395)
-$EnableDefrag.Font = 'Segoe UI,10'
 
 $DisableServices = New-Object System.Windows.Forms.Button
 $DisableServices.Text = "Disable unnecessary services"
 $DisableServices.Width = 140
 $DisableServices.Height = 40
-$DisableServices.Location = New-Object System.Drawing.Point(320,439)
+$DisableServices.Location = New-Object System.Drawing.Point(320,285)
 $DisableServices.Font = 'Segoe UI,10'
 
 $EnableServices = New-Object System.Windows.Forms.Button
 $EnableServices.Text = "Enable unnecessary services"
 $EnableServices.Width = 140
 $EnableServices.Height = 40
-$EnableServices.Location = New-Object System.Drawing.Point(460,439)
+$EnableServices.Location = New-Object System.Drawing.Point(460,285)
 $EnableServices.Font = 'Segoe UI,10'
 
 $DisableTasks = New-Object System.Windows.Forms.Button
 $DisableTasks.Text = "Disable unnecessary tasks"
 $DisableTasks.Width = 140
 $DisableTasks.Height = 40
-$DisableTasks.Location = New-Object System.Drawing.Point(320,479)
+$DisableTasks.Location = New-Object System.Drawing.Point(320,325)
 $DisableTasks.Font = 'Segoe UI,10'
 
 $EnableTasks = New-Object System.Windows.Forms.Button
 $EnableTasks.Text = "Enable unnecessary tasks"
 $EnableTasks.Width = 140
 $EnableTasks.Height = 40
-$EnableTasks.Location = New-Object System.Drawing.Point(460,479)
+$EnableTasks.Location = New-Object System.Drawing.Point(460,325)
 $EnableTasks.Font = 'Segoe UI,10'
-
 
 
 ################ MAINTENANCE ##############
@@ -372,21 +299,21 @@ $Label6.Text = "                   Maintenance"
 $Label6.AutoSize = $true
 $Label6.Width = 25
 $Label6.Height = 10
-$Label6.Location = New-Object System.Drawing.Point(10,410)
+$Label6.Location = New-Object System.Drawing.Point(10,350)
 $Label6.Font = 'Segoe UI,12,style=Bold'
 
 $RestartComputer = New-Object System.Windows.Forms.Button 
 $RestartComputer.Text = "Restart this PC"
 $RestartComputer.Width = 140
 $RestartComputer.Height = 40
-$RestartComputer.Location = New-Object System.Drawing.Point(10, 440)
+$RestartComputer.Location = New-Object System.Drawing.Point(10, 380)
 $RestartComputer.Font = 'Segoe UI,10'
 
 $RestartExplorer = New-Object System.Windows.Forms.Button 
 $RestartExplorer.Text = "Restart Windows Explorer"
 $RestartExplorer.Width = 140
 $RestartExplorer.Height = 40
-$RestartExplorer.Location = New-Object System.Drawing.Point(150, 440)
+$RestartExplorer.Location = New-Object System.Drawing.Point(150, 380)
 $RestartExplorer.Font = 'Segoe UI,10'
 
 
@@ -395,16 +322,15 @@ $Label7.Text = "CleanWin is FOSS, and shall only be downloaded from https://gith
 $Label7.AutoSize = $true
 $Label7.Width = 25
 $Label7.Height = 10
-$Label7.Location = New-Object System.Drawing.Point(10,538)
-$Label7.Font = 'Segoe UI,8,style=Monospace' 
+$Label7.Location = New-Object System.Drawing.Point(10,450)
+$Label7.Font = 'Segoe UI,6,style=Monospace' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label6, $Label7, $UninstallAllBloatApps, 
 $UninstallAppsSelectively, $InstallChoco ,$ChocoInstall, $InstallWSL, 
-$UninstallBloatFeatures, $OOShutup10, $DisableDataCollection, $DisableTelemetry, $HostsTelemetry,
+$UninstallBloatFeatures, $DisableDataCollection, $DisableTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $DisableStickyKeys, 
-$EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, $UndoCleanExplorer, 
-$EnableStickyKeys, $DisablePrtScrForSnip, $Show3DObjects, $HideVerboseStatus,  $EnableBlurLockScreen, $HideSeconds, 
-$DisableAutoUpdates, $DisableDefrag, $EnableAutoUpdates, $EnableDefrag, $DisableServices, $EnableServices, $DisableTasks, $EnableTasks))
+$EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, $RevertExplorerChanges, 
+$DisableAutoUpdates, $EnableAutoUpdates, $DisableServices, $EnableServices, $DisableTasks, $EnableTasks))
 
 $CWFolder = "C:\Temp\CleanWin"
 If (Test-Path $CWFolder) {
@@ -1002,10 +928,10 @@ $START_MENU_LAYOUT = @"
 
 })
 
-$UndoCleanExplorer.Add_Click( {
+$RevertExplorerChanges.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
 
-    Write-Host "Reverting changes..."
+    Write-Host "Reverting to stock..."
 
     # Enable Sticky keys prompt
     Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "510"
@@ -1040,6 +966,16 @@ $UndoCleanExplorer.Add_Click( {
 	$Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
 	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 0
     Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 0
+    
+    # Hide Verbose Status
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "VerboseStatus" -Type DWord -Value 0
+
+    # Enable lock screen blur
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "DisableAcrylicBackgroundOnLogon" -Type DWord -Value 0
+
+    # Disable PrtScr for Snip
+    Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
+
 
     # Restart explorer.exe to reflect changes immeditately and then provide 2 seconds of breathing time
     Stop-Process -ProcessName explorer
@@ -1055,21 +991,9 @@ $ShowVerboseStatus.Add_Click( {
     Write-Host "Done."
 })
 
-$HideVerboseStatus.Add_Click( {
-    $ErrorActionPreference = 'SilentlyContinue'
-    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "VerboseStatus" -Type DWord -Value 0
-    Write-Host "Done."
-})
-
 $DisableBlurLockScreen.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "DisableAcrylicBackgroundOnLogon" -Type DWord -Value 1
-    Write-Host "Done." 
-})
-
-$EnableBlurLockScreen.Add_Click( {
-    $ErrorActionPreference = 'SilentlyContinue'
-    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "DisableAcrylicBackgroundOnLogon" -Type DWord -Value 0
     Write-Host "Done." 
 })
 
@@ -1077,12 +1001,6 @@ $EnableBlurLockScreen.Add_Click( {
 $ShowSeconds.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
-    Write-Host "Done."
-})
-
-$HideSeconds.Add_Click( {
-    $ErrorActionPreference = 'SilentlyContinue'
-    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 0
     Write-Host "Done."
 })
 
@@ -1103,25 +1021,8 @@ $Hide3DObjects.Add_Click( {
     Write-Host "Done."
 })
 
-$Show3DObjects.Add_Click( {
-    $Restore3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
-    $Restore3DObjects2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-    $Restore3DObjects3 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-    If (!(Test-Path $Restore3DObjects1)) {
-        New-Item -Path $Restore3DObjects1 | Out-Null
-        }
-    Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy"
-    Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy"
-    Write-Host "Done."
-})
-
 $EnablePrtScrForSnip.Add_Click( {
     Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 1
-    Write-Host "Done."
-})
-
-$DisablePrtScrForSnip.Add_Click( {
-    Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
     Write-Host "Done."
 })
 
@@ -1130,10 +1031,6 @@ $DisableStickyKeys.Add_Click( {
     Write-Host "Done."
 })
 
-$EnableStickyKeys.Add_Click( {
-    Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "510"
-    Write-Host "Done."
-})
 
 
 #################
@@ -1422,16 +1319,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 $EnableAutoUpdates.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
     Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Recurse -ErrorAction SilentlyContinue 
-    Write-Host "Done."
-})
-
-$DisableDefrag.Add_Click( {
-    Disable-ScheduledTask -TaskName "Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
-    Write-Host "Done."
-})
-
-$EnableDefrag.Add_Click( {
-    Enable-ScheduledTask -TaskName "Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
     Write-Host "Done."
 })
 
