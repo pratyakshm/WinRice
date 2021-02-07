@@ -91,19 +91,19 @@ $UninstallAppsSelectively.Height = 45
 $UninstallAppsSelectively.Location = New-Object System.Drawing.Point(150, 38)
 $UninstallAppsSelectively.Font = 'Segoe UI,10'
 
-$InstallChoco = New-Object System.Windows.Forms.Button
-$InstallChoco.Text = "Install Chocolatey"
-$InstallChoco.Width = 140
-$InstallChoco.Height = 45
-$InstallChoco.Location = New-Object System.Drawing.Point(10,83)
-$InstallChoco.Font = 'Segoe UI,10'
+$InstallWinGet = New-Object System.Windows.Forms.Button
+$InstallWinGet.Text = "Install WinGet"
+$InstallWinGet.Width = 140
+$InstallWinGet.Height = 45
+$InstallWinGet.Location = New-Object System.Drawing.Point(10,83)
+$InstallWinGet.Font = 'Segoe UI,10'
 
-$ChocInstall = New-Object System.Windows.Forms.Button
-$ChocInstall.Text = "ChocInstall"
-$ChocInstall.Width = 140
-$ChocInstall.Height = 45
-$ChocInstall.Location = New-Object System.Drawing.Point(150, 83)
-$ChocInstall.Font = 'Segoe UI,10'
+$Winstall = New-Object System.Windows.Forms.Button
+$Winstall.Text = "Winstall"
+$Winstall.Width = 140
+$Winstall.Height = 45
+$Winstall.Location = New-Object System.Drawing.Point(150, 83)
+$Winstall.Font = 'Segoe UI,10'
 
 $InstallWSL = New-Object System.Windows.Forms.Button
 $InstallWSL.Text = "Install WSL"
@@ -326,7 +326,7 @@ $Label7.Location = New-Object System.Drawing.Point(10,450)
 $Label7.Font = 'Segoe UI,6,style=Monospace' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label6, $Label7, $UninstallAllBloatApps, 
-$UninstallAppsSelectively, $InstallChoco ,$ChocInstall, $InstallWSL, $UninstallBloatFeatures, $DisableDataCollection, $DisableTelemetry,
+$UninstallAppsSelectively, $InstallWinGet ,$Winstall, $InstallWSL, $UninstallBloatFeatures, $DisableDataCollection, $DisableTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $RevertExplorerChanges, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, 
 $DisableAutoUpdates, $EnableAutoUpdates, $DisableServices, $EnableServices, $DisableTasks, $EnableTasks))
@@ -335,7 +335,7 @@ $CWFolder = "C:\Temp\CleanWin"
 If (Test-Path $CWFolder) {
 }
 Else {
-    New-Item -Path "${CWFolder}" -ItemType Directory
+    New-Item -Path "${CWFolder}" -ItemType Directory | Out-Null 
 }
 
 Start-Transcript -OutputDirectory "${CWFolder}" | Out-Null 
@@ -769,21 +769,26 @@ $START_MENU_LAYOUT = @"
 
 })
 
-$InstallChoco.Add_Click( {
-    Write-Host "Installing Chocolatey package manager..."
-	Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-	choco install chocolatey-core.extension -y
+$InstallWinGet.Add_Click( {
+	Import-Module BitsTransfer 
+    Write-Host "Downloading required files..."
+    Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
+    Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+    Write-Host "Installing Windows Package Manager (WinGet)..."
+    Add-AppxPackage -Path .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -DependencyPath .\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+    Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
+    Remove-Item Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
 	Write-Host "Done."
 	Start-Sleep 1
 })
 
-$ChocInstall.Add_Click( {
-    Get-Content 'ChocInstall.txt' | Foreach-Object {
+$Winstall.Add_Click( {
+    Get-Content 'Winstall.txt' | Foreach-Object {
         $App = $_.Split('=')
         Write-Host "Installing $App..."
-		choco install $App -Y
+		winget install $App
     }
-    Write-Host "ChocInstall has finished the jobs."
+    Write-Host "Winstall has finished the jobs."
 })
 
 
