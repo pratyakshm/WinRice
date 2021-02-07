@@ -586,7 +586,8 @@ $ErrorActionPreference = 'SilentlyContinue'
     $Bloatware = @(
     "Microsoft.549981C3F5F10"
     "Microsoft.BingNews"
-    "Microsoft.BingWeather" 
+    "Microsoft.BingWeather"
+    "Microsoft.GamingServices" 
     "Microsoft.GetHelp" 
     "Microsoft.Getstarted" 
     "Microsoft.Messaging"
