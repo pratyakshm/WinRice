@@ -54,6 +54,8 @@ Function screen {
     Start-Sleep 1
     Write-Host "                                        CleanWin v0.3.5"
     Write-Warning "The GUI window might freeze for an extended period of time while it's performing a task."
+    Write-Host " "
+    Write-Host " "
 }
 
 screen
