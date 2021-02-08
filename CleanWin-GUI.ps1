@@ -791,12 +791,18 @@ $InstallWinGet.Add_Click( {
 })
 
 $Winstall.Add_Click( {
-    Get-Content 'Winstall.txt' | Foreach-Object {
-        $App = $_.Split('=')
-        Write-Host "Installing $App..."
-		winget install $App
+    If (Test-Path Winstall.txt) {
+        Get-Content 'Winstall.txt' | Foreach-Object {
+            $App = $_.Split('=')
+            Write-Host "Installing $App..."
+            winget install $App
+        }
+        Write-Host "Winstall has finished the jobs."
     }
-    Write-Host "Winstall has finished the jobs."
+    else {
+        Write-Host "ERROR: Winstall could not perform the requested jobs. Reason: Could not find file named 'Winstall.txt'. "
+        Write-Host "Note that the filename 'Winstall.txt' is case-sensitive and it should exist in the same folder as CleanWin."
+    }
 })
 
 
