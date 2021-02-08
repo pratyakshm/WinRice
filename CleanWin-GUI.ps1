@@ -807,11 +807,21 @@ $Winstall.Add_Click( {
 
 
 $InstallWSL.Add_Click( {
-    Write-Host "Installing WSL..."
-    dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /all /NoRestart /Quiet
-	dism.exe /Online /Enable-Feature /FeatureName:VirtualMachinePlatform /All /NoRestart /Quiet
-    dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V /All /NoRestart	/Quiet
-    Write-Host "Done."
+    # Import BitsTransfer module and download NetTestFile
+    Import-Module BitsTransfer 
+    Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/NetTestFile
+    # If the file exists, proceed with installing WSL, else inform user about no internet connection.
+    If (Test-Path NetTestFile) {
+        Remove-item NetTestFile
+        Write-Host "Installing WSL..."
+        dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /all /NoRestart /Quiet
+        dism.exe /Online /Enable-Feature /FeatureName:VirtualMachinePlatform /All /NoRestart /Quiet
+        dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V /All /NoRestart	/Quiet
+        Write-Host "Done."
+    } 
+    else {
+        Write-Host "WSL installation has failed because CleanWin can't connect to the internet."
+    }
 })
 
 $UninstallBloatFeatures.Add_Click( {
