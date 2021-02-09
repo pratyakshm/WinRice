@@ -9,14 +9,12 @@
 
 ## How to run:
 1. Read the full documentation properly before proceeding. 
-2. Download the latest release from the [Releases page](https://github.com/pratyakshm/CleanWin/releases), unzip it and run what you want between CLI/GUI. 
-   -   (Ignore SmartScreen errors, these might get fixed in a future release).   
-
+2. Download the latest release from the [Releases page](https://github.com/pratyakshm/CleanWin/releases), unzip it and run what you want between CLI/GUI (ignore SmartScreen errors, they exist because the executables aren't signed).
 ## List of tasks:
 This section contains the list of tasks that CleanWin performs. They're grouped in the following categories (sorted by alphabetical order):
 <details>
 <summary>Apps & Features</summary>
-Apps removed:   
+Uninstall all bloat apps:   
   <br>3D Viewer   
   <br>Alarms & Clock
   <br>Cortana  
@@ -50,12 +48,9 @@ Apps removed:
   <br>Xbox
   <br>Xbox Game bar
   <br>Your Phone
-  <br><br>Apps installed:
-  <br>Chocolatey Package Manager
-  <br>7zip
-  <br><br>Optional features:
-  <br>Install WSL (optional)
-  <br>CLI-only: Turn on dotNET 3.5 (optional)
+  <br><br>Install features:
+  <br>Install WSL
+  <br><br>Uninstall bloat features:
   <br>Uninstall Math Recognizer 
   <br>Uninstall Windows Hello Face
   <br>Uninstall Work Folders
@@ -63,30 +58,25 @@ Apps removed:
 
 <details>
  <summary>Privacy & Security</summary>
-  Privacy:
-  <br>Turn off data collection/telemetry (level full, optional)
-  <br>O&OShutup10 config (optional)
-  <br>Turn off maps updates
-  <br>Turn off feedback
-  <br>Turn off advertising ID
-  <br>Turn off location tracking
-  <br>Turn off background apps
-  <br>Turn off speech recognition and access to language list for personalization
-  <br>Turn on automatic login when PC restarts after installing a Windows Update
-  <br><br>Security:
-  <br>Turn off Meltdown compatibility flag
+ Disable data collection:
+  <br>Disable Feedback
+  <br>Disable Maps updates
+  <br>Disable Advertising ID 
+  <br>Disable Location tracking 
+  <br>Disable background apps
+  <br>Disable access to language list
+  <br><br>Turn off telemetry
 </details>
 
 <details>
  <summary>Tasks & Services</summary>
-  Services:
-  <br>Turn off automatic Windows updates (optional)
+  Disable the following unnecessary services:
   <br>Turn off Windows Update delivery via P2P and LAN
   <br>Turn off AutoPlay
   <br>Turn off Autorun
-  <br>Turn off disk defragmentation (optional)
   <br>Set BIOS time to UTC
-  <br><br>Tasks:
+  <br><br>Disable automatic Windows Updates
+  <br><br>Disable the following unnecessary tasks:
   <br>Turn off Consolidator
   <br>Turn off DmClient
   <br>Turn off DmClientOnScenarioDownload
