@@ -1,11 +1,11 @@
 # CleanWin
-
-![Minimum Supported PowerShell Version](https://img.shields.io/badge/PowerShell-5.1-brightgreen.svg?style=flat-square)
 ![Stars](https://img.shields.io/github/stars/pratyakshm/CleanWin?style=flat-square)
 [![Downloads](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=brightgreen&logoColor=brightgreen&style=flat-square)](https://github.com/pratyakshm/CleanWin/releases)
 [![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)](https://github.com/pratyakshm/CleanWin/releases/tag/v0.3.3)
 ![Latest release](https://img.shields.io/github/release-date/pratyakshm/CleanWin?style=flat-square)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-important?style=flat-square)](https://paypal.me/pratyakshm)
+
+![PowerShell Support](https://img.shields.io/badge/PowerShell%207-Ready-203349?labelColor=1B232D&style=flat-square&logo=PowerShell)
 
 ## How to run:
 1. Read the full documentation properly before proceeding. 
