@@ -251,19 +251,19 @@ $Label5.Height = 10
 $Label5.Location = New-Object System.Drawing.Point(320,218)
 $Label5.Font = 'Segoe UI,12,style=Bold' 
 
-$DisableAutoUpdates = New-Object System.Windows.Forms.Button
-$DisableAutoUpdates.Text = "Disable automatic updates"
-$DisableAutoUpdates.Width = 140
-$DisableAutoUpdates.Height = 40
-$DisableAutoUpdates.Location = New-Object System.Drawing.Point(320,245)
-$DisableAutoUpdates.Font = 'Segoe UI,10'
+$SetupWindowsUpdate = New-Object System.Windows.Forms.Button
+$SetupWindowsUpdate.Text = "Setup Windows Update"
+$SetupWindowsUpdate.Width = 140
+$SetupWindowsUpdate.Height = 40
+$SetupWindowsUpdate.Location = New-Object System.Drawing.Point(320,245)
+$SetupWindowsUpdate.Font = 'Segoe UI,10'
 
-$EnableAutoUpdates = New-Object System.Windows.Forms.Button
-$EnableAutoUpdates.Text = "Enable automatic updates"
-$EnableAutoUpdates.Width = 140
-$EnableAutoUpdates.Height = 40
-$EnableAutoUpdates.Location = New-Object System.Drawing.Point(460,245)
-$EnableAutoUpdates.Font = 'Segoe UI,10'
+$ResetWindowsUpdates = New-Object System.Windows.Forms.Button
+$ResetWindowsUpdates.Text = "Reset Windows Update"
+$ResetWindowsUpdates.Width = 140
+$ResetWindowsUpdates.Height = 40
+$ResetWindowsUpdates.Location = New-Object System.Drawing.Point(460,245)
+$ResetWindowsUpdates.Font = 'Segoe UI,10'
 
 $DisableServices = New-Object System.Windows.Forms.Button
 $DisableServices.Text = "Disable unnecessary services"
@@ -331,7 +331,7 @@ $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label6,
 $UninstallAppsSelectively, $InstallWinGet ,$Winstall, $InstallWSL, $UninstallBloatFeatures, $DisableDataCollection, $DisableTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $RevertExplorerChanges, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, 
-$DisableAutoUpdates, $EnableAutoUpdates, $DisableServices, $EnableServices, $DisableTasks, $EnableTasks))
+$SetupWindowsUpdate, $ResetWindowsUpdates, $DisableServices, $EnableServices, $DisableTasks, $EnableTasks))
 
 $CWFolder = "C:\Temp\CleanWin"
 If (Test-Path $CWFolder) {
@@ -1303,7 +1303,7 @@ $ReserveBandwidth.Add_Click({
 #####  T A S K S & S E R V I C E S ########
 ###########################################
 
-$DisableAutoUpdates.Add_Click( {
+$SetupWindowsUpdate.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
     $Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
     $Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
@@ -1311,15 +1311,21 @@ $ErrorActionPreference = 'SilentlyContinue'
           New-Item -Path $Update1 | Out-Null
           New-Item -Path $Update2 | Out-Null
           }
+    Set-ItemProperty -Path $Update1 -Name ExcludeWUDriversInQualityUpdate -Type DWord -Value 1
+    Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
+    Set-ItemProperty -Path $Update1 -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
+    Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
+    Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
     Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
     Write-Host "Done."
 })
 
-$EnableAutoUpdates.Add_Click( {
+$ResetWindowsUpdate.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
-    Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Recurse -ErrorAction SilentlyContinue 
+    Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
     Write-Host "Done."
 })
+
 
 $DisableServices.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
