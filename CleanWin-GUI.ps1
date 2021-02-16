@@ -234,12 +234,12 @@ $ShowSeconds.Height = 40
 $ShowSeconds.Location = New-Object System.Drawing.Point(320,158)
 $ShowSeconds.Font = 'Segoe UI,10'
 
-$DisableBlurLockScreen = New-Object System.Windows.Forms.Button
-$DisableBlurLockScreen.Text = "Disable blur in lock screen"
-$DisableBlurLockScreen.Width = 140
-$DisableBlurLockScreen.Height = 40
-$DisableBlurLockScreen.Location = New-Object System.Drawing.Point(460,158)
-$DisableBlurLockScreen.Font = 'Segoe UI,10'
+$ApplyChanges = New-Object System.Windows.Forms.Button
+$ApplyChanges.Text = "Apply changes"
+$ApplyChanges.Width = 140
+$ApplyChanges.Height = 40
+$ApplyChanges.Location = New-Object System.Drawing.Point(460,158)
+$ApplyChanges.Font = 'Segoe UI,10'
 
 ############# TASKS & SERVICES ###################
 
@@ -330,7 +330,7 @@ $Label7.Font = 'Segoe UI,6,style=Monospace'
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label6, $Label7, $UninstallAllBloatApps, 
 $UninstallAppsSelectively, $InstallWinGet ,$Winstall, $InstallWSL, $UninstallBloatFeatures, $DisableDataCollection, $DisableTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $RevertExplorerChanges, $DisableStickyKeys, 
-$EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $DisableBlurLockScreen, $ShowSeconds, 
+$EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $ApplyChanges, $ShowSeconds, 
 $SetupWindowsUpdate, $ResetWindowsUpdates, $DisableServices, $EnableServices, $DisableTasks, $EnableTasks))
 
 $CWFolder = "C:\Temp\CleanWin"
@@ -1014,13 +1014,6 @@ $ShowVerboseStatus.Add_Click( {
     Write-Host "Done."
 })
 
-$DisableBlurLockScreen.Add_Click( {
-    $ErrorActionPreference = 'SilentlyContinue'
-    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "DisableAcrylicBackgroundOnLogon" -Type DWord -Value 1
-    Write-Host "Done." 
-})
-
-
 $ShowSeconds.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
@@ -1054,7 +1047,12 @@ $DisableStickyKeys.Add_Click( {
     Write-Host "Done."
 })
 
-
+$ApplyChanges.Add_Click( {
+    Write-Host "Restarting Windows Explorer to apply changes..."
+    Stop-Process -ProcessName explorer
+    Start-Sleep 4
+    Write-Host "Done."
+})
 
 #################
 #### PRIVACY ####
