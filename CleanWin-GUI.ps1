@@ -65,8 +65,8 @@ screen
 $Form = New-Object System.Windows.Forms.Form
 $Form.ClientSize = '610,400'
 $Form.Text = "CleanWin v0.3.5"
-$Form.TopMost = $false
-
+$Form.TopMost = $false;
+$Form.MaximizeBox = $false
 
 
 ############### APPS AND FEATURES ############################
