@@ -63,7 +63,7 @@ screen
 ### BEGIN GUI ###
 
 $Form = New-Object System.Windows.Forms.Form
-$Form.ClientSize = '610,480'
+$Form.ClientSize = '610,400'
 $Form.Text = "CleanWin v0.3.5"
 $Form.TopMost = $false
 
@@ -293,43 +293,17 @@ $EnableTasks.Height = 40
 $EnableTasks.Location = New-Object System.Drawing.Point(460,325)
 $EnableTasks.Font = 'Segoe UI,10'
 
-
-################ MAINTENANCE ##############
-
-$Label6 = New-Object System.Windows.Forms.Label
-$Label6.Text = "                   Maintenance"
-$Label6.AutoSize = $true
-$Label6.Width = 25
-$Label6.Height = 10
-$Label6.Location = New-Object System.Drawing.Point(10,350)
-$Label6.Font = 'Segoe UI,12,style=Bold'
-
-$RestartComputer = New-Object System.Windows.Forms.Button 
-$RestartComputer.Text = "Restart this PC"
-$RestartComputer.Width = 140
-$RestartComputer.Height = 40
-$RestartComputer.Location = New-Object System.Drawing.Point(10, 380)
-$RestartComputer.Font = 'Segoe UI,10'
-
-$RestartExplorer = New-Object System.Windows.Forms.Button 
-$RestartExplorer.Text = "Restart Windows Explorer"
-$RestartExplorer.Width = 140
-$RestartExplorer.Height = 40
-$RestartExplorer.Location = New-Object System.Drawing.Point(150, 380)
-$RestartExplorer.Font = 'Segoe UI,10'
-
-
 $Label7 = New-Object System.Windows.Forms.Label
 $Label7.Text = "CleanWin is FOSS, and shall only be downloaded from https://github.com/pratyakshm/CleanWin"
 $Label7.AutoSize = $true
 $Label7.Width = 25
 $Label7.Height = 10
-$Label7.Location = New-Object System.Drawing.Point(10,450)
+$Label7.Location = New-Object System.Drawing.Point(10,380)
 $Label7.Font = 'Segoe UI,6,style=Monospace' 
 
-$Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label6, $Label7, $UninstallAllBloatApps, 
+$Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label7, $UninstallAllBloatApps, 
 $UninstallAppsSelectively, $InstallWinGet ,$Winstall, $InstallWSL, $UninstallBloatFeatures, $DisableDataCollection, $DisableTelemetry,
-$EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $RestartComputer, $RestartExplorer, $CleanExplorer, $RevertExplorerChanges, $DisableStickyKeys, 
+$EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $CleanExplorer, $RevertExplorerChanges, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $ApplyChanges, $ShowSeconds, 
 $SetupWindowsUpdate, $ResetWindowsUpdates, $DisableServices, $EnableServices, $DisableTasks, $EnableTasks))
 
@@ -1046,7 +1020,7 @@ $DisableStickyKeys.Add_Click( {
     Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
     Write-Host "Done."
 })
-
+s
 $ApplyChanges.Add_Click( {
     Write-Host "Restarting Windows Explorer to apply changes..."
     Stop-Process -ProcessName explorer
@@ -1392,19 +1366,6 @@ $EnableTasks.Add_Click( {
 	Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
     Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
     Write-Host "Done."
-})
-
-##############################
-##### MAINTENANCE ########
-##############################
-
-
-$RestartComputer.Add_Click( {
-    Restart-Computer -Force
-})
-
-$RestartExplorer.Add_Click( {
-    Stop-Process -ProcessName explorer
 })
 
 [void]$Form.ShowDialog()
