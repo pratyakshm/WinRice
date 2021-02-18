@@ -733,9 +733,6 @@ $START_MENU_LAYOUT = @"
         Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 0
     }
 
-    #Restart Explorer and delete the layout file
-    Stop-Process -name explorer
-
     # Uncomment the next line to make clean start menu default for all new users
     Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
 
