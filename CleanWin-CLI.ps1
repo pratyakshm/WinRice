@@ -14,16 +14,16 @@ $tasks = @(
 	
 ### Privacy changes ###
 	"PrintPrivacyChanges",
-	"DisableTelemetry", 	   # "EnableDataCollection",
-	"DisableActivityHistory",
-	"DisableAdvertisingID",
-	"DisableFeedback",		       
-	"DisableBackgroundApps",     
-	"DisableLangRecommendation",  
-	"DisableLocationTracking",  
-	"DisableMapUpdates",
-	"DisableSuggestions",		  
-	"DisableSpeechRecognition",    
+	"DisableDataCollection", 	   # "EnableDataCollection",
+	# "DisableActivityHistory",
+	# "DisableAdvertisingID",
+	# "DisableFeedback",		       
+	# "DisableBackgroundApps",     
+	# "DisableLangRecommendation",  
+	# "DisableLocationTracking",  
+	# "DisableMapUpdates",
+	# "DisableSuggestions",		  
+	# "DisableSpeechRecognition",    
 	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
@@ -155,45 +155,112 @@ Function PrintPrivacyChanges {
 }
 
 # Disable telemetry
-Function DisableTelemetry {
-		Write-Host "Turning off telemetry..."
+Function DisableDataCollection {
+	
+	Write-Host "Turning off telemetry..."
+    
+	# Disable suggestions and bloatware auto-install
+	$Suggestions = "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
+	Set-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "SystemPaneSuggestionsEnabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "SoftLandingEnabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "ContentDeliveryAllowed" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "OemPreInstalledAppsEnabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEnabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEverEnabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-310093Enabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-314559Enabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-338387Enabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-338388Enabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-338389Enabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-338393Enabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-353694Enabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-353696Enabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-353698Enabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $Suggestions -Name "SystemPaneSuggestionsEnabled" -Type DWord -Value 0
+    
+    # Disable tailored experiences
+	$CloudContent = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
+	If (!(Test-Path $CloudContent )) {
+		New-Item $CloudContent -Force | Out-Null
+		}
+	Set-ItemProperty -Path $CloudContent -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
 
-		# Disable suggestions and bloatware auto-install
-		$Suggestions1 = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
-		$Suggestions2 = "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-		Set-ItemProperty -Path $Suggestions1 -Name "SilentInstalledAppsEnabled" -Type DWord -Value 0
-		Set-ItemProperty -Path $Suggestions1 -Name "SystemPaneSuggestionsEnabled" -Type DWord -Value 0
-		Set-ItemProperty -Path $Suggestions1 -Name "SoftLandingEnabled" -Type DWord -Value 0
-		Set-ItemProperty -Path $Suggestions1 -Name "SubscribedContent" -Type DWord -Value 0
+	# Disable telemetry
+	$DataCollection1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
+	$DataCollection2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
+	$DataCollection3 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
+	Set-ItemProperty -Path $DataCollection1 -Name "AllowTelemetry" -Type DWord -Value 0
+	Set-ItemProperty -Path $DataCollection2 -Name "AllowTelemetry" -Type DWord -Value 0
+	Set-ItemProperty -Path $DataCollection3 -Name "AllowTelemetry" -Type DWord -Value 0
 
-		# Disable tailored experiences
-		$CloudContent = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
-		If (!(Test-Path $CloudContent )) {
-			New-Item $CloudContent -Force | Out-Null
-			}
-		Set-ItemProperty -Path $CloudContent -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
+	# Stop and disable telemetry services
+	Stop-Service DiagTrack | Set-Service -StartupType Disabled
+	Stop-Service dmwappushservice | Set-Service -StartupType Disabled
 
-		# Disable scheduled tasks
-		Get-ScheduledTask Consolidator | Disable-ScheduledTask | Out-Null
-		Get-ScheduledTask DmClient | Disable-ScheduledTask | Out-Null
-		Get-ScheduledTask DmClientOnScenarioDownload | Disable-ScheduledTask | Out-Null
-		Get-ScheduledTask ProgramDataUpdater | Disable-ScheduledTask | Out-Null
-		Get-ScheduledTask QueueReporting | Disable-ScheduledTask | Out-Null
-		Get-ScheduledTask UsbCeip | Disable-ScheduledTask | Out-Null
-
-		# Disable telemetry
-		$DataCollection1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-		$DataCollection2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-		$DataCollection3 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
-		Set-ItemProperty -Path $DataCollection1 -Name "AllowTelemetry" -Type DWord -Value 0
-		Set-ItemProperty -Path $DataCollection2 -Name "AllowTelemetry" -Type DWord -Value 0
-		Set-ItemProperty -Path $DataCollection3 -Name "AllowTelemetry" -Type DWord -Value 0
-
-		# Stop and disable telemetry services
-		Stop-Service DiagTrack | Set-Service -StartupType Disabled
-		Stop-Service dmwappushservice | Set-Service -StartupType Disabled
-		
-		Write-Host "Done."
+    $ActivityFeed = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
+    Set-ItemProperty -Path $ActivityFeed -Name "EnableActivityFeed" -Type DWord -Value 0
+    Set-ItemProperty -Path $ActivityFeed -Name "PublishUserActivities" -Type DWord -Value 0
+    Set-ItemProperty -Path $ActivityFeed -Name "UploadUserActivities" -Type DWord -Value 0	
+    
+    # Disable Advertising ID
+    $AdvertisingID = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
+    If (!(Test-Path $AdvertisingID)) {
+        New-Item -Path $AdvertisingID | Out-Null
+    }
+    Set-ItemProperty -Path $AdvertisingID -Name "DisabledByGroupPolicy" -Type DWord -Value 1
+    
+    # Disable Feedback
+    $Feedback1 = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
+    $Feedback2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
+    $Feedback3 = "Microsoft\Windows\Feedback\Siuf\DmClient"
+    $Feedback4 = "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
+    If (!(Test-Path $Feedback1)) {
+        New-Item -Path $Feedback1 -Force | Out-Null
+    }
+    Set-ItemProperty -Path $Feedback1 -Name "NumberOfSIUFInPeriod" -Type DWord -Value 1
+    If (!(Test-Path $Feedback2)) {
+        New-Item -Path $Feedback2 -Force | Out-Null
+    }
+    Set-ItemProperty -Path $Feedback2 -Name "DoNotShowFeedbackNotifications" -Type DWord -Value 1
+    Disable-ScheduledTask -TaskName $Feedback3 -ErrorAction SilentlyContinue | Out-Null
+    Disable-ScheduledTask -TaskName $Feedback4 -ErrorAction SilentlyContinue | Out-Null
+    
+    # Disable Background apps
+    Get-ChildItem -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications" -Exclude "Microsoft.Windows.Cortana*" | ForEach-Object {
+        Set-ItemProperty -Path $_.PsPath -Name "Disabled" -Type DWord -Value 1
+        Set-ItemProperty -Path $_.PsPath -Name "DisabledByUser" -Type DWord -Value 1
+    }
+    
+    # Disable Location Tracking
+    $Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
+    $Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
+    If (!(Test-Path $Location1)) {
+        New-Item -Path $Location1 -Force | Out-Null
+    }
+    Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Deny"
+    Set-ItemProperty -Path $Location2 -Name "SensorPermissionState" -Type DWord -Value 0
+    
+    # Disable language list access for relevant content
+    $Language = "HKCU:\Control Panel\International\User Profile"
+    If (!(Test-Path $Language)) {
+        New-Item -Path $Language | Out-Null
+    }
+    Set-ItemProperty -Path $Language -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 1
+    
+    # Disable automatic Maps updates
+    Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 0
+    
+    # Disable Speech Recognition
+    $Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
+    If (!(Test-Path $Speech)) {
+        New-Item -Path $Speech | Out-Null
+    }
+    Set-ItemProperty -Path $Speech -Name "HasAccepted" -Type DWord -Value 0
+	
+	Write-Host "Done."
 }
 
 # Disable activity history
@@ -313,7 +380,7 @@ Function DisableSuggestions {
 
 
 # Reverts all privacy changes made by CleanWin
-Function Revert-Privacy {
+Function RevertPrivacy {
 	# Enable advertising ID
 	$Advertising = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
 	Remove-ItemProperty -Path $Advertising -Name "DisabledByGroupPolicy" -ErrorAction SilentlyContinue
