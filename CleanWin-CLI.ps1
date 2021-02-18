@@ -8,13 +8,12 @@ $tasks = @(
 ### Maintenance Tasks ###
 	"Setup",
 	"CleanWin",
-	"LessSleep",
 	"ProductInformation",
 	"ClearShell",
 	
 ### Privacy changes ###
 	"PrintPrivacyChanges",
-	"DisableDataCollection", 	   # "EnableDataCollection",
+	"DisableDataCollection", 	   # "RevertPrivacy",
 	# "DisableActivityHistory",
 	# "DisableAdvertisingID",
 	# "DisableFeedback",		       
@@ -24,7 +23,6 @@ $tasks = @(
 	# "DisableMapUpdates",
 	# "DisableSuggestions",		  
 	# "DisableSpeechRecognition",    
-	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
 
@@ -36,7 +34,6 @@ $tasks = @(
 	"DisableAutorun",              # "EnableAutorun",
 	"SetBIOSTimeUTC",              # "SetBIOSTimeLocal",
 	"DisableServices",			   # "EnableServices",
-	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
 
@@ -52,7 +49,6 @@ $tasks = @(
 	"HideTaskView",                # "RestoreTaskView",
 	"HideCortana",			       # "RestoreCortana",
 	"HideMeetNow",				   # "RestoreMeetNow",
-	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
 
@@ -63,7 +59,6 @@ $tasks = @(
 	"UninstallHelloFace",			# "InstallHelloFace"
 	"UninstallWorkFolders",			# "InstallWorkFolders"
 	"InstalldotNET3",				# "UninstalldotNET3",
-	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
 
@@ -71,14 +66,6 @@ $tasks = @(
 	"PrintSecurityChanges",
 	"AutoLoginPostUpdate", 		   # "StayOnLockscreenPostUpdate",
 	"DisableMeltdownCompatFlag",   # "EnableMeltdownCompatFlag",
-	"LessSleep",
-	"ChangesDone",
-	"ClearShell",
-
-### System changes ###
-	"PrintSystemChanges",
-	"EnableUltimatePerf",	
-	"LessSleep",
 	"ChangesDone",
 	"ClearShell",
 
@@ -86,9 +73,7 @@ $tasks = @(
 	"PrintAppsChanges",
 	"DebloatApps", "CleanupRegistry",
 	"InstallWinGet", "Install7zip", "Winstall", 
-	"LessSleep",
 	"ChangesDone",
-	"ClearShell",
 	"ClearShell",
 
 ###  Tasks after successful run ###
@@ -117,11 +102,6 @@ Function Setup {
 Function ProductInformation {
 	Write-Host " "
 	Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName, ReleaseId, DisplayVersion, BuildLab
-}
-
-# Less sleep
-Function LessSleep {
-	Start-Sleep 1
 }
 
 # Clear the shell output
@@ -907,27 +887,6 @@ Function DisableMeltdownCompatFlag {
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat" -Name "cadca5fe-87d3-4b96-b7fb-a231484277cc" -ErrorAction SilentlyContinue
 	Write-Host "Done."
 }
-
-
-######### System changes #########
-
-Function PrintSystemChanges {
-	Write-Host " "
-	Write-Host " "
-	Write-Host "--------------------------"
-	Write-Host "      SYSTEM CHANGES      "
-	Write-Host "--------------------------"
-	Write-Host " "
-}
-
-# To delete Ultimate performance power plan (its safe to do so), you need to go to Control Panel\System and Security\Power Options, click on "Ultimate performance" and then click on "Delete this plan"
-Function EnableUltimatePerf {
-	Write-Host "Turning on ultimate performance power plan..."
-	powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61
-	Write-Host " "
-	Write-Host "Done."
-}
-
 
 
 ######### App changes #########
