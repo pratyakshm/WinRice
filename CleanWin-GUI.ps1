@@ -258,12 +258,12 @@ $SetupWindowsUpdate.Height = 40
 $SetupWindowsUpdate.Location = New-Object System.Drawing.Point(320,245)
 $SetupWindowsUpdate.Font = 'Segoe UI,10'
 
-$ResetWindowsUpdates = New-Object System.Windows.Forms.Button
-$ResetWindowsUpdates.Text = "Reset Windows Update"
-$ResetWindowsUpdates.Width = 140
-$ResetWindowsUpdates.Height = 40
-$ResetWindowsUpdates.Location = New-Object System.Drawing.Point(460,245)
-$ResetWindowsUpdates.Font = 'Segoe UI,10'
+$ResetWindowsUpdate = New-Object System.Windows.Forms.Button
+$ResetWindowsUpdate.Text = "Reset Windows Update"
+$ResetWindowsUpdate.Width = 140
+$ResetWindowsUpdate.Height = 40
+$ResetWindowsUpdate.Location = New-Object System.Drawing.Point(460,245)
+$ResetWindowsUpdate.Font = 'Segoe UI,10'
 
 $DisableServices = New-Object System.Windows.Forms.Button
 $DisableServices.Text = "Disable unnecessary services"
@@ -305,7 +305,7 @@ $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label7,
 $UninstallAppsSelectively, $InstallWinGet ,$Winstall, $InstallWSL, $UninstallBloatFeatures, $DisableDataCollection, $DisableTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $CleanExplorer, $RevertExplorerChanges, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $ApplyChanges, $ShowSeconds, 
-$SetupWindowsUpdate, $ResetWindowsUpdates, $DisableServices, $EnableServices, $DisableTasks, $EnableTasks))
+$SetupWindowsUpdate, $ResetWindowsUpdate, $DisableServices, $EnableServices, $DisableTasks, $EnableTasks))
 
 $CWFolder = "C:\CleanWin"
 If (Test-Path $CWFolder) {
@@ -1291,7 +1291,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 $ResetWindowsUpdate.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
-    Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
+    Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Recurse
     Write-Host "Done."
 })
 
