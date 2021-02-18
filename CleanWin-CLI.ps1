@@ -120,14 +120,7 @@ Function Setup {
 # Product Information 
 Function ProductInformation {
 	Write-Host " "
-	Write-Host "Checking system info..."
-	Get-ComputerInfo -Property Windows*
-	if([System.IntPtr]::Size -eq 4){
-		"Windows.OSArchitecture         : 32-bit"
-	}
-	else{
-		"Windows.OSArchitecture         : 64-bit"
-	}
+	Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName, ReleaseId, DisplayVersion, BuildLab
 }
 
 # Less sleep
