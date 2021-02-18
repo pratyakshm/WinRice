@@ -307,7 +307,7 @@ $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $Cle
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $ApplyChanges, $ShowSeconds, 
 $SetupWindowsUpdate, $ResetWindowsUpdates, $DisableServices, $EnableServices, $DisableTasks, $EnableTasks))
 
-$CWFolder = "C:\Temp\CleanWin"
+$CWFolder = "C:\CleanWin"
 If (Test-Path $CWFolder) {
 }
 Else {
