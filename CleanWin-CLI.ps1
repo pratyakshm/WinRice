@@ -108,7 +108,6 @@ Function ProductInformation {
 Function ClearShell {
 	Write-Host " "
 	Write-Host "Clearing shell..."
-	Start-Sleep 2
 	Clear-Host
 }
 
@@ -233,13 +232,6 @@ Function DisableDataCollection {
     # Disable automatic Maps updates
     Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 0
     
-    # Disable Speech Recognition
-    $Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
-    If (!(Test-Path $Speech)) {
-        New-Item -Path $Speech | Out-Null
-    }
-    Set-ItemProperty -Path $Speech -Name "HasAccepted" -Type DWord -Value 0
-	
 	Write-Host "Done."
 }
 
@@ -853,14 +845,14 @@ Function PrintSecurityChanges {
 
 Function AutoLoginPostUpdate {
 	Write-Host " "
-	Write-Host "Telling this PC to automatically login after Windows Update..."
+	Write-Host "Turning on automatic login post updates..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 1
 	Write-Host "Done."
 } 
 
 Function StayOnLockscreenPostUpdate {
 	Write-Host " "
-	Write-Host "Telling this PC to not automatically login post a Windows Update reset."
+	Write-Host "Turning off automatic login post updates..."
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent"
 	Write-Host "Done."
 }
@@ -1015,7 +1007,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	/Windows/SysWOW64/OneDriveSetup.exe /uninstall
 
 	# Unpin all start menu tiles
-
+	Write-Host "Unpinning tiles from start menu..."
 	Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <DefaultLayoutOverride>'
@@ -1080,9 +1072,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 		$keyPath = $basePath + "\Explorer" 
 		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 0
 	}
-
-	#Restart Explorer and delete the layout file
-	Stop-Process -name explorer
 
 	# Uncomment the next line to make clean start menu default for all new users
 	Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
