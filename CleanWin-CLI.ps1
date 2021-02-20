@@ -55,10 +55,7 @@ $tasks = @(
 ### Features changes ###
 	"PrintFeaturesChanges",
 	"EnableWSL",
-	"UninstallMathRecognizer",		# "InstallMathRecognizer"
-	"UninstallHelloFace",			# "InstallHelloFace"
-	"UninstallWorkFolders",			# "InstallWorkFolders"
-	"InstalldotNET3",				# "UninstalldotNET3",
+	"UninstallFeatures",
 	"ChangesDone",
 	"ClearShell",
 
@@ -776,58 +773,15 @@ Function EnableWSL {
 		Write-Host "Done."
 }
 
-# Uninstall Work Folders Client - Not applicable to Server
-Function UninstallWorkFolders {
+# Uninstall Features
+Function UninstallFeatures {
 	Write-Host " "
-	Write-Host "Uninstalling Work Folders Client..."
+	Write-Host "Uninstalling unnecessary features..."
 	Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "WorkFolders-Client" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
-	Write-Host "Done."
-}
-
-# Install Work Folders Client
-Function InstallWorkFolders {
-	Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "WorkFolders-Client" } | Enable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
-}
-
-# Uninstall Windows Hello Face
-Function UninstallHelloFace {
-	Write-Host " "
-	Write-Host "Uninstalling Windows Hello Face..."
 	Get-WindowsCapability -Online | Where-Object { $_.Name -like "Hello.Face*" } | Remove-WindowsCapability -Online | Out-Null
-	Write-Host "Done."
-}
-
-# Install Windows Hello Face
-Function InstallHelloFace {
-	Get-WindowsCapability -Online | Where-Object { $_.Name -like "Hello.Face*" } | Add-WindowsCapability -Online | Out-Null
-}
-
-# Uninstall Math Recognizer
-Function UninstallMathRecognizer {
-	Write-Host " "
-	Write-Host "Uninstalling Math Recognizer..."
 	Get-WindowsCapability -Online | Where-Object { $_.Name -like "MathRecognizer*" } | Remove-WindowsCapability -Online | Out-Null
 	Write-Host "Done."
 }
-
-# Install Math Recognizer - Not applicable to Server
-Function InstallMathRecognizer {
-	Get-WindowsCapability -Online | Where-Object { $_.Name -like "MathRecognizer*" } | Add-WindowsCapability -Online | Out-Null
-}
-
-# Install dotNET 3.5
-Function InstalldotNET3 {
-	Write-Host " "
-	Write-Host "Installing dotNET 3.5..."
-	Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "NetFx3" } | Enable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
-	Write-Host "Done."
-}
-
-# Uninstall dotNET 3.5
-Function UninstalldotNET3 {
-	Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "NetFx3" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
-}
-
 
 
 
