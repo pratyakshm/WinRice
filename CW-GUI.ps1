@@ -815,6 +815,7 @@ $UninstallBloatFeatures.Add_Click( {
 	Remove-WindowsCapability -Name "OpenSSH.Client~~~~0.0.1.0" -Online | Out-Null
 	Remove-WindowsCapability -Name "Print.Fax.Scan~~~~0.0.1.0" -Online | Out-Null
 	Remove-WindowsCapability -Name "XPS.Viewer~~~~0.0.1.0" -Online | Out-Null
+    Disable-WindowsOptionalFeature -FeatureName "Printing-XPSServices-Features" -Online | Out-Null 
     Write-Host "Done."
 })
 
