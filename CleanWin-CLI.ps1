@@ -10,9 +10,18 @@ $tasks = @(
 	"CleanWin",
 	"ProductInformation",
 	"ClearShell",
-	
-### Privacy changes ###
-	"PrintPrivacyChanges",
+
+### Apps & Features ###
+	"AppsFeatures",
+	"DebloatApps", "CleanupRegistry",
+	"InstallWinGet", "Install7zip", "Winstall", 
+	"InstallWSL",
+	"UninstallFeatures",
+	"ChangesDone",
+	"ClearShell",
+
+### Privacy & Security ###
+	"PrivacySecurity",
 	"DisableDataCollection", 	   # "RevertPrivacy",
 	# "DisableActivityHistory",
 	# "DisableAdvertisingID",
@@ -23,11 +32,13 @@ $tasks = @(
 	# "DisableMapUpdates",
 	# "DisableSuggestions",		  
 	# "DisableSpeechRecognition",    
+	"AutoLoginPostUpdate", 		   # "StayOnLockscreenPostUpdate",
+	"DisableMeltdownCompatFlag",   # "EnableMeltdownCompatFlag",
 	"ChangesDone",
 	"ClearShell",
 
-### Service changes ###
-	"PrintServicesChanges",
+### Tasks & Services ###
+	"TasksServices",
 	"DisableAutoUpdates",		   # "EnableAutoUpdates",
 	"DisableLANP2P"                # "EnableLANP2P",
 	"DisableAutoplay",             # "EnableAutoplay",
@@ -37,7 +48,7 @@ $tasks = @(
 	"ChangesDone",
 	"ClearShell",
 
-### Windows Explorer Changes ###
+### Windows Explorer ###
 	"PrintExplorerChanges",
 	"ShowVerboseStatus",           # "HideVerboseStatus",
 	"EnablePrtScrToSnip",		   # "DisablePrtScrSnip",
@@ -49,27 +60,6 @@ $tasks = @(
 	"HideTaskView",                # "RestoreTaskView",
 	"HideCortana",			       # "RestoreCortana",
 	"HideMeetNow",				   # "RestoreMeetNow",
-	"ChangesDone",
-	"ClearShell",
-
-### Features changes ###
-	"PrintFeaturesChanges",
-	"EnableWSL",
-	"UninstallFeatures",
-	"ChangesDone",
-	"ClearShell",
-
-### Security changes ###
-	"PrintSecurityChanges",
-	"AutoLoginPostUpdate", 		   # "StayOnLockscreenPostUpdate",
-	"DisableMeltdownCompatFlag",   # "EnableMeltdownCompatFlag",
-	"ChangesDone",
-	"ClearShell",
-
-### App changes ###
-	"PrintAppsChanges",
-	"DebloatApps", "CleanupRegistry",
-	"InstallWinGet", "Install7zip", "Winstall", 
 	"ChangesDone",
 	"ClearShell",
 
@@ -119,21 +109,346 @@ Function ChangesDone {
 }
 
 
-######### Privacy Changes #########
 
-# Update status: privacy changes
-Function PrintPrivacyChanges {
+######### APPS & FEATURES #########
+
+# Update status
+Function AppsFeatures {
+	Write-Host " "
 	Write-Host " "
 	Write-Host "-------------------------"
-	Write-Host "     PRIVACY CHANGES     "
+	Write-Host "     APPS & FEATURES     "
 	Write-Host "-------------------------"
 	Write-Host " "
 }
 
-# Disable telemetry
+# Debloat apps
+Function DebloatApps {
+$ErrorActionPreference = 'SilentlyContinue'
+
+	# Prebuilt apps
+	Write-Host "Uninstalling unnecessary apps..."
+	$Bloatware = @(
+	"Microsoft.549981C3F5F10"
+	"Microsoft.BingNews"
+	"Microsoft.BingWeather"
+	"Microsoft.GamingServices" 
+	"Microsoft.GetHelp" 
+	"Microsoft.Getstarted" 
+	"Microsoft.Messaging"
+	"Microsoft.Microsoft3DViewer" 
+	"Microsoft.MicrosoftStickyNotes"  
+	"Microsoft.MSPaint"
+	"Microsoft.MicrosoftOfficeHub"
+	"Microsoft.Office.OneNote"
+	"Microsoft.MixedReality.Portal"
+	"Microsoft.MicrosoftSolitaireCollection" 
+	"Microsoft.NetworkSpeedTest" 
+	"Microsoft.News" 
+	"Microsoft.Office.Sway" 
+	"Microsoft.OneConnect"
+	"Microsoft.People" 
+	"Microsoft.Print3D" 
+	"Microsoft.SkypeApp"
+	"Microsoft.ScreenSketch"
+	"Microsoft.StorePurchaseApp" 
+	"Microsoft.WindowsAlarms"
+	"Microsoft.WindowsCamera"
+	"Microsoft.WindowsCommunicationsApps" 
+	"Microsoft.WindowsFeedbackHub" 
+	"Microsoft.WindowsMaps" 
+	"Microsoft.WindowsSoundRecorder" 
+	"Microsoft.XboxApp"
+	"Microsoft.XboxGamingOverlay"
+	"Microsoft.YourPhone"
+	"Microsoft.ZuneMusic"
+	"Microsoft.ZuneVideo"
+
+	#Sponsored Windows 10 AppX Apps
+	#Add sponsored/featured apps to remove in the "*AppName*" format
+	"*EclipseManager*"
+	"*ActiproSoftwareLLC*"
+	"*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
+	"*Duolingo-LearnLanguagesforFree*"
+	"*PandoraMediaInc*"
+	"*CandyCrush*"
+	"*BubbleWitch3Saga*"
+	"*Wunderlist*"
+	"*Flipboard*"
+	"*Twitter*"
+	"*Facebook*"
+	"*Spotify*"
+	"*Minecraft*"
+	"*Royal Revolt*"
+	"*Sway*"
+	"*Speed Test*"
+	"*Dolby*"
+	)
+	foreach ($Bloat in $Bloatware) {
+		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
+		Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
+	}
+
+	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
+	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
+	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
+	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Word.lnk"
+	$Keys = @(
+		New-PSDrive HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
+		#Remove Background Tasks
+		"HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
+		"HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+		"HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
+		"HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
+		"HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
+		"HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
+				
+		#Windows File
+		"HKCR:\Extensions\ContractId\Windows.File\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+				
+		#Registry keys to delete if they aren't uninstalled by RemoveAppXPackage/RemoveAppXProvisionedPackage
+		"HKCR:\Extensions\ContractId\Windows.Launch\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
+		"HKCR:\Extensions\ContractId\Windows.Launch\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+		"HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
+		"HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
+		"HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
+				
+		#Scheduled Tasks to delete
+		"HKCR:\Extensions\ContractId\Windows.PreInstalledConfigTask\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
+				
+		#Windows Protocol Keys
+		"HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+		"HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
+		"HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
+		"HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
+				
+		#Windows Share Target
+		"HKCR:\Extensions\ContractId\Windows.ShareTarget\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+		)
+		
+	#This writes the output of each key it is removing and also removes the keys listed above.
+	ForEach ($Key in $Keys) {
+		Remove-Item $Key -Recurse 
+	}
+
+	# Uninstall OneDrive
+	taskkill /f /im onedrive.exe
+	/Windows/SysWOW64/OneDriveSetup.exe /uninstall
+
+	# Unpin all start menu tiles
+	Write-Host "Unpinning tiles from start menu..."
+	Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <DefaultLayoutOverride>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    <StartLayoutCollection>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      <defaultlayout:StartLayout GroupCellWidth="6" />'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    </StartLayoutCollection>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  </DefaultLayoutOverride>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    <CustomTaskbarLayoutCollection>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      <defaultlayout:TaskbarLayout>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '        <taskbar:TaskbarPinList>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '          <taskbar:UWA AppUserModelID="Microsoft.MicrosoftEdge_8wekyb3d8bbwe!MicrosoftEdge" />'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '          <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\System Tools\File Explorer.lnk" />'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '        </taskbar:TaskbarPinList>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      </defaultlayout:TaskbarLayout>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    </CustomTaskbarLayoutCollection>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '</LayoutModificationTemplate>'
+
+	$START_MENU_LAYOUT = @"
+	<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">
+		<LayoutOptions StartTileGroupCellWidth="6" />
+		<DefaultLayoutOverride>
+			<StartLayoutCollection>
+				<defaultlayout:StartLayout GroupCellWidth="6" />
+			</StartLayoutCollection>
+		</DefaultLayoutOverride>
+	</LayoutModificationTemplate>
+"@
+
+	$layoutFile="C:\Windows\StartMenuLayout.xml"
+
+	#Delete layout file if it already exists
+	If(Test-Path $layoutFile)
+	{
+		Remove-Item $layoutFile
+	}
+
+	#Creates the blank layout file
+	$START_MENU_LAYOUT | Out-File $layoutFile -Encoding ASCII
+
+	$regAliases = @("HKLM", "HKCU")
+
+	#Assign the start layout and force it to apply with "LockedStartLayout" at both the machine and user level
+	foreach ($regAlias in $regAliases){
+		$basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
+		$keyPath = $basePath + "\Explorer" 
+		IF(!(Test-Path -Path $keyPath)) { 
+			New-Item -Path $basePath -Name "Explorer"
+		}
+		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 1
+		Set-ItemProperty -Path $keyPath -Name "StartLayoutFile" -Value $layoutFile
+	}
+
+	#Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process
+	Stop-Process -name explorer
+	Start-Sleep -s 5
+	$wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
+	Start-Sleep -s 5
+
+	#Enable the ability to pin items again by disabling "LockedStartLayout"
+	foreach ($regAlias in $regAliases){
+		$basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
+		$keyPath = $basePath + "\Explorer" 
+		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 0
+	}
+
+	# Uncomment the next line to make clean start menu default for all new users
+	Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
+
+	Remove-Item $layoutFile
+
+	Write-Host "Done."
+}
+
+Function CleanupRegistry {
+$ErrorActionPreference = 'SilentlyContinue'
+	Write-Host " "
+	Write-Host "Cleaning up registry..."
+    	$Keys = @(
+		
+		New-PSDrive HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
+        #Remove Background Tasks
+        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
+        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
+        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
+        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
+        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
+            
+        #Windows File
+        "HKCR:\Extensions\ContractId\Windows.File\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+            
+        #Registry keys to delete if they aren't uninstalled by RemoveAppXPackage/RemoveAppXProvisionedPackage
+        "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
+        "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+        "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
+        "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
+        "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
+            
+        #Scheduled Tasks to delete
+        "HKCR:\Extensions\ContractId\Windows.PreInstalledConfigTask\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
+            
+        #Windows Protocol Keys
+        "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+        "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
+        "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
+        "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
+               
+        #Windows Share Target
+        "HKCR:\Extensions\ContractId\Windows.ShareTarget\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
+    )
+        
+    #This writes the output of each key it is removing and also removes the keys listed above.
+    ForEach ($Key in $Keys) {
+		Remove-Item $Key -Recurse
+	}
+	Write-Host "Done."
+}
+
+# Install WinGet
+Function InstallWinGet {
+	Write-Host " "
+	# Import BitsTransfer module and download NetTestFile
+    Import-Module BitsTransfer 
+    Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/NetTestFile
+    # If the file exists, proceed with downloading WinGet files, else inform user about no internet connection.
+    If (Test-Path NetTestFile) {
+        Remove-Item NetTestFile
+        Write-Host "Downloading required files..."
+        Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
+        Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+        Write-Host "Installing Windows Package Manager (WinGet)..."
+        Add-AppxPackage -Path .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -DependencyPath .\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+        Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
+        Remove-Item Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+        Write-Host "Done."
+	} 
+	else {
+	  Write-Host "We can't connect to GitHub to download the installation files. Are you sure that your internet connection is working?"
+	}
+	Write-Host "Done."
+}
+
+# Install 7zip
+Function Install7zip {
+	Write-Host " "
+	Write-Host "Installing 7-zip..."
+	winget install 7zip
+}
+
+# Install apps from Winstall file (the Winstall.txt file must be on the same directory where CleanWin is)
+Function Winstall {
+	If (Test-Path Winstall.txt) {
+        Get-Content 'Winstall.txt' | Foreach-Object {
+            $App = $_.Split('=')
+            Write-Host "Installing $App..."
+            winget install $App
+        }
+        Write-Host "Winstall has finished the jobs."
+    }
+    else {
+        Write-Host "ERROR: Winstall could not perform the requested jobs. Reason: Could not find file named 'Winstall.txt'. "
+        Write-Host "Note that the filename 'Winstall.txt' is case-sensitive and it should exist in the same folder as CleanWin."
+    }
+}
+
+# Install WSL
+Function InstallWSL {
+		Write-Host "Installing WSL..."
+		dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /all /NoRestart /Quiet
+		dism.exe /Online /Enable-Feature /FeatureName:VirtualMachinePlatform /All /NoRestart /Quiet
+		dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V /All /NoRestart	/Quiet
+		Write-Host "Done."
+}
+
+# Uninstall Features
+Function UninstallFeatures {
+	Write-Host " "
+	Write-Host "Uninstalling unnecessary features, please stand by..."
+	Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "WorkFolders-Client" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
+	Get-WindowsCapability -Online | Where-Object { $_.Name -like "Hello.Face*" } | Remove-WindowsCapability -Online | Out-Null
+	Get-WindowsCapability -Online | Where-Object { $_.Name -like "MathRecognizer*" } | Remove-WindowsCapability -Online | Out-Null
+	Remove-WindowsCapability -Name "App.StepsRecorder~~~~0.0.1.0" -Online | Out-Null
+	Remove-WindowsCapability -Name "App.Support.QuickAssist~~~~0.0.1.0" -Online | Out-Null
+	Remove-WindowsCapability -Name "Browser.InternetExplorer~~~~0.0.11.0" -Online | Out-Null
+	Remove-WindowsCapability -Name "Media.WindowsMediaPlayer~~~~0.0.12.0" -Online | Out-Null
+	Remove-WindowsCapability -Name "Microsoft-Windows-SnippingTool~~~~0.0.1.0" -Online | Out-Null
+	Remove-WindowsCapability -Name "Microsoft.Windows.MSPaint~~~~0.0.1.0" -Online | Out-Null
+	Remove-WindowsCapability -Name "Microsoft.Windows.PowerShell.ISE~~~~0.0.1.0" -Online | Out-Null
+	Remove-WindowsCapability -Name "Microsoft.Windows.WordPad~~~~0.0.1.0" -Online | Out-Null
+	Remove-WindowsCapability -Name "Print.Fax.Scan~~~~0.0.1.0" -Online | Out-Null
+	Remove-WindowsCapability -Name "OpenSSH.Client~~~~0.0.1.0" -Online | Out-Null
+	Remove-WindowsCapability -Name "Print.Fax.Scan~~~~0.0.1.0" -Online | Out-Null
+	Remove-WindowsCapability -Name "XPS.Viewer~~~~0.0.1.0" -Online | Out-Null
+	Write-Host "Done."
+}
+
+
+######### Privacy & Security #########
+
+# Update status
+Function PrivacySecurity {
+	Write-Host " "
+	Write-Host "-------------------------"
+	Write-Host "    PRIVACY & SECURITY   "
+	Write-Host "-------------------------"
+	Write-Host " "
+}
+
+# Disable data collection
 Function DisableDataCollection {
 	
-	Write-Host "Turning off telemetry..."
+	Write-Host "Turning off data collection..."
     
 	# Disable suggestions and bloatware auto-install
 	$Suggestions = "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
@@ -434,16 +749,52 @@ Function RevertPrivacy {
 	Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
 }
 
+Function AutoLoginPostUpdate {
+	Write-Host " "
+	Write-Host "Turning on automatic login post updates..."
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 1
+	Write-Host "Done."
+} 
+
+Function StayOnLockscreenPostUpdate {
+	Write-Host " "
+	Write-Host "Turning off automatic login post updates..."
+	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent"
+	Write-Host "Done."
+}
+
+# Enable Meltdown (CVE-2017-5754) compatibility flag - Required for January 2018 and all subsequent Windows updates
+# This flag is normally automatically enabled by compatible antivirus software (such as Windows Defender).
+# Use the tweak only if you have confirmed that your AV is compatible but unable to set the flag automatically or if you don't use any AV at all.
+# See https://support.microsoft.com/en-us/help/4072699/january-3-2018-windows-security-updates-and-antivirus-software for details.
+Function EnableMeltdownCompatFlag {
+	Write-Host " "
+	Write-Host "Turning on Meltdown (CVE-2017-5754) compatibility flag..."
+	$MeltdownCompat = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat"
+	If (!(Test-Path $MeltdownCompat)) {
+		New-Item -Path $MeltdownCompat | Out-Null
+	}
+	Set-ItemProperty -Path $MeltdownCompat -Name "cadca5fe-87d3-4b96-b7fb-a231484277cc" -Type DWord -Value 0
+	Write-Host "Done."
+}
+
+# Disable Meltdown (CVE-2017-5754) compatibility flag
+Function DisableMeltdownCompatFlag {
+	Write-Host " "
+	Write-Host "Turning off Meltdown (CVE-2017-5754) compatibility flag..."
+	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat" -Name "cadca5fe-87d3-4b96-b7fb-a231484277cc" -ErrorAction SilentlyContinue
+	Write-Host "Done."
+}
 
 
-######### Service Changes #########
+######### TASKS & SERVICES #########
 
-# Update status: services changes
-Function PrintServicesChanges {
+# Update status
+Function TasksServices {
 	Write-Host " "
 	Write-Host " "
 	Write-Host "---------------------------"
-	Write-Host "     SERVICES CHANGES      "   
+	Write-Host "      TASKS & SERVICES     "   
 	Write-Host "---------------------------"
 	Write-Host " "
 }
@@ -575,7 +926,7 @@ Function PrintExplorerChanges {
 	Write-Host " "
 	Write-Host " "
 	Write-Host "----------------------------------"
-	Write-Host "     WINDOWS EXPLORER CHANGES     "
+	Write-Host "          WINDOWS EXPLORER        "
 	Write-Host "----------------------------------"
 	Write-Host " "
 }
@@ -750,396 +1101,6 @@ Function RestoreMeetNow {
 	Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 0
 	Write-Host "Done."
 }
-
-
-
-######### Features changes #########
-
-# Update status: features changes
-Function PrintFeaturesChanges {
-	Write-Host " "	
-	Write-Host " "
-	Write-Host "--------------------------------------------"
-	Write-Host "     WINDOWS OPTIONAL FEATURES CHANGES      "
-	Write-Host "--------------------------------------------"
-	Write-Host " "
-}
-
-Function EnableWSL {
-		Write-Host "Installing WSL..."
-		dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /all /NoRestart /Quiet
-		dism.exe /Online /Enable-Feature /FeatureName:VirtualMachinePlatform /All /NoRestart /Quiet
-		dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V /All /NoRestart	/Quiet
-		Write-Host "Done."
-}
-
-# Uninstall Features
-Function UninstallFeatures {
-	Write-Host " "
-	Write-Host "Uninstalling unnecessary features, please stand by..."
-	Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "WorkFolders-Client" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
-	Get-WindowsCapability -Online | Where-Object { $_.Name -like "Hello.Face*" } | Remove-WindowsCapability -Online | Out-Null
-	Get-WindowsCapability -Online | Where-Object { $_.Name -like "MathRecognizer*" } | Remove-WindowsCapability -Online | Out-Null
-	Remove-WindowsCapability -Name "App.StepsRecorder~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "App.Support.QuickAssist~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "Browser.InternetExplorer~~~~0.0.11.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "Media.WindowsMediaPlayer~~~~0.0.12.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "Microsoft-Windows-SnippingTool~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "Microsoft.Windows.MSPaint~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "Microsoft.Windows.PowerShell.ISE~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "Microsoft.Windows.WordPad~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "Print.Fax.Scan~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "OpenSSH.Client~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "Print.Fax.Scan~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "XPS.Viewer~~~~0.0.1.0" -Online | Out-Null
-	Write-Host "Done."
-}
-
-
-
-######### Security changes #########
-
-# Update status: beginning security changes
-Function PrintSecurityChanges {
-	Write-Host " "
-	Write-Host " "
-	Write-Host "----------------------------"
-	Write-Host "      SECURITY CHANGES      "
-	Write-Host "----------------------------"
-	Write-Host " "
-}
-
-Function AutoLoginPostUpdate {
-	Write-Host " "
-	Write-Host "Turning on automatic login post updates..."
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 1
-	Write-Host "Done."
-} 
-
-Function StayOnLockscreenPostUpdate {
-	Write-Host " "
-	Write-Host "Turning off automatic login post updates..."
-	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent"
-	Write-Host "Done."
-}
-
-# Enable Meltdown (CVE-2017-5754) compatibility flag - Required for January 2018 and all subsequent Windows updates
-# This flag is normally automatically enabled by compatible antivirus software (such as Windows Defender).
-# Use the tweak only if you have confirmed that your AV is compatible but unable to set the flag automatically or if you don't use any AV at all.
-# See https://support.microsoft.com/en-us/help/4072699/january-3-2018-windows-security-updates-and-antivirus-software for details.
-Function EnableMeltdownCompatFlag {
-	Write-Host " "
-	Write-Host "Turning on Meltdown (CVE-2017-5754) compatibility flag..."
-	$MeltdownCompat = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat"
-	If (!(Test-Path $MeltdownCompat)) {
-		New-Item -Path $MeltdownCompat | Out-Null
-	}
-	Set-ItemProperty -Path $MeltdownCompat -Name "cadca5fe-87d3-4b96-b7fb-a231484277cc" -Type DWord -Value 0
-	Write-Host "Done."
-}
-
-# Disable Meltdown (CVE-2017-5754) compatibility flag
-Function DisableMeltdownCompatFlag {
-	Write-Host " "
-	Write-Host "Turning off Meltdown (CVE-2017-5754) compatibility flag..."
-	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat" -Name "cadca5fe-87d3-4b96-b7fb-a231484277cc" -ErrorAction SilentlyContinue
-	Write-Host "Done."
-}
-
-
-######### App changes #########
-
-# Update status: starting app changes
-Function PrintAppsChanges {
-	Write-Host " "
-	Write-Host " "
-	Write-Host "-------------------------"
-	Write-Host "       APP CHANGES       "
-	Write-Host "-------------------------"
-	Write-Host " "
-}
-
-# Debloat apps
-Function DebloatApps {
-$ErrorActionPreference = 'SilentlyContinue'
-
-	# Prebuilt apps
-	Write-Host "Uninstalling unnecessary apps..."
-	$Bloatware = @(
-	"Microsoft.549981C3F5F10"
-	"Microsoft.BingNews"
-	"Microsoft.BingWeather"
-	"Microsoft.GamingServices" 
-	"Microsoft.GetHelp" 
-	"Microsoft.Getstarted" 
-	"Microsoft.Messaging"
-	"Microsoft.Microsoft3DViewer" 
-	"Microsoft.MicrosoftStickyNotes"  
-	"Microsoft.MSPaint"
-	"Microsoft.MicrosoftOfficeHub"
-	"Microsoft.Office.OneNote"
-	"Microsoft.MixedReality.Portal"
-	"Microsoft.MicrosoftSolitaireCollection" 
-	"Microsoft.NetworkSpeedTest" 
-	"Microsoft.News" 
-	"Microsoft.Office.Sway" 
-	"Microsoft.OneConnect"
-	"Microsoft.People" 
-	"Microsoft.Print3D" 
-	"Microsoft.SkypeApp"
-	"Microsoft.ScreenSketch"
-	"Microsoft.StorePurchaseApp" 
-	"Microsoft.WindowsAlarms"
-	"Microsoft.WindowsCamera"
-	"Microsoft.WindowsCommunicationsApps" 
-	"Microsoft.WindowsFeedbackHub" 
-	"Microsoft.WindowsMaps" 
-	"Microsoft.WindowsSoundRecorder" 
-	"Microsoft.XboxApp"
-	"Microsoft.XboxGamingOverlay"
-	"Microsoft.YourPhone"
-	"Microsoft.ZuneMusic"
-	"Microsoft.ZuneVideo"
-
-	#Sponsored Windows 10 AppX Apps
-	#Add sponsored/featured apps to remove in the "*AppName*" format
-	"*EclipseManager*"
-	"*ActiproSoftwareLLC*"
-	"*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
-	"*Duolingo-LearnLanguagesforFree*"
-	"*PandoraMediaInc*"
-	"*CandyCrush*"
-	"*BubbleWitch3Saga*"
-	"*Wunderlist*"
-	"*Flipboard*"
-	"*Twitter*"
-	"*Facebook*"
-	"*Spotify*"
-	"*Minecraft*"
-	"*Royal Revolt*"
-	"*Sway*"
-	"*Speed Test*"
-	"*Dolby*"
-	)
-	foreach ($Bloat in $Bloatware) {
-		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
-		Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
-	}
-
-	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
-	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
-	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
-	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Word.lnk"
-	$Keys = @(
-		New-PSDrive HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
-		#Remove Background Tasks
-		"HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
-		"HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
-		"HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
-		"HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
-		"HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
-		"HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
-				
-		#Windows File
-		"HKCR:\Extensions\ContractId\Windows.File\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
-				
-		#Registry keys to delete if they aren't uninstalled by RemoveAppXPackage/RemoveAppXProvisionedPackage
-		"HKCR:\Extensions\ContractId\Windows.Launch\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
-		"HKCR:\Extensions\ContractId\Windows.Launch\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
-		"HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
-		"HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
-		"HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
-				
-		#Scheduled Tasks to delete
-		"HKCR:\Extensions\ContractId\Windows.PreInstalledConfigTask\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
-				
-		#Windows Protocol Keys
-		"HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
-		"HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
-		"HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
-		"HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
-				
-		#Windows Share Target
-		"HKCR:\Extensions\ContractId\Windows.ShareTarget\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
-		)
-		
-	#This writes the output of each key it is removing and also removes the keys listed above.
-	ForEach ($Key in $Keys) {
-		Remove-Item $Key -Recurse 
-	}
-
-	# Uninstall OneDrive
-	taskkill /f /im onedrive.exe
-	/Windows/SysWOW64/OneDriveSetup.exe /uninstall
-
-	# Unpin all start menu tiles
-	Write-Host "Unpinning tiles from start menu..."
-	Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
-	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
-	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <DefaultLayoutOverride>'
-	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    <StartLayoutCollection>'
-	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      <defaultlayout:StartLayout GroupCellWidth="6" />'
-	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    </StartLayoutCollection>'
-	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  </DefaultLayoutOverride>'
-	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    <CustomTaskbarLayoutCollection>'
-	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      <defaultlayout:TaskbarLayout>'
-	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '        <taskbar:TaskbarPinList>'
-	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '          <taskbar:UWA AppUserModelID="Microsoft.MicrosoftEdge_8wekyb3d8bbwe!MicrosoftEdge" />'
-	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '          <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\System Tools\File Explorer.lnk" />'
-	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '        </taskbar:TaskbarPinList>'
-	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      </defaultlayout:TaskbarLayout>'
-	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    </CustomTaskbarLayoutCollection>'
-	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '</LayoutModificationTemplate>'
-
-	$START_MENU_LAYOUT = @"
-	<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">
-		<LayoutOptions StartTileGroupCellWidth="6" />
-		<DefaultLayoutOverride>
-			<StartLayoutCollection>
-				<defaultlayout:StartLayout GroupCellWidth="6" />
-			</StartLayoutCollection>
-		</DefaultLayoutOverride>
-	</LayoutModificationTemplate>
-"@
-
-	$layoutFile="C:\Windows\StartMenuLayout.xml"
-
-	#Delete layout file if it already exists
-	If(Test-Path $layoutFile)
-	{
-		Remove-Item $layoutFile
-	}
-
-	#Creates the blank layout file
-	$START_MENU_LAYOUT | Out-File $layoutFile -Encoding ASCII
-
-	$regAliases = @("HKLM", "HKCU")
-
-	#Assign the start layout and force it to apply with "LockedStartLayout" at both the machine and user level
-	foreach ($regAlias in $regAliases){
-		$basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
-		$keyPath = $basePath + "\Explorer" 
-		IF(!(Test-Path -Path $keyPath)) { 
-			New-Item -Path $basePath -Name "Explorer"
-		}
-		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 1
-		Set-ItemProperty -Path $keyPath -Name "StartLayoutFile" -Value $layoutFile
-	}
-
-	#Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process
-	Stop-Process -name explorer
-	Start-Sleep -s 5
-	$wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
-	Start-Sleep -s 5
-
-	#Enable the ability to pin items again by disabling "LockedStartLayout"
-	foreach ($regAlias in $regAliases){
-		$basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
-		$keyPath = $basePath + "\Explorer" 
-		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 0
-	}
-
-	# Uncomment the next line to make clean start menu default for all new users
-	Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
-
-	Remove-Item $layoutFile
-
-	Write-Host "Done."
-
-}
-
-Function CleanupRegistry {
-$ErrorActionPreference = 'SilentlyContinue'
-	Write-Host " "
-	Write-Host "Cleaning up registry..."
-    	$Keys = @(
-		
-		New-PSDrive HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
-        #Remove Background Tasks
-        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
-        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
-        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
-        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
-        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
-        "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
-            
-        #Windows File
-        "HKCR:\Extensions\ContractId\Windows.File\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
-            
-        #Registry keys to delete if they aren't uninstalled by RemoveAppXPackage/RemoveAppXProvisionedPackage
-        "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
-        "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
-        "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
-        "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
-        "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
-            
-        #Scheduled Tasks to delete
-        "HKCR:\Extensions\ContractId\Windows.PreInstalledConfigTask\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
-            
-        #Windows Protocol Keys
-        "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
-        "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
-        "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
-        "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
-               
-        #Windows Share Target
-        "HKCR:\Extensions\ContractId\Windows.ShareTarget\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
-    )
-        
-    #This writes the output of each key it is removing and also removes the keys listed above.
-    ForEach ($Key in $Keys) {
-		Remove-Item $Key -Recurse
-	}
-	Write-Host "Done."
-}
-
-# Install WinGet
-Function InstallWinGet {
-	Write-Host " "
-	# Import BitsTransfer module and download NetTestFile
-    Import-Module BitsTransfer 
-    Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/NetTestFile
-    # If the file exists, proceed with downloading WinGet files, else inform user about no internet connection.
-    If (Test-Path NetTestFile) {
-        Remove-Item NetTestFile
-        Write-Host "Downloading required files..."
-        Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
-        Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-        Write-Host "Installing Windows Package Manager (WinGet)..."
-        Add-AppxPackage -Path .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -DependencyPath .\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-        Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
-        Remove-Item Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-        Write-Host "Done."
-	} 
-	else {
-	  Write-Host "We can't connect to GitHub to download the installation files. Are you sure that your internet connection is working?"
-	}
-	Write-Host "Done."
-}
-
-# Install 7zip
-Function Install7zip {
-	Write-Host " "
-	Write-Host "Installing 7-zip..."
-	winget install 7zip
-}
-
-# Install apps from Winstall file (the Winstall.txt file must be on the same directory where CleanWin is)
-Function Winstall {
-	If (Test-Path Winstall.txt) {
-        Get-Content 'Winstall.txt' | Foreach-Object {
-            $App = $_.Split('=')
-            Write-Host "Installing $App..."
-            winget install $App
-        }
-        Write-Host "Winstall has finished the jobs."
-    }
-    else {
-        Write-Host "ERROR: Winstall could not perform the requested jobs. Reason: Could not find file named 'Winstall.txt'. "
-        Write-Host "Note that the filename 'Winstall.txt' is case-sensitive and it should exist in the same folder as CleanWin."
-    }
-}
-
 
 
 ######### Tasks after successful run #########
