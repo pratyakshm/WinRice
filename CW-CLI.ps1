@@ -46,6 +46,7 @@ $tasks = @(
 	"SetBIOSTimeUTC",              # "SetBIOSTimeLocal",
 	"DisableServices",			   # "EnableServices",
 	"DisableTasks",				   # "EnableTasks",
+	"SetupWindowsUpdate",		   # "ResetWindowsUpdate",
 	"ChangesDone",
 	"ClearShell",
 
@@ -945,6 +946,31 @@ Function EnableTasks {
 	Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
     Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
 }
+Function SetupWindowsUpdate {
+	Write-Host " "
+	Write-Host "Setting up Windows Update..."
+	$Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
+    $Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
+        If (!(Test-Path $Update1)) {
+          New-Item -Path $Update1 | Out-Null
+          New-Item -Path $Update2 | Out-Null
+          }
+    Set-ItemProperty -Path $Update1 -Name ExcludeWUDriversInQualityUpdate -Type DWord -Value 1
+    Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
+    Set-ItemProperty -Path $Update1 -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
+    Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
+    Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
+    Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
+    Write-Host "Done."
+}
+
+Function ResetWindowsUpdate {
+	Write-Host " "
+	Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Recurse
+	Write-Host "Windows Update policies have been removed."
+}
+
+
 
 ######### Explorer changes #########
 
