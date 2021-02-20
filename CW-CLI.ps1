@@ -79,6 +79,7 @@ Function CleanWin {
 	Write-Host "https://github.com/pratyakshm/CleanWin"
 	Write-Host "CleanWin is licensed under the MIT License: https://github.com/pratyakshm/CleanWin/blob/main/LICENSE"
 	Write-Host "All rights reserved."
+	Start-Sleep 4
 }
 
 # Set ExecutionPolicy to Unrestricted for session
