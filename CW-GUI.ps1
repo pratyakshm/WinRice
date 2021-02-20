@@ -79,19 +79,19 @@ $Label2.Height = 15
 $Label2.Location = New-Object System.Drawing.Point(10, 10)
 $Label2.Font = 'Segoe UI,12,style=Bold'
 
-$UninstallAllBloatApps = New-Object System.Windows.Forms.Button
-$UninstallAllBloatApps.Text = "Uninstall all bloat apps"
-$UninstallAllBloatApps.Width = 140
-$UninstallAllBloatApps.Height = 45
-$UninstallAllBloatApps.Location = New-Object System.Drawing.Point(10, 38)
-$UninstallAllBloatApps.Font = 'Segoe UI,10'
+$UninstallApps = New-Object System.Windows.Forms.Button
+$UninstallApps.Text = "Uninstall all bloat apps"
+$UninstallApps.Width = 140
+$UninstallApps.Height = 45
+$UninstallApps.Location = New-Object System.Drawing.Point(10, 38)
+$UninstallApps.Font = 'Segoe UI,10'
 
-$UninstallAppsSelectively = New-Object System.Windows.Forms.Button
-$UninstallAppsSelectively.Text = "Uninstall apps selectively"
-$UninstallAppsSelectively.Width = 140
-$UninstallAppsSelectively.Height = 45
-$UninstallAppsSelectively.Location = New-Object System.Drawing.Point(150, 38)
-$UninstallAppsSelectively.Font = 'Segoe UI,10'
+$UninstallSelectively = New-Object System.Windows.Forms.Button
+$UninstallSelectively.Text = "Uninstall apps selectively"
+$UninstallSelectively.Width = 140
+$UninstallSelectively.Height = 45
+$UninstallSelectively.Location = New-Object System.Drawing.Point(150, 38)
+$UninstallSelectively.Font = 'Segoe UI,10'
 
 $InstallWinGet = New-Object System.Windows.Forms.Button
 $InstallWinGet.Text = "Install WinGet"
@@ -114,12 +114,12 @@ $EnableWSL.Height = 45
 $EnableWSL.Location = New-Object System.Drawing.Point(150,128)
 $EnableWSL.Font = 'Segoe UI,10'
 
-$UninstallBloatFeatures = New-Object System.Windows.Forms.Button
-$UninstallBloatFeatures.Text = "Uninstall bloat features"
-$UninstallBloatFeatures.Width = 140
-$UninstallBloatFeatures.Height = 45
-$UninstallBloatFeatures.Location = New-Object System.Drawing.Point(10,128)
-$UninstallBloatFeatures.Font = 'Segoe UI,10'
+$UninstallFeatures = New-Object System.Windows.Forms.Button
+$UninstallFeatures.Text = "Uninstall bloat features"
+$UninstallFeatures.Width = 140
+$UninstallFeatures.Height = 45
+$UninstallFeatures.Location = New-Object System.Drawing.Point(10,128)
+$UninstallFeatures.Font = 'Segoe UI,10'
 
 ####################### PRIVACY & SECURITY ##########################
 
@@ -192,12 +192,12 @@ $CleanExplorer.Height = 43
 $CleanExplorer.Location = New-Object System.Drawing.Point(320,35)
 $CleanExplorer.Font = 'Segoe UI,10'
 
-$RevertExplorerChanges = New-Object System.Windows.Forms.Button
-$RevertExplorerChanges.Text = "Revert Windows Explorer tweaks"
-$RevertExplorerChanges.Width = 140
-$RevertExplorerChanges.Height = 43
-$RevertExplorerChanges.Location = New-Object System.Drawing.Point(460,35)
-$RevertExplorerChanges.Font = 'Segoe UI,10'
+$RevertExplorer = New-Object System.Windows.Forms.Button
+$RevertExplorer.Text = "Revert Windows Explorer tweaks"
+$RevertExplorer.Width = 140
+$RevertExplorer.Height = 43
+$RevertExplorer.Location = New-Object System.Drawing.Point(460,35)
+$RevertExplorer.Font = 'Segoe UI,10'
 
 $DisableStickyKeys = New-Object System.Windows.Forms.Button
 $DisableStickyKeys.Text = "Disable Sticky keys"
@@ -301,9 +301,9 @@ $Label7.Height = 10
 $Label7.Location = New-Object System.Drawing.Point(10,380)
 $Label7.Font = 'Segoe UI,6,style=Monospace' 
 
-$Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label7, $UninstallAllBloatApps, 
-$UninstallAppsSelectively, $InstallWinGet ,$Winstall, $EnableWSL, $UninstallBloatFeatures, $DisableDataCollection, $DisableTelemetry,
-$EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $CleanExplorer, $RevertExplorerChanges, $DisableStickyKeys, 
+$Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label7, $UninstallApps, 
+$UninstallSelectively, $InstallWinGet ,$Winstall, $EnableWSL, $UninstallFeatures, $DisableDataCollection, $DisableTelemetry,
+$EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $CleanExplorer, $RevertExplorer, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $ApplyChanges, $ShowSeconds, 
 $SetupWindowsUpdate, $ResetWindowsUpdate, $DisableServices, $EnableServices, $DisableTasks, $EnableTasks))
 
@@ -319,7 +319,7 @@ Start-Transcript -OutputDirectory "${CWFolder}" | Out-Null
 #### BUTTONS CODE ###
 
 #### APPS ####
-$UninstallAppsSelectively.Add_Click( {
+$UninstallSelectively.Add_Click( {
     Add-Type -AssemblyName PresentationCore, PresentationFramework
 
     #region Variables
@@ -555,7 +555,7 @@ $UninstallAppsSelectively.Add_Click( {
     }
 })
 
-$UninstallAllBloatApps.Add_Click( { 
+$UninstallApps.Add_Click( { 
 $ErrorActionPreference = 'SilentlyContinue'
     # Prebuilt apps
     Write-Host "Uninstalling unnecessary apps..."
@@ -798,7 +798,7 @@ $EnableWSL.Add_Click( {
     }
 })
 
-$UninstallBloatFeatures.Add_Click( {
+$UninstallFeatures.Add_Click( {
     Write-Host "Uninstalling unnecessary features..."
 	Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "WorkFolders-Client" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
 	Get-WindowsCapability -Online | Where-Object { $_.Name -like "Hello.Face*" } | Remove-WindowsCapability -Online | Out-Null
@@ -936,7 +936,7 @@ $START_MENU_LAYOUT = @"
 
 })
 
-$RevertExplorerChanges.Add_Click( {
+$RevertExplorer.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
 
     Write-Host "Reverting to stock..."
