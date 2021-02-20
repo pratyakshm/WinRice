@@ -765,17 +765,18 @@ $InstallWinGet.Add_Click( {
 })
 
 $Winstall.Add_Click( {
-    If (Test-Path Winstall.txt) {
+	Write-Host "Finding Winstall.txt..."
+	If (Test-Path Winstall.txt) {
+		Write-Host "Found Winstall.txt! Beginning Winstall..."
         Get-Content 'Winstall.txt' | Foreach-Object {
             $App = $_.Split('=')
             Write-Host "Installing $App..."
             winget install $App
         }
-        Write-Host "Winstall has finished the jobs."
+        Write-Host "Winstall has successfully installed the package(s)."
     }
     else {
-        Write-Host "ERROR: Winstall could not perform the requested jobs. Reason: Could not find file named 'Winstall.txt'. "
-        Write-Host "Note that the filename 'Winstall.txt' is case-sensitive and it should exist in the same folder as CleanWin."
+        Write-Host "Could not find 'Winstall.txt'. Learn more at bit.ly/Winstall."
     }
 })
 
@@ -815,7 +816,7 @@ $UninstallBloatFeatures.Add_Click( {
 	Remove-WindowsCapability -Name "OpenSSH.Client~~~~0.0.1.0" -Online | Out-Null
 	Remove-WindowsCapability -Name "Print.Fax.Scan~~~~0.0.1.0" -Online | Out-Null
 	Remove-WindowsCapability -Name "XPS.Viewer~~~~0.0.1.0" -Online | Out-Null
-    Disable-WindowsOptionalFeature -FeatureName "Printing-XPSServices-Features" -Online | Out-Null 
+    Disable-WindowsOptionalFeature -FeatureName "Printing-XPSServices-Features" -Online -NoRestart -WarningAction Ignore | Out-Null 
     Write-Host "Done."
 })
 
