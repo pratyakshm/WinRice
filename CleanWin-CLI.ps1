@@ -50,7 +50,6 @@ $tasks = @(
 
 ### Windows Explorer ###
 	"PrintExplorerChanges",
-	"ShowVerboseStatus",           # "HideVerboseStatus",
 	"EnablePrtScrToSnip",		   # "DisablePrtScrSnip",
 	"DisableStickyKeys",           # "EnableStickyKeys",
 	"SetExplorerThisPC",           # "SetExplorerQuickAccess",
@@ -929,20 +928,6 @@ Function PrintExplorerChanges {
 	Write-Host "          WINDOWS EXPLORER        "
 	Write-Host "----------------------------------"
 	Write-Host " "
-}
-
-# Show verbose status
-Function ShowVerboseStatus {
-	Write-Host "Turning on Verbose Status..."
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "VerboseStatus" -Type DWord -Value 1
-	Write-Host "Done."
-}
-
-# Hide verbose status 
-Function HideVerboseStatus {
-	Write-Host "Turning off Verbose Status..."
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "VerboseStatus" -Type DWord -Value 0
-	Write-Host "Done."
 }
 
 # Enable use print screen key to open screen snipping
