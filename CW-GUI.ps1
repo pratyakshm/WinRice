@@ -107,12 +107,12 @@ $Winstall.Height = 45
 $Winstall.Location = New-Object System.Drawing.Point(150, 83)
 $Winstall.Font = 'Segoe UI,10'
 
-$InstallWSL = New-Object System.Windows.Forms.Button
-$InstallWSL.Text = "Install WSL"
-$InstallWSL.Width = 140
-$InstallWSL.Height = 45
-$InstallWSL.Location = New-Object System.Drawing.Point(150,128)
-$InstallWSL.Font = 'Segoe UI,10'
+$EnableWSL = New-Object System.Windows.Forms.Button
+$EnableWSL.Text = "Enable WSL"
+$EnableWSL.Width = 140
+$EnableWSL.Height = 45
+$EnableWSL.Location = New-Object System.Drawing.Point(150,128)
+$EnableWSL.Font = 'Segoe UI,10'
 
 $UninstallBloatFeatures = New-Object System.Windows.Forms.Button
 $UninstallBloatFeatures.Text = "Uninstall bloat features"
@@ -302,7 +302,7 @@ $Label7.Location = New-Object System.Drawing.Point(10,380)
 $Label7.Font = 'Segoe UI,6,style=Monospace' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label7, $UninstallAllBloatApps, 
-$UninstallAppsSelectively, $InstallWinGet ,$Winstall, $InstallWSL, $UninstallBloatFeatures, $DisableDataCollection, $DisableTelemetry,
+$UninstallAppsSelectively, $InstallWinGet ,$Winstall, $EnableWSL, $UninstallBloatFeatures, $DisableDataCollection, $DisableTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $CleanExplorer, $RevertExplorerChanges, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $ApplyChanges, $ShowSeconds, 
 $SetupWindowsUpdate, $ResetWindowsUpdate, $DisableServices, $EnableServices, $DisableTasks, $EnableTasks))
@@ -781,21 +781,20 @@ $Winstall.Add_Click( {
 })
 
 
-$InstallWSL.Add_Click( {
+$EnableWSL.Add_Click( {
     # Import BitsTransfer module and download NetTestFile
     Import-Module BitsTransfer 
     Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/NetTestFile
     # If the file exists, proceed with installing WSL, else inform user about no internet connection.
     If (Test-Path NetTestFile) {
-        Remove-item NetTestFile
-        Write-Host "Installing WSL..."
-        dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /all /NoRestart /Quiet
-        dism.exe /Online /Enable-Feature /FeatureName:VirtualMachinePlatform /All /NoRestart /Quiet
-        dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V /All /NoRestart	/Quiet
-        Write-Host "Done."
+        Remove-Item NetTestFile
+        Write-Host "Enabling Windows Subsystem for Linux..."
+        Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+        Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+        Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
     } 
     else {
-        Write-Host "WSL installation has failed because CleanWin can't connect to the internet."
+        Write-Host "Windows Subsystem for Linux can't be installed. Are you sure you're connected to the internet?"
     }
 })
 
