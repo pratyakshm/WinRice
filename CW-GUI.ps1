@@ -583,6 +583,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     "Microsoft.SkypeApp"
     "Microsoft.ScreenSketch"
     "Microsoft.StorePurchaseApp" 
+    "Microsoft.Todos"
     "Microsoft.WindowsAlarms"
     "Microsoft.WindowsCamera"
     "Microsoft.WindowsCommunicationsApps" 
