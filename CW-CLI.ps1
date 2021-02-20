@@ -377,7 +377,6 @@ Function InstallWinGet {
 	else {
 	  Write-Host "We can't connect to GitHub to download the installation files. Are you sure that your internet connection is working?"
 	}
-	Write-Host "Done."
 }
 
 # Install 7zip
