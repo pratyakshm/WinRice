@@ -9,16 +9,14 @@ $tasks = @(
 	"Setup",
 	"CleanWin",
 	"ProductInformation",
-	"ClearShell",
 
 ### Apps & Features ###
 	"AppsFeatures",
 	"DebloatApps", "CleanupRegistry",
 	"InstallWinGet", "Install7zip", "Winstall", 
-	"InstallWSL",
+	"EnableWSL", "EnableSandbox",
 	"UninstallFeatures",
 	"ChangesDone",
-	"ClearShell",
 
 ### Privacy & Security ###
 	"PrivacySecurity",
@@ -35,7 +33,6 @@ $tasks = @(
 	"AutoLoginPostUpdate", 		   # "StayOnLockscreenPostUpdate",
 	"DisableMeltdownCompatFlag",   # "EnableMeltdownCompatFlag",
 	"ChangesDone",
-	"ClearShell",
 
 ### Tasks & Services ###
 	"TasksServices",
@@ -48,7 +45,6 @@ $tasks = @(
 	"DisableTasks",				   # "EnableTasks",
 	"SetupWindowsUpdate",		   # "ResetWindowsUpdate",
 	"ChangesDone",
-	"ClearShell",
 
 ### Windows Explorer ###
 	"PrintExplorerChanges",
@@ -62,7 +58,6 @@ $tasks = @(
 	"HideCortana",			       # "RestoreCortana",
 	"HideMeetNow",				   # "RestoreMeetNow",
 	"ChangesDone",
-	"ClearShell",
 
 ###  Tasks after successful run ###
 	"RestartPC"
@@ -79,7 +74,7 @@ Function CleanWin {
 	Write-Host "https://github.com/pratyakshm/CleanWin"
 	Write-Host "CleanWin is licensed under the MIT License: https://github.com/pratyakshm/CleanWin/blob/main/LICENSE"
 	Write-Host "All rights reserved."
-	Start-Sleep 4
+	Start-Sleep 1
 }
 
 # Set ExecutionPolicy to Unrestricted for session
@@ -90,14 +85,9 @@ Function Setup {
 # Product Information 
 Function ProductInformation {
 	Write-Host " "
+	Write-Host "OS Build info:"
 	Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName, ReleaseId, DisplayVersion, BuildLab
-}
-
-# Clear the shell output
-Function ClearShell {
-	Write-Host " "
-	Write-Host "Clearing shell..."
-	Clear-Host
+	Start-Sleep 4
 }
 
 # Changes performed
@@ -399,24 +389,31 @@ Function Winstall {
         Write-Host "Winstall has finished the jobs."
     }
     else {
-        Write-Host "ERROR: Winstall could not perform the requested jobs. Reason: Could not find file named 'Winstall.txt'. "
-        Write-Host "Note that the filename 'Winstall.txt' is case-sensitive and it should exist in the same folder as CleanWin."
+        Write-Host "Could not find 'Winstall.txt'. Learn more at bit.ly/Winstall!"
     }
 }
 
-# Install WSL
-Function InstallWSL {
-		Write-Host "Installing WSL..."
-		dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /all /NoRestart /Quiet
-		dism.exe /Online /Enable-Feature /FeatureName:VirtualMachinePlatform /All /NoRestart /Quiet
-		dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Hyper-V /All /NoRestart	/Quiet
-		Write-Host "Done."
+# Enable WSL
+Function EnableWSL {
+	Write-Host " "
+	Write-Host "Enabling Windows Subsystem for Linux..."
+	Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+	Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+	Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+	Write-Host "Done."
 }
 
+# Enable Sandbox
+Function EnableSandbox {
+	Write-Host " "
+	Write-Host "Enabling Windows Sandbox..."
+	Enable-WindowsOptionalFeature -FeatureName "Containers-DisposableClientVM" -All -Online -NoRestart -WarningAction Ignore | Out-Null
+	Write-Host "Done."
+}
 # Uninstall Features
 Function UninstallFeatures {
 	Write-Host " "
-	Write-Host "Uninstalling unnecessary features, please stand by..."
+	Write-Host "Uninstalling unnecessary features, please standby..."
 	Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "WorkFolders-Client" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
 	Get-WindowsCapability -Online | Where-Object { $_.Name -like "Hello.Face*" } | Remove-WindowsCapability -Online | Out-Null
 	Get-WindowsCapability -Online | Where-Object { $_.Name -like "MathRecognizer*" } | Remove-WindowsCapability -Online | Out-Null
@@ -432,7 +429,7 @@ Function UninstallFeatures {
 	Remove-WindowsCapability -Name "OpenSSH.Client~~~~0.0.1.0" -Online | Out-Null
 	Remove-WindowsCapability -Name "Print.Fax.Scan~~~~0.0.1.0" -Online | Out-Null
 	Remove-WindowsCapability -Name "XPS.Viewer~~~~0.0.1.0" -Online | Out-Null
-    Disable-WindowsOptionalFeature -FeatureName "Printing-XPSServices-Features" -Online | Out-Null 
+    Disable-WindowsOptionalFeature -FeatureName "Printing-XPSServices-Features" -Online -NoRestart -WarningAction Ignore | Out-Null 
 	Write-Host "Done."
 }
 
