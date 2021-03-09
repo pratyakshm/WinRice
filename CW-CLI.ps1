@@ -12,7 +12,7 @@ $tasks = @(
 
 ### Apps & Features ###
 	"AppsFeatures",
-	"DebloatApps", "CleanupRegistry", 
+	"DebloatApps", "CleanupRegistry", "EnableEdgeStartupBoost", # "DisableEdgeStartupBoost",
 	"UninstallFeatures", "EnableWSL", "EnableSandbox",
 	"InstallWinGet", "Install7zip", "Winstall", 
 	"ChangesDone",
@@ -185,7 +185,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
 	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
 	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Word.lnk"
-	
+
 	# Uninstall OneDrive
 	taskkill /f /im onedrive.exe
 	/Windows/SysWOW64/OneDriveSetup.exe /uninstall
@@ -309,6 +309,20 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Remove-Item $Key -Recurse
 	}
 	Write-Host "Done."
+}
+
+# Enable Startup boost in Microsoft Edge
+Function EnableEdgeStartupBoost {
+	$EdgeStartupBoost = "HKLM:\SOFTWARE\Policies\Microsoft\Edge"
+	If (!(Test-Path $EdgeStartupBoost )) {
+		New-Item -Path $EdgeStartupBoost -Force | Out-Null
+		}
+	New-ItemProperty -Path $EdgeStartupBoost -Name "StartupBoostEnabled" -Type DWord -Value 1 | Out-Null
+}
+
+# Disable Startup boost in Microsoft Edge
+Function DisableEdgeStartupBoost {
+	Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Edge" -Recurse
 }
 
 # Uninstall Features
