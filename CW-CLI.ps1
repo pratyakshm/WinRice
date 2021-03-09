@@ -401,7 +401,6 @@ Function Install7zip {
 # Install apps from Winstall file (the Winstall.txt file must be on the same directory where CleanWin is)
 Function Winstall {
 	Write-Host " "
-	Write-Host "Finding Winstall.txt..."
 	If (Test-Path Winstall.txt) {
 		Write-Host "Found Winstall.txt! Beginning Winstall..."
         Get-Content 'Winstall.txt' | Foreach-Object {
@@ -412,7 +411,7 @@ Function Winstall {
         Write-Host "Winstall has successfully installed the package(s)."
     }
     else {
-        Write-Host "Could not find 'Winstall.txt'. Learn more at bit.ly/Winstall."
+        Write-Host "Winstall.txt was not found. Learn more at bit.ly/Winstall."
     }
 }
 
