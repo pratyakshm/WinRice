@@ -1170,6 +1170,8 @@ Function RestoreMeetNow {
 
 # Update status: Script execution successful
 Function RestartPC {
+	Stop-Process -Name explorer
+	Start-Sleep 3
 	Write-Host "CleanWin has finished working."
 	Write-Host "This PC is set to restart in 10 seconds, please close this window if you want to halt the restart."
 	Write-Host "Thank you for using CleanWin."
