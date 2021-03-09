@@ -313,11 +313,13 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 # Enable Startup boost in Microsoft Edge
 Function EnableEdgeStartupBoost {
+	Write-Host "Enabling Startup boost for Microsoft Edge..."
 	$EdgeStartupBoost = "HKLM:\SOFTWARE\Policies\Microsoft\Edge"
 	If (!(Test-Path $EdgeStartupBoost )) {
 		New-Item -Path $EdgeStartupBoost -Force | Out-Null
 		}
 	New-ItemProperty -Path $EdgeStartupBoost -Name "StartupBoostEnabled" -Type DWord -Value 1 | Out-Null
+	Write-Host "Done."
 }
 
 # Disable Startup boost in Microsoft Edge
