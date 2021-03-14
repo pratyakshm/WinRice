@@ -13,7 +13,8 @@ $tasks = @(
 ### Apps & Features ###
 	"AppsFeatures",
 	"DebloatApps", "UninstallOneDrive", "CleanupRegistry", 
-	"EnableEdgeStartupBoost", # "DisableEdgeStartupBoost",
+	"EnableEdgeStartupBoost", # "DisableEdgeStartupBoost", 
+	"DisableBrowserRestoreAd", #"EnableBrowserRestoreAd",
 	"UninstallFeatures", "EnableWSL", "EnableSandbox",
 	"InstallWinGet", "Install7zip", "Winstall", 
 	"ChangesDone",
@@ -367,6 +368,40 @@ Function EnableEdgeStartupBoost {
 # Disable Startup boost in Microsoft Edge
 Function DisableEdgeStartupBoost {
 	Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Edge" -Recurse
+}
+
+# Disable "Web Browsing - Restore recommended promo in Settings"
+Function DisableBrowserRestoreAd {
+	Write-Host " "
+    Import-Module BitsTransfer 
+    Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Albacore.ViVe.dll
+	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/ViVeTool.exe
+    If (Test-Path ViVeTool.exe) {
+        Write-Host "Hiding 'Web browsing: Restore recommended' suggestion from Settings..."
+		ViVeTool.exe delconfig 23531064 1
+		Remove-Item ViVeTool.exe
+		Remove-Item Albacore.ViVe.dll
+        Write-Host "Done."
+	} 
+	else {
+	  Write-Host "We can't connect to GitHub to download the required files. Are you sure that your internet connection is working?"
+	}
+}
+
+Function EnableBrowserRestoreAd {
+	Write-Host " "
+    Import-Module BitsTransfer 
+    Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Albacore.ViVe.dll
+	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/ViVeTool.exe
+    If (Test-Path ViVeTool.exe) {
+		ViVeTool.exe addconfig 23531064 0
+		Remove-Item ViVeTool.exe
+		Remove-Item Albacore.ViVe.dll
+        Write-Host "Done."
+	} 
+	else {
+	  Write-Host "We can't connect to GitHub to download the required files. Are you sure that your internet connection is working?"
+	}
 }
 
 # Uninstall Features
