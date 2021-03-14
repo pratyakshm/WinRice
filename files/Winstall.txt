@@ -1,3 +1,0 @@
-7zip
-vscode
-Mozilla.Firefox
