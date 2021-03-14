@@ -140,6 +140,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	"Microsoft.News" 
 	"Microsoft.Office.Sway" 
 	"Microsoft.OneConnect"
+	"Microsoft.PPIProjection"
 	"Microsoft.People" 
 	"Microsoft.Print3D" 
 	"Microsoft.SkypeApp"
@@ -187,6 +188,14 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
 	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
 	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Word.lnk"
+
+	# Uninstall Connect app
+	Import-Module BitsTransfer
+	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
+	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
+	connect.cmd
+	Remove-Item install_wim_tweak.exe
+	Remove-Item connect.cmd
 
 	# Unpin all start menu tiles
 	Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
