@@ -1,3 +1,7 @@
+# This file is a part of the CleanWin software
+# Copyright (c) 2021 PratyakshM <pratyakshm@protonmail.com>
+# All rights reserved.
+
 # Import BitsTransfer module and download NetTestFile
 Import-Module BitsTransfer 
 Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/NetTestFile
