@@ -63,7 +63,7 @@ screen
 ### BEGIN GUI ###
 
 $Form = New-Object System.Windows.Forms.Form
-$Form.ClientSize = '610,400'
+$Form.ClientSize = '610,380'
 $Form.Text = "CleanWin v0.3.5"
 $Form.TopMost = $false;
 $Form.MaximizeBox = $false
@@ -265,47 +265,33 @@ $ResetWindowsUpdate.Height = 40
 $ResetWindowsUpdate.Location = New-Object System.Drawing.Point(460,245)
 $ResetWindowsUpdate.Font = 'Segoe UI,10'
 
-$DisableServices = New-Object System.Windows.Forms.Button
-$DisableServices.Text = "Disable unnecessary services"
-$DisableServices.Width = 140
-$DisableServices.Height = 40
-$DisableServices.Location = New-Object System.Drawing.Point(320,285)
-$DisableServices.Font = 'Segoe UI,10'
+$DisableTasksServices = New-Object System.Windows.Forms.Button
+$DisableTasksServices.Text = "Optimize Tasks and Services"
+$DisableTasksServices.Width = 140
+$DisableTasksServices.Height = 40
+$DisableTasksServices.Location = New-Object System.Drawing.Point(320,285)
+$DisableTasksServices.Font = 'Segoe UI,10'
 
-$EnableServices = New-Object System.Windows.Forms.Button
-$EnableServices.Text = "Enable unnecessary services"
-$EnableServices.Width = 140
-$EnableServices.Height = 40
-$EnableServices.Location = New-Object System.Drawing.Point(460,285)
-$EnableServices.Font = 'Segoe UI,10'
-
-$DisableTasks = New-Object System.Windows.Forms.Button
-$DisableTasks.Text = "Disable unnecessary tasks"
-$DisableTasks.Width = 140
-$DisableTasks.Height = 40
-$DisableTasks.Location = New-Object System.Drawing.Point(320,325)
-$DisableTasks.Font = 'Segoe UI,10'
-
-$EnableTasks = New-Object System.Windows.Forms.Button
-$EnableTasks.Text = "Enable unnecessary tasks"
-$EnableTasks.Width = 140
-$EnableTasks.Height = 40
-$EnableTasks.Location = New-Object System.Drawing.Point(460,325)
-$EnableTasks.Font = 'Segoe UI,10'
+$EnableTasksServices = New-Object System.Windows.Forms.Button
+$EnableTasksServices.Text = "Revert Tasks and Services changes"
+$EnableTasksServices.Width = 140
+$EnableTasksServices.Height = 40
+$EnableTasksServices.Location = New-Object System.Drawing.Point(460,285)
+$EnableTasksServices.Font = 'Segoe UI,10'
 
 $Label7 = New-Object System.Windows.Forms.Label
 $Label7.Text = "CleanWin is FOSS, and shall only be downloaded from https://github.com/pratyakshm/CleanWin"
 $Label7.AutoSize = $true
 $Label7.Width = 25
 $Label7.Height = 10
-$Label7.Location = New-Object System.Drawing.Point(10,380)
+$Label7.Location = New-Object System.Drawing.Point(10,360)
 $Label7.Font = 'Segoe UI,6,style=Monospace' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label7, $UninstallApps, 
 $UninstallSelectively, $InstallWinGet ,$Winstall, $EnableWSL, $UninstallFeatures, $DisableDataCollection, $DisableTelemetry,
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $CleanExplorer, $RevertExplorer, $DisableStickyKeys, 
 $EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $ApplyChanges, $ShowSeconds, 
-$SetupWindowsUpdate, $ResetWindowsUpdate, $DisableServices, $EnableServices, $DisableTasks, $EnableTasks))
+$SetupWindowsUpdate, $ResetWindowsUpdate, $DisableTasksServices, $EnableTasksServices))
 
 $CWFolder = "C:\CleanWin"
 If (Test-Path $CWFolder) {
@@ -1310,9 +1296,11 @@ $ErrorActionPreference = 'SilentlyContinue'
 })
 
 
-$DisableServices.Add_Click( {
+$DisableTasksServices.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
     
+    Write-Host "Disabling unnecessary tasks & services...
+    "
     # Stop the services
     Stop-Service RetailDemo | Out-Null
     Stop-Service "diagnosticshub.standardcollector.service" | Out-Null
@@ -1324,7 +1312,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     Stop-Service TrkWks | Out-Null
     Stop-Service SysMain | Out-Null
 
-    #Set services startup type to disabled
+    # Set services startup type to disabled
     Set-Service RetailDemo -StartupType Disabled
     Set-Service "diagnosticshub.standardcollector.service" -StartupType Disabled
 	Set-Service MapsBroker  -StartupType Disabled
@@ -1335,25 +1323,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     Set-Service TrkWks -StartupType Disabled 
     Set-Service SysMain -StartupType Disabled
 
-	Write-Host "Done."
-})
-
-$EnableServices.Add_Click( {
-$ErrorActionPreference = 'SilentlyContinue'
-
-	Set-Service RetailDemo -StartupType Automatic
-	Set-Service "diagnosticshub.standardcollector.service" -StartupType Automatic
-	Set-Service MapsBroker -StartupType Automatic
-	Set-Service NetTcpPortSharing -StartupType Automatic
-	Set-Service RemoteAccess -StartupType Automatic 
-	Set-Service RemoteRegistry -StartupType Automatic
-	Set-Service SharedAccess -StartupType Automatic
-    Set-Service TrkWks -StartupType Automatic
-    Set-Service SysMain -StartupType Automatic
-    Write-Host "Done."
-})
-
-$DisableTasks.Add_Click( {
+    # Disable tasks 
     Disable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" | Out-Null
 	Disable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\ProgramDataUpdater" | Out-Null
 	Disable-ScheduledTask -TaskName "Microsoft\Windows\Autochk\Proxy" | Out-Null
@@ -1363,10 +1333,27 @@ $DisableTasks.Add_Click( {
 	Disable-ScheduledTask -TaskName "Microsoft\Windows\Windows Error Reporting\QueueReporting" | Out-Null
 	Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
     Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
-    Write-Host "Done."
+
+	Write-Host "Done."
 })
 
-$EnableTasks.Add_Click( {
+$EnableTasksServices.Add_Click( {
+$ErrorActionPreference = 'SilentlyContinue'
+
+    Write-Host "Reverting changes made to tasks & services..."
+
+    # Set services startup type to Automatic
+	Set-Service RetailDemo -StartupType Automatic
+	Set-Service "diagnosticshub.standardcollector.service" -StartupType Automatic
+	Set-Service MapsBroker -StartupType Automatic
+	Set-Service NetTcpPortSharing -StartupType Automatic
+	Set-Service RemoteAccess -StartupType Automatic 
+	Set-Service RemoteRegistry -StartupType Automatic
+	Set-Service SharedAccess -StartupType Automatic
+    Set-Service TrkWks -StartupType Automatic
+    Set-Service SysMain -StartupType Automatic
+
+    # Enable tasks
     Enable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" | Out-Null
 	Enable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\ProgramDataUpdater" | Out-Null
 	Enable-ScheduledTask -TaskName "Microsoft\Windows\Autochk\Proxy" | Out-Null
