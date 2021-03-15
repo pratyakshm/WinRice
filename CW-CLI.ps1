@@ -963,16 +963,25 @@ Function SetBIOSTimeLocal {
 
 # Disable unnecessary services 
 Function DisableServices {
+$ErrorActionPreference = 'SilentlyContinue'
 	Write-Host " "
 	Write-Host "Turning off unnecessary services..."
-	Set-Service RetailDemo -StartupType Disabled -ErrorAction SilentlyContinue
-	Set-Service "diagnosticshub.standardcollector.service" -StartupType Disabled -ErrorAction SilentlyContinue
-	Set-Service MapsBroker  -StartupType Disabled -ErrorAction SilentlyContinue
-	Set-Service NetTcpPortSharing  -StartupType Disabled -ErrorAction SilentlyContinue
-	Set-Service RemoteAccess -StartupType Disabled -ErrorAction SilentlyContinue 
-	Set-Service RemoteRegistry -StartupType Disabled -ErrorAction SilentlyContinue 
-	Set-Service SharedAccess -StartupType Disabled -ErrorAction SilentlyContinue 
-	Set-Service TrkWks -StartupType Disabled -ErrorAction SilentlyContinue 
+	Stop-Service -Name "SysMain" | Out-Null
+	Stop-Service -Name "RetailDemo" | Out-Null
+	Stop-Service -Name "diagnosticshub.standardcollector.service" | Out-Null
+	Stop-Service -Name "MapsBroker" | Out-Null
+	Stop-Service -Name "NetTcpPortSharing" | Out-Null
+	Stop-Service -Name "RemoteRegistry" | Out-Null
+	Stop-Service -Name "SharedAccess" | Out-Null
+	Stop-Service -Name "TrkWks" | Out-Null
+	Set-Service RetailDemo -StartupType Disabled
+	Set-Service "diagnosticshub.standardcollector.service" -StartupType Disabled
+	Set-Service MapsBroker -StartupType Disabled
+	Set-Service NetTcpPortSharing  -StartupType Disabled
+	Set-Service RemoteAccess -StartupType Disabled
+	Set-Service RemoteRegistry -StartupType Disabled
+	Set-Service SharedAccess -StartupType Disabled
+	Set-Service TrkWks -StartupType Disabled 
 	Write-Host "Done."
 }
 
