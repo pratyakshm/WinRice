@@ -141,7 +141,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	"Microsoft.News" 
 	"Microsoft.Office.Sway" 
 	"Microsoft.OneConnect"
-	"Microsoft.PPIProjection"
 	"Microsoft.People" 
 	"Microsoft.Print3D" 
 	"Microsoft.SkypeApp"
@@ -194,7 +193,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Import-Module BitsTransfer
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
 	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
-	connect.cmd
+	./connect.cmd
 	Remove-Item install_wim_tweak.exe
 	Remove-Item connect.cmd
 
