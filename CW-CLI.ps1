@@ -12,7 +12,7 @@ $tasks = @(
 
 ### Apps & Features ###
 	"AppsFeatures",
-	"DebloatApps", "UninstallOneDrive", "CleanupRegistry", 
+	"DebloatApps", "UnpinStartTiles", "UninstallOneDrive", "CleanupRegistry", 
 	"EnableEdgeStartupBoost", # "DisableEdgeStartupBoost", 
 	"DisableBrowserRestoreAd", #"EnableBrowserRestoreAd",
 	"UninstallFeatures", "EnableWSL", "EnableSandbox",
@@ -193,11 +193,17 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Import-Module BitsTransfer
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
 	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
-	./connect.cmd
+	./connect.cmd | Out-Null
 	Remove-Item install_wim_tweak.exe
 	Remove-Item connect.cmd
 
-	# Unpin all start menu tiles
+	Write-Host "Done."
+}
+
+
+# Unpin all start menu tiles
+Function UnpinStartTiles {
+	Write-Host "Unpinning all tiles in start menu..."
 	Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <DefaultLayoutOverride>'
