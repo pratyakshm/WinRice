@@ -199,47 +199,20 @@ $RevertExplorer.Height = 43
 $RevertExplorer.Location = New-Object System.Drawing.Point(460,35)
 $RevertExplorer.Font = 'Segoe UI,10'
 
-$DisableStickyKeys = New-Object System.Windows.Forms.Button
-$DisableStickyKeys.Text = "Disable Sticky keys"
-$DisableStickyKeys.Width = 140
-$DisableStickyKeys.Height = 40
-$DisableStickyKeys.Location = New-Object System.Drawing.Point(320,78)
-$DisableStickyKeys.Font = 'Segoe UI,10'
-
-$EnablePrtScrForSnip = New-Object System.Windows.Forms.Button
-$EnablePrtScrForSnip.Text = "Use PrtScr to open Screen Snip"
-$EnablePrtScrForSnip.Width = 140
-$EnablePrtScrForSnip.Height = 40
-$EnablePrtScrForSnip.Location = New-Object System.Drawing.Point(460,78)
-$EnablePrtScrForSnip.Font = 'Segoe UI,10'
-
-$Hide3DObjects = New-Object System.Windows.Forms.Button
-$Hide3DObjects.Text = "Hide 3D objects"
-$Hide3DObjects.Width = 140
-$Hide3DObjects.Height = 40
-$Hide3DObjects.Location = New-Object System.Drawing.Point(460,118)
-$Hide3DObjects.Font = 'Segoe UI,10'
-
-$ShowVerboseStatus = New-Object System.Windows.Forms.Button
-$ShowVerboseStatus.Text = "Show Verbose status"
-$ShowVerboseStatus.Width = 140
-$ShowVerboseStatus.Height = 40
-$ShowVerboseStatus.Location = New-Object System.Drawing.Point(320,118)
-$ShowVerboseStatus.Font = 'Segoe UI,10'
-
 $ShowSeconds = New-Object System.Windows.Forms.Button
 $ShowSeconds.Text = "Show seconds in taskbar"
 $ShowSeconds.Width = 140
-$ShowSeconds.Height = 40
-$ShowSeconds.Location = New-Object System.Drawing.Point(320,158)
+$ShowSeconds.Height = 43
+$ShowSeconds.Location = New-Object System.Drawing.Point(320,78)
 $ShowSeconds.Font = 'Segoe UI,10'
 
-$ApplyChanges = New-Object System.Windows.Forms.Button
-$ApplyChanges.Text = "Apply changes"
-$ApplyChanges.Width = 140
-$ApplyChanges.Height = 40
-$ApplyChanges.Location = New-Object System.Drawing.Point(460,158)
-$ApplyChanges.Font = 'Segoe UI,10'
+$UnpinStartTiles = New-Object System.Windows.Forms.Button
+$UnpinStartTiles.Text = "Unpin tiles in Start menu"
+$UnpinStartTiles.Width = 140
+$UnpinStartTiles.Height = 43
+$UnpinStartTiles.Location = New-Object System.Drawing.Point(460,78)
+$UnpinStartTiles.Font = 'Segoe UI,10'
+
 
 ############# TASKS & SERVICES ###################
 
@@ -289,8 +262,7 @@ $Label7.Font = 'Segoe UI,6,style=Monospace'
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label7, $UninstallApps, 
 $UninstallSelectively, $InstallWinGet ,$Winstall, $EnableWSL, $UninstallFeatures, $DisableDataCollection, $DisableTelemetry,
-$EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $CleanExplorer, $RevertExplorer, $DisableStickyKeys, 
-$EnablePrtScrForSnip, $Hide3DObjects, $ShowVerboseStatus, $ApplyChanges, $ShowSeconds, 
+$EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $CleanExplorer, $RevertExplorer, $UnpinStartTiles, $ShowSeconds, 
 $SetupWindowsUpdate, $ResetWindowsUpdate, $DisableTasksServices, $EnableTasksServices))
 
 $CWFolder = "C:\CleanWin"
@@ -653,78 +625,6 @@ $ErrorActionPreference = 'SilentlyContinue'
     taskkill /f /im onedrive.exe
     /Windows/SysWOW64/OneDriveSetup.exe /uninstall
 
-    # Unpin all start menu tiles
-
-    Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <DefaultLayoutOverride>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    <StartLayoutCollection>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      <defaultlayout:StartLayout GroupCellWidth="6" />'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    </StartLayoutCollection>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  </DefaultLayoutOverride>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    <CustomTaskbarLayoutCollection>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      <defaultlayout:TaskbarLayout>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '        <taskbar:TaskbarPinList>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '          <taskbar:UWA AppUserModelID="Microsoft.MicrosoftEdge_8wekyb3d8bbwe!MicrosoftEdge" />'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '          <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\System Tools\File Explorer.lnk" />'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '        </taskbar:TaskbarPinList>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      </defaultlayout:TaskbarLayout>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    </CustomTaskbarLayoutCollection>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '</LayoutModificationTemplate>'
-
-$START_MENU_LAYOUT = @"
-    <LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">
-        <LayoutOptions StartTileGroupCellWidth="6" />
-        <DefaultLayoutOverride>
-            <StartLayoutCollection>
-                <defaultlayout:StartLayout GroupCellWidth="6" />
-            </StartLayoutCollection>
-        </DefaultLayoutOverride>
-    </LayoutModificationTemplate>
-"@
-
-    $layoutFile="C:\Windows\StartMenuLayout.xml"
-
-    #Delete layout file if it already exists
-    If(Test-Path $layoutFile)
-    {
-        Remove-Item $layoutFile
-    }
-
-    #Creates the blank layout file
-    $START_MENU_LAYOUT | Out-File $layoutFile -Encoding ASCII
-
-    $regAliases = @("HKLM", "HKCU")
-
-    #Assign the start layout and force it to apply with "LockedStartLayout" at both the machine and user level
-    foreach ($regAlias in $regAliases){
-        $basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
-        $keyPath = $basePath + "\Explorer" 
-        IF(!(Test-Path -Path $keyPath)) { 
-            New-Item -Path $basePath -Name "Explorer"
-        }
-        Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 1
-        Set-ItemProperty -Path $keyPath -Name "StartLayoutFile" -Value $layoutFile
-    }
-
-    #Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process
-    Stop-Process -name explorer
-    Start-Sleep -s 5
-    $wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
-    Start-Sleep -s 5
-
-    #Enable the ability to pin items again by disabling "LockedStartLayout"
-    foreach ($regAlias in $regAliases){
-        $basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
-        $keyPath = $basePath + "\Explorer" 
-        Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 0
-    }
-
-    # Uncomment the next line to make clean start menu default for all new users
-    Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
-
-    Remove-Item $layoutFile
-    
     Write-Host "Done."
 
 })
@@ -846,78 +746,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1 -ErrorAction SilentlyContinue
     Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
     
-    # This script removes all Start Menu Tiles from the .default user #
-
-    Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <DefaultLayoutOverride>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    <StartLayoutCollection>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      <defaultlayout:StartLayout GroupCellWidth="6" />'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    </StartLayoutCollection>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  </DefaultLayoutOverride>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    <CustomTaskbarLayoutCollection>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      <defaultlayout:TaskbarLayout>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '        <taskbar:TaskbarPinList>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '          <taskbar:UWA AppUserModelID="Microsoft.MicrosoftEdge_8wekyb3d8bbwe!MicrosoftEdge" />'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '          <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\System Tools\File Explorer.lnk" />'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '        </taskbar:TaskbarPinList>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      </defaultlayout:TaskbarLayout>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    </CustomTaskbarLayoutCollection>'
-    Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '</LayoutModificationTemplate>'
-
-$START_MENU_LAYOUT = @"
-    <LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">
-        <LayoutOptions StartTileGroupCellWidth="6" />
-        <DefaultLayoutOverride>
-            <StartLayoutCollection>
-                <defaultlayout:StartLayout GroupCellWidth="6" />
-            </StartLayoutCollection>
-        </DefaultLayoutOverride>
-    </LayoutModificationTemplate>
-"@
-
-    $layoutFile="C:\Windows\StartMenuLayout.xml"
-
-    #Delete layout file if it already exists
-    If(Test-Path $layoutFile)
-    {
-        Remove-Item $layoutFile
-    }
-
-    #Creates the blank layout file
-    $START_MENU_LAYOUT | Out-File $layoutFile -Encoding ASCII
-
-    $regAliases = @("HKLM", "HKCU")
-
-    #Assign the start layout and force it to apply with "LockedStartLayout" at both the machine and user level
-    foreach ($regAlias in $regAliases){
-        $basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
-        $keyPath = $basePath + "\Explorer" 
-        IF(!(Test-Path -Path $keyPath)) { 
-            New-Item -Path $basePath -Name "Explorer"
-        }
-        Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 1
-        Set-ItemProperty -Path $keyPath -Name "StartLayoutFile" -Value $layoutFile
-    }
-
-    #Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process
-    Stop-Process -name explorer
-    Start-Sleep -s 5
-    $wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
-    Start-Sleep -s 5
-
-    #Enable the ability to pin items again by disabling "LockedStartLayout"
-    foreach ($regAlias in $regAliases){
-        $basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
-        $keyPath = $basePath + "\Explorer" 
-        Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 0
-    }
-
-    # Uncomment the next line to make clean start menu default for all new users
-    Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
-
-    Remove-Item $layoutFile
-
     Write-Host "Done."
 
 })
@@ -979,50 +807,88 @@ $RevertExplorer.Add_Click( {
 
 })
 
-$ShowVerboseStatus.Add_Click( {
-    $ErrorActionPreference = 'SilentlyContinue'
-    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "VerboseStatus" -Type DWord -Value 1
-    Write-Host "Done."
-})
-
 $ShowSeconds.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
-    Write-Host "Done."
-})
-
-$Hide3DObjects.Add_Click( {
-    $ErrorActionPreference = 'SilentlyContinue'
-    $Hide3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-    $Hide3DObjects2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-    $Hide3DObjects3 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
-    If (!(Test-Path $Hide3DObjects1)) {
-        New-Item -Path $Hide3DObjects1 -Force | Out-Null
-        }
-    Set-ItemProperty -Path $Hide3DObjects1 -Name "ThisPCPolicy" -Type String -Value "Hide"
-    If (!(Test-Path $Hide3DObjects2)) {
-        New-Item -Path $Hide3DObjects2 -Force | Out-Null
-        }
-    Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
-    Remove-Item -Path $Hide3DObjects3 -Recurse
-    Write-Host "Done."
-})
-
-$EnablePrtScrForSnip.Add_Click( {
-    Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 1
-    Write-Host "Done."
-})
-
-$DisableStickyKeys.Add_Click( {
-    Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
-    Write-Host "Done."
-})
-s
-$ApplyChanges.Add_Click( {
-    Write-Host "Restarting Windows Explorer to apply changes..."
     Stop-Process -ProcessName explorer
-    Start-Sleep 4
     Write-Host "Done."
+})
+
+$UnpinStartTiles.Add_Click( {
+	Write-Host "Unpinning all tiles in start menu..."
+	Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <DefaultLayoutOverride>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    <StartLayoutCollection>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      <defaultlayout:StartLayout GroupCellWidth="6" />'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    </StartLayoutCollection>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  </DefaultLayoutOverride>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    <CustomTaskbarLayoutCollection>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      <defaultlayout:TaskbarLayout>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '        <taskbar:TaskbarPinList>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '          <taskbar:UWA AppUserModelID="Microsoft.MicrosoftEdge_8wekyb3d8bbwe!MicrosoftEdge" />'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '          <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\System Tools\File Explorer.lnk" />'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '        </taskbar:TaskbarPinList>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      </defaultlayout:TaskbarLayout>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    </CustomTaskbarLayoutCollection>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '</LayoutModificationTemplate>'
+	
+	$START_MENU_LAYOUT = @"
+	<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">
+		<LayoutOptions StartTileGroupCellWidth="6" />
+		<DefaultLayoutOverride>
+			<StartLayoutCollection>
+				<defaultlayout:StartLayout GroupCellWidth="6" />
+			</StartLayoutCollection>
+		</DefaultLayoutOverride>
+	</LayoutModificationTemplate>
+"@
+	
+	$layoutFile="C:\Windows\StartMenuLayout.xml"
+	
+	# Delete layout file if it already exists
+	If(Test-Path $layoutFile)
+	{
+		Remove-Item $layoutFile
+	}
+	
+	# Creates the blank layout file
+	$START_MENU_LAYOUT | Out-File $layoutFile -Encoding ASCII
+	
+	$regAliases = @("HKLM", "HKCU")
+	
+	# Assign the start layout and force it to apply with "LockedStartLayout" at both the machine and user level
+	foreach ($regAlias in $regAliases){
+		$basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
+		$keyPath = $basePath + "\Explorer" 
+		IF(!(Test-Path -Path $keyPath)) { 
+			New-Item -Path $basePath -Name "Explorer" | Out-Null
+		}
+		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 1
+		Set-ItemProperty -Path $keyPath -Name "StartLayoutFile" -Value $layoutFile
+	}
+	
+	# Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process
+	Stop-Process -name explorer
+	Start-Sleep -s 5
+	$wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
+	Start-Sleep -s 5
+	
+	# Enable the ability to pin items again by disabling "LockedStartLayout"
+	foreach ($regAlias in $regAliases){
+		$basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
+		$keyPath = $basePath + "\Explorer" 
+		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 0
+	}
+	
+	# Restart Explorer and delete the layout file
+	Stop-Process -name explorer
+	
+	# Uncomment the next line to make clean start menu default for all new users
+	Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
+	
+	Remove-Item $layoutFile
+	Write-Host "Done."
 })
 
 #################
