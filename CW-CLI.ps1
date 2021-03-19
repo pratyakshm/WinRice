@@ -9,7 +9,8 @@ $tasks = @(
 	"Setup",
 	"CleanWin",
 	"ProductInformation",
-	"PowerShell7Ready,"
+	"PowerShell7Ready",
+	"CreateSystemRestore",
 
 ### Apps & Features ###
 	"AppsFeatures",
@@ -112,6 +113,12 @@ Function PowerShell7Ready {
 			Import-Module -Name Microsoft.PowerShell.Management, PackageManagement, Appx -UseWindowsPowerShell
 		}
 	}
+}
+
+# Create a system restore point with type MODIFY_SETTINGS, silently continue if already created within the past 24 hours
+Function CreateSystemRestore {
+	Enable-ComputerRestore -Drive "C:\"
+	Checkpoint-Computer -Description "RestorePoint1" -RestorePointType "MODIFY_SETTINGS" -WarningAction SilentlyContinue
 }
 
 
@@ -422,7 +429,7 @@ Function EnableBrowserRestoreAd {
     Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Albacore.ViVe.dll
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/ViVeTool.exe
     If (Test-Path ViVeTool.exe) {
-		./ViVeTool.exe addconfig 23531064 0
+		./ViVeTool.exe addconfig 23531064 0 | Out-Null
 		Remove-Item ViVeTool.exe
 		Remove-Item Albacore.ViVe.dll
         Write-Host "Done."
