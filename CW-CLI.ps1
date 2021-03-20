@@ -45,7 +45,7 @@ $tasks = @(
 	"DisableAutoplay",             # "EnableAutoplay",
 	"DisableAutorun",              # "EnableAutorun",
 	"SetBIOSTimeUTC",              # "SetBIOSTimeLocal",
-	"DisableServices",			   # "EnableServices"
+	"DisableServices",			   # "EnableServices",
 	"DisableTasks",				   # "EnableTasks",
 	"SetupWindowsUpdate",		   # "ResetWindowsUpdate",
 	"ChangesDone",
