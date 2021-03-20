@@ -6,7 +6,7 @@
 $tasks = @(
 
 ### Maintenance Tasks ###
-	"Setup",
+ 	"Setup",
 	"CleanWin",
 	"ProductInformation",
 	"PowerShell7Ready",
@@ -15,8 +15,8 @@ $tasks = @(
 ### Apps & Features ###
 	"AppsFeatures",
 	"DebloatApps", "UnpinStartTiles", "UninstallOneDrive", "CleanupRegistry", 
-	"EnableEdgeStartupBoost", # "DisableEdgeStartupBoost", 
-	"DisableBrowserRestoreAd", #"EnableBrowserRestoreAd",
+	"EnableEdgeStartupBoost",       # "DisableEdgeStartupBoost", 
+	"DisableBrowserRestoreAd",      #"EnableBrowserRestoreAd",
 	"UninstallFeatures", "EnableWSL", "EnableSandbox",
 	"InstallWinGet", "Install7zip", "Winstall", 
 	"ChangesDone",
@@ -25,7 +25,7 @@ $tasks = @(
 	"PrivacySecurity",
 	"DisableActivityHistory",		# "EnableActivityHistory",
 	"DisableAdvertisingID",			# "EnableAdvertisingID",
-	"DisableBackgroundApps",     	# "EnableBackgroundApps",
+	"DisableBackgroundApps",        # "EnableBackgroundApps",
 	"DisableFeedback",		        # "EnableFeedback",
 	"DisableLangAccess",  		    # "EnableLangListAccess",
 	"DisableLocationTracking",      # "EnableLocationTracking",
@@ -45,7 +45,7 @@ $tasks = @(
 	"DisableAutoplay",             # "EnableAutoplay",
 	"DisableAutorun",              # "EnableAutorun",
 	"SetBIOSTimeUTC",              # "SetBIOSTimeLocal",
-	"DisableServices",			   # "EnableServices",
+	"DisableServices",			   # "EnableServices"
 	"DisableTasks",				   # "EnableTasks",
 	"SetupWindowsUpdate",		   # "ResetWindowsUpdate",
 	"ChangesDone",
@@ -978,67 +978,88 @@ Function DisableServices {
 $ErrorActionPreference = 'SilentlyContinue'
 	Write-Host " "
 	Write-Host "Turning off unnecessary services..."
-	Stop-Service -Name "DiagTrack" | Out-Null
-	Stop-Service -Name "dmwappushservice" | Out-Null
-	Stop-Service -Name "SysMain" | Out-Null
-	Stop-Service -Name "RetailDemo" | Out-Null
-	Stop-Service -Name "diagnosticshub.standardcollector.service" | Out-Null
-	Stop-Service -Name "MapsBroker" | Out-Null
-	Stop-Service -Name "NetTcpPortSharing" | Out-Null
-	Stop-Service -Name "RemoteRegistry" | Out-Null
-	Stop-Service -Name "SharedAccess" | Out-Null
-	Stop-Service -Name "TrkWks" | Out-Null
-	Set-Service DiagTrack -StartupType Disabled
-	Set-Service dmwappushservice -StartupType Disabled
-	Set-Service RetailDemo -StartupType Disabled
-	Set-Service "diagnosticshub.standardcollector.service" -StartupType Disabled
-	Set-Service MapsBroker -StartupType Disabled
-	Set-Service NetTcpPortSharing  -StartupType Disabled
-	Set-Service RemoteAccess -StartupType Disabled
-	Set-Service RemoteRegistry -StartupType Disabled
-	Set-Service SharedAccess -StartupType Disabled
-	Set-Service TrkWks -StartupType Disabled 
+    	$Services = @(
+		"DiagTrack"
+		"dmwapppushservice"
+		"SysMain"
+		"RetailDemo"
+		"diagnosticshub.standardcollector.service"
+		"MapsBroker"
+		"NetTcpPortSharing"
+		"RemoteRegistry"
+		"SharedAccess"
+		"TrkWks"
+    )
+    ForEach ($Service in $Services) {
+		Stop-Service $Service | Out-Null
+		Set-Service $Service -StartupType Disabled
+		Write-Host "Stopped $Service service."
+	}
 	Write-Host "Done."
 }
 
 # Enable unnecessary services
 Function EnableServices {
-	Set-Service RetailDemo -StartupType Automatic -ErrorAction SilentlyContinue
-	Set-Service "diagnosticshub.standardcollector.service" -StartupType Automatic -ErrorAction SilentlyContinue
-	Set-Service MapsBroker  -StartupType Automatic -ErrorAction SilentlyContinue
-	Set-Service NetTcpPortSharing  -StartupType Automatic -ErrorAction SilentlyContinue
-	Set-Service RemoteAccess -StartupType Automatic -ErrorAction SilentlyContinue 
-	Set-Service RemoteRegistry -StartupType Automatic -ErrorAction SilentlyContinue 
-	Set-Service SharedAccess -StartupType Automatic -ErrorAction SilentlyContinue 
-	Set-Service TrkWks -StartupType Automatic -ErrorAction SilentlyContinue 
+    	$Services = @(
+		"DiagTrack"
+		"dmwapppushservice"
+		"SysMain"
+		"RetailDemo"
+		"diagnosticshub.standardcollector.service"
+		"MapsBroker"
+		"NetTcpPortSharing"
+		"RemoteRegistry"
+		"SharedAccess"
+		"TrkWks"
+    )
+    ForEach ($Service in $Services) {
+		Start-Service $Service | Out-Null
+		Set-Service $Service -StartupType Automatic
+		Write-Host "Started $Service service."
+	}
+	Write-Host "Done."
 }
 
 Function DisableTasks {
 	Write-Host " "
 	Write-Host "Turning off unnecessary tasks..."
-	Disable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" | Out-Null
-	Disable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\ProgramDataUpdater" | Out-Null
-	Disable-ScheduledTask -TaskName "Microsoft\Windows\Autochk\Proxy" | Out-Null
-	Disable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" | Out-Null
-	Disable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" | Out-Null
-	Disable-ScheduledTask -TaskName "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" | Out-Null
-	Disable-ScheduledTask -TaskName "Microsoft\Windows\Windows Error Reporting\QueueReporting" | Out-Null
-	Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
-    Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
+	$Tasks = @(
+		"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser"
+		"Microsoft\Windows\Application Experience\ProgramDataUpdater"
+		"Microsoft\Windows\Customer Experience Improvement Program\Consolidator"
+		"Microsoft\Windows\Autochk\Proxy"
+		"Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" 
+		"Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" 
+		"Microsoft\Windows\Windows Error Reporting\QueueReporting" 
+		"Microsoft\Windows\Feedback\Siuf\DmClient"
+		"Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
+    )
+    ForEach ($Task in $Tasks) {
+		Disable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
+		Write-Host "Disabled $Task task."
+	}
     Write-Host "Done."
 }
 
 Function EnableTasks {
-	Enable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" | Out-Null
-	Enable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\ProgramDataUpdater" | Out-Null
-	Enable-ScheduledTask -TaskName "Microsoft\Windows\Autochk\Proxy" | Out-Null
-	Enable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" | Out-Null
-	Enable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" | Out-Null
-	Enable-ScheduledTask -TaskName "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" | Out-Null
-	Enable-ScheduledTask -TaskName "Microsoft\Windows\Windows Error Reporting\QueueReporting" | Out-Null
-	Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
-    Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
+	$Tasks = @(
+		"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser"
+		"Microsoft\Windows\Application Experience\ProgramDataUpdater"
+		"Microsoft\Windows\Customer Experience Improvement Program\Consolidator"
+		"Microsoft\Windows\Autochk\Proxy"
+		"Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" 
+		"Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" 
+		"Microsoft\Windows\Windows Error Reporting\QueueReporting" 
+		"Microsoft\Windows\Feedback\Siuf\DmClient"
+		"Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
+    )
+    ForEach ($Task in $Tasks) {
+		Enable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
+		Write-Host "Enabled $Task task."
+	}
+    Write-Host "Done."
 }
+
 Function SetupWindowsUpdate {
 	Write-Host " "
 	Write-Host "Setting up Windows Update..."
@@ -1239,7 +1260,7 @@ Function RestoreMeetNow {
 
 # Update status: Script execution successful
 Function RestartPC {
-	Stop-Process -Name explorer
+	Stop-Process -Name explorer -Force
 	Start-Sleep 3
 	Write-Host "CleanWin has finished working."
 	Write-Host "This PC is set to restart in 10 seconds, please close this window if you want to halt the restart."

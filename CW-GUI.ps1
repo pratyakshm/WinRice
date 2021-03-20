@@ -1202,42 +1202,43 @@ $ErrorActionPreference = 'SilentlyContinue'
 $DisableTasksServices.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
     
-    Write-Host "Disabling unnecessary tasks & services...
-    "
-    # Stop the services
-    Stop-Service RetailDemo | Out-Null
-    Stop-Service "diagnosticshub.standardcollector.service" | Out-Null
-    Stop-Service MapsBroker | Out-Null
-    Stop-Service NetTcpPortSharing | Out-Null
-    Stop-Service RemoteAccess | Out-Null
-    Stop-Service RemoteRegistry | Out-Null
-    Stop-Service SharedAccess | Out-Null
-    Stop-Service TrkWks | Out-Null
-    Stop-Service SysMain | Out-Null
+    Write-Host "Disabling unnecessary tasks & services..."
 
-    # Set services startup type to disabled
-    Set-Service RetailDemo -StartupType Disabled
-    Set-Service "diagnosticshub.standardcollector.service" -StartupType Disabled
-	Set-Service MapsBroker  -StartupType Disabled
-	Set-Service NetTcpPortSharing  -StartupType Disabled
-	Set-Service RemoteAccess -StartupType Disabled
-	Set-Service RemoteRegistry -StartupType Disabled 
-	Set-Service SharedAccess -StartupType Disabled
-    Set-Service TrkWks -StartupType Disabled 
-    Set-Service SysMain -StartupType Disabled
+    $Services = @(
+		"DiagTrack"
+		"dmwapppushservice"
+		"SysMain"
+		"RetailDemo"
+		"diagnosticshub.standardcollector.service"
+		"MapsBroker"
+		"NetTcpPortSharing"
+		"RemoteRegistry"
+		"SharedAccess"
+		"TrkWks"
+    )
+    ForEach ($Service in $Services) {
+		Stop-Service $Service | Out-Null
+		Set-Service $Service -StartupType Disabled
+		Write-Host "Stopped $Service service."
+	}
 
-    # Disable tasks 
-    Disable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" | Out-Null
-	Disable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\ProgramDataUpdater" | Out-Null
-	Disable-ScheduledTask -TaskName "Microsoft\Windows\Autochk\Proxy" | Out-Null
-	Disable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" | Out-Null
-	Disable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" | Out-Null
-	Disable-ScheduledTask -TaskName "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" | Out-Null
-	Disable-ScheduledTask -TaskName "Microsoft\Windows\Windows Error Reporting\QueueReporting" | Out-Null
-	Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
-    Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
+	$Tasks = @(
+		"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser"
+		"Microsoft\Windows\Application Experience\ProgramDataUpdater"
+		"Microsoft\Windows\Customer Experience Improvement Program\Consolidator"
+		"Microsoft\Windows\Autochk\Proxy"
+		"Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" 
+		"Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" 
+		"Microsoft\Windows\Windows Error Reporting\QueueReporting" 
+		"Microsoft\Windows\Feedback\Siuf\DmClient"
+		"Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
+    )
+    ForEach ($Task in $Tasks) {
+		Disable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
+		Write-Host "Disabled $Task task."
+	}
 
-	Write-Host "Done."
+    Write-Host "Done."
 })
 
 $EnableTasksServices.Add_Click( {
@@ -1245,27 +1246,39 @@ $ErrorActionPreference = 'SilentlyContinue'
 
     Write-Host "Reverting changes made to tasks & services..."
 
-    # Set services startup type to Automatic
-	Set-Service RetailDemo -StartupType Automatic
-	Set-Service "diagnosticshub.standardcollector.service" -StartupType Automatic
-	Set-Service MapsBroker -StartupType Automatic
-	Set-Service NetTcpPortSharing -StartupType Automatic
-	Set-Service RemoteAccess -StartupType Automatic 
-	Set-Service RemoteRegistry -StartupType Automatic
-	Set-Service SharedAccess -StartupType Automatic
-    Set-Service TrkWks -StartupType Automatic
-    Set-Service SysMain -StartupType Automatic
+    $Services = @(
+		"DiagTrack"
+		"dmwapppushservice"
+		"SysMain"
+		"RetailDemo"
+		"diagnosticshub.standardcollector.service"
+		"MapsBroker"
+		"NetTcpPortSharing"
+		"RemoteRegistry"
+		"SharedAccess"
+		"TrkWks"
+    )
+    ForEach ($Service in $Services) {
+		Start-Service $Service | Out-Null
+		Set-Service $Service -StartupType Automatic
+		Write-Host "Started $Service service."
+	}
 
-    # Enable tasks
-    Enable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" | Out-Null
-	Enable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\ProgramDataUpdater" | Out-Null
-	Enable-ScheduledTask -TaskName "Microsoft\Windows\Autochk\Proxy" | Out-Null
-	Enable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" | Out-Null
-	Enable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" | Out-Null
-	Enable-ScheduledTask -TaskName "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" | Out-Null
-	Enable-ScheduledTask -TaskName "Microsoft\Windows\Windows Error Reporting\QueueReporting" | Out-Null
-	Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
-    Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
+	$Tasks = @(
+		"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser"
+		"Microsoft\Windows\Application Experience\ProgramDataUpdater"
+		"Microsoft\Windows\Customer Experience Improvement Program\Consolidator"
+		"Microsoft\Windows\Autochk\Proxy"
+		"Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" 
+		"Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" 
+		"Microsoft\Windows\Windows Error Reporting\QueueReporting" 
+		"Microsoft\Windows\Feedback\Siuf\DmClient"
+		"Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
+    )
+    ForEach ($Task in $Tasks) {
+		Enable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
+		Write-Host "Enabled $Task task."
+	}
     Write-Host "Done."
 })
 
