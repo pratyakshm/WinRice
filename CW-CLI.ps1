@@ -412,7 +412,7 @@ Function DisableBrowserRestoreAd {
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/ViVeTool.exe
     If (Test-Path ViVeTool.exe) {
         Write-Host "Hiding 'Web browsing: Restore recommended' suggestion from Settings..."
-		./ViVeTool.exe delconfig 23531064 1
+		./ViVeTool.exe delconfig 23531064 1 | Out-Null
 		Remove-Item ViVeTool.exe
 		Remove-Item Albacore.ViVe.dll
         Write-Host "Done."
