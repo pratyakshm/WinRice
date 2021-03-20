@@ -24,7 +24,7 @@ $tasks = @(
 	"PrivacySecurity",
 	"DisableActivityHistory",		# "EnableActivityHistory",
 	"DisableAdvertisingID",			# "EnableAdvertisingID",
-	"DisableBackgroundApps",        # "EnableBackgroundApps",
+	# "DisableBackgroundApps",      # "EnableBackgroundApps",
 	"DisableFeedback",		        # "EnableFeedback",
 	"DisableLangAccess",  		    # "EnableLangListAccess",
 	"DisableLocationTracking",      # "EnableLocationTracking",
