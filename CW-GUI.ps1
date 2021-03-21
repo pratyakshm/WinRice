@@ -1029,13 +1029,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     
     # Disable automatic Maps updates
     Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 0
-    
-    # Disable Speech Recognition
-    $Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
-    If (!(Test-Path $Speech)) {
-        New-Item -Path $Speech | Out-Null
-    }
-    Set-ItemProperty -Path $Speech -Name "HasAccepted" -Type DWord -Value 0
+
 
     Write-Host "Done."
 })
@@ -1090,13 +1084,6 @@ $EnableDataCollection.Add_Click( {
     Remove-ItemProperty -Path $Suggestions2 -Name "ShowSyncProviderNotifications"
     Remove-ItemProperty -Path $Suggestions1 -Name "SoftLandingEnabled"
     Remove-ItemProperty -Path $Suggestions1 -Name "SubscribedContent"
-
-	# Enable speech recognition
-    $Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
-    If (!(Test-Path $Speech)) {
-        New-Item -Path $Speech | Out-Null
-    }
-    Set-ItemProperty -Path $Speech -Name "HasAccepted" -Type DWord -Value 1
 	
 	# Enable Tailored Experiences
     $TailoredExp1 = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"

@@ -30,7 +30,7 @@ $tasks = @(
 	"DisableLocationTracking",      # "EnableLocationTracking",
 	"DisableMapUpdates",			# "EnableMapsUpdates",
 	"DisableSuggestions",		    # "EnableSuggestions",
-	"DisableSpeechRecognition",		# "EnableSpeechRecognition",
+	# "DisableSpeechRecognition",		# "EnableSpeechRecognition",
 	"DisableTailoredExperiences",	# "EnableTailoredExperiences",
 	"DisableTelemetry",				# "EnableTelemetry",
 	"AutoLoginPostUpdate", 		    # "StayOnLockscreenPostUpdate",
