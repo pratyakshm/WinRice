@@ -139,7 +139,7 @@ Function DebloatApps {
 $ErrorActionPreference = 'SilentlyContinue'
 
 	# Prebuilt apps
-	Write-Host "Removing all bloatware and cleaning up start menu, Windows Explorer will reload mutliple times during this process..."
+	Write-Host "Uninstalling bloatware..."
 	$Bloatware = @(
 	"Microsoft.549981C3F5F10"
 	"Microsoft.BingNews"
@@ -222,6 +222,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 # Unpin all start menu tiles
 Function UnpinStartTiles {
+$ConfirmPreference="Low"
 	Write-Host "Unpinning all tiles in start menu..."
 	Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
@@ -276,7 +277,7 @@ Function UnpinStartTiles {
 	}
 	
 	# Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process
-	Stop-Process -name explorer
+	Stop-Process -name explorer -Force
 	Start-Sleep -s 5
 	$wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
 	Start-Sleep -s 5
@@ -289,7 +290,7 @@ Function UnpinStartTiles {
 	}
 	
 	# Restart Explorer and delete the layout file
-	Stop-Process -name explorer
+	Stop-Process -name explorer -Force
 	
 	# Uncomment the next line to make clean start menu default for all new users
 	Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
