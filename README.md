@@ -10,6 +10,10 @@
 ## How to run:
 1. Read the full documentation properly before proceeding. 
 2. Download the latest release from the [Releases page](https://github.com/pratyakshm/CleanWin/releases), unzip it and run what you want between CLI/GUI (ignore SmartScreen errors, they exist because the executables aren't signed).
+
+## Wiki:
+[Visit the Wiki](https://github.com/pratyakshm/CleanWin/wiki) to read the full documentation.
+
 ## List of tasks:
 This section contains the list of tasks that CleanWin performs. They're grouped in the following categories (sorted by alphabetical order):
 <details>
@@ -144,9 +148,6 @@ Apps uninstalled:
 - [Windows 10 20H2 Update - Known Issues tracker](https://docs.microsoft.com/en-us/windows/release-information/status-windows-10-20h2)
 
 -------------------------------------------------------------
-
-## Wiki:
-To view detailed documentation, please [visit the Wiki](https://github.com/pratyakshm/CleanWin/wiki).
 
 ## Support the development
 [<img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" width="190" height="80">](http://bit.ly/paypalpratyakshm)
