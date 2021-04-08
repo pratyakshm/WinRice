@@ -299,6 +299,29 @@ Function UnpinStartTiles {
 	Write-Host "Done."
 }
 
+# Install WinGet
+Function InstallWinGet {
+	Write-Host " "
+	# Import BitsTransfer module and download NetTestFile
+    Import-Module BitsTransfer 
+    Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/NetTestFile
+    # If the file exists, proceed with downloading WinGet files, else inform user about no internet connection.
+    If (Test-Path NetTestFile) {
+        Remove-Item NetTestFile
+        Write-Host "Downloading WinGet..."
+        Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
+        Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+        Write-Host "Installing WinGet..."
+        Add-AppxPackage -Path .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -DependencyPath .\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+        Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
+        Remove-Item Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+        Write-Host "Done."
+	} 
+	else {
+	  Write-Host "We can't connect to GitHub to download the installation files. Are you sure that your internet connection is working?"
+	}
+}
+
 Function UninstallOneDrive {
 	Write-Host " "
 	Write-Host "Uninstalling OneDrive..."
@@ -338,9 +361,14 @@ Function UninstallOneDrive {
 		New-Item $ExplorerReg2 | Out-Null
 	}
 	Set-ItemProperty $ExplorerReg2 System.IsPinnedToNameSpaceTree -Value 0
-	Start-Process explorer.exe -NoNewWindow
-	Write-Host "Done."
+	Start-Process explorer.exe
+	# For 64-bit versions of Microsoft OneDrive (in preview)
+	Remove-Item "C:\Users\$env:UserName\AppData\Local\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
+	Remove-Item "C:\Users\$env:UserName\AppData\Local\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json.backup" -ErrorAction SilentlyContinue
+	Start-BitsTransfer -Source "https://raw.githubusercontent.com/CleanWin/Files/main/settings.json" -Destination "C:\Users\$env:UserName\AppData\Local\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
+	winget uninstall OneDriveSetup.exe
 	Remove-Item env:OneDrive
+	Write-Host "Done."
 }
 
 Function CleanupRegistry {
@@ -480,28 +508,6 @@ Function EnableSandbox {
 	Write-Host "Done."
 }
 
-# Install WinGet
-Function InstallWinGet {
-	Write-Host " "
-	# Import BitsTransfer module and download NetTestFile
-    Import-Module BitsTransfer 
-    Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/NetTestFile
-    # If the file exists, proceed with downloading WinGet files, else inform user about no internet connection.
-    If (Test-Path NetTestFile) {
-        Remove-Item NetTestFile
-        Write-Host "Downloading WinGet installation files..."
-        Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
-        Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-        Write-Host "Installing WinGet..."
-        Add-AppxPackage -Path .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -DependencyPath .\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-        Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
-        Remove-Item Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-        Write-Host "Done."
-	} 
-	else {
-	  Write-Host "We can't connect to GitHub to download the installation files. Are you sure that your internet connection is working?"
-	}
-}
 
 # Install 7zip
 Function Install7zip {
