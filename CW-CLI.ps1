@@ -363,7 +363,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 		New-Item $ExplorerReg2 | Out-Null
 	}
 	Set-ItemProperty $ExplorerReg2 System.IsPinnedToNameSpaceTree -Value 0
-	Start-Process explorer.exe
 	# For 64-bit versions of Microsoft OneDrive (in preview)
 	Remove-Item "C:\Users\$env:UserName\AppData\Local\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
 	Remove-Item "C:\Users\$env:UserName\AppData\Local\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json.backup" -ErrorAction SilentlyContinue
