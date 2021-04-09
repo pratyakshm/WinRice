@@ -159,6 +159,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	"Microsoft.News" 
 	"Microsoft.Office.Sway" 
 	"Microsoft.OneConnect"
+	"Microsoft.Paint"
 	"Microsoft.People" 
 	"Microsoft.PowerAutomateDesktop"
 	"Microsoft.Print3D" 
