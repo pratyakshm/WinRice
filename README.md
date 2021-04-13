@@ -6,7 +6,8 @@
 [![Donate](https://img.shields.io/badge/Donate-PayPal-important?style=flat-square)](https://paypal.me/pratyakshm)</centre>
 
 ![PowerShell Support](https://img.shields.io/badge/PowerShell%207-Ready-203349?labelColor=1B232D&style=flat-square&logo=PowerShell)
-
+## What is CleanWin
+An open source project to make your 🐌 PC faster.
 ## How to run:
 1. Read the full documentation properly before proceeding. 
 2. Download the latest release from the [Releases page](https://github.com/pratyakshm/CleanWin/releases), unzip it and run what you want between CLI/GUI (ignore SmartScreen errors, they exist because the executables aren't signed).
@@ -177,3 +178,5 @@ Hide/cleanup the following:
 
 ## Support the development
 [<img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" width="190" height="80">](http://bit.ly/paypalpratyakshm)
+
+P.S.: CleanWin isn't a substitute for people using HDD as OS drive.
