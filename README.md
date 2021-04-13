@@ -1,9 +1,9 @@
 # CleanWin
-![Stars](https://img.shields.io/github/stars/pratyakshm/CleanWin?style=flat-square)
+<centre>![Stars](https://img.shields.io/github/stars/pratyakshm/CleanWin?style=flat-square)
 [![Downloads](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=brightgreen&logoColor=brightgreen&style=flat-square)](https://github.com/pratyakshm/CleanWin/releases)
 [![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)](https://github.com/pratyakshm/CleanWin/releases/tag/v0.3.3)
 ![Latest release](https://img.shields.io/github/release-date/pratyakshm/CleanWin?style=flat-square)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-important?style=flat-square)](https://paypal.me/pratyakshm)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-important?style=flat-square)](https://paypal.me/pratyakshm)</centre>
 
 ![PowerShell Support](https://img.shields.io/badge/PowerShell%207-Ready-203349?labelColor=1B232D&style=flat-square&logo=PowerShell)
 
@@ -14,12 +14,13 @@
 ## Wiki:
 [Visit the Wiki](https://github.com/pratyakshm/CleanWin/wiki) to read the full documentation.
 
-## List of tasks:
+## List of tasks
 This section contains the list of tasks that CleanWin performs. They're grouped in the following categories (sorted by alphabetical order):
-<details>
-<summary>Apps & Features</summary>
-Apps uninstalled:
-  <br>3D Viewer   
+
+### Apps & Features
+<details><summary>Apps</summary>
+  <details><summary>Apps uninstalled:</summary>
+  3D Viewer   
   <br>Alarms & Clock
   <br>Cortana  
   <br>Camera  
@@ -32,6 +33,7 @@ Apps uninstalled:
   <br>Mail and Calendar  
   <br>Messaging  
   <br>Maps  
+  <br>Microsoft OneDrive
   <br>Microsoft News  
   <br>Microsoft Solitaire Collection  
   <br>Mixed Reality Portal
@@ -53,12 +55,19 @@ Apps uninstalled:
   <br>Weather
   <br>Xbox
   <br>Xbox Game bar
-  <br>Your Phone
-  <br><br>Install / Enable features:
-  <br>Windows Subsystem for Linux
-  <br> Windows Sandbox
-  <br><br>Uninstall optional features:
-  <br>Hello Face
+  <br>Your Phone</details>
+  <details><summary>Apps installed:</summary>
+  7-Zip
+   <details><summary>Winstall</summary>
+  Now you can install your own set of apps using a custom list
+Learn more at Wiki/Using Winstall!
+  </details>
+  </details>
+  </details>
+
+<details><summary>Features</summary>
+  <details><summary>Features uninstalled:</summary>
+  Hello Face
   <br>Internet Explorer
   <br>Math Recognizer
   <br>Microsoft Paint (Desktop app)
@@ -72,52 +81,37 @@ Apps uninstalled:
   <br>WordPad
   <br>Windows Fax & Scan
   <br>XPS Viewer
-  <br>XPS Printer
+  <br>XPS Printer</details>
+
+<details><summary>Features installed:</summary>
+  Windows Sandbox
+  <br>Windows Subsystem for Linux</details>
 </details>
 
-<details>
- <summary>Privacy & Security</summary>
- Privacy:
-  <br>Activity History
+
+
+### Privacy & Security
+<details><summary>Privacy</summary>
+  Activity History
   <br>Advertising ID 
   <br>Access to language list
   <br>Feedback
   <br>Maps updates
   <br>Location tracking 
   <br>Suggestions
-  <br>Silent installation of promoted apps
   <br>Tailored Experiences
-<br><br>Security:
-<br>Auto login post update restart
+  </details>
+
+<details><summary>Security</summary>
+Auto login post update restart
 <br>Disable Meltdown compatibility flag
 </details>
 
 
-<details>
- <summary>Tasks & Services</summary>
-  Services:
-  <br>DiagTrack
-	<br>DMWAppPushService
-	<br>SysMain
-	<br>RetailDemo
-	<br>diagnosticshub.standardcollector.service
-	<br>MapsBroker
-	<br>NetTcpPortSharing
-	<br>RemoteRegistry
-	<br>SharedAccess
-	<br>TrkWks
-  <br><br>Turn off Windows Update delivery via P2P and LAN.
-  <br>Turn off AutoPlay.
-  <br>Turn off Autorun.
-  <br>Set BIOS time to UTC.
-  <br><br>Setup Windows Update:
-  <br>- Turn off automatic updates.
-  <br>- Delay feature updates by 20 days.
-  <br>- Delay quality updates by 4 days.
-  <br>- Turn off driver offering via Windows Update.
-  <br>- Turn off re-installation of bloatware after feature update.
-  <br><br>Tasks:
-  <br>Consolidator
+
+### Tasks & Services
+  <details><summary>Tasks</summary>
+  Consolidator
   <br>DmClient
   <br>DmClientOnScenarioDownload
   <br>Disk Diagnostics Data Collector
@@ -127,21 +121,53 @@ Apps uninstalled:
   <br>ProgramDataUpdater
   <br>QueueReporting
   <br>UsbCeip
+  </details>
+ <details><summary>Services</summary>
+  DiagTrack
+  <br>DMWAppPushService
+  <br>SysMain
+  <br>RetailDemo
+  <br>diagnosticshub.standardcollector.service
+  <br>MapsBroker
+  <br>NetTcpPortSharing
+  <br>RemoteRegistry
+  <br>SharedAccess
+  <br>TrkWks
+  </details>
+
+  <details><summary>Windows Update</summary>
+  - Turn off automatic updates
+  <br>- Delay feature updates by 20 days
+  <br>- Delay quality updates by 4 days
+  <br>- Turn off driver offering via Windows Update
+  <br>- Turn off re-installation of bloatware after feature update
+  <br>- Set Windows Update to download updates only from Microsoft's servers by turning off Delivery through P2P and LAN
+  </details>
+
+  <details><summary>More changes</summary>
+  Turn off AutoPlay
+  <br>Turn off Autorun
+  <br>Set BIOS time to UTC
+  </details>
+
 </details>
 
-<details>
- <summary>Windows Explorer</summary>
- One click to Cleanup Explorer
-   <br>Hide 3D Objects tabs from This PC and Quick Access
-  <br>Hide task view icon from taskbar
-  <br>Hide Cortana icon from taskbar
-  <br>Hide Meet now button from tray 
-  <br>Hide search bar from taskbar
-  <br>Set This PC as default view
-  <br>Show seconds in taskbar clock
+
+### Windows Explorer
+<details><summary>Cleanup</summary>
+Hide/cleanup the following:
+  <br>3D Objects
+  <br>Task View button
+  <br>Cortana button
+  <br>Meet now button
+  <br>Search bar</details>
+<details><summary>Improvements</summary>
+  Set This PC as default view
   <br>Turn off sticky keys prompt
   <br>Use Print Screen key to open Snip & Sketch overlay
 </details>
+
+&nbsp;
 
 ## Microsoft Docs
 - [Windows 10 Release Information](https://docs.microsoft.com/en-us/windows/release-information/)
