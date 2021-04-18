@@ -201,4 +201,4 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 ## Support the development
 [![Donate with PayPal](https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png)](http://bit.ly/paypalpratyakshm)
 
-P.S.: CleanWin isn't a substitute for SSD.
+### Using an HDD as boot disk and expecting ultra fast Windows 10 experience after running CleanWin? [🪄Tap here🪄](https://www.amazon.com/s?k=SSD)
