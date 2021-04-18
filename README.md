@@ -1,8 +1,8 @@
 # CleanWin
-![Stars](https://img.shields.io/github/stars/pratyakshm/CleanWin?style=flat-square)
 ![GitHub all releases](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=darkgreen&style=flat-square)
-[![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)](https://github.com/pratyakshm/CleanWin/releases/tag/v0.3.3)
-![GitHub Release Date](https://img.shields.io/github/release-date/pratyakshm/CleanWin?color=darkblue&style=flat-square)[![Donate](https://img.shields.io/badge/Donate-PayPal-important?style=flat-square)](https://paypal.me/pratyakshm) ![PowerShell Support](https://img.shields.io/badge/PowerShell%207-Ready-203349?labelColor=1B232D&style=flat-square&logo=PowerShell)
+![Stars](https://img.shields.io/github/stars/pratyakshm/CleanWin?style=flat-square)
+[![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)](https://github.com/pratyakshm/CleanWin/releases)
+![GitHub Release Date](https://img.shields.io/github/release-date/pratyakshm/CleanWin?color=blue&label=latest%20release&style=flat-square)
 &nbsp;
 
 ## What is CleanWin
