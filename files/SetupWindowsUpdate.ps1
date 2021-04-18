@@ -9,7 +9,6 @@ $Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
         New-Item -Path $Update1 | Out-Null
         New-Item -Path $Update2 | Out-Null
         }
-Set-ItemProperty -Path $Update1 -Name ExcludeWUDriversInQualityUpdate -Type DWord -Value 1
 Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
 Set-ItemProperty -Path $Update1 -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
 Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
