@@ -119,8 +119,9 @@ Function CreateSystemRestore {
 }
 
 
-
+###################################
 ######### APPS & FEATURES #########
+###################################
 
 # Update status
 Function AppsFeatures {
@@ -534,7 +535,9 @@ Function Winstall {
 
 
 
-######### Privacy & Security #########
+######################################
+######### PRIVACY & SECURITY #########
+######################################
 
 # Update status
 Function PrivacySecurity {
@@ -873,7 +876,9 @@ Function DisableMeltdownCompatFlag {
 }
 
 
+####################################
 ######### TASKS & SERVICES #########
+####################################
 
 # Update status
 Function TasksServices {
@@ -1050,7 +1055,9 @@ Function ResetWindowsUpdate {
 
 
 
-######### Explorer changes #########
+####################################
+######### WINDOWS EXPLORER #########
+####################################
 
 # Update status: Explorer Changes
 Function PrintExplorerChanges {	
@@ -1232,5 +1239,6 @@ Function RestartPC {
 	Start-Sleep 10
 	Restart-Computer
 }
+
 # Call the desired tweak functions
 $tasks | ForEach-Object { Invoke-Expression $_ }
