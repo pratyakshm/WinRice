@@ -1028,6 +1028,17 @@ $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Deny"
     Set-ItemProperty -Path $Location2 -Name "SensorPermissionState" -Type DWord -Value 0
     
+    # Disable inking personalization
+	$Ink1 = "HKCU:\Software\Microsoft\InputPersonalization"
+	$Ink2 = "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore"
+	$Ink3 = "HKCU:\Software\Microsoft\Personalization\Settings"
+	If (!(Test-Path $Ink1)) {
+		New-Item -Path $Ink1 -Force | Out-Null
+	}
+	New-ItemProperty -Path $Ink1 -Name "RestrictImplicitInkCollection" -Type DWord -Value 1 -Force | Out-Null 
+	Set-ItemProperty -Path $Ink2 -Name "HarvestContacts" -Type DWord -Value 0
+	Set-ItemProperty -Path $Ink3 -Name "AcceptedPrivacyPolicy" -Type DWord -Value 0
+
     # Disable "Let websites provide locally relevant content by accessing my language list"
 	$LangAccess = "HKCU:\Control Panel\International\User Profile"
 	Remove-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut"
@@ -1076,7 +1087,18 @@ $EnableDataCollection.Add_Click( {
     }
     Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Allow"
     Set-ItemProperty -Path $Location2 -Name "SensorPermissionState" -Type DWord -Value 1
-        
+    
+    # Enable ink harvesting
+    $Ink1 = "HKCU:\Software\Microsoft\InputPersonalization"
+	$Ink2 = "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore"
+	$Ink3 = "HKCU:\Software\Microsoft\Personalization\Settings"
+	If (!(Test-Path $Ink1)) {
+		New-Item -Path $Ink1 -Force | Out-Null
+	}
+	New-ItemProperty -Path $Ink1 -Name "RestrictImplicitInkCollection" -Type DWord -Value 0 -Force | Out-Null 
+	Set-ItemProperty -Path $Ink2 -Name "HarvestContacts" -Type DWord -Value 1
+	Set-ItemProperty -Path $Ink3 -Name "AcceptedPrivacyPolicy" -Type DWord -Value 1
+
 	# Disable Maps updates
     Remove-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled"
 

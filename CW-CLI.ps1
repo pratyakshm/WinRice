@@ -26,11 +26,12 @@ $tasks = @(
 	"DisableAdvertisingID",			# "EnableAdvertisingID",
 	# "DisableBackgroundApps",      # "EnableBackgroundApps",
 	"DisableFeedback",		        # "EnableFeedback",
+	"DisableInkHarvesting",			# "EnableInkHarvesting",
 	"DisableLangAccess",  		    # "EnableLangAccess",
 	"DisableLocationTracking",      # "EnableLocationTracking",
 	"DisableMapUpdates",			# "EnableMapsUpdates",
 	"DisableSuggestions",		    # "EnableSuggestions",
-	# "DisableSpeechRecognition",		# "EnableSpeechRecognition",
+	"DisableSpeechRecognition",		# "EnableSpeechRecognition",
 	"DisableTailoredExperiences",	# "EnableTailoredExperiences",
 	"DisableTelemetry",				# "EnableTelemetry",
 	"AutoLoginPostUpdate", 		    # "StayOnLockscreenPostUpdate",
@@ -647,13 +648,42 @@ Function EnableFeedback {
 	Write-Host "Done."
 }
 
+# Disable inking personalization
+Function DisableInkHarvesting {
+	Write-Host " "
+	Write-Host "Turning off personal typing and inking dictionary..."
+	$Ink1 = "HKCU:\Software\Microsoft\InputPersonalization"
+	$Ink2 = "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore"
+	$Ink3 = "HKCU:\Software\Microsoft\Personalization\Settings"
+	If (!(Test-Path $Ink1)) {
+		New-Item -Path $Ink1 -Force | Out-Null
+	}
+	New-ItemProperty -Path $Ink1 -Name "RestrictImplicitInkCollection" -Type DWord -Value 1 -Force | Out-Null 
+	Set-ItemProperty -Path $Ink2 -Name "HarvestContacts" -Type DWord -Value 0
+	Set-ItemProperty -Path $Ink3 -Name "AcceptedPrivacyPolicy" -Type DWord -Value 0
+	Write-Host "Done."
+}
+
+# Enable inking personalization 
+Function EnableInkHarvesting {
+	$Ink1 = "HKCU:\Software\Microsoft\InputPersonalization"
+	$Ink2 = "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore"
+	$Ink3 = "HKCU:\Software\Microsoft\Personalization\Settings"
+	If (!(Test-Path $Ink1)) {
+		New-Item -Path $Ink1 -Force | Out-Null
+	}
+	New-ItemProperty -Path $Ink1 -Name "RestrictImplicitInkCollection" -Type DWord -Value 0 -Force | Out-Null 
+	Set-ItemProperty -Path $Ink2 -Name "HarvestContacts" -Type DWord -Value 1
+	Set-ItemProperty -Path $Ink3 -Name "AcceptedPrivacyPolicy" -Type DWord -Value 1
+}
+
 # Disable "Let websites provide locally relevant content by accessing my language list"
 Function DisableLangAccess {
 	Write-Host " "
 	Write-Host "Turning off websites' ability to provide you with locally relevant content by accessing your language list..."
 	$LangAccess = "HKCU:\Control Panel\International\User Profile"
-	Remove-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut"
-	New-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 1
+	Remove-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" | Out-Null
+	New-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 1 | Out-Null
 	Write-Host "Done."
 }
 
@@ -763,6 +793,7 @@ Function EnableSuggestions {
 	Remove-ItemProperty -Path $Suggestions -Name "SystemPaneSuggestionsEnabled"
 	Write-Host "Done."
 }
+
 # Disable Speech Recognition
 Function DisableSpeechRecognition {
 	Write-Host " "
