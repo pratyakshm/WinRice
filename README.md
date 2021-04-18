@@ -1,11 +1,10 @@
 # CleanWin
-<centre>![Stars](https://img.shields.io/github/stars/pratyakshm/CleanWin?style=flat-square)
-[![Downloads](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=brightgreen&logoColor=brightgreen&style=flat-square)](https://github.com/pratyakshm/CleanWin/releases)
+![Stars](https://img.shields.io/github/stars/pratyakshm/CleanWin?style=flat-square)
+![GitHub all releases](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=darkgreen&style=flat-square)
 [![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)](https://github.com/pratyakshm/CleanWin/releases/tag/v0.3.3)
-![Latest release](https://img.shields.io/github/release-date/pratyakshm/CleanWin?style=flat-square)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-important?style=flat-square)](https://paypal.me/pratyakshm)</centre>
+![GitHub Release Date](https://img.shields.io/github/release-date/pratyakshm/CleanWin?color=darkblue&style=flat-square)[![Donate](https://img.shields.io/badge/Donate-PayPal-important?style=flat-square)](https://paypal.me/pratyakshm) ![PowerShell Support](https://img.shields.io/badge/PowerShell%207-Ready-203349?labelColor=1B232D&style=flat-square&logo=PowerShell)
+&nbsp;
 
-![PowerShell Support](https://img.shields.io/badge/PowerShell%207-Ready-203349?labelColor=1B232D&style=flat-square&logo=PowerShell)
 ## What is CleanWin
 An open source project to make your 🐌 PC faster.
 ## How to run:
