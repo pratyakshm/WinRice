@@ -1028,12 +1028,10 @@ $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Deny"
     Set-ItemProperty -Path $Location2 -Name "SensorPermissionState" -Type DWord -Value 0
     
-    # Disable language list access for relevant content
-    $Language = "HKCU:\Control Panel\International\User Profile"
-    If (!(Test-Path $Language)) {
-        New-Item -Path $Language | Out-Null
-    }
-    Set-ItemProperty -Path $Language -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 1
+    # Disable "Let websites provide locally relevant content by accessing my language list"
+	$LangAccess = "HKCU:\Control Panel\International\User Profile"
+	Remove-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut"
+	New-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 1
     
     # Disable automatic Maps updates
     Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 0
@@ -1065,12 +1063,10 @@ $EnableDataCollection.Add_Click( {
     }
     Remove-ItemProperty -Path $Feedback -Name "NumberOfSIUFInPeriod"
 
-	# Enable language list
-    $LanguageList = "HKCU:\Control Panel\International\User Profile"
-    If (!(Test-Path $LanguageList)) {
-        New-Item -Path $LanguageList | Out-Null
-        }
-    Set-ItemProperty -Path $LanguageList  -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 0
+    # Enable "Let websites provide locally relevant content by accessing my language list"
+	$LangAccess = "HKCU:\Control Panel\International\User Profile"
+	Remove-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut"
+	New-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 0
         
 	# Enable location tracking
     $Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
@@ -1124,7 +1120,7 @@ $EnableDataCollection.Add_Click( {
     Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
     Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
     
-    Write-Host "Data collection turned on."
+    Write-Host "Done."
 })
 
 $DisableTelemetry.Add_Click( {

@@ -26,7 +26,7 @@ $tasks = @(
 	"DisableAdvertisingID",			# "EnableAdvertisingID",
 	# "DisableBackgroundApps",      # "EnableBackgroundApps",
 	"DisableFeedback",		        # "EnableFeedback",
-	"DisableLangAccess",  		    # "EnableLangListAccess",
+	"DisableLangAccess",  		    # "EnableLangAccess",
 	"DisableLocationTracking",      # "EnableLocationTracking",
 	"DisableMapUpdates",			# "EnableMapsUpdates",
 	"DisableSuggestions",		    # "EnableSuggestions",
@@ -647,26 +647,21 @@ Function EnableFeedback {
 	Write-Host "Done."
 }
 
-# Disable language list access for relevant content
+# Disable "Let websites provide locally relevant content by accessing my language list"
 Function DisableLangAccess {
 	Write-Host " "
-	Write-Host "Restricting websites from accessing your language list..."
-	$Language = "HKCU:\Control Panel\International\User Profile"
-	If (!(Test-Path $Language)) {
-		New-Item -Path $Language | Out-Null
-	}
-	Set-ItemProperty -Path $Language -Name "HttpAcceptLanguageOptOut " -Type DWord -Value 1
+	Write-Host "Turning off websites' ability to provide you with locally relevant content by accessing your language list..."
+	$LangAccess = "HKCU:\Control Panel\International\User Profile"
+	Remove-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut"
+	New-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 1
 	Write-Host "Done."
 }
 
-# Enable language list access for relevant content
-Function EnableLangListAccess {
-	Write-Host "Turning on language list recommendation..."
-	$LanguageList = "HKCU:\Control Panel\International\User Profile"
-	If (!(Test-Path $LanguageList)) {
-		New-Item -Path $LanguageList | Out-Null
-		}
-	Set-ItemProperty -Path $LanguageList  -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 0
+# Enable "Let websites provide locally relevant content by accessing my language list"
+Function EnableLangAccess {
+	Write-Host "Turning on websites' ability to provide you with locally relevant content by accessing your language list..."
+	$LangAccess = "HKCU:\Control Panel\International\User Profile"
+	Set-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 0
 	Write-Host "Done."
 }
 
