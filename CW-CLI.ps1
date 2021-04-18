@@ -59,6 +59,7 @@ $tasks = @(
 	"HideTaskView",                # "RestoreTaskView",
 	"HideCortana",			       # "RestoreCortana",
 	"HideMeetNow",				   # "RestoreMeetNow",
+	"DisableTaskbarFeed",		   # "EnableTaskbarFeed",
 	"ChangesDone",
 
 ###  Tasks after successful run ###
@@ -1242,6 +1243,20 @@ Function RestoreMeetNow {
 	Write-Host "Done."
 }
 
+# Turn off Taskbar feed
+Function DisableTaskbarFeed {
+	Write-Host " "
+	Write-Host "Turning off News and interests..."
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2
+	Write-Host "Done."
+}
+
+# Turn on Taskbar feed
+Function EnableTaskbarFeed {
+	Write-Host "Turning on News and interests..."
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0
+	Write-Host "Done."
+}
 
 ######### Tasks after successful run #########
 

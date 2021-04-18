@@ -782,9 +782,15 @@ $ErrorActionPreference = 'SilentlyContinue'
 	$Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
 	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1 -ErrorAction SilentlyContinue
     Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
+
+    # Turn off News and interests
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2
+
+    # Restart explorer.exe to reflect changes immeditately and then provide 2 seconds of breathing time
+    Stop-Process -ProcessName explorer
+    Start-Sleep 2
     
     Write-Host "Done."
-
 })
 
 $RevertExplorer.Add_Click( {
@@ -835,6 +841,8 @@ $RevertExplorer.Add_Click( {
     # Disable PrtScr for Snip
     Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
 
+    # Turn on News and interests
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0
 
     # Restart explorer.exe to reflect changes immeditately and then provide 2 seconds of breathing time
     Stop-Process -ProcessName explorer
