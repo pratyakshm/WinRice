@@ -39,8 +39,6 @@ $tasks = @(
 
 ### Tasks & Services ###
 	"TasksServices",
-	"DisableAutoUpdates",		   # "EnableAutoUpdates",
-	"DisableLANP2P"                # "EnableLANP2P",
 	"DisableAutoplay",             # "EnableAutoplay",
 	"DisableAutorun",              # "EnableAutorun",
 	"SetBIOSTimeUTC",              # "SetBIOSTimeLocal",
@@ -887,50 +885,6 @@ Function TasksServices {
 	Write-Host " "
 }
 
-# Disable automatic updates
-Function DisableAutoUpdates {
-	Write-Host "Turning off automatic Windows updates..."
-	$Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
-	$Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
-		If (!(Test-Path $Update1)) {
-	  	New-Item -Path $Update1 | Out-Null
-	  	New-Item -Path $Update2 | Out-Null
-	  	}
-	Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
-	Write-Host "Done."
-}
-
-# Enable automatic updates
-Function EnableAutoUpdates {
-	Write-Host "Turning on automatic Windows updates..."
-	Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -ErrorAction SilentlyContinue
-	Write-Host "Done."
-}
-
-# Update only from MSFT (no LAN or P2P)
-Function DisableLANP2P {
-	Write-Host " "
-	Write-Host "Turning off P2P and LAN updates..."
-	$LANP2P1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization"
-	$LANP2P2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"
-	If (!(Test-Path $LANP2P1)) {
-		New-Item -Path $LANP2P1 | Out-Null
-		New-Item -Path $LANP2P2 | Out-Null
-		}
-	Set-ItemProperty -Path $LANP2P2 -Name DownloadMode -Type DWord -Value 0
-	Set-ItemProperty -Path $LANP2P2 -Name DODownloadMode -Type DWord -Value 0
-	Write-Host "Done."
-}
-
-# Enable LAN-P2P update bits delivery
-Function EnableLANP2P {
-	Write-Host "Turning on P2P and LAN updates..."
-	$LANP2P3 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config"
-	Set-ItemProperty -Path $LANP2P3 -Name DownloadMode -Type DWord -Value 3
-	Set-ItemProperty -Path $LANP2P3 -Name DODownloadMode -Type DWord -Value 3
-	Write-Host "Done."
-}
-
 # Disable Autoplay
 Function DisableAutoplay {
 	Write-Host " "
@@ -1070,17 +1024,21 @@ Function EnableTasks {
 Function SetupWindowsUpdate {
 	Write-Host " "
 	Write-Host "Setting up Windows Update..."
+	$DeliveryOptimization = "HKLM:\SYSTEM\CurrentControlSet\Services\DoSvc"
 	$Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
     $Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
         If (!(Test-Path $Update1)) {
           New-Item -Path $Update1 | Out-Null
           New-Item -Path $Update2 | Out-Null
           }
-    Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
+    Set-ItemProperty -Path $DeliveryOptimization -Name Start -Type DWord -Value 4
+	Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
     Set-ItemProperty -Path $Update1 -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
     Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
     Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
     Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
+	Stop-Service DoSvc | Out-Null
+	Set-Service DoSvc -StartupType Disabled  | Out-Null
     Write-Host "Done."
 }
 
