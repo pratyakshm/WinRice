@@ -39,6 +39,7 @@ $tasks = @(
 
 ### Tasks & Services ###
 	"TasksServices",
+	"DisableReservedStorage",	   # "EnableReservedStorage",
 	"DisableAutoplay",             # "EnableAutoplay",
 	"DisableAutorun",              # "EnableAutorun",
 	"SetBIOSTimeUTC",              # "SetBIOSTimeLocal",
@@ -936,6 +937,21 @@ Function SetBIOSTimeUTC {
 Function SetBIOSTimeLocal {
 	Write-Host "Setting BIOS time to Local time..."
 	Remove-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name "RealTimeIsUniversal" -ErrorAction SilentlyContinue
+	Write-Host "Done."
+}
+
+# Disable Reserved Storage 
+Function DisableReservedStorage {
+	Write-Host " "
+	Write-Host "Turning off reserved storage..."
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager" -Name "ShippedWithReserves" -Type DWord -Value 0
+	Write-Host "Done."
+}
+
+# Enable Reserved Storage 
+Function EnableReservedStorage {
+	Write-Host "Turning on reserved storage..."
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager" -Name "ShippedWithReserves" -Type DWord -Value 1
 	Write-Host "Done."
 }
 
