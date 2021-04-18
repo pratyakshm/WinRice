@@ -15,139 +15,160 @@ An open source project to make your 🐌 PC faster.
 [Visit the Wiki](https://github.com/pratyakshm/CleanWin/wiki) to read the full documentation.
 
 ## List of tasks
-This section contains the list of tasks that CleanWin performs. They're grouped in the following categories (sorted by alphabetical order):
+This section contains the list of tasks that CleanWin performs. They're grouped in the following categories:
 
 ### Apps & Features
-<details><summary>Apps</summary>
-  <details><summary>Apps uninstalled:</summary>
-  3D Viewer   
-  <br>Alarms & Clock
-  <br>Cortana  
-  <br>Camera  
-  <br>Connect
-  <br>Feedback Hub 
-  <br>Films & TV  
-  <br>Get Help      
-  <br>Get started  
-  <br>Groove Music 
-  <br>Mail and Calendar  
-  <br>Messaging  
-  <br>Maps  
-  <br>Microsoft OneDrive
-  <br>Microsoft News  
-  <br>Microsoft Solitaire Collection  
-  <br>Mixed Reality Portal
-  <br>Network Speed Test
-  <br>OneConnect  
-  <br>OneNote  
-  <br>Office
-  <br>Office Lens
-  <br>Paint 3D  
-  <br>Power Automate Desktop
-  <br>Print 3D
-  <br>People  
-  <br>Sway
-  <br>Snip & Sketch
-  <br>Sticky Notes  
-  <br>Skype
-  <br>Voice Recorder
-  <br>Whiteboard
-  <br>Weather
-  <br>Xbox
-  <br>Xbox Game bar
-  <br>Your Phone</details>
-  <details><summary>Apps installed:</summary>
-  7-Zip
-   <details><summary>Winstall</summary>
-  Now you can install your own set of apps using a custom list
-Learn more at Wiki/Using Winstall!
-  </details>
-  </details>
-  </details>
+<details>
+  <summary>Apps</summary>
 
-<details><summary>Features</summary>
-  <details><summary>Features uninstalled:</summary>
-  Hello Face
-  <br>Internet Explorer
-  <br>Math Recognizer
-  <br>Microsoft Paint (Desktop app)
-  <br>OpenSSH Client
-  <br>PowerShell ISE
-  <br>Quick Assist
-  <br>Steps Recorder
-  <br>Snipping Tool
-  <br>Work Folders
-  <br>Windows Media Player
-  <br>WordPad
-  <br>Windows Fax & Scan
-  <br>XPS Viewer
-  <br>XPS Printer</details>
+  - Apps installed:
+    - Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/))
+    - [7-zip](https://www.7-zip.org/)
+    - Install your desired apps using [Winstall](https://github.com/pratyakshm/CleanWin/wiki/Winstall:-Installing-your-own-set-of-apps-using-a-simple-list).
 
-<details><summary>Features installed:</summary>
-  Windows Sandbox
-  <br>Windows Subsystem for Linux</details>
+  - Apps uninstalled:
+    - 3D Viewer   
+    - Alarms & Clock
+    - Cortana  
+    - Camera  
+    - Connect
+    - Feedback Hub 
+    - Films & TV  
+    - Get Help      
+    - Get started  
+    - Groove Music 
+    - Mail and Calendar  
+    - Messaging  
+    - Maps  
+    - Microsoft OneDrive
+    - Microsoft News  
+    - Microsoft Solitaire Collection  
+    - Mixed Reality Portal
+    - Network Speed Test
+    - OneConnect  
+    - OneNote  
+    - Office
+    - Office Lens
+    - Paint 3D  
+    - Power Automate Desktop
+    - Print 3D
+    - People  
+    - Sway
+    - Snip & Sketch
+    - Sticky Notes  
+    - Skype
+    - Voice Recorder
+    - Whiteboard
+    - Weather
+    - Xbox
+    - Xbox Game bar
+    - Your Phone
+  - More changes include:
+    - Turn off automatic/silent installation of "suggested apps" / bloatware in layman's terms.
 </details>
 
+<details>
+  <summary>Features</summary>
+
+  - Features installed:
+    - Windows Subsystem for Linux
+    - Windows Sandbox
+
+
+  - Features uninstalled:
+    - Hello Face
+    - Internet Explorer
+    - Math Recognizer
+    - Microsoft Paint (Desktop app)
+    - OpenSSH Client
+    - PowerShell ISE
+    - Quick Assist
+    - Steps Recorder
+    - Snipping Tool
+    - Work Folders
+    - Windows Media Player
+    - WordPad
+    - Windows Fax & Scan
+    - XPS Viewer
+    - XPS Printer
+</details>
 
 
 ### Privacy & Security
 <details><summary>Privacy</summary>
-  Activity History
-  <br>Advertising ID 
-  <br>Access to language list
-  <br>Feedback
-  <br>Maps updates
-  <br>Location tracking 
-  <br>Suggestions
-  <br>Tailored Experiences
+
+#### Turn off the following:
+  - Activity History
+  - Advertising ID 
+  - Access to language list
+  - App suggestions
+  - Feedback
+  - Location tracking 
+  - Maps updates
+  - Online speech recognition
+  - Tailored Experiences
+  - Telemetry
   </details>
 
 <details><summary>Security</summary>
-Auto login post update restart
-<br>Disable Meltdown compatibility flag
+
+  - Turn on auto login post restart after Windows is updated.
+  - Turn off Meltdown compatibility.
 </details>
 
 
 
 ### Tasks & Services
-  <details><summary>Tasks</summary>
-  Consolidator
-  <br>DmClient
-  <br>DmClientOnScenarioDownload
-  <br>Disk Diagnostics Data Collector
-  <br>Disk Defragmentation (optional)
-  <br>Feedback Notifications task
-  <br>Microsoft Compatibility Appraiser
-  <br>ProgramDataUpdater
-  <br>QueueReporting
-  <br>UsbCeip
-  </details>
- <details><summary>Services</summary>
-  DiagTrack
-  <br>DMWAppPushService
-  <br>SysMain
-  <br>RetailDemo
-  <br>diagnosticshub.standardcollector.service
-  <br>MapsBroker
-  <br>NetTcpPortSharing
-  <br>RemoteRegistry
-  <br>SharedAccess
-  <br>TrkWks
+<details>
+  <summary>Tasks</summary>
+
+#### Turn off the following tasks:
+- Consolidator
+- DmClient
+- DmClientOnScenarioDownload
+- Disk Diagnostics Data Collector
+- Disk Defragmentation (optional)
+- Feedback Notifications task
+- Microsoft Compatibility Appraiser
+- ProgramDataUpdater
+- QueueReporting
+- UsbCeip
   </details>
 
-  <details><summary>Windows Update</summary>
+<details><summary>Services</summary>
+
+#### Turn off the following services:
+- DiagTrack
+- DMWAppPushService
+- SysMain
+- RetailDemo
+- diagnosticshub.standardcollector.service
+- MapsBroker
+- NetTcpPortSharing
+- RemoteRegistry
+- SharedAccess
+- TrkWks
+</details>
+
+<details><summary>Windows Update</summary>
+
+- Setup Windows Update with the following settings:
   - Turn off automatic updates
-  <br>- Delay feature updates by 20 days
-  <br>- Delay quality updates by 4 days
-  <br>- Turn off driver offering via Windows Update
-  <br>- Turn off re-installation of bloatware after feature update
-  <br>- Set Windows Update to download updates only from Microsoft's servers by turning off Delivery through P2P and LAN
+  - Delay feature updates by 20 days
+  - Delay quality updates by 4 days
+  - Turn off driver offering via Windows Update
+  - Turn off re-installation of bloatware after feature update
+  - Set Windows Update to download updates only from Microsoft's servers by turning off Delivery through P2P and LAN
+
+- Reset Windows Update is also available for users who want to switch back to stock Windows Update settings.
+
   </details>
 
   <details><summary>More changes</summary>
-  Turn off AutoPlay
-  <br>Turn off Autorun
-  <br>Set BIOS time to UTC
+
+  - Turn off AutoPlay
+  - Turn off Autorun
+  - Set BIOS time to UTC
   </details>
 
 </details>
@@ -155,16 +176,18 @@ Auto login post update restart
 
 ### Windows Explorer
 <details><summary>Cleanup</summary>
-Hide/cleanup the following:
-  <br>3D Objects
-  <br>Task View button
-  <br>Cortana button
-  <br>Meet now button
-  <br>Search bar</details>
+
+#### Hide/cleanup the following:
+  -  3D Objects
+  -  Task View button
+  -  Cortana button
+  -  Meet now button
+  -  Search bar</details>
 <details><summary>Improvements</summary>
-  Set This PC as default view
-  <br>Turn off sticky keys prompt
-  <br>Use Print Screen key to open Snip & Sketch overlay
+
+  - Set This PC as default view
+  - Turn off sticky keys prompt
+  - Use Print Screen key to open Snip & Sketch overlay
 </details>
 
 &nbsp;
@@ -176,6 +199,6 @@ Hide/cleanup the following:
 -------------------------------------------------------------
 
 ## Support the development
-[<img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" width="190" height="80">](http://bit.ly/paypalpratyakshm)
+[![Donate with PayPal](https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png)](http://bit.ly/paypalpratyakshm)
 
-P.S.: CleanWin isn't a substitute for people using HDD as OS drive.
+P.S.: CleanWin isn't a substitute for SSD.
