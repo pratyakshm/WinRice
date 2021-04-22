@@ -24,7 +24,7 @@ $tasks = @(
 	"PrivacySecurity",
 	"DisableActivityHistory",		# "EnableActivityHistory",
 	"DisableAdvertisingID",			# "EnableAdvertisingID",
-	# "DisableBackgroundApps",      # "EnableBackgroundApps",
+	"DisableBackgroundApps",      # "EnableBackgroundApps",
 	"DisableFeedback",		        # "EnableFeedback",
 	"DisableInkHarvesting",			# "EnableInkHarvesting",
 	"DisableLangAccess",  		    # "EnableLangAccess",
@@ -597,11 +597,11 @@ Function EnableAdvertisingID {
 # Disable Background application access - ie. if apps can download or update when they aren't used - Cortana is excluded as its inclusion breaks start menu search
 Function DisableBackgroundApps {
 	Write-Host " "
-	Write-Host "Turning off background apps..."
-	Get-ChildItem -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications" -Exclude "Microsoft.Windows.Cortana*" | ForEach-Object {
+	Write-Output "Turning off Background apps..."
+	Get-ChildItem -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications" -Exclude "Microsoft.Windows.Cortana*", "Microsoft.Windows.ShellExperienceHost*", "Microsoft.Windows.Search*" | ForEach-Object {
 		Set-ItemProperty -Path $_.PsPath -Name "Disabled" -Type DWord -Value 1
 		Set-ItemProperty -Path $_.PsPath -Name "DisabledByUser" -Type DWord -Value 1
-		}
+	}
 	Write-Host "Done."
 }
 

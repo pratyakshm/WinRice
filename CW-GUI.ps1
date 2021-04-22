@@ -1014,10 +1014,10 @@ $ErrorActionPreference = 'SilentlyContinue'
     Disable-ScheduledTask -TaskName $Feedback4 -ErrorAction SilentlyContinue | Out-Null
     
     # Disable Background apps
-    Get-ChildItem -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications" -Exclude "Microsoft.Windows.Cortana*" | ForEach-Object {
-        Set-ItemProperty -Path $_.PsPath -Name "Disabled" -Type DWord -Value 1
-        Set-ItemProperty -Path $_.PsPath -Name "DisabledByUser" -Type DWord -Value 1
-    }
+	Get-ChildItem -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications" -Exclude "Microsoft.Windows.Cortana*", "Microsoft.Windows.ShellExperienceHost*", "Microsoft.Windows.Search*" | ForEach-Object {
+		Set-ItemProperty -Path $_.PsPath -Name "Disabled" -Type DWord -Value 1
+		Set-ItemProperty -Path $_.PsPath -Name "DisabledByUser" -Type DWord -Value 1
+	}
     
     # Disable Location Tracking
     $Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
