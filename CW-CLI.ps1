@@ -16,7 +16,7 @@ $tasks = @(
 	"AppsFeatures",
 	"DebloatApps", "UnpinStartTiles", "InstallWinGet", "UninstallOneDrive", "CleanupRegistry", 
 	"DisableBrowserRestoreAd",      #"EnableBrowserRestoreAd",
-	"UninstallFeatures", "EnableWSL", "EnableSandbox",
+	"UninstallFeatures", "EnableWSL", "EnableSandbox", "EnabledotNET3.5",
 	"Install7zip", "Winstall", 
 	"ChangesDone",
 
@@ -537,6 +537,13 @@ Function EnableSandbox {
 	Write-Host "Done."
 }
 
+# Enable dotNET 3.5
+Function EnabledotNET3.5 {
+	Write-Host " "
+	Write-Host "Enabling dotNET 3.5..."
+	Dism /online /Enable-Feature /FeatureName:NetFx3 /NoRestart /Quiet
+	Write-Host "Done."
+}
 
 # Install 7zip
 Function Install7zip {
