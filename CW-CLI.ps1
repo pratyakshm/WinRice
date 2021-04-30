@@ -15,8 +15,8 @@ $tasks = @(
 ### Apps & Features ###
 	"AppsFeatures",
 	"DebloatApps", "UnpinStartTiles", "InstallWinGet", "UninstallOneDrive", "CleanupRegistry", 
-	"DisableBrowserRestoreAd",      #"EnableBrowserRestoreAd",
-	"UninstallFeatures", "EnableWSL", "EnableSandbox", "EnabledotNET3.5",
+	"DisableBrowserRestoreAd",      # "EnableBrowserRestoreAd",
+	"UninstallFeatures", "EnableWSL", "EnabledotNET3.5", # "EnableSandbox",
 	"Install7zip", "Winstall", 
 	"ChangesDone",
 
