@@ -146,6 +146,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	"Microsoft.549981C3F5F10"
 	"Microsoft.BingNews"
 	"Microsoft.BingWeather"
+	"Microsoft.GamingApp"
 	"Microsoft.GamingServices" 
 	"Microsoft.GetHelp" 
 	"Microsoft.Getstarted" 
@@ -205,7 +206,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
 		Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
 	}
-	
+
     # Remove Office webapp shortcuts
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
