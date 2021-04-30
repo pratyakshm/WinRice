@@ -205,11 +205,12 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
 		Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
 	}
-
-	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
-	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
-	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
-	Remove-Item "C:\Users\$env:UserName\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Word.lnk"
+	
+    # Remove Office webapp shortcuts
+	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
+	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
+	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
+	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Word.lnk"
 
 	# Uninstall Connect app
 	Import-Module BitsTransfer
