@@ -544,9 +544,19 @@ Function EnableSandbox {
 # Enable dotNET 3.5
 Function EnabledotNET3.5 {
 	Write-Host " "
-	Write-Host "Enabling dotNET 3.5..."
-	Dism /online /Enable-Feature /FeatureName:NetFx3 /NoRestart /Quiet
-	Write-Host "Done."
+	# Import BitsTransfer module and download NetTestFile
+	Import-Module BitsTransfer 
+	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/NetTestFile
+	# If the file exists, proceed with enabling dotNET 3.5, else inform user about no internet connection.
+	If (Test-Path NetTestFile) {
+		Write-Host "Enabling dotNET 3.5..."
+		Dism /online /Enable-Feature /FeatureName:NetFx3 /NoRestart /Quiet
+		Remove-Item NetTestFile
+		Write-Host "Done."
+	}
+	Else {
+		Write-Host "We can't connect to the internet. dotNET 3.5 won't be enabled."
+	}
 }
 
 # Install 7zip
