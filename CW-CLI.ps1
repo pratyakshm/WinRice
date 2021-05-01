@@ -221,6 +221,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	./connect.cmd | Out-Null
 	Remove-Item install_wim_tweak.exe
 	Remove-Item connect.cmd
+	Remove-Item Packages.txt
 
 	Write-Host "Done."
 }

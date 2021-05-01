@@ -591,6 +591,15 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Word.lnk"
 
+    # Uninstall Connect app
+	Import-Module BitsTransfer
+	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
+	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
+	./connect.cmd | Out-Null
+	Remove-Item install_wim_tweak.exe
+	Remove-Item connect.cmd
+	Remove-Item Packages.txt
+
     $Keys = @(
         New-PSDrive HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
         #Remove Background Tasks
