@@ -36,6 +36,7 @@ $tasks = @(
 	"DisableTelemetry",				# "EnableTelemetry",
 	"AutoLoginPostUpdate", 		    # "StayOnLockscreenPostUpdate",
 	"DisableMeltdownCompatFlag",    # "EnableMeltdownCompatFlag",
+	"HardenUAC", 					# "SoftenUAC",
 	"ChangesDone",
 
 ### Tasks & Services ###
@@ -949,6 +950,20 @@ Function DisableMeltdownCompatFlag {
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat" -Name "cadca5fe-87d3-4b96-b7fb-a231484277cc" -ErrorAction SilentlyContinue
 	Write-Host "Done."
 }
+
+# Harden user account control prompt by making it ask for passwords even in administrator accounts
+Function HardenUAC {
+	Write-Host " "
+	Write-Host "Hardening user account control consent..."
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name ConsentPromptBehaviorAdmin -Type DWord -Value 3
+	Write-Host "Done."
+}
+
+# Soften (?) user account control prompt by NOT making it ask for passwords when allowing a program to run as administrator
+Function SoftenUAC {
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name ConsentPromptBehaviorAdmin -Type DWord -Value 5
+}
+
 
 
 ####################################
