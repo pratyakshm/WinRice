@@ -301,6 +301,9 @@ $UninstallSelectively.Add_Click( {
     
         # Microsoft Store
         "Microsoft.WindowsStore",
+
+        # Microsoft Windows Terminal
+        "Microsoft.WindowsTerminal",
     
         # Photos (and Video Editor)
         "Microsoft.Windows.Photos",
@@ -550,6 +553,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     "Microsoft.WindowsFeedbackHub" 
     "Microsoft.WindowsMaps" 
     "Microsoft.WindowsSoundRecorder" 
+    "Microsoft.WindowsTerminal"
     "Microsoft.XboxApp"
     "Microsoft.XboxGamingOverlay"
     "Microsoft.YourPhone"
