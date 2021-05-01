@@ -40,7 +40,7 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
     - Mail and Calendar  
     - Messaging  
     - Maps  
-    - Microsoft OneDrive
+    - Microsoft OneDrive (64-bit variants can also be uninstalled)
     - Microsoft News  
     - Microsoft Solitaire Collection  
     - Mixed Reality Portal
@@ -58,6 +58,7 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
     - Sticky Notes  
     - Skype
     - Voice Recorder
+    - Windows Terminal
     - Whiteboard
     - Weather
     - Xbox
@@ -72,7 +73,7 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 
   - Features installed:
     - Windows Subsystem for Linux
-    - Windows Sandbox
+    - dotNET 3.5 
 
 
   - Features uninstalled:
@@ -100,14 +101,15 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 #### Turn off the following:
   - Activity History
   - Advertising ID 
-  - Access to language list
   - App suggestions
   - Feedback
+  - Inking personalization
   - Location tracking 
   - Maps updates
   - Online speech recognition
   - Tailored Experiences
   - Telemetry
+  - Websites' access to language list to provide loaclly relevant content
   </details>
 
 <details><summary>Security</summary>
@@ -154,9 +156,9 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 
 - Setup Windows Update with the following settings:
   - Turn off automatic updates
+  - Do not auto restart PC if users are signed in
   - Delay feature updates by 20 days
   - Delay quality updates by 4 days
-  - Turn off driver offering via Windows Update
   - Turn off re-installation of bloatware after feature update
   - Set Windows Update to download updates only from Microsoft's servers by turning off Delivery through P2P and LAN
 
@@ -168,6 +170,8 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 
   - Turn off AutoPlay
   - Turn off Autorun
+  - Turn off Reserved Storage
+    - This setting will only take place after an update is installed.
   - Set BIOS time to UTC
   </details>
 
@@ -179,10 +183,11 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 
 #### Hide/cleanup the following:
   -  3D Objects
-  -  Task View button
   -  Cortana button
   -  Meet now button
-  -  Search bar</details>
+  -  News and interests
+  -  Search bar
+  -  Task View button</details>
 <details><summary>Improvements</summary>
 
   - Set This PC as default view
