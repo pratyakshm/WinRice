@@ -8,8 +8,19 @@
 ## What is CleanWin
 An open source project to make your 🐌 PC faster.
 ## How to run:
-1. Read the full documentation properly before proceeding. 
-2. Download the latest release from the [Releases page](https://github.com/pratyakshm/CleanWin/releases), unzip it and run what you want between CLI/GUI (ignore SmartScreen errors, they exist because the executables aren't signed).
+**Step 0:** Read the full documentation properly before proceeding. 
+### Method 1 (recommended): Running the latest release 
+   1. Download the latest release from [Releases](https://github.com/pratyakshm/CleanWin/releases).
+   2. Unzip the ZIP file.
+   3. Double tap to launch CLI or GUI.
+        - CleanWin prebuilt binaries that ship via GitHub releases will not run unless administrator priviliges are provided.
+### Method 2: Running the latest code from main branch
+Code from main branch is not quality tested or validated, as oppossed to prebuilt binaries from GitHub releases. Proceed with caution.   
+Copy pasted the below code into Windows PowerShell (Administrator):  
+  **CLI:**     
+               ``Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JmqTS'))``   
+  **GUI:**      
+                ``Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jqcr0'))`` 
 
 ## Wiki:
 [Visit the Wiki](https://github.com/pratyakshm/CleanWin/wiki) to read the full documentation.
