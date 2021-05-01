@@ -1132,6 +1132,7 @@ Function SetupWindowsUpdate {
     Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
     Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
     Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
+	Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
 	Stop-Service DoSvc | Out-Null
 	Set-Service DoSvc -StartupType Disabled  | Out-Null
     Write-Host "Done."
