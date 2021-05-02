@@ -7,8 +7,8 @@
 
 ## What is CleanWin
 An open source project to make your 🐌 PC faster.
-## How to run:
-**Step 0:** Read the full documentation properly before proceeding. 
+## How to run
+**NOTE:** It's strongly recommended to read documentation properly before proceeding.
 ### Method 1 (recommended): Running the latest release 
    1. Download the latest release from [Releases](https://github.com/pratyakshm/CleanWin/releases).
    2. Unzip the ZIP file.
@@ -212,9 +212,6 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 - [Windows 10 Release Information](https://docs.microsoft.com/en-us/windows/release-information/)
 - [Windows 10 20H2 Update - Known Issues tracker](https://docs.microsoft.com/en-us/windows/release-information/status-windows-10-20h2)
 
--------------------------------------------------------------
-
-## Support the development
-[![Donate with PayPal](https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png)](http://bit.ly/paypalpratyakshm)
+&nbsp;
 
 ### Using an HDD as boot disk and expecting ultra fast Windows 10 experience after running CleanWin? [🪄Tap here🪄](https://www.amazon.com/s?k=SSD)
