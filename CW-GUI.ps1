@@ -330,6 +330,9 @@ $UninstallSelectively.Add_Click( {
     
         # Web Media Extensions
         "Microsoft.WebMediaExtensions"
+
+        # Windows Terminal
+        "Microsoft.WindowsTerminal"
     )
     #endregion Variables
     
