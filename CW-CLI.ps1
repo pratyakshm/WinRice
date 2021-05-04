@@ -177,7 +177,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	"Microsoft.WindowsFeedbackHub" 
 	"Microsoft.WindowsMaps" 
 	"Microsoft.WindowsSoundRecorder"
-	"Microsoft.WindowsTerminal"
 	"Microsoft.XboxApp"
 	"Microsoft.XboxGamingOverlay"
 	"Microsoft.YourPhone"
