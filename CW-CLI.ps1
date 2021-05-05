@@ -48,6 +48,7 @@ $tasks = @(
 	"DisableServices",			   # "EnableServices",
 	"DisableTasks",				   # "EnableTasks",
 	"SetupWindowsUpdate",		   # "ResetWindowsUpdate",
+	"EnablePowerdownAfterShutdown", # "DisablePowerdownAfterShutdown",
 	"ChangesDone",
 
 ### Windows Explorer ###
@@ -1156,6 +1157,17 @@ Function ResetWindowsUpdate {
 	Write-Host " "
 	Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Recurse
 	Write-Host "Windows Update policies have been removed."
+}
+
+Function EnablePowerdownAfterShutdown {
+	Write-Host "Enabling full powerdown on shut down..."
+	Write-Host "This is known to fix issues where some PCs might boot up after shutdown."
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name PowerdownAfterShutdown -Type DWord -Value 1
+	Write-Host "Done."
+}
+
+Function DisablePowerdownAfterShutdown {
+		Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name PowerdownAfterShutdown -Type DWord -Value 0
 }
 
 
