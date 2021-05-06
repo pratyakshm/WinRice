@@ -689,48 +689,23 @@ $ErrorActionPreference = 'SilentlyContinue'
 })
 
 $InstallWinGet.Add_Click( {
-	Write-Host " "
-    # Check if OS build is supported then proceed
-	if ([System.Environment]::OSVersion.Version.Build -ge 16299) {
-		# Import BitsTransfer module and download NetTestFile
-		Import-Module BitsTransfer 
-		Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/NetTestFile
-			# If the file exists, proceed with downloading WinGet files, else inform user about no internet connection.
-			if (Test-Path NetTestFile) {
-				Remove-Item NetTestFile
-				Write-Host "Downloading WinGet..."
-				Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
-				Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-				# Hash the files, begin installation if pass or write warning message
-				$filehash1 = Get-FileHash "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle" -Algorithm SHA256
-				if ($filehash1 = "10712301941ECC8803DD435C8B84FCD289157AE935D050F18604967B7C6FE267") {
-					$filehash2 = Get-FileHash "Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx" -Algorithm SHA256
-					if ($filehash2 = "6602159C341BAFEA747D0EDF15669AC72DF8817299FBFAA90469909E06794256") {
-						Write-Host "Successfully verified installer hash."
-						Write-Host "Installing WinGet..."
-						Add-AppxPackage -Path .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -DependencyPath .\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-						Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
-						Remove-Item Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-						Write-Host "Done."
-					}
-					else {
-						Write-Warning "VCLibs UWPDesktop package hash does not match. Installation halted."
-					}
-				}
-				else {
-					Write-Warning "DesktopAppInstaller package hash does not match. Installation halted."
-				}
-
-			} 
-			else {
-			Write-Host "We can't connect to GitHub to download the installation files. Are you sure that your internet connection is working?"
-			}
-	}
+    # Import BitsTransfer module and download NetTestFile
+    Import-Module BitsTransfer 
+    Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/NetTestFile
+    # If the file exists, proceed with downloading WinGet files, else inform user about no internet connection.
+    If (Test-Path NetTestFile) {
+        Remove-Item NetTestFile
+        Write-Host "Downloading required files..."
+        Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
+        Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+        Write-Host "Installing Windows Package Manager (WinGet)..."
+        Add-AppxPackage -Path .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -DependencyPath .\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+        Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
+        Remove-Item Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+        Write-Host "Done."
+	} 
 	else {
-		$version = Get-ItemPropertyValue "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name DisplayVersion
-		$osbuild = Get-ItemPropertyValue "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name CurrentBuild
-		Write-Host "WinGet can't be installed since you're running Windows 10 $version build $osbuild which is unsupported."
-		Write-Host "Its strongly recommended that you upgrade to or fresh install the latest version of Windows 10."
+	  Write-Host "We can't connect to GitHub to download the installation files. Are you sure that your internet connection is working?"
 	}
 })
 
