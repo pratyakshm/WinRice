@@ -17,7 +17,7 @@ $tasks = @(
 	"DebloatApps", "UnpinStartTiles", "InstallWinGet", "UninstallOneDrive", "CleanupRegistry", 
 	"DisableBrowserRestoreAd",      # "EnableBrowserRestoreAd",
 	"UninstallFeatures", "EnableWSL", "EnabledotNET3.5", # "EnableSandbox",
-	"Install7zip", "Winstall", "SetPhotoViewerAssociation", # "SetPhotoViewerAssociation",
+	"Install7zip", "Winstall", "InstallHEVC", "SetPhotoViewerAssociation", # "SetPhotoViewerAssociation",
 	"ChangesDone",
 
 ### Privacy & Security ###
@@ -122,6 +122,7 @@ Function CreateSystemRestore {
 	Enable-ComputerRestore -Drive "C:\"
 	Checkpoint-Computer -Description "RestorePoint1" -RestorePointType "MODIFY_SETTINGS" -WarningAction SilentlyContinue
 }
+
 
 
 ###################################
@@ -560,9 +561,48 @@ Function Winstall {
     }
 }
 
+# Install HEVC (https://dev.to/kaiwalter/download-windows-store-apps-with-powershell-from-https-store-rg-adguard-net-155m)
+Function InstallHEVC {
+	$apiUrl = "https://store.rg-adguard.net/api/GetFiles"
+
+	$productUrl = "https://www.microsoft.com/store/productId/9n4wgh0z6vhq"
+
+	$downloadFolder = Join-Path $env:TEMP "StoreDownloads"
+	if(!(Test-Path $downloadFolder -PathType Container)) {
+		New-Item $downloadFolder -ItemType Directory -Force
+	}
+
+	$body = @{
+		type = 'url'
+		url  = $productUrl
+		ring = 'RP'
+		lang = 'en-US'
+	}
+
+	$raw = Invoke-RestMethod -Method Post -Uri $apiUrl -ContentType 'application/x-www-form-urlencoded' -Body $body
+
+	$raw | Select-String '<tr style.*<a href=\"(?<url>.*)"\s.*>(?<text>.*)<\/a>' -AllMatches | % { $_.Matches } | % { 
+		$url = $_.Groups[1].Value
+		$text = $_.Groups[2].Value
+
+		if($text -match "_(x64|neutral).appx(|bundle)$") {
+			Write-Host $text $url
+			$downloadFile = Join-Path $downloadFolder $text
+			Write-Host "Downloading HEVC Video Extensions from Device Manufacturer..."
+			Invoke-WebRequest -Uri $url -OutFile $downloadFile
+		}
+	}
+	Write-Host "Installing HEVC Video Extensions from Device Manufacturer..."
+	Write-Host "This codec was designed to take advantage of better hardware capabilites to play Ultra HD 4K content on Windows 10."
+	Add-AppxPackage $env:TEMP\StoreDownloads\Microsoft.HEVCVideoExtension_*.appx
+	Remove-Item $env:TEMP\StoreDownloads -Recurse
+	Write-Host "Done."
+}
+
 # Set Windows Photo Viewer association for bmp, gif, jpg, png and tif
 Function SetPhotoViewerAssociation {
-	Write-Output "Setting Photo Viewer association for bmp, gif, jpg, png and tif..."
+	Write-Host " "
+	Write-Output "Adding Windows Photo Viewer (classic) to the 'Open with' menu..."
 	If (!(Test-Path "HKCR:")) {
 		New-PSDrive -Name "HKCR" -PSProvider "Registry" -Root "HKEY_CLASSES_ROOT" | Out-Null
 	}
@@ -572,6 +612,8 @@ Function SetPhotoViewerAssociation {
 		Set-ItemProperty -Path $("HKCR:\$type\shell\open") -Name "MuiVerb" -Type ExpandString -Value "@%ProgramFiles%\Windows Photo Viewer\photoviewer.dll,-3043"
 		Set-ItemProperty -Path $("HKCR:\$type\shell\open\command") -Name "(Default)" -Type ExpandString -Value "%SystemRoot%\System32\rundll32.exe `"%ProgramFiles%\Windows Photo Viewer\PhotoViewer.dll`", ImageView_Fullscreen %1"
 	}
+	Write-Output "Done."
+
 }
 
 # Unset Windows Photo Viewer association for bmp, gif, jpg, png and tif
@@ -588,6 +630,8 @@ Function UnsetPhotoViewerAssociation {
 	Remove-Item -Path "HKCR:\jpegfile\shell\open" -Recurse -ErrorAction SilentlyContinue
 	Remove-Item -Path "HKCR:\pngfile\shell\open" -Recurse -ErrorAction SilentlyContinue
 }
+
+
 
 
 ######################################
