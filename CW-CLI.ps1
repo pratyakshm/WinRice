@@ -10,6 +10,7 @@ $tasks = @(
 	"CleanWin",
 	"ProductInformation",
 	"PowerShell7Ready",
+	"InternetStatus",
 	"CreateSystemRestore",
 
 ### Apps & Features ###
@@ -114,6 +115,20 @@ Function PowerShell7Ready {
 		{
 			Import-Module -Name Microsoft.PowerShell.Management, PackageManagement, Appx -UseWindowsPowerShell
 		}
+	}
+}
+
+# Test internet connection
+Function InternetStatus {
+	Write-Host " "
+	Write-Host "Testing internet connection..."
+	$result = Test-NetConnection github.com
+	if( $result.PingSucceeded ) {
+	  Write-Host "This PC is currently online."
+		} 
+	else {
+	  Write-Host "Could not connect to GitHub. This PC might be offline."
+	  Write-Host "Features that depend on active Internet connection won't work."
 	}
 }
 
@@ -311,12 +326,10 @@ Function UnpinStartTiles {
 # Install WinGet
 Function InstallWinGet {
 	Write-Host " "
-	# Import BitsTransfer module and download NetTestFile
+	# Import BitsTransfer module
     Import-Module BitsTransfer 
-    Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/NetTestFile
-    # If the file exists, proceed with downloading WinGet files, else inform user about no internet connection.
-    If (Test-Path NetTestFile) {
-        Remove-Item NetTestFile
+	$result = Test-NetConnection github.com
+	if( $result.PingSucceeded ) {
         Write-Host "Downloading WinGet..."
         Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
         Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
@@ -327,7 +340,7 @@ Function InstallWinGet {
         Write-Host "Done."
 	} 
 	else {
-	  Write-Host "We can't connect to GitHub to download the installation files. Are you sure that your internet connection is working?"
+	  Write-Host "Can't connect to GitHub to download the installation files. Are you sure that your internet connection is working?"
 	}
 }
 
@@ -522,14 +535,12 @@ Function EnableSandbox {
 # Enable dotNET 3.5
 Function EnabledotNET3.5 {
 	Write-Host " "
-	# Import BitsTransfer module and download NetTestFile
+	# Import BitsTransfer module
 	Import-Module BitsTransfer 
-	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/NetTestFile
-	# If the file exists, proceed with enabling dotNET 3.5, else inform user about no internet connection.
-	If (Test-Path NetTestFile) {
+	$result = Test-NetConnection github.com
+	if( $result.PingSucceeded ) {
 		Write-Host "Enabling dotNET 3.5..."
 		Dism /online /Enable-Feature /FeatureName:NetFx3 /NoRestart /Quiet
-		Remove-Item NetTestFile
 		Write-Host "Done."
 	}
 	Else {
