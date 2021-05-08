@@ -42,6 +42,7 @@ $tasks = @(
 
 ### Tasks & Services ###
 	"TasksServices",
+	"DisableStorageSense",		   # "EnableStorageSense",
 	"DisableReservedStorage",	   # "EnableReservedStorage",
 	"DisableAutoplay",             # "EnableAutoplay",
 	"DisableAutorun",              # "EnableAutorun",
@@ -1124,6 +1125,23 @@ Function SetBIOSTimeLocal {
 	Write-Host "Setting BIOS time to Local time..."
 	Remove-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name "RealTimeIsUniversal" -ErrorAction SilentlyContinue
 	Write-Host "Done."
+}
+
+# Enable Storage Sense 
+Function EnableStorageSense {
+	Write-Host " "
+	Write-Host "Turning on Storage Sense..."
+	$EnableStorageSense = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
+	New-Item -Path $EnableStorageSense -ItemType Directory -Force | Out-Null
+	New-ItemProperty -Path $EnableStorageSense -Name 01 -PropertyType DWord -Value 1 -Force | Out-Null
+	Write-Host "Done."
+}
+
+# Disable Storage Sense 
+Function DisableStorageSense {
+	$DisableStorageSense = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
+	New-Item -Path $DisableStorageSense -ItemType Directory -Force | Out-Null
+	New-ItemProperty -Path $DisableStorageSense -Name 01 -PropertyType DWord -Value 0 -Force | Out-Null
 }
 
 # Disable Reserved Storage 
