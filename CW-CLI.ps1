@@ -575,8 +575,6 @@ Function EnableSandbox {
 # Enable dotNET 3.5
 Function EnabledotNET3.5 {
 	Write-Host " "
-	# Import BitsTransfer module
-	Import-Module BitsTransfer 
 	$result = Test-NetConnection github.com
 	if( $result.PingSucceeded ) {
 		Write-Host "Enabling dotNET 3.5..."

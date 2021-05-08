@@ -278,7 +278,13 @@ Start-Transcript -OutputDirectory "${CWFolder}" | Out-Null
 
 #### APPS ####
 $UninstallSelectively.Add_Click( {	
-    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/J37Tj'))
+    $result = Test-NetConnection github.com
+	if( $result.PingSucceeded ) {
+        Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/J37Tj'))
+    }
+    else {
+        Write-Host "CleanWin cannot connect to the internet. This feauture won't work without an active internet connection."
+    }
     Remove-Item AppUninstallerGUI.ps1
 })
 
