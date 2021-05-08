@@ -610,42 +610,28 @@ Function Winstall {
     }
 }
 
-# Install HEVC (https://dev.to/kaiwalter/download-windows-store-apps-with-powershell-from-https-store-rg-adguard-net-155m)
+# Install HEVC
 Function InstallHEVC {
-	$apiUrl = "https://store.rg-adguard.net/api/GetFiles"
-
-	$productUrl = "https://www.microsoft.com/store/productId/9n4wgh0z6vhq"
-
-	$downloadFolder = Join-Path $env:TEMP "StoreDownloads"
-	if(!(Test-Path $downloadFolder -PathType Container)) {
-		New-Item $downloadFolder -ItemType Directory -Force
-	}
-
-	$body = @{
-		type = 'url'
-		url  = $productUrl
-		ring = 'RP'
-		lang = 'en-US'
-	}
-
-	$raw = Invoke-RestMethod -Method Post -Uri $apiUrl -ContentType 'application/x-www-form-urlencoded' -Body $body
-
-	$raw | Select-String '<tr style.*<a href=\"(?<url>.*)"\s.*>(?<text>.*)<\/a>' -AllMatches | % { $_.Matches } | % { 
-		$url = $_.Groups[1].Value
-		$text = $_.Groups[2].Value
-
-		if($text -match "_(x64|neutral).appx(|bundle)$") {
-			Write-Host $text $url
-			$downloadFile = Join-Path $downloadFolder $text
-			Write-Host "Downloading HEVC Video Extensions from Device Manufacturer..."
-			Invoke-WebRequest -Uri $url -OutFile $downloadFile
+	Write-Host " "
+	$result = Test-NetConnection github.com
+	if (-not (Get-AppxPackage -Name Microsoft.HEVCVideoExtension)) {
+		if( $result.PingSucceeded ) {
+			Import-Module BitsTransfer
+			Write-Host "Downloading HEVC Video Extensions..."
+			Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.41023.0_x64__8wekyb3d8bbwe.Appx
+			Write-Host "Installing HEVC Video Extensions from Device Manufacturer..."
+			Write-Host "This codec was designed to take advantage of better hardware capabilites to play Ultra HD 4K content on Windows 10."
+			Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.41023.0_x64__8wekyb3d8bbwe.Appx
+			Remove-Item Microsoft.HEVCVideoExtension_1.0.41023.0_x64__8wekyb3d8bbwe.Appx
+			Write-Host "Done."
+		}
+		else {
+			Write-Host "We can't connect to the internet. HEVC Video Extensions won't be installed."
 		}
 	}
-	Write-Host "Installing HEVC Video Extensions from Device Manufacturer..."
-	Write-Host "This codec was designed to take advantage of better hardware capabilites to play Ultra HD 4K content on Windows 10."
-	Add-AppxPackage $env:TEMP\StoreDownloads\Microsoft.HEVCVideoExtension_*.appx
-	Remove-Item $env:TEMP\StoreDownloads -Recurse
-	Write-Host "Done."
+	else {
+		Write-Host "HEVC Video Extensions are already installed on this device."
+	}
 }
 
 # Set Windows Photo Viewer association for bmp, gif, jpg, png and tif
@@ -774,8 +760,8 @@ Function DisableBackgroundApps {
 		)
 		$OFS = "|"
 		Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | Where-Object -FilterScript {$_.PSChildName -notmatch "^$($ExcludedApps.ForEach({[regex]::Escape($_)}))"} | ForEach-Object -Process {
-			New-ItemProperty -Path $_.PsPath -Name Disabled -PropertyType DWord -Value 1 -Force
-			New-ItemProperty -Path $_.PsPath -Name DisabledByUser -PropertyType DWord -Value 1 -Force
+			New-ItemProperty -Path $_.PsPath -Name Disabled -PropertyType DWord -Value 1 -Force | Out-Null
+			New-ItemProperty -Path $_.PsPath -Name DisabledByUser -PropertyType DWord -Value 1 -Force | Out-Null
 		}
 		$OFS = " "
 	Write-Host "Done."
@@ -855,7 +841,7 @@ Function DisableLangAccess {
 	Write-Host " "
 	Write-Host "Turning off websites' ability to provide you with locally relevant content by accessing your language list..."
 	$LangAccess = "HKCU:\Control Panel\International\User Profile"
-	Remove-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" | Out-Null
+	Remove-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -ErrorAction SilentlyContinue | Out-Null
 	New-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 1 | Out-Null
 	Write-Host "Done."
 }
@@ -973,9 +959,10 @@ Function DisableSpeechRecognition {
 	Write-Host "Turning off online speech recognition..."
 	$Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
 	If (!(Test-Path $Speech)) {
-		New-Item -Path $Speech | Out-Null
+		New-Item -Path $Speech -ErrorAction SilentlyContinue | Out-Null
 	}
-	Set-ItemProperty -Path $Speech -Name "HasAccepted" -Type DWord -Value 0
+	Remove-ItemProperty -Path $Speech -Name "HasAccepted" -ErrorAction SilentlyContinue
+	New-ItemProperty -Path $Speech -Name "HasAccepted" -Type DWord -Value 0 -ErrorAction SilentlyContinue | Out-Null
 	Write-Host "Done."
 }
 
@@ -1303,8 +1290,6 @@ Function SetupWindowsUpdate {
     Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
     Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
 	Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
-	Stop-Service DoSvc | Out-Null
-	Set-Service DoSvc -StartupType Disabled  | Out-Null
     Write-Host "Done."
 }
 
@@ -1315,6 +1300,7 @@ Function ResetWindowsUpdate {
 }
 
 Function EnablePowerdownAfterShutdown {
+	Write-Host " "
 	Write-Host "Enabling full powerdown on shut down..."
 	Write-Host "This is known to fix issues where some PCs might boot up after shutdown."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name PowerdownAfterShutdown -Type DWord -Value 1
@@ -1437,7 +1423,7 @@ Function ExpandRibbonInExplorer {
 	Write-Host "Expanding Ribbon in File Explorer..."
 	$ExpandRibbonInExplorer = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Ribbon"
 	New-Item -Path $ExpandRibbonInExplorer -Force | Out-Null
-	New-ItemProperty -Path $ExpandRibbonInExplorer -Name MinimizedStateTabletModeOff -PropertyType DWord -Value 0 -Force
+	New-ItemProperty -Path $ExpandRibbonInExplorer -Name MinimizedStateTabletModeOff -PropertyType DWord -Value 0 -Force | Out-Null
 	Write-Host "Done."
 }
 
@@ -1519,7 +1505,7 @@ Function RestoreMeetNow {
 Function DisableTaskbarFeed {
 	Write-Host " "
 	Write-Host "Turning off News and interests..."
-	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
 	Write-Host "Done."
 }
 
