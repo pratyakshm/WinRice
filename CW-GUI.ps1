@@ -684,6 +684,39 @@ $ErrorActionPreference = 'SilentlyContinue'
 	winget uninstall OneDriveSetup.exe | Out-Null
 	Remove-Item env:OneDrive
 
+    # Unpin Microsoft Store from Taskbar (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Sophia.psm1#L2557-L2601)
+	$Signature = @{
+		Namespace = "WinAPI"
+		Name = "GetStr"
+		Language = "CSharp"
+		MemberDefinition = @"
+[DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+public static extern IntPtr GetModuleHandle(string lpModuleName);
+[DllImport("user32.dll", CharSet = CharSet.Auto)]
+internal static extern int LoadString(IntPtr hInstance, uint uID, StringBuilder lpBuffer, int nBufferMax);
+public static string GetString(uint strId)
+{
+	IntPtr intPtr = GetModuleHandle("shell32.dll");
+	StringBuilder sb = new StringBuilder(255);
+	LoadString(intPtr, strId, sb, sb.Capacity);
+	return sb.ToString();
+}
+"@
+	}
+	if (-not ("WinAPI.GetStr" -as [type]))
+	{
+		Add-Type @Signature -Using System.Text
+	}
+
+	# Extract the localized "Unpin from taskbar" string from shell32.dll
+	$LocalizedString = [WinAPI.GetStr]::GetString(5387)
+
+	# Start-Job is used due to that the calling this function before UninstallUWPApps breaks the retrieval of the localized UWP apps packages names
+	Start-Job -ScriptBlock {
+		$Apps = (New-Object -ComObject Shell.Application).NameSpace("shell:::{4234d49b-0245-4df3-b780-3893943456e1}").Items()
+		($Apps | Where-Object -FilterScript {$_.Name -eq "Microsoft Store"}).Verbs() | Where-Object -FilterScript {$_.Name -eq $Using:LocalizedString} | ForEach-Object -Process {$_.DoIt()}
+	} | Receive-Job -Wait -AutoRemoveJob
+
     Write-Host "Done."
 
 })
