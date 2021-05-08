@@ -807,6 +807,9 @@ $ErrorActionPreference = 'SilentlyContinue'
 
     Write-Host "Cleaning up Windows Explorer..."
 
+    # Disable Sticky keys prompt
+    Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
+
     # Sets default explorer view to This PC
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -Type DWord -Value 1
 
