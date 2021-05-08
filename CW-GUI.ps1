@@ -1075,11 +1075,42 @@ $ErrorActionPreference = 'SilentlyContinue'
     Disable-ScheduledTask -TaskName $Feedback3 -ErrorAction SilentlyContinue | Out-Null
     Disable-ScheduledTask -TaskName $Feedback4 -ErrorAction SilentlyContinue | Out-Null
     
-    # Disable Background apps
-	Get-ChildItem -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications" -Exclude "Microsoft.Windows.Cortana*", "Microsoft.Windows.ShellExperienceHost*", "Microsoft.Windows.Search*" | ForEach-Object {
-		Set-ItemProperty -Path $_.PsPath -Name "Disabled" -Type DWord -Value 1
-		Set-ItemProperty -Path $_.PsPath -Name "DisabledByUser" -Type DWord -Value 1
-	}
+    # Disable Background apps (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Sophia.psm1#L8988-L9033)
+	Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process {
+			Remove-ItemProperty -Path $_.PsPath -Name * -Force
+		}
+	$ExcludedApps = @(
+		# Lock screen app
+		"Microsoft.LockApp",
+
+		# Content Delivery Manager (delivers Windows Spotlight wallpapers to the lock screen)
+		"Microsoft.Windows.ContentDeliveryManager",
+
+		# Cortana
+		"Microsoft.Windows.Cortana",
+		"Microsoft.549981C3F5F10",
+
+		# Windows Search
+		"Microsoft.Windows.Search",
+
+		# Windows Security
+		"Microsoft.Windows.SecHealthUI",
+
+		# Windows Shell Experience (Action center, Screen Snip, Banner notifications, Touch keyboard)
+		"Microsoft.Windows.ShellExperienceHost",
+
+		# The Start menu
+		"Microsoft.Windows.StartMenuExperienceHost",
+
+		# Microsoft Store
+		"Microsoft.WindowsStore"
+		)
+		$OFS = "|"
+		Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | Where-Object -FilterScript {$_.PSChildName -notmatch "^$($ExcludedApps.ForEach({[regex]::Escape($_)}))"} | ForEach-Object -Process {
+			New-ItemProperty -Path $_.PsPath -Name Disabled -PropertyType DWord -Value 1 -Force
+			New-ItemProperty -Path $_.PsPath -Name DisabledByUser -PropertyType DWord -Value 1 -Force
+		}
+		$OFS = " "
     
     # Disable Location Tracking
     $Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
@@ -1136,6 +1167,11 @@ $EnableDataCollection.Add_Click( {
     }
     Remove-ItemProperty -Path $Feedback -Name "NumberOfSIUFInPeriod"
 
+    # Enable background apps
+    Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process {
+	    Remove-ItemProperty -Path $_.PsPath -Name * -Force
+	}
+    
     # Enable "Let websites provide locally relevant content by accessing my language list"
 	$LangAccess = "HKCU:\Control Panel\International\User Profile"
 	Remove-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut"
