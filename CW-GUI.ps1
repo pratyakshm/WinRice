@@ -278,9 +278,7 @@ Start-Transcript -OutputDirectory "${CWFolder}" | Out-Null
 
 #### APPS ####
 $UninstallSelectively.Add_Click( {	
-    Import-Module BitsTransfer
-    Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/AppUninstallerGUI.ps1
-    ./AppUninstallerGUI.ps1
+    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/J37Tj'))
     Remove-Item AppUninstallerGUI.ps1
 })
 
