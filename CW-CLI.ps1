@@ -59,6 +59,7 @@ $tasks = @(
 	"SetExplorerThisPC",           # "SetExplorerQuickAccess",
     "Hide3DObjectsInThisPC",       # "Restore3DObjectsInThisPC",
 	"Hide3DObjectsInExplorer",     # "Restore3DObjectsInExplorer",
+	"ExpandRibbonInExplorer",	   # "MinimizeRibbonInExplorer",
 	"HideSearchBar",			   # "RestoreSearchBar"
 	"HideTaskView",                # "RestoreTaskView",
 	"HideCortana",			       # "RestoreCortana",
@@ -1333,6 +1334,23 @@ Function Restore3DObjectsInExplorer {
 	Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
 	Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
 	Write-Host "Done."
+}
+
+# Expand ribbon in File Explorer
+Function ExpandRibbonInExplorer {
+	Write-Host " "
+	Write-Host "Expanding Ribbon in File Explorer..."
+	$ExpandRibbonInExplorer = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Ribbon"
+	New-Item -Path $ExpandRibbonInExplorer -Force | Out-Null
+	New-ItemProperty -Path $ExpandRibbonInExplorer -Name MinimizedStateTabletModeOff -PropertyType DWord -Value 0 -Force
+	Write-Host "Done."
+}
+
+# Minimize ribbon in File Explorer
+Function MinimizeRibbonInExplorer {
+	$MinimizeRibbonInExplorer = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Ribbon"
+	New-Item -Path $MinimizeRibbonInExplorer -Force | Out-Null
+	New-ItemProperty -Path $MinimizeRibbonInExplorer -Name MinimizedStateTabletModeOff -PropertyType DWord -Value 1 -Force
 }
 
 # Hide Search bar from taskbar
