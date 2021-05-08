@@ -47,6 +47,7 @@ $tasks = @(
 	"DisableAutoplay",             # "EnableAutoplay",
 	"DisableAutorun",              # "EnableAutorun",
 	"SetBIOSTimeUTC",              # "SetBIOSTimeLocal",
+	"EnableNumLock",			   # "DisableNumLock",
 	"DisableServices",			   # "EnableServices",
 	"DisableTasks",				   # "EnableTasks",
 	"SetupWindowsUpdate",		   # "ResetWindowsUpdate",
@@ -1125,6 +1126,19 @@ Function SetBIOSTimeLocal {
 	Write-Host "Setting BIOS time to Local time..."
 	Remove-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name "RealTimeIsUniversal" -ErrorAction SilentlyContinue
 	Write-Host "Done."
+}
+
+# Enable Num lock on startup
+Function EnableNumLock {
+	Write-Host " "
+	Write-Host "Setting Num lock to autoamtically enable on startup..."
+	New-ItemProperty -Path "Registry::HKEY_USERS\.DEFAULT\Control Panel\Keyboard" -Name InitialKeyboardIndicators -PropertyType String -Value 2147483650 -Force | Out-Null
+	Write-Host "Done."
+}
+
+# Disable Num lock on startup 
+Function DisableNumLock {
+	New-ItemProperty -Path "Registry::HKEY_USERS\.DEFAULT\Control Panel\Keyboard" -Name InitialKeyboardIndicators -PropertyType String -Value 2147483648 -Force | Out-Null
 }
 
 # Enable Storage Sense 
