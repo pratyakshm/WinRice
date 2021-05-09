@@ -6,28 +6,40 @@
 &nbsp;
 
 ## What is CleanWin
-An open source project to make your 🐌 PC faster.
+An open source project to make your 🐌 PC faster.  
+**💡 Read documentation properly before running CleanWin.**
 ## How to run
-**NOTE:** It's strongly recommended to read documentation properly before proceeding.
-### Method 1 (recommended): Running the latest release 
+   
+#### Method 1 (recommended): Running the latest release 
+<details><summary>Tap here</summary>
+   
    1. Download the latest release from [Releases](https://github.com/pratyakshm/CleanWin/releases).
    2. Unzip the ZIP file.
    3. Double tap to launch CLI or GUI.
         - CleanWin prebuilt binaries that ship via GitHub releases will not run unless administrator priviliges are provided.
-### Method 2: Running the latest code from main branch
-Code from main branch is not quality tested or validated, as oppossed to prebuilt binaries from GitHub releases. Proceed with caution.   
-Copy pasted the below code into Windows PowerShell (Administrator):  
+</details>
+
+#### Method 2: Running the latest code from main branch
+<details><summary>Tap here</summary>
+
+   1. Choose if you want to run CleanWin CLI or GUI.
+   2. Copy its corresponding code from the below section.
+   3. Paste it into Windows PowerShell (Admin)
   **CLI:**     
                ``Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JmqTS'))``   
   **GUI:**      
-                ``Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jqcr0'))`` 
+                ``Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jqcr0'))``     
+
+
+⚠️ Code from main branch is not quality tested or validated, as oppossed to prebuilt binaries from GitHub releases. Proceed with caution.   
+</details>
 
 ## Wiki:
-[Visit the Wiki](https://github.com/pratyakshm/CleanWin/wiki) to read the full documentation.
+[Visit the Wiki](https://github.com/pratyakshm/CleanWin/wiki).
 
 ## List of tasks
-This section contains the list of tasks that CleanWin performs. They're grouped in the following categories:
-
+This section contains the list of tasks that CleanWin performs. They're grouped in the following categories:   
+`💡 Tap on the sub-category names to expand or collapse them.`
 ### Apps & Features
 <details>
   <summary>Apps</summary>
@@ -190,7 +202,7 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 
 
 ### Windows Explorer
-<details><summary>Cleanup</summary>
+<details><summary>Core changes</summary>
 
 #### Hide/cleanup the following:
   -  3D Objects
@@ -199,7 +211,7 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
   -  News and interests
   -  Search bar
   -  Task View button</details>
-<details><summary>Improvements</summary>
+<details><summary>More changes</summary>
 
   - Set This PC as default view
   - Turn off sticky keys prompt
@@ -211,6 +223,7 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 ## Microsoft Docs
 - [Windows 10 Release Information](https://docs.microsoft.com/en-us/windows/release-information/)
 - [Windows 10 20H2 Update - Known Issues tracker](https://docs.microsoft.com/en-us/windows/release-information/status-windows-10-20h2)
+- [Windows Blog](https://blogs.windows.com/)
 
 &nbsp;
 
