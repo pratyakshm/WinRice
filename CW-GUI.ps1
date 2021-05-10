@@ -278,6 +278,7 @@ Start-Transcript -OutputDirectory "${CWFolder}" | Out-Null
 
 #### APPS ####
 $UninstallSelectively.Add_Click( {	
+    Write-Host " "
     $result = Test-NetConnection github.com
 	if( $result.PingSucceeded ) {
         Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/J37Tj'))
@@ -290,8 +291,10 @@ $UninstallSelectively.Add_Click( {
 
 $UninstallApps.Add_Click( { 
 $ErrorActionPreference = 'SilentlyContinue'
+    Write-Host " "
+    Write-Host "Removing all bloatware... please stand by."
     # Prebuilt apps
-    Write-Host "Uninstalling unnecessary apps..."
+    Write-Host "    Uninstalling unnecessary UWP apps..."
     $Bloatware = @(
     "Microsoft.549981C3F5F10"
     "Microsoft.BingNews"
@@ -355,12 +358,14 @@ $ErrorActionPreference = 'SilentlyContinue'
         Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
     }
+    Write-Host "    Unnecessary UWP apps uninstalled... proceeding ahead..."
 
     # Remove Office webapp shortcuts
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Word.lnk"
+    Write-Host "    Removed Office Online web-app shortcuts."
 
     # Uninstall Connect app
 	Import-Module BitsTransfer
@@ -371,6 +376,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Remove-Item connect.cmd
 	Remove-Item Packages.txt
 
+    Write-Host "    Deleting unnecessary registry keys..."
     $Keys = @(
         New-PSDrive HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
         #Remove Background Tasks
@@ -408,8 +414,10 @@ $ErrorActionPreference = 'SilentlyContinue'
     ForEach ($Key in $Keys) {
         Remove-Item $Key -Recurse 
     }
-    
+    Write-Host "    Deleted unnecessary registry keys."    
+
     # Uninstall OneDrive
+    Write-Host "    Uninstalling Microsoft OneDrive..."
 	$OneDriveKey = 'HKLM:Software\Policies\Microsoft\Windows\OneDrive'
 	If (!(Test-Path $OneDriveKey)) {
 		mkdir $OneDriveKey | Out-Null
@@ -455,6 +463,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Start-BitsTransfer -Source "https://raw.githubusercontent.com/CleanWin/Files/main/settings.json" -Destination "%LocalAppData%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
 	winget uninstall OneDriveSetup.exe | Out-Null
 	Remove-Item env:OneDrive
+    Write-Host "    Uninstalled Microsoft OneDrive."
 
     # Unpin Microsoft Store from Taskbar (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Sophia.psm1#L2557-L2601)
 	$Signature = @{
@@ -489,17 +498,16 @@ public static string GetString(uint strId)
 		($Apps | Where-Object -FilterScript {$_.Name -eq "Microsoft Store"}).Verbs() | Where-Object -FilterScript {$_.Name -eq $Using:LocalizedString} | ForEach-Object -Process {$_.DoIt()}
 	} | Receive-Job -Wait -AutoRemoveJob
 
-    Write-Host "Done."
+    Write-Host "Done removing all bloatware."
 
 })
 
 $InstallWinGet.Add_Click( {
-    # Import BitsTransfer module and download NetTestFile
-    Import-Module BitsTransfer 
-    Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/NetTestFile
-    # If the file exists, proceed with downloading WinGet files, else inform user about no internet connection.
-    If (Test-Path NetTestFile) {
-        Remove-Item NetTestFile
+    Write-Host " "
+    # Import BitsTransfer module
+    Import-Module BitsTransfer
+	$result = Test-NetConnection github.com
+	if( $result.PingSucceeded ) {
         Write-Host "Downloading required files..."
         Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
         Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
@@ -507,7 +515,7 @@ $InstallWinGet.Add_Click( {
         Add-AppxPackage -Path .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -DependencyPath .\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
         Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
         Remove-Item Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-        Write-Host "Done."
+        Write-Host "Done installing Windows Package Manager (WinGet)."
 	} 
 	else {
 	  Write-Host "We can't connect to GitHub to download the installation files. Are you sure that your internet connection is working?"
@@ -515,6 +523,7 @@ $InstallWinGet.Add_Click( {
 })
 
 $Winstall.Add_Click( {
+    Write-Host " "
 	Write-Host "Finding Winstall.txt..."
 	If (Test-Path Winstall.txt) {
 		Write-Host "Found Winstall.txt! Beginning Winstall..."
@@ -532,16 +541,16 @@ $Winstall.Add_Click( {
 
 
 $EnableWSL.Add_Click( {
-    # Import BitsTransfer module and download NetTestFile
+    Write-Host " "
+    # Import BitsTransfer module
     Import-Module BitsTransfer 
-    Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/NetTestFile
-    # If the file exists, proceed with installing WSL, else inform user about no internet connection.
-    If (Test-Path NetTestFile) {
-        Remove-Item NetTestFile
+	$result = Test-NetConnection github.com
+	if( $result.PingSucceeded ) {
         Write-Host "Enabling Windows Subsystem for Linux..."
         Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
         Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
         Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+        Write-Host "Done enabling Windows Subsystem for Linux."
     } 
     else {
         Write-Host "Windows Subsystem for Linux can't be installed. Are you sure you're connected to the internet?"
@@ -549,24 +558,54 @@ $EnableWSL.Add_Click( {
 })
 
 $UninstallFeatures.Add_Click( {
-    Write-Host "Uninstalling unnecessary features..."
-	Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq "WorkFolders-Client" } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
-	Get-WindowsCapability -Online | Where-Object { $_.Name -like "Hello.Face*" } | Remove-WindowsCapability -Online | Out-Null
-	Get-WindowsCapability -Online | Where-Object { $_.Name -like "MathRecognizer*" } | Remove-WindowsCapability -Online | Out-Null
-	Remove-WindowsCapability -Name "App.StepsRecorder~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "App.Support.QuickAssist~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "Browser.InternetExplorer~~~~0.0.11.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "Media.WindowsMediaPlayer~~~~0.0.12.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "Microsoft-Windows-SnippingTool~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "Microsoft.Windows.MSPaint~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "Microsoft.Windows.PowerShell.ISE~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "Microsoft.Windows.WordPad~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "Print.Fax.Scan~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "OpenSSH.Client~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "Print.Fax.Scan~~~~0.0.1.0" -Online | Out-Null
-	Remove-WindowsCapability -Name "XPS.Viewer~~~~0.0.1.0" -Online | Out-Null
-    Disable-WindowsOptionalFeature -FeatureName "Printing-XPSServices-Features" -Online -NoRestart -WarningAction Ignore | Out-Null 
-    Write-Host "Done."
+    Write-Host " "
+    Write-Host "Disabling and uninstalling unnecessary features..."
+    $Capabilities = @(
+		"App.StepsRecorder*"
+		"App.Support.QuickAssist*"
+		"Browser.InternetExplorer*"
+        "Hello.Face*"
+        "MathRecognizer*"
+		"Media.WindowsMediaPlayer*"
+		"Microsoft-Windows-SnippingTool*"
+		"Microsoft.Windows.MSPaint*" 
+		"Microsoft.Windows.PowerShell.ISE*"
+		"Microsoft.Windows.WordPad*"
+		"Print.Fax.Scan*"
+		"XPS.Viewer*"
+    )
+    ForEach ($Capability in $Capabilities) {
+		Remove-WindowsCapability -Name $Capability -Online | Out-Null
+	}
+
+    $CapLists =@(
+		"Internet Explorer"
+        "Math Recognizer"
+		"Microsoft Paint"
+		"Quick Assist"
+        "Steps Recorder"
+		"Snipping Tool"
+        "Windows Fax & Scan"
+        "Windows Media Player"
+        "Windows Hello Face"
+		"Windows PowerShell ISE"
+		"Windows XPS Features"
+		"WordPad"
+    )
+    ForEach ($CapList in $CapLists) {
+        Write-Host "    - Uninstalled $CapList"
+    }
+
+    $OptionalFeatures = @(
+        "WorkFolders-Client*"
+        "Printing-XPSServices-Feature*"
+    )
+    ForEach ($OptionalFeature in $OptionalFeatures) {
+        Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq $OptionalFeature } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
+    }
+    Write-Host "    - Disabled Work Folders Client."
+
+    Write-Host "Finished disabling and uninstalling unnecessary features."
 })
 
 
@@ -576,7 +615,7 @@ $UninstallFeatures.Add_Click( {
 
 $CleanExplorer.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
-
+    Write-Host " "
     Write-Host "Cleaning up Windows Explorer..."
 
     # Disable Sticky keys prompt
@@ -627,14 +666,40 @@ $ErrorActionPreference = 'SilentlyContinue'
     # Restart explorer.exe to reflect changes immeditately and then provide 2 seconds of breathing time
     Stop-Process -ProcessName explorer
     Start-Sleep 2
-    
-    Write-Host "Done."
+
+    # Print user messages
+    Write-Host "Changelog:"
+    Write-Host "    - Bound Print Screen key to launch Snip overlay"
+    Write-Host "    - Set default File Explorer View to This PC instead of Quick Access"
+    Write-Host "    - Expanded Ribbon in File Explorer"
+    $TurnOffs =@(
+        "Sticky keys popup"
+        "News and interests in Taskbar"
+    )
+    ForEach ($TurnOff in $TurnOffs) {
+        Write-Host "    - Turned off $TurnOff."
+    }
+
+    $Hides =@(
+        "3D Objects"
+        "Search bar in Taskbar"
+        "Task View in Taskbar"
+        "Cortana icon in Taskbar"
+        "Meet Now icon in taskbar"
+    )
+    ForEach ($Hide in $Hides) {
+        Write-Host "    - Hid $Hide."
+    }
+
+    Write-Host "Finished cleaning up Windows Explorer."
+       
 })
 
 $RevertExplorer.Add_Click( {
+    Write-Host " "
     $ErrorActionPreference = 'SilentlyContinue'
 
-    Write-Host "Reverting to stock..."
+    Write-Host "Reverting to default Windows Explorer settings..."
 
     # Enable Sticky keys prompt
     Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "510"
@@ -682,18 +747,19 @@ $RevertExplorer.Add_Click( {
     Stop-Process -ProcessName explorer
     Start-Sleep 2
 
-    Write-Host "Done."
-
+    Write-Host "Reverted to default Windows Explorer settings."
 })
 
 $ShowSeconds.Add_Click( {
+    Write-Host " "
     $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
     Stop-Process -ProcessName explorer
-    Write-Host "Done."
+    Write-Host "Done showing seconds in Taskbar - change will take effect on next restart of Windows Explorer or this PC."
 })
 
 $UnpinStartTiles.Add_Click( {
+    Write-Host " "
 	Write-Host "Unpinning all tiles in start menu..."
 	Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
@@ -767,15 +833,18 @@ $UnpinStartTiles.Add_Click( {
 	Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
 	
 	Remove-Item $layoutFile
-	Write-Host "Done."
+	Write-Host "Finished unpinning all tiles in Start Menu."
 })
+
+
+
 
 #################
 #### PRIVACY ####
 #################
 $DisableDataCollection.Add_Click( { 
 $ErrorActionPreference = 'SilentlyContinue'
-
+    Write-Host " "
     Write-Host "Turning off data collection..."
     
 	# Disable suggestions and bloatware auto-install
@@ -871,7 +940,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		# Windows Shell Experience (Action center, Screen Snip, Banner notifications, Touch keyboard)
 		"Microsoft.Windows.ShellExperienceHost",
 
-		# The Start menu
+		# Start Menu
 		"Microsoft.Windows.StartMenuExperienceHost",
 
 		# Microsoft Store
@@ -912,14 +981,48 @@ $ErrorActionPreference = 'SilentlyContinue'
     # Disable automatic Maps updates
     Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 0
 
+	$Tasks = @(
+		"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser"
+		"Microsoft\Windows\Application Experience\ProgramDataUpdater"
+		"Microsoft\Windows\Customer Experience Improvement Program\Consolidator"
+		"Microsoft\Windows\Autochk\Proxy"
+		"Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" 
+		"Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" 
+		"Microsoft\Windows\Windows Error Reporting\QueueReporting" 
+		"Microsoft\Windows\Feedback\Siuf\DmClient"
+		"Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
+    )
+    ForEach ($Task in $Tasks) {
+		Disable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
+		Write-Host "Disabled scheduled task: $Task."
+	}
 
-    Write-Host "Done."
+    $PrivacySettings =@(
+        "Activity History"
+        "Advertising ID"
+        "App suggestions"
+        "Feedback"
+        "Inking personalization"
+        "Location tracking"
+        "Maps updates"
+        "Online speech recognition"
+        "Tailored Experiences"
+        "Tasks related to data collection"
+        "Telemetry"
+        "Websites access to language list to provide loaclly relevant content"
+    )
+    Write-Host "Turned off:"
+    ForEach ($PrivacySetting in $PrivacySettings) {
+        Write-Host " - $PrivacySetting"
+    }
+
+    Write-Host "Data collection was turned off."
 })
 
 
 $EnableDataCollection.Add_Click( { 
     $ErrorActionPreference = 'SilentlyContinue'
-
+    Write-Host " "
     Write-Host "Turning on data collection..."
 
 	# Enable advertising ID
@@ -1000,57 +1103,67 @@ $EnableDataCollection.Add_Click( {
 	# Start telemetry services
     Start-Service DiagTrack | Set-Service -StartupType Automatic
     Start-Service dmwappushservice | Set-Service -StartupType Automatic
-	
-	# Enable tasks
-    Enable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" | Out-Null
-    Enable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\ProgramDataUpdater" | Out-Null
-    Enable-ScheduledTask -TaskName "Microsoft\Windows\Autochk\Proxy" | Out-Null
-    Enable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" | Out-Null
-    Enable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" | Out-Null
-    Enable-ScheduledTask -TaskName "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" | Out-Null
-    Enable-ScheduledTask -TaskName "Microsoft\Windows\Windows Error Reporting\QueueReporting" | Out-Null
-    Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
-    Enable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
-    
-    Write-Host "Done."
+
+    $PrivacySettings =@(
+        "Activity History"
+        "Advertising ID"
+        "App suggestions"
+        "Feedback"
+        "Inking personalization"
+        "Location tracking"
+        "Maps updates"
+        "Online speech recognition"
+        "Tailored Experiences"
+        "Telemetry"
+        "Websites access to language list to provide loaclly relevant content"
+    )
+    Write-Host "Turned on:"
+    ForEach ($PrivacySetting in $PrivacySettings) {
+        Write-Host " - $PrivacySetting"
+    }
+  
+    Write-Host "Data collection has been turned on."
 })
 
 $DisableTelemetry.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
+    Write-Host " "
     $Telemetry = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
     Set-ItemProperty -Path $Telemetry -Name "AllowCommericalDataPipeline" -Type DWord -Value 1
     Set-ItemProperty -Path $Telemetry -Name "AllowDeviceNameInTelemetry" -Type DWord -Value 0
     Set-ItemProperty -Path $Telemetry -Name "AllowTelemetry" -Type DWord -Value 0
     Set-ItemProperty -Path $Telemetry -Name "DoNotShowFeedbackNotifications" -Type DWord -Value 1
     Set-ItemProperty -Path $Telemetry -Name "LimitEnhancedDiagnosticDataWindowsAnalytics" -Type DWord -Value 0
-    Write-Host "Done."
+    Write-Host "Telemetry / Diagnostic Data collection has been turned off."
 })
 
 $EnableTelemetry.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
-    Write-Host "Turning on telemetry..."
+    Write-Host " "
     $Telemetry = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
     Remove-ItemProperty -Path $Telemetry -Name "AllowTelemetry"
     Remove-ItemProperty -Path $Telemetry -Name "AllowCommericalDataPipeline"
     Remove-ItemProperty -Path $Telemetry -Name "DoNotShowFeedbackNotifications"
     Remove-ItemProperty -Path $Telemetry -Name "LimitEnhancedDiagnosticDataWindowsAnalytics"
     Remove-ItemProperty -Path $Telemetry -Name "AllowDeviceNameInTelemetry"
-    Write-Host "Done."
+    Write-Host "Telemetry / Diagnostic Data collection has been turned on."
 })
 
 $FullBandwidth.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
+    Write-Host " "
     $Bandwidth = "HKLM:\SOFTWARE\Policies\Microsoft\Psched"
     New-Item -Path $Bandwidth -ItemType Directory -Force
     Set-ItemProperty -Path $Bandwidth -Name "NonBestEffortLimit" -Type DWord -Value 0
-    Write-Host "Done."
+    Write-Host "Released full bandwidth to user."
 })
 
 $ReserveBandwidth.Add_Click({
     $ErrorActionPreference = 'SilentlyContinue'
+    Write-Host " "
     $Bandwidth = "HKLM:\SOFTWARE\Policies\Microsoft\Psched"
     Remove-ItemProperty -Path $Bandwidth -Name "NonBestEffortLimit"
-    Write-Host "Done."
+    Write-Host "Implemented default setting of reserving 20% internet bandwidth to OS."
 })
 
 
@@ -1061,7 +1174,19 @@ $ReserveBandwidth.Add_Click({
 $SetupWindowsUpdate.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
     Write-Host " "
-    Write-Host "Setting up Windows Update..."
+    Write-Host "Configuring Windows Update with the following policies..."
+    $WinUpdatePolicies =@(
+        "Turn off automatic updates"
+        "Do not auto restart PC if users are signed in"
+        "Delay feature updates by 20 days"
+        "Delay quality updates by 4 days"
+        "Turn off re-installation of bloatware after Windows Updates"
+        "Download Windows Update and other Microsoft Software through Microsoft's servers only"
+    )
+    ForEach ($WinUpdatePolicy in $WinUpdatePolicies) {
+        Write-Host "    - $WinUpdatePolicy"
+    }
+
     $DeliveryOptimization = "HKLM:\SYSTEM\CurrentControlSet\Services\DoSvc"
     $Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
     $Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
@@ -1078,21 +1203,23 @@ $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
     Stop-Service DoSvc | Out-Null
     Set-Service DoSvc -StartupType Disabled  | Out-Null
-    Write-Host "Done."
+
+    Write-Host "Windows Update policies have been configured."
+    Write-Host "Note: These policies will only take effect if you're using Windows 10 Education, Pro, Enterprise or up."
 })
 
 $ResetWindowsUpdate.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
+    Write-Host " "
     Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Recurse
-    Write-Host "Done."
+    Write-Host "All Windows Update policies were reset."
 })
 
 
 $DisableTasksServices.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
-    
+    Write-Host " "
     Write-Host "Disabling unnecessary tasks & services..."
-
     $Services = @(
 		"DiagTrack"
 		"dmwapppushservice"
@@ -1108,7 +1235,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     ForEach ($Service in $Services) {
 		Stop-Service $Service | Out-Null
 		Set-Service $Service -StartupType Disabled
-		Write-Host "Stopped $Service service."
+		Write-Host "Turned off service: $Service."
 	}
 
 	$Tasks = @(
@@ -1124,7 +1251,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     )
     ForEach ($Task in $Tasks) {
 		Disable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
-		Write-Host "Disabled $Task task."
+		Write-Host "Turned off task: $Task."
 	}
 
     Write-Host "Done."
@@ -1132,7 +1259,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 $EnableTasksServices.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
-
+    Write-Host " "
     Write-Host "Reverting changes made to tasks & services..."
 
     $Services = @(
@@ -1150,7 +1277,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     ForEach ($Service in $Services) {
 		Start-Service $Service | Out-Null
 		Set-Service $Service -StartupType Automatic
-		Write-Host "Started $Service service."
+		Write-Host "Enabled and started: $Service service."
 	}
 
 	$Tasks = @(
@@ -1166,7 +1293,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     )
     ForEach ($Task in $Tasks) {
 		Enable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
-		Write-Host "Enabled $Task task."
+		Write-Host "Enabled scheduled task: $Task."
 	}
     Write-Host "Done."
 })
