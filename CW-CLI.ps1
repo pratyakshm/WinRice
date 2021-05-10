@@ -597,8 +597,14 @@ Function EnabledotNET3.5 {
 # Install 7zip
 Function Install7zip {
 	Write-Host " "
-	Write-Host "Installing 7-zip..."
-	winget install 7zip
+	$7zip = "HKLM:\SOFTWARE\7-Zip"
+	If (!(Test-Path $7zip)) {
+		Write-Host "Installing 7-zip..."
+		winget install 7zip
+	}
+	else {
+		Write-Host "7-zip is already installed on this device."
+	}
 }
 
 # Install apps from Winstall file (the Winstall.txt file must be on the same directory where CleanWin is)
