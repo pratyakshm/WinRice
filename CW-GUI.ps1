@@ -307,8 +307,8 @@ $UninstallSelectively.Add_Click( {
 $UninstallApps.Add_Click( { 
 $ErrorActionPreference = 'SilentlyContinue'
     Write-Host " "
-    Write-Host "Removing all bloatware... please stand by."
-    # Prebuilt apps
+    
+    # Inbox UWP apps
     Write-Host "    Uninstalling unnecessary UWP apps..."
     $Bloatware = @(
     "Microsoft.549981C3F5F10"
@@ -373,7 +373,7 @@ $ErrorActionPreference = 'SilentlyContinue'
         Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
     }
-    Write-Host "    Unnecessary UWP apps uninstalled... proceeding ahead..."
+    Write-Host "    Uninstalled unnecessary UWP apps."
 
     # Remove Office webapp shortcuts
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
@@ -530,7 +530,7 @@ $InstallWinGet.Add_Click( {
         Add-AppxPackage -Path .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -DependencyPath .\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
         Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
         Remove-Item Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-        Write-Host "Done installing Windows Package Manager (WinGet)."
+        Write-Host "Installed Windows Package Manager (WinGet)."
 	} 
 	else {
 	  Write-Host "We can't connect to GitHub to download the installation files. Are you sure that your internet connection is working?"
@@ -565,7 +565,7 @@ $EnableWSL.Add_Click( {
         Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
         Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
         Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-        Write-Host "Done enabling Windows Subsystem for Linux."
+        Write-Host "Enabled Windows Subsystem for Linux."
     } 
     else {
         Write-Host "Windows Subsystem for Linux can't be installed. Are you sure you're connected to the internet?"
