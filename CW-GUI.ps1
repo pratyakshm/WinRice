@@ -56,6 +56,21 @@ Function screen {
     Write-Warning "The GUI window might freeze for an extended period of time while it's performing a task."
     Write-Host " "
     Write-Host " "
+    Write-Host " "
+    Write-Host " "
+    Write-Host " "
+    Write-Host " "
+    Write-Host "Checking connetivity to the internet..."
+    $result = Test-NetConnection github.com
+	if ($result.PingSucceeded ) { 
+        Write-Host "This PC is connected."
+    }
+    else {
+        Write-Host "Can't connect to GitHub. Some features that require an internet connection will not work."
+    }
+    Write-Host " "
+    Write-Host "Please ensure that no other apps or programs run while CleanWin is working."
+    Write-Host " "
 }
 
 screen
@@ -1181,7 +1196,7 @@ $ErrorActionPreference = 'SilentlyContinue'
         "Delay feature updates by 20 days"
         "Delay quality updates by 4 days"
         "Turn off re-installation of bloatware after Windows Updates"
-        "Download Windows Update and other Microsoft Software through Microsoft's servers only"
+        "Download Windows Update and other Microsoft Software only from Microsoft CDN"
     )
     ForEach ($WinUpdatePolicy in $WinUpdatePolicies) {
         Write-Host "    - $WinUpdatePolicy"
