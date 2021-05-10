@@ -15,7 +15,7 @@ $tasks = @(
 
 ### Apps & Features ###
 	"AppsFeatures",
-	"DebloatApps", "UnpinStartTiles", "InstallWinGet", "UninstallOneDrive", "CleanupRegistry", 
+	"DebloatApps", "UnpinStartTiles", "UnpinAppsFromTaskbar", "InstallWinGet", "UninstallOneDrive", "CleanupRegistry", 
 	"DisableBrowserRestoreAd",      # "EnableBrowserRestoreAd",
 	"UninstallFeatures", "EnableWSL", "EnabledotNET3.5", # "EnableSandbox",
 	"Install7zip", "Winstall", "InstallHEVC", "SetPhotoViewerAssociation", # "SetPhotoViewerAssociation",
@@ -339,7 +339,7 @@ Function UnpinAppsFromTaskbar {
 	ForEach ($AppName in $AppNames) {
  		((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | ?{$_.Name -eq $AppName}).Verbs() | ?{$_.Name.replace('&','') -match 'Unpin from taskbar'} | %{$_.DoIt(); $exec = $true} -ErrorAction SilentlyContinue | Out-Null
 	}
-	Write-Host "Unpinned apps from Taskbar"
+	Write-Host "Unpinned apps from Taskbar."
 }
 
 # Install WinGet
