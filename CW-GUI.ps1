@@ -1235,7 +1235,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     ForEach ($Service in $Services) {
 		Stop-Service $Service | Out-Null
 		Set-Service $Service -StartupType Disabled
-		Write-Host "Turned off service: $Service."
+		Write-Host "    Stopped service: $Service."
 	}
 
 	$Tasks = @(
@@ -1251,10 +1251,10 @@ $ErrorActionPreference = 'SilentlyContinue'
     )
     ForEach ($Task in $Tasks) {
 		Disable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
-		Write-Host "Turned off task: $Task."
+		Write-Host "    Turned off task: $Task."
 	}
 
-    Write-Host "Done."
+    Write-Host "Done optimizing tasks and services."
 })
 
 $EnableTasksServices.Add_Click( {
@@ -1277,7 +1277,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     ForEach ($Service in $Services) {
 		Start-Service $Service | Out-Null
 		Set-Service $Service -StartupType Automatic
-		Write-Host "Enabled and started: $Service service."
+		Write-Host "    Started service: $Service."
 	}
 
 	$Tasks = @(
@@ -1293,9 +1293,9 @@ $ErrorActionPreference = 'SilentlyContinue'
     )
     ForEach ($Task in $Tasks) {
 		Enable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
-		Write-Host "Enabled scheduled task: $Task."
+		Write-Host "    Turned on task: $Task."
 	}
-    Write-Host "Done."
+    Write-Host "Done undoing tasks and services changes."
 })
 
 [void]$Form.ShowDialog()
