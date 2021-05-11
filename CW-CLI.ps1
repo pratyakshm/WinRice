@@ -112,13 +112,7 @@ Function ChangesDone {
 
 # Import modules from Windows PowerShell 5.1 
 Function PowerShell7Ready {
-	switch ($PSVersionTable.PSVersion.Major)
-	{
-		"7"
-		{
-			Import-Module -Name Microsoft.PowerShell.Management, PackageManagement, Appx -UseWindowsPowerShell
-		}
-	}
+	Import-Module -Name Microsoft.PowerShell.Management, PackageManagement, Appx -UseWindowsPowerShell
 }
 
 # Test internet connection
@@ -156,10 +150,10 @@ Function AppsFeatures {
 	Write-Host " "
 }
 
-# Debloat apps
+# Debloat apps.
 Function DebloatApps {
 $ErrorActionPreference = 'SilentlyContinue'
-	# Inbox UWP apps
+	# Inbox UWP apps.
 	Write-Host "    Uninstalling unnecessary UWP apps..."
 	$Bloatware = @(
 	"Microsoft.549981C3F5F10"
@@ -201,8 +195,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	"Microsoft.ZuneMusic"
 	"Microsoft.ZuneVideo"
 
-	#Sponsored Windows 10 AppX Apps
-	#Add sponsored/featured apps to remove in the "*AppName*" format
+	# Sponsored Apps
 	"*EclipseManager*"
 	"*ActiproSoftwareLLC*"
 	"*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
@@ -227,7 +220,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	}
 	Write-Host "    Uninstalled unnecessary UWP apps."
 
-    # Remove Office webapp shortcuts
+    # Remove Office webapps shortcuts.
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
@@ -235,7 +228,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Write-Host "    Removed Office Online web-app shortcuts."
 
 
-	# Uninstall Connect app
+	# Uninstall Connect app.
 	Import-Module BitsTransfer
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
 	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
@@ -268,7 +261,6 @@ Function UnpinStartTiles {
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      </defaultlayout:TaskbarLayout>'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    </CustomTaskbarLayoutCollection>'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '</LayoutModificationTemplate>'
-	
 	$START_MENU_LAYOUT = @"
 	<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">
 		<LayoutOptions StartTileGroupCellWidth="6" />
@@ -279,21 +271,16 @@ Function UnpinStartTiles {
 		</DefaultLayoutOverride>
 	</LayoutModificationTemplate>
 "@
-	
 	$layoutFile="C:\Windows\StartMenuLayout.xml"
-	
-	# Delete layout file if it already exists
+	# Delete layout file if it already exists.
 	If(Test-Path $layoutFile)
 	{
 		Remove-Item $layoutFile
 	}
-	
-	# Creates the blank layout file
+	# Creates a blank layout file.
 	$START_MENU_LAYOUT | Out-File $layoutFile -Encoding ASCII
-	
 	$regAliases = @("HKLM", "HKCU")
-	
-	# Assign the start layout and force it to apply with "LockedStartLayout" at both the machine and user level
+	# Assign the start layout and force it to apply with "LockedStartLayout" at both the machine and user level.
 	foreach ($regAlias in $regAliases){
 		$basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
 		$keyPath = $basePath + "\Explorer" 
@@ -303,26 +290,21 @@ Function UnpinStartTiles {
 		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 1
 		Set-ItemProperty -Path $keyPath -Name "StartLayoutFile" -Value $layoutFile
 	}
-	
-	# Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process
+	# Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process.
 	Stop-Process -name explorer -Force
 	Start-Sleep -s 5
 	$wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
 	Start-Sleep -s 5
-	
-	# Enable the ability to pin items again by disabling "LockedStartLayout"
+	# Enable the ability to pin items again by disabling "LockedStartLayout".
 	foreach ($regAlias in $regAliases){
 		$basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
 		$keyPath = $basePath + "\Explorer" 
 		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 0
 	}
-	
-	# Restart Explorer and delete the layout file
+	# Restart Explorer and delete the layout file.
 	Stop-Process -name explorer -Force
-	
-	# Uncomment the next line to make clean start menu default for all new users
+	# Uncomment the next line to make clean start menu default for all new users.
 	Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
-	
 	Remove-Item $layoutFile
 	Write-Host "Finished unpinning all tiles in Start Menu."
 }
@@ -345,7 +327,7 @@ Function UnpinAppsFromTaskbar {
 # Install WinGet
 Function InstallWinGet {
 	Write-Host " "
-	# Import BitsTransfer module
+	# Import BitsTransfer module, ping github - if success, proceed with installation, else print no connection message.
     Import-Module BitsTransfer 
 	$result = Test-NetConnection github.com
 	if( $result.PingSucceeded ) {
@@ -359,7 +341,7 @@ Function InstallWinGet {
         Write-Host "Done installing Windows Package Manager (WinGet)."
 	} 
 	else {
-	  Write-Host "Can't connect to GitHub to download the installation files. Are you sure that your internet connection is working?"
+	  Write-Host "Could not connect to the internet. WinGet won't be installed."
 	}
 }
 
@@ -371,8 +353,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 	If (!(Test-Path $OneDriveKey)) {
 		mkdir $OneDriveKey | Out-Null
 		Set-ItemProperty $OneDriveKey -Name OneDrive -Value DisableFileSyncNGSC
-	}
-		Set-ItemProperty $OneDriveKey -Name OneDrive -Value DisableFileSyncNGSC
+		}
+	Set-ItemProperty $OneDriveKey -Name OneDrive -Value DisableFileSyncNGSC
 	New-PSDrive  HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT | Out-Null
 	$onedrive = "$env:SYSTEMROOT\SysWOW64\OneDriveSetup.exe"
 	$ExplorerReg1 = "HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
@@ -404,7 +386,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	}
 	Set-ItemProperty $ExplorerReg2 System.IsPinnedToNameSpaceTree -Value 0
 
-	# For 64-bit versions of Microsoft OneDrive (in preview)
+	# Microsoft OneDrive 64-bit.
 	Remove-Item "%LocalAppData%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
 	Remove-Item "%LocalAppData%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json.backup" -ErrorAction SilentlyContinue
 	Start-BitsTransfer -Source "https://raw.githubusercontent.com/CleanWin/Files/main/settings.json" -Destination "%LocalAppData%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
@@ -419,9 +401,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Write-Host " "
 	Write-Host "Deleting unnecessary registry keys..."
     	$Keys = @(
-		
 		New-PSDrive HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
-        #Remove Background Tasks
+        # Remove Background Tasks.
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
@@ -429,30 +410,30 @@ $ErrorActionPreference = 'SilentlyContinue'
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
             
-        #Windows File
+        # Windows File
         "HKCR:\Extensions\ContractId\Windows.File\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
             
-        #Registry keys to delete if they aren't uninstalled by RemoveAppXPackage/RemoveAppXProvisionedPackage
+        # Registry keys to delete if they aren't uninstalled by RemoveAppXPackage/RemoveAppXProvisionedPackage.
         "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
         "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
         "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
         "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
         "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
             
-        #Scheduled Tasks to delete
+        # Scheduled Tasks to delete.
         "HKCR:\Extensions\ContractId\Windows.PreInstalledConfigTask\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
             
-        #Windows Protocol Keys
+        # Windows Protocol Keys.
         "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
         "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
         "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
         "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
                
-        #Windows Share Target
+        # Windows Share Target.
         "HKCR:\Extensions\ContractId\Windows.ShareTarget\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
     )
         
-    #This writes the output of each key it is removing and also removes the keys listed above.
+    # Delete the keys.
     ForEach ($Key in $Keys) {
 		Remove-Item $Key -Recurse
 	}
@@ -468,7 +449,7 @@ Function EnableEdgeStartupBoost {
 		New-Item -Path $EdgeStartupBoost -Force | Out-Null
 		}
 	New-ItemProperty -Path $EdgeStartupBoost -Name "StartupBoostEnabled" -Type DWord -Value 1 | Out-Null
-	Write-Host "Enabled Startup Boost in Microsoft Edge."
+	Write-Host "Turned on Startup Boost in Microsoft Edge."
 }
 
 # Disable Startup boost in Microsoft Edge
@@ -483,14 +464,14 @@ Function DisableBrowserRestoreAd {
     Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Albacore.ViVe.dll
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/ViVeTool.exe
     If (Test-Path ViVeTool.exe) {
-        Write-Host "Hiding 'Web browsing: Restore recommended' suggestion from Settings..."
+        Write-Host "Turning off 'Web browsing: Restore recommended' suggestion from Settings..."
 		./ViVeTool.exe delconfig 23531064 1 | Out-Null
 		Remove-Item ViVeTool.exe
 		Remove-Item Albacore.ViVe.dll
         Write-Host "Done."
 	} 
 	else {
-	  Write-Host "We can't connect to GitHub to download the required files. Are you sure that your internet connection is working?"
+	  Write-Host "Could not connect to the internet. Browser Restore recommendation won't be turned off."
 	}
 }
 
@@ -506,7 +487,7 @@ Function EnableBrowserRestoreAd {
         Write-Host "Done."
 	} 
 	else {
-	  Write-Host "We can't connect to GitHub to download the required files. Are you sure that your internet connection is working?"
+	  Write-Host "Could not connect to the internet. Browser Restore recommendation won't be turned on."
 	}
 }
 
@@ -514,6 +495,7 @@ Function EnableBrowserRestoreAd {
 Function UninstallFeatures {
     Write-Host " "
     Write-Host "Disabling and uninstalling unnecessary features..."
+	# Uninstall capabilities
     $Capabilities = @(
 		"App.StepsRecorder*"
 		"App.Support.QuickAssist*"
@@ -531,7 +513,7 @@ Function UninstallFeatures {
     ForEach ($Capability in $Capabilities) {
 		Remove-WindowsCapability -Name $Capability -Online | Out-Null
 	}
-
+	# Print user friendly list of capabilities uninstalled
     $CapLists =@(
 		"Internet Explorer"
         "Math Recognizer"
@@ -550,6 +532,7 @@ Function UninstallFeatures {
         Write-Host "    - Uninstalled $CapList"
     }
 
+	# Uninstall Optional features.
     $OptionalFeatures = @(
         "WorkFolders-Client*"
         "Printing-XPSServices-Feature*"
@@ -564,12 +547,20 @@ Function UninstallFeatures {
 
 # Enable WSL
 Function EnableWSL {
-	Write-Host " "
-	Write-Host "Enabling Windows Subsystem for Linux..."
-	Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-	Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-	Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-	Write-Host "Enabled Windows Subsystem for Linux."
+    Write-Host " "
+    # Import BitsTransfer module, ping github - if success, enable WSL, else print no connection message.
+    Import-Module BitsTransfer 
+	$result = Test-NetConnection github.com
+	if( $result.PingSucceeded ) {
+        Write-Host "Enabling Windows Subsystem for Linux..."
+        Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+        Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+        Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+        Write-Host "Enabled Windows Subsystem for Linux."
+    } 
+    else {
+        Write-Host "Could not connect to the internet. WSL won't be enabled."
+    }
 }
 
 # Enable Sandbox
@@ -583,6 +574,7 @@ Function EnableSandbox {
 # Enable dotNET 3.5
 Function EnabledotNET3.5 {
 	Write-Host " "
+	# Ping github - if success, enable WSL, else print no connection message.
 	$result = Test-NetConnection github.com
 	if( $result.PingSucceeded ) {
 		Write-Host "Enabling dotNET 3.5..."
@@ -590,7 +582,7 @@ Function EnabledotNET3.5 {
 		Write-Host "Enabled dotNET 3.5"
 	}
 	Else {
-		Write-Host "We can't connect to the internet. dotNET 3.5 won't be enabled."
+		Write-Host "Could not connect to the internet. dotNET 3.5 runtime won't be enabled."
 	}
 }
 
@@ -607,7 +599,7 @@ Function Install7zip {
 	}
 }
 
-# Install apps from Winstall file (the Winstall.txt file must be on the same directory where CleanWin is)
+# Install apps from Winstall file (the Winstall.txt file must be on the same directory as CleanWin)
 Function Winstall {
 	Write-Host " "
 	If (Test-Path Winstall.txt) {
@@ -627,6 +619,7 @@ Function Winstall {
 # Install HEVC
 Function InstallHEVC {
 	Write-Host " "
+	# Import BitsTransfer module, ping github - if success, install HEVC Video Extensions, else print no connection message.
 	$result = Test-NetConnection github.com
 	if (-not (Get-AppxPackage -Name Microsoft.HEVCVideoExtension)) {
 		if( $result.PingSucceeded ) {
@@ -634,13 +627,12 @@ Function InstallHEVC {
 			Write-Host "Downloading HEVC Video Extensions..."
 			Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.41023.0_x64__8wekyb3d8bbwe.Appx
 			Write-Host "Installing HEVC Video Extensions from Device Manufacturer..."
-			Write-Host "This codec was designed to take advantage of better hardware capabilites to play Ultra HD 4K content on Windows 10."
 			Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.41023.0_x64__8wekyb3d8bbwe.Appx
 			Remove-Item Microsoft.HEVCVideoExtension_1.0.41023.0_x64__8wekyb3d8bbwe.Appx
 			Write-Host "Installed HEVC Video Extensions."
 		}
 		else {
-			Write-Host "We can't connect to the internet. HEVC Video Extensions won't be installed."
+			Write-Host "Could not connect to the internet. HEVC Video Extensions won't be installed."
 		}
 	}
 	else {
@@ -745,32 +737,17 @@ Function DisableBackgroundApps {
 	Write-Host " "
 	Write-Output "Turning off Background apps..."
 	Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process {
-			Remove-ItemProperty -Path $_.PsPath -Name * -Force
-		}
+		Remove-ItemProperty -Path $_.PsPath -Name * -Force
+	}
 	$ExcludedApps = @(
-		# Lock screen app
 		"Microsoft.LockApp",
-
-		# Content Delivery Manager (delivers Windows Spotlight wallpapers to the lock screen)
 		"Microsoft.Windows.ContentDeliveryManager",
-
-		# Cortana
 		"Microsoft.Windows.Cortana",
 		"Microsoft.549981C3F5F10",
-
-		# Windows Search
 		"Microsoft.Windows.Search",
-
-		# Windows Security
 		"Microsoft.Windows.SecHealthUI",
-
-		# Windows Shell Experience (Action center, Screen Snip, Banner notifications, Touch keyboard)
 		"Microsoft.Windows.ShellExperienceHost",
-
-		# The Start menu
 		"Microsoft.Windows.StartMenuExperienceHost",
-
-		# Microsoft Store
 		"Microsoft.WindowsStore"
 		)
 		$OFS = "|"
@@ -1271,7 +1248,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Set-Service $Service -StartupType Automatic
 		Write-Host "    Started service: $Service."
 	}
-	Write-Host "Turned on unnecessary services."
+	Write-Host "Turned on redundant services."
 }
 
 Function DisableTasks {
@@ -1311,7 +1288,7 @@ Function EnableTasks {
 		Enable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
 		Write-Host "    Turned on task: $Task."
 	}
-    Write-Host "Done."
+    Write-Host "Turned on redundant tasks."
 }
 
 Function SetupWindowsUpdate {

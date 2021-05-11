@@ -215,7 +215,7 @@ $RevertExplorer.Location = New-Object System.Drawing.Point(460,35)
 $RevertExplorer.Font = 'Segoe UI,10'
 
 $ShowSeconds = New-Object System.Windows.Forms.Button
-$ShowSeconds.Text = "Show seconds in taskbar"
+$ShowSeconds.Text = "Show seconds in Taskbar"
 $ShowSeconds.Width = 140
 $ShowSeconds.Height = 43
 $ShowSeconds.Location = New-Object System.Drawing.Point(320,78)
@@ -308,7 +308,7 @@ $UninstallApps.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
     Write-Host " "
     
-    # Inbox UWP apps
+    # Inbox UWP Apps
     Write-Host "    Uninstalling unnecessary UWP apps..."
     $Bloatware = @(
     "Microsoft.549981C3F5F10"
@@ -349,8 +349,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     "Microsoft.ZuneMusic"
     "Microsoft.ZuneVideo"
 
-    #Sponsored Windows 10 AppX Apps
-    #Add sponsored/featured apps to remove in the "*AppName*" format
+    # Sponsored Apps
     "*EclipseManager*"
     "*ActiproSoftwareLLC*"
     "*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
@@ -375,14 +374,14 @@ $ErrorActionPreference = 'SilentlyContinue'
     }
     Write-Host "    Uninstalled unnecessary UWP apps."
 
-    # Remove Office webapp shortcuts
+    # Remove Office webapps shortcuts
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Word.lnk"
     Write-Host "    Removed Office Online web-app shortcuts."
 
-    # Uninstall Connect app
+    # Uninstall Connect App
 	Import-Module BitsTransfer
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
 	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
@@ -394,7 +393,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     Write-Host "    Deleting unnecessary registry keys..."
     $Keys = @(
         New-PSDrive HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
-        #Remove Background Tasks
+        # Remove Background Tasks
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
@@ -402,43 +401,43 @@ $ErrorActionPreference = 'SilentlyContinue'
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
                 
-        #Windows File
+        # Windows File
         "HKCR:\Extensions\ContractId\Windows.File\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
                 
-        #Registry keys to delete if they aren't uninstalled by RemoveAppXPackage/RemoveAppXProvisionedPackage
+        # Registry keys to delete if they aren't uninstalled by RemoveAppXPackage/RemoveAppXProvisionedPackage
         "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
         "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
         "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
         "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
         "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
                 
-        #Scheduled Tasks to delete
+        # Scheduled Tasks to delete
         "HKCR:\Extensions\ContractId\Windows.PreInstalledConfigTask\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
                 
-        #Windows Protocol Keys
+        # Windows Protocol Keys
         "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
         "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
         "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
         "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
                 
-        #Windows Share Target
+        # Windows Share Target
         "HKCR:\Extensions\ContractId\Windows.ShareTarget\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
         )
         
-    # This writes the output of each key it is removing and also removes the keys listed above.
+    # Delete the keys
     ForEach ($Key in $Keys) {
         Remove-Item $Key -Recurse 
     }
     Write-Host "    Deleted unnecessary registry keys."    
 
-    # Uninstall OneDrive
+    # Uninstall Microsoft OneDrive
     Write-Host "    Uninstalling Microsoft OneDrive..."
 	$OneDriveKey = 'HKLM:Software\Policies\Microsoft\Windows\OneDrive'
 	If (!(Test-Path $OneDriveKey)) {
 		mkdir $OneDriveKey | Out-Null
 		Set-ItemProperty $OneDriveKey -Name OneDrive -Value DisableFileSyncNGSC
 	}
-		Set-ItemProperty $OneDriveKey -Name OneDrive -Value DisableFileSyncNGSC
+	Set-ItemProperty $OneDriveKey -Name OneDrive -Value DisableFileSyncNGSC
 	New-PSDrive  HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT | Out-Null
 	$onedrive = "$env:SYSTEMROOT\SysWOW64\OneDriveSetup.exe"
 	$ExplorerReg1 = "HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
@@ -472,7 +471,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Start-Process explorer.exe -NoNewWindow
 	Remove-Item env:OneDrive
 
-	# For 64-bit versions of Microsoft OneDrive (in preview)
+	# Uninstall Microsoft OneDrive 64-bit (in preview)
 	Remove-Item "%LocalAppData%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
 	Remove-Item "%LocalAppData%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json.backup" -ErrorAction SilentlyContinue
 	Start-BitsTransfer -Source "https://raw.githubusercontent.com/CleanWin/Files/main/settings.json" -Destination "%LocalAppData%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
@@ -492,12 +491,11 @@ $ErrorActionPreference = 'SilentlyContinue'
 	}
 
     Write-Host "Done removing all bloatware."
-
 })
 
 $InstallWinGet.Add_Click( {
     Write-Host " "
-    # Import BitsTransfer module
+    # Import BitsTransfer module, ping github - if success, proceed with installation, else print no connection message.
     Import-Module BitsTransfer
 	$result = Test-NetConnection github.com
 	if( $result.PingSucceeded ) {
@@ -511,7 +509,7 @@ $InstallWinGet.Add_Click( {
         Write-Host "Installed Windows Package Manager (WinGet)."
 	} 
 	else {
-	  Write-Host "We can't connect to GitHub to download the installation files. Are you sure that your internet connection is working?"
+	  Write-Host "Could not connect to the internet. WinGet won't be installed."
 	}
 })
 
@@ -535,7 +533,7 @@ $Winstall.Add_Click( {
 
 $EnableWSL.Add_Click( {
     Write-Host " "
-    # Import BitsTransfer module
+    # Import BitsTransfer module, ping github - if success, enable WSL, else print no connection message.
     Import-Module BitsTransfer 
 	$result = Test-NetConnection github.com
 	if( $result.PingSucceeded ) {
@@ -546,13 +544,15 @@ $EnableWSL.Add_Click( {
         Write-Host "Enabled Windows Subsystem for Linux."
     } 
     else {
-        Write-Host "Windows Subsystem for Linux can't be installed. Are you sure you're connected to the internet?"
+        Write-Host "Could not connect to the internet. WSL won't be enabled."
     }
 })
 
 $UninstallFeatures.Add_Click( {
     Write-Host " "
     Write-Host "Disabling and uninstalling unnecessary features..."
+
+    # Uninstall capabilities.
     $Capabilities = @(
 		"App.StepsRecorder*"
 		"App.Support.QuickAssist*"
@@ -570,7 +570,7 @@ $UninstallFeatures.Add_Click( {
     ForEach ($Capability in $Capabilities) {
 		Remove-WindowsCapability -Name $Capability -Online | Out-Null
 	}
-
+    # Print the friendly names list of capabilities uninstalled.
     $CapLists =@(
 		"Internet Explorer"
         "Math Recognizer"
@@ -589,6 +589,7 @@ $UninstallFeatures.Add_Click( {
         Write-Host "    - Uninstalled $CapList"
     }
 
+    # Uninstall optional features.
     $OptionalFeatures = @(
         "WorkFolders-Client*"
         "Printing-XPSServices-Feature*"
@@ -596,6 +597,7 @@ $UninstallFeatures.Add_Click( {
     ForEach ($OptionalFeature in $OptionalFeatures) {
         Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq $OptionalFeature } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
     }
+    # Print the friendly list of optional features uninstalled.
     Write-Host "    - Disabled Work Folders Client."
 
     Write-Host "Finished disabling and uninstalling unnecessary features."
@@ -611,16 +613,16 @@ $ErrorActionPreference = 'SilentlyContinue'
     Write-Host " "
     Write-Host "Cleaning up Windows Explorer..."
 
-    # Disable Sticky keys prompt
+    # Turn off Sticky keys prompt.
     Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
 
-    # Use print screen key to launch Snip overlay
+    # Use print screen key to launch Snip overlay.
     Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 1
 
-    # Sets default explorer view to This PC
+    # Sets default explorer view to This PC.
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -Type DWord -Value 1
 
-    # Hides 3D objects in File Explorer
+    # Hide 3D objects in File Explorer.
     Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Recurse -ErrorAction SilentlyContinue
     $Hide3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
     $Hide3DObjects2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
@@ -633,52 +635,46 @@ $ErrorActionPreference = 'SilentlyContinue'
         }
     Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
     
-    # Expand Ribbon in File Explorer
+    # Expand Ribbon in File Explorer.
     $ExpandRibbonInExplorer = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Ribbon"
 	New-Item -Path $ExpandRibbonInExplorer -Force | Out-Null
 	New-ItemProperty -Path $ExpandRibbonInExplorer -Name MinimizedStateTabletModeOff -PropertyType DWord -Value 0 -Force
 
-    # Hide search bar in taskbar
+    # Hide search bar in Taskbar.
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
     
-    # Hide Task view icon in taskbar
+    # Hide Task view icon in Taskbar.
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
     
-    # Hide Cortana icon in taskbar
+    # Hide Cortana icon in Taskbar.
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
 
-    # Hide Meet Now icon in taskbar
+    # Hide Meet Now icon in Taskbar.
 	$Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
 	$Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
 	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1 -ErrorAction SilentlyContinue
     Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
 
-    # Turn off News and interests in taskbar
+    # Turn off News and interests in Taskbar.
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2
 
-    # Restart explorer.exe to reflect changes immeditately and then provide 2 seconds of breathing time
+    # Restart explorer.exe to reflect changes immeditately and then provide 2 seconds of breathing time.
     Stop-Process -ProcessName explorer
     Start-Sleep 2
 
-    # Print user messages
+    # Print list of changes done.
     Write-Host "Changelog:"
     Write-Host "    - Bound Print Screen key to launch Snip overlay"
     Write-Host "    - Set default File Explorer View to This PC instead of Quick Access"
     Write-Host "    - Expanded Ribbon in File Explorer"
-    $TurnOffs =@(
-        "Sticky keys popup"
-        "News and interests in Taskbar"
-    )
-    ForEach ($TurnOff in $TurnOffs) {
-        Write-Host "    - Turned off $TurnOff."
-    }
-
+    Write-Host "    - Turned off Sticky keys popup"
+    Write-Host "    - Turned off News and interests"
     $Hides =@(
-        "3D Objects"
+        "3D Objects from File Explorer"
         "Search bar in Taskbar"
         "Task View in Taskbar"
-        "Cortana icon in Taskbar"
-        "Meet Now icon in taskbar"
+        "Cortana in Taskbar"
+        "Meet Now in Taskbar"
     )
     ForEach ($Hide in $Hides) {
         Write-Host "    - Hid $Hide."
@@ -694,13 +690,13 @@ $RevertExplorer.Add_Click( {
 
     Write-Host "Reverting to default Windows Explorer settings..."
 
-    # Enable Sticky keys prompt
+    # Enable Sticky keys prompt.
     Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "510"
 
-    # Set Explorer default view to Quick access
+    # Set Explorer default view to Quick access.
     Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo"
 
-    # Restore 3D objects in File Explorer
+    # Restore 3D objects in File Explorer.
     $Restore3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
     $Restore3DObjects2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
     $Restore3DObjects3 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
@@ -710,33 +706,33 @@ $RevertExplorer.Add_Click( {
     Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy"
     Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy"
     
-    # Minimize Ribbon in File Explorer
+    # Minimize Ribbon in File Explorer.
 	$MinimizeRibbonInExplorer = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Ribbon"
 	New-Item -Path $MinimizeRibbonInExplorer -Force | Out-Null
 	New-ItemProperty -Path $MinimizeRibbonInExplorer -Name MinimizedStateTabletModeOff -PropertyType DWord -Value 1 -Force
 
-    # Show search bar icon in taskbar
+    # Show search bar icon in Taskbar.
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
     
-    # Show taskview icon in taskbar 
+    # Show taskview icon in Taskbar.
     Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton"
     
-    # Show Cortana icon in taskbar
+    # Show Cortana icon in Taskbar.
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
 
-    # Show Meet now icon in taskbar
+    # Show Meet now icon in Taskbar.
 	$Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
 	$Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
 	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 0
     Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 0
     
-    # Disable PrtScr for Snip
+    # No longer use print screen key to launch Snip overlay.
     Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
 
-    # Turn on News and interests in taskbar
+    # Turn on News and interests in Taskbar.
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0
 
-    # Restart explorer.exe to reflect changes immeditately and then provide 2 seconds of breathing time
+    # Restart explorer.exe to reflect changes immeditately and then provide 2 seconds of breathing time.
     Stop-Process -ProcessName explorer
     Start-Sleep 2
 
@@ -748,7 +744,7 @@ $ShowSeconds.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
     Stop-Process -ProcessName explorer
-    Write-Host "Done showing seconds in Taskbar - change will take effect on next restart of Windows Explorer or this PC."
+    Write-Host "Showed Seconds in Taskbar. Changes will take effect on next restart."
 })
 
 $UnpinStartTiles.Add_Click( {
@@ -770,7 +766,6 @@ $UnpinStartTiles.Add_Click( {
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      </defaultlayout:TaskbarLayout>'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    </CustomTaskbarLayoutCollection>'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '</LayoutModificationTemplate>'
-	
 	$START_MENU_LAYOUT = @"
 	<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">
 		<LayoutOptions StartTileGroupCellWidth="6" />
@@ -781,21 +776,15 @@ $UnpinStartTiles.Add_Click( {
 		</DefaultLayoutOverride>
 	</LayoutModificationTemplate>
 "@
-	
 	$layoutFile="C:\Windows\StartMenuLayout.xml"
-	
-	# Delete layout file if it already exists
-	If(Test-Path $layoutFile)
-	{
+	# Delete layout file if it already exists.
+	If(Test-Path $layoutFile) {
 		Remove-Item $layoutFile
 	}
-	
-	# Creates the blank layout file
+	# Create a blank layout file.
 	$START_MENU_LAYOUT | Out-File $layoutFile -Encoding ASCII
-	
 	$regAliases = @("HKLM", "HKCU")
-	
-	# Assign the start layout and force it to apply with "LockedStartLayout" at both the machine and user level
+	# Assign start layout and force it to apply with "LockedStartLayout" at both the machine and user level.
 	foreach ($regAlias in $regAliases){
 		$basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
 		$keyPath = $basePath + "\Explorer" 
@@ -805,28 +794,24 @@ $UnpinStartTiles.Add_Click( {
 		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 1
 		Set-ItemProperty -Path $keyPath -Name "StartLayoutFile" -Value $layoutFile
 	}
-	
-	# Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process
+	# Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process.
 	Stop-Process -name explorer
 	Start-Sleep -s 5
 	$wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
 	Start-Sleep -s 5
 	
-	# Enable the ability to pin items again by disabling "LockedStartLayout"
+	# Enable the ability to pin items again by disabling "LockedStartLayout".
 	foreach ($regAlias in $regAliases){
 		$basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
 		$keyPath = $basePath + "\Explorer" 
 		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 0
 	}
-	
-	# Restart Explorer and delete the layout file
+	# Restart Explorer and delete the layout file.
 	Stop-Process -name explorer
-	
-	# Uncomment the next line to make clean start menu default for all new users
+	# Uncomment the next line to make clean start menu default for all new users.
 	Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
-	
 	Remove-Item $layoutFile
-	Write-Host "Finished unpinning all tiles in Start Menu."
+	Write-Host "Unpinned all tiles in Start Menu."
 })
 
 
@@ -840,7 +825,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     Write-Host " "
     Write-Host "Turning off data collection..."
     
-	# Disable suggestions and bloatware auto-install
+	# Disable suggestions and silent installation of sponsored apps.
 	$Suggestions = "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
 	Set-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled" -Type DWord -Value 0
 	Set-ItemProperty -Path $Suggestions -Name "SystemPaneSuggestionsEnabled" -Type DWord -Value 0
@@ -862,14 +847,14 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-353698Enabled" -Type DWord -Value 0
 	Set-ItemProperty -Path $Suggestions -Name "SystemPaneSuggestionsEnabled" -Type DWord -Value 0
     
-    # Disable tailored experiences
+    # Disable Tailored experiences.
 	$CloudContent = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
 	If (!(Test-Path $CloudContent )) {
 		New-Item $CloudContent -Force | Out-Null
 		}
 	Set-ItemProperty -Path $CloudContent -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
 
-	# Disable telemetry
+	# Disable Telemetry.
 	$DataCollection1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
 	$DataCollection2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
 	$DataCollection3 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
@@ -877,23 +862,24 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Set-ItemProperty -Path $DataCollection2 -Name "AllowTelemetry" -Type DWord -Value 0
 	Set-ItemProperty -Path $DataCollection3 -Name "AllowTelemetry" -Type DWord -Value 0
 
-	# Stop and disable telemetry services
+	# Stop and disable Telemetry services.
 	Stop-Service DiagTrack | Set-Service -StartupType Disabled
 	Stop-Service dmwappushservice | Set-Service -StartupType Disabled
 
+    # Turn off Activity History.
     $ActivityFeed = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
     Set-ItemProperty -Path $ActivityFeed -Name "EnableActivityFeed" -Type DWord -Value 0
     Set-ItemProperty -Path $ActivityFeed -Name "PublishUserActivities" -Type DWord -Value 0
     Set-ItemProperty -Path $ActivityFeed -Name "UploadUserActivities" -Type DWord -Value 0	
     
-    # Disable Advertising ID
+    # Turn off Advertising ID.
     $AdvertisingID = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
     If (!(Test-Path $AdvertisingID)) {
         New-Item -Path $AdvertisingID | Out-Null
     }
     Set-ItemProperty -Path $AdvertisingID -Name "DisabledByGroupPolicy" -Type DWord -Value 1
     
-    # Disable Feedback
+    # Turn off Feedback notifications.
     $Feedback1 = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
     $Feedback2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
     $Feedback3 = "Microsoft\Windows\Feedback\Siuf\DmClient"
@@ -909,34 +895,19 @@ $ErrorActionPreference = 'SilentlyContinue'
     Disable-ScheduledTask -TaskName $Feedback3 -ErrorAction SilentlyContinue | Out-Null
     Disable-ScheduledTask -TaskName $Feedback4 -ErrorAction SilentlyContinue | Out-Null
     
-    # Disable Background apps (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Sophia.psm1#L8988-L9033)
+    # Turn off Background apps (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Sophia.psm1#L8988-L9033).
 	Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process {
 			Remove-ItemProperty -Path $_.PsPath -Name * -Force
 		}
 	$ExcludedApps = @(
-		# Lock screen app
 		"Microsoft.LockApp",
-
-		# Content Delivery Manager (delivers Windows Spotlight wallpapers to the lock screen)
 		"Microsoft.Windows.ContentDeliveryManager",
-
-		# Cortana
 		"Microsoft.Windows.Cortana",
 		"Microsoft.549981C3F5F10",
-
-		# Windows Search
 		"Microsoft.Windows.Search",
-
-		# Windows Security
 		"Microsoft.Windows.SecHealthUI",
-
-		# Windows Shell Experience (Action center, Screen Snip, Banner notifications, Touch keyboard)
 		"Microsoft.Windows.ShellExperienceHost",
-
-		# Start Menu
 		"Microsoft.Windows.StartMenuExperienceHost",
-
-		# Microsoft Store
 		"Microsoft.WindowsStore"
 		)
 		$OFS = "|"
@@ -946,7 +917,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		}
 		$OFS = " "
     
-    # Disable Location Tracking
+    # Turn off Location permission.
     $Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
     $Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
     If (!(Test-Path $Location1)) {
@@ -955,7 +926,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Deny"
     Set-ItemProperty -Path $Location2 -Name "SensorPermissionState" -Type DWord -Value 0
     
-    # Disable inking personalization
+    # Turn off Inking & typing personalization.
 	$Ink1 = "HKCU:\Software\Microsoft\InputPersonalization"
 	$Ink2 = "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore"
 	$Ink3 = "HKCU:\Software\Microsoft\Personalization\Settings"
@@ -966,12 +937,12 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Set-ItemProperty -Path $Ink2 -Name "HarvestContacts" -Type DWord -Value 0
 	Set-ItemProperty -Path $Ink3 -Name "AcceptedPrivacyPolicy" -Type DWord -Value 0
 
-    # Disable "Let websites provide locally relevant content by accessing my language list"
+    # Turn off "Let websites provide locally relevant content by accessing my language list".
 	$LangAccess = "HKCU:\Control Panel\International\User Profile"
 	Remove-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut"
 	New-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 1
     
-    # Disable automatic Maps updates
+    # Turn off automatic Maps updates.
     Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 0
 
 	$Tasks = @(
@@ -990,6 +961,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Write-Host "Disabled scheduled task: $Task."
 	}
 
+    # Print user messages to list every change
     $PrivacySettings =@(
         "Activity History"
         "Advertising ID"
@@ -1002,11 +974,11 @@ $ErrorActionPreference = 'SilentlyContinue'
         "Tailored Experiences"
         "Tasks related to data collection"
         "Telemetry"
-        "Websites access to language list to provide loaclly relevant content"
+        "Websites access to language list to provide locally relevant content"
     )
     Write-Host "Turned off:"
     ForEach ($PrivacySetting in $PrivacySettings) {
-        Write-Host " - $PrivacySetting"
+        Write-Host "    - $PrivacySetting"
     }
 
     Write-Host "Data collection was turned off."
@@ -1018,34 +990,34 @@ $EnableDataCollection.Add_Click( {
     Write-Host " "
     Write-Host "Turning on data collection..."
 
-	# Enable advertising ID
+	# Turn on Advertising ID.
     $Advertising = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
     Remove-ItemProperty -Path $Advertising -Name "DisabledByGroupPolicy"
 
-	# Enable activity history
+	# Turn on Activity History.
     $ActivityHistory = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
     Set-ItemProperty -Path $ActivityHistory -Name "EnableActivityFeed" -Type DWord -Value 1
     Set-ItemProperty -Path $ActivityHistory -Name "PublishUserActivities" -Type DWord -Value 1
     Set-ItemProperty -Path $ActivityHistory -Name "UploadUserActivities" -Type DWord -Value 1
 	
-	# Enable feedback
+	# Turn on Feedback notifications.
     $Feedback = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
     If (!(Test-Path $Feedback )) {
         New-Item $Feedback -Force | Out-Null
     }
     Remove-ItemProperty -Path $Feedback -Name "NumberOfSIUFInPeriod"
 
-    # Enable background apps
+    # Turn on Background apps.
     Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process {
 	    Remove-ItemProperty -Path $_.PsPath -Name * -Force
 	}
     
-    # Enable "Let websites provide locally relevant content by accessing my language list"
+    # Turn on "Let websites provide locally relevant content by accessing my language list".
 	$LangAccess = "HKCU:\Control Panel\International\User Profile"
 	Remove-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut"
 	New-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 0
         
-	# Enable location tracking
+	# Turn on location permission.
     $Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
     $Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
     If (!(Test-Path $Location1)) {
@@ -1054,7 +1026,7 @@ $EnableDataCollection.Add_Click( {
     Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Allow"
     Set-ItemProperty -Path $Location2 -Name "SensorPermissionState" -Type DWord -Value 1
     
-    # Enable ink harvesting
+    # Turn on Inking & typing personalization.
     $Ink1 = "HKCU:\Software\Microsoft\InputPersonalization"
 	$Ink2 = "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore"
 	$Ink3 = "HKCU:\Software\Microsoft\Personalization\Settings"
@@ -1065,10 +1037,10 @@ $EnableDataCollection.Add_Click( {
 	Set-ItemProperty -Path $Ink2 -Name "HarvestContacts" -Type DWord -Value 1
 	Set-ItemProperty -Path $Ink3 -Name "AcceptedPrivacyPolicy" -Type DWord -Value 1
 
-	# Disable Maps updates
+	# Turn on Maps updates.
     Remove-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled"
 
-	# Enable suggestions and bloatware auto-install
+	# Turn on suggestions and silent installation of sponsored apps.
     $Suggestions1 = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
     $Suggestions2 = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
     Remove-ItemProperty -Path $Suggestions1 -Name "SilentInstalledAppsEnabled"
@@ -1077,7 +1049,7 @@ $EnableDataCollection.Add_Click( {
     Remove-ItemProperty -Path $Suggestions1 -Name "SoftLandingEnabled"
     Remove-ItemProperty -Path $Suggestions1 -Name "SubscribedContent"
 	
-	# Enable Tailored Experiences
+	# Turn on Tailored Experiences.
     $TailoredExp1 = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
     $TailoredExp2 = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting"
     $TailoredExp3 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
@@ -1085,7 +1057,7 @@ $EnableDataCollection.Add_Click( {
     Remove-ItemProperty -Path $TailoredExp2 -Name "Disabled"
     Remove-ItemProperty -Path $TailoredExp3 -Name "DoNotShowFeedbackNotifications"
 	
-	# Enable telemetry
+	# Turn on telemetry.
     $Telemetry1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
     $Telemetry2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
     $Telemetry3 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
@@ -1097,6 +1069,7 @@ $EnableDataCollection.Add_Click( {
     Start-Service DiagTrack | Set-Service -StartupType Automatic
     Start-Service dmwappushservice | Set-Service -StartupType Automatic
 
+    # Print user messages to list everything enabled.
     $PrivacySettings =@(
         "Activity History"
         "Advertising ID"
@@ -1108,11 +1081,11 @@ $EnableDataCollection.Add_Click( {
         "Online speech recognition"
         "Tailored Experiences"
         "Telemetry"
-        "Websites access to language list to provide loaclly relevant content"
+        "Websites access to language list to provide locally relevant content"
     )
     Write-Host "Turned on:"
     ForEach ($PrivacySetting in $PrivacySettings) {
-        Write-Host " - $PrivacySetting"
+        Write-Host "    - $PrivacySetting"
     }
   
     Write-Host "Data collection has been turned on."
@@ -1247,7 +1220,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Write-Host "    Turned off task: $Task."
 	}
 
-    Write-Host "Done optimizing tasks and services."
+    Write-Host "Optimized tasks and services."
 })
 
 $EnableTasksServices.Add_Click( {
@@ -1288,7 +1261,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Enable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
 		Write-Host "    Turned on task: $Task."
 	}
-    Write-Host "Done undoing tasks and services changes."
+    Write-Host "Undone tasks and services changes."
 })
 
 [void]$Form.ShowDialog()
