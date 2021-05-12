@@ -118,7 +118,7 @@ Function PowerShell7Ready {
 # Test internet connection
 Function InternetStatus {
 	Write-Host " "
-	Write-Host "Checking connetivity to the internet..."
+	Write-Host "Checking connectivity to the internet..."
 	$result = Test-NetConnection github.com
 	if( $result.PingSucceeded ) {
 	  Write-Host "This PC is connected."
@@ -153,6 +153,7 @@ Function AppsFeatures {
 # Debloat apps.
 Function DebloatApps {
 $ErrorActionPreference = 'SilentlyContinue'
+	Write-Host "Removing all bloatware..."
 	# Inbox UWP apps.
 	Write-Host "    Uninstalling unnecessary UWP apps..."
 	$Bloatware = @(
@@ -237,14 +238,14 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Remove-Item connect.cmd
 	Remove-Item Packages.txt
 
-	Write-Host "Done removing all bloatware."
+	Write-Host "Removed all bloatware."
 }
 
 
 # Unpin all start menu tiles
 Function UnpinStartTiles {
 	Write-Host " "
-	Write-Host "Unpinning all tiles in start menu..."
+	Write-Host "Unpinning all tiles from Start Menu..."
 	Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <DefaultLayoutOverride>'
@@ -306,13 +307,14 @@ Function UnpinStartTiles {
 	# Uncomment the next line to make clean start menu default for all new users.
 	Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
 	Remove-Item $layoutFile
-	Write-Host "Finished unpinning all tiles in Start Menu."
+	Write-Host "Unpinned all tiles from Start Menu."
 }
 
 # Unpin Apps from Taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html)
 Function UnpinAppsFromTaskbar {
+	Write-Host " "
 	Write-Host "Unpinning apps from Taskbar..."
-	$AppNames @(
+	$AppNames = @(
 		"Microsoft Store"
 		"Office"
 		"Xbox"
@@ -338,7 +340,7 @@ Function InstallWinGet {
         Add-AppxPackage -Path .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -DependencyPath .\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
         Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
         Remove-Item Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-        Write-Host "Done installing Windows Package Manager (WinGet)."
+        Write-Host "Installed Windows Package Manager (WinGet)."
 	} 
 	else {
 	  Write-Host "Could not connect to the internet. WinGet won't be installed."
@@ -468,7 +470,7 @@ Function DisableBrowserRestoreAd {
 		./ViVeTool.exe delconfig 23531064 1 | Out-Null
 		Remove-Item ViVeTool.exe
 		Remove-Item Albacore.ViVe.dll
-        Write-Host "Done."
+        Write-Host "Turned off 'Web browsing: Restore recommended' suggestion from Settings."
 	} 
 	else {
 	  Write-Host "Could not connect to the internet. Browser Restore recommendation won't be turned off."
@@ -484,7 +486,7 @@ Function EnableBrowserRestoreAd {
 		./ViVeTool.exe addconfig 23531064 0 | Out-Null
 		Remove-Item ViVeTool.exe
 		Remove-Item Albacore.ViVe.dll
-        Write-Host "Done."
+        Write-Host "Turned on 'Web browsing: Restore recommended' suggestion from Settings."
 	} 
 	else {
 	  Write-Host "Could not connect to the internet. Browser Restore recommendation won't be turned on."
@@ -499,7 +501,6 @@ Function UninstallFeatures {
     $Capabilities = @(
 		"App.StepsRecorder*"
 		"App.Support.QuickAssist*"
-		"Browser.InternetExplorer*"
         "Hello.Face*"
         "MathRecognizer*"
 		"Media.WindowsMediaPlayer*"
@@ -515,7 +516,6 @@ Function UninstallFeatures {
 	}
 	# Print user friendly list of capabilities uninstalled
     $CapLists =@(
-		"Internet Explorer"
         "Math Recognizer"
 		"Microsoft Paint"
 		"Quick Assist"

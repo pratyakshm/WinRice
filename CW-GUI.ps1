@@ -490,7 +490,7 @@ $ErrorActionPreference = 'SilentlyContinue'
  		((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | ?{$_.Name -eq $AppName}).Verbs() | ?{$_.Name.replace('&','') -match 'Unpin from taskbar'} | %{$_.DoIt(); $exec = $true} -ErrorAction SilentlyContinue | Out-Null
 	}
 
-    Write-Host "Done removing all bloatware."
+    Write-Host "Removed all bloatware."
 })
 
 $InstallWinGet.Add_Click( {
@@ -556,7 +556,6 @@ $UninstallFeatures.Add_Click( {
     $Capabilities = @(
 		"App.StepsRecorder*"
 		"App.Support.QuickAssist*"
-		"Browser.InternetExplorer*"
         "Hello.Face*"
         "MathRecognizer*"
 		"Media.WindowsMediaPlayer*"
@@ -572,7 +571,6 @@ $UninstallFeatures.Add_Click( {
 	}
     # Print the friendly names list of capabilities uninstalled.
     $CapLists =@(
-		"Internet Explorer"
         "Math Recognizer"
 		"Microsoft Paint"
 		"Quick Assist"
@@ -1261,7 +1259,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Enable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
 		Write-Host "    Turned on task: $Task."
 	}
-    Write-Host "Undone tasks and services changes."
+    Write-Host "Undid tasks and services changes."
 })
 
 [void]$Form.ShowDialog()
