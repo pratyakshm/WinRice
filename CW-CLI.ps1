@@ -15,10 +15,22 @@ $tasks = @(
 
 ### Apps & Features ###
 	"AppsFeatures",
-	"DebloatApps", "UnpinStartTiles", "UnpinAppsFromTaskbar", "InstallWinGet", "UninstallOneDrive", "CleanupRegistry", 
+	"DebloatApps", 
+	"UnpinStartTiles", 
+	"UnpinAppsFromTaskbar", 
+	"InstallWinGet", 
+	"UninstallOneDrive", 
+	"CleanupRegistry", 
 	"DisableBrowserRestoreAd",      # "EnableBrowserRestoreAd",
-	"UninstallFeatures", "EnableWSL", "EnabledotNET3.5", # "EnableSandbox",
-	"Install7zip", "Winstall", "InstallHEVC", "SetPhotoViewerAssociation", # "SetPhotoViewerAssociation",
+	"UninstallFeatures", 
+	"EnableWSL", 
+	"EnabledotNET3.5", 
+	#"EnableSandbox",
+	"Install7zip", 
+	"Winstall", 
+	"InstallHEVC", 
+	"SetPhotoViewerAssociation", # "SetPhotoViewerAssociation",
+	"InstallAndroidWinUSB",
 	"ChangesDone",
 
 ### Privacy & Security ###
@@ -673,7 +685,17 @@ Function UnsetPhotoViewerAssociation {
 	Write-Host "Removed Windows Photo Viewer association."
 }
 
-
+# Install Android fastboot USB drivers
+Function InstallAndroidWinUSB {
+	Write-Host " "
+	Write-Host  "Installing Android USB Drivers for Android fastboot environment..."
+	# Add certificates to TrustedPublisher store.
+	Get-ChildItem ".\files\drivers\fastboot\" -Recurse -Filter "*.cat" | ForEach-Object { certutil.exe -AddStore "TrustedPublisher" $_.FullName }
+TrustedPublisher "Trusted Publishers" | Out-Null
+	# Install the driver.
+	pnputil.exe /Add-Driver "files\drivers\fastboot\android_winusb.inf" /SubDirs /Install | Out-Null
+	Write-Host "Done."
+}
 
 
 ######################################
