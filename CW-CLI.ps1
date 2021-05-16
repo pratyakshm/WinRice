@@ -516,7 +516,6 @@ Function UninstallFeatures {
         "Hello.Face*"
         "MathRecognizer*"
 		"Media.WindowsMediaPlayer*"
-		"Microsoft-Windows-SnippingTool*"
 		"Microsoft.Windows.MSPaint*" 
 		"Microsoft.Windows.PowerShell.ISE*"
 		"Microsoft.Windows.WordPad*"
@@ -532,7 +531,6 @@ Function UninstallFeatures {
 		"Microsoft Paint"
 		"Quick Assist"
         "Steps Recorder"
-		"Snipping Tool"
         "Windows Fax & Scan"
         "Windows Media Player"
         "Windows Hello Face"
@@ -694,7 +692,7 @@ Function InstallAndroidWinUSB {
 TrustedPublisher "Trusted Publishers" | Out-Null
 	# Install the driver.
 	pnputil.exe /Add-Driver "files\drivers\fastboot\android_winusb.inf" /SubDirs /Install | Out-Null
-	Write-Host "Done."
+	Write-Host "Installed Android USB Drivers for Android fastboot environment."
 }
 
 
