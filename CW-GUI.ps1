@@ -480,7 +480,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     Write-Host "    Uninstalled Microsoft OneDrive."
 
     # Unpin apps from Taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html)
-    $AppNames @(
+    $AppNames = @(
 		"Microsoft Store"
 		"Office"
 		"Xbox"
