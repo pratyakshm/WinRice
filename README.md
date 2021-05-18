@@ -222,7 +222,7 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 
 ## Microsoft Docs
 - [Windows 10 Release Information](https://docs.microsoft.com/en-us/windows/release-information/)
-- [Windows 10 20H2 Update - Known Issues tracker](https://docs.microsoft.com/en-us/windows/release-information/status-windows-10-20h2)
+- [Windows 10 21H1 "May 2021 Update" - Known Issues tracker](https://docs.microsoft.com/en-us/windows/release-information/status-windows-10-21h1)
 - [Windows Blog](https://blogs.windows.com/)
 
 &nbsp;
