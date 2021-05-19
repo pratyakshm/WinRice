@@ -24,7 +24,7 @@ An open source project to make your 🐌 PC faster.
 
    1. Choose if you want to run CleanWin CLI or GUI.
    2. Copy its corresponding code from the below section.
-   3. Paste it into Windows PowerShell (Admin)
+   3. Paste it into Windows PowerShell (Admin)  
   **CLI:**     
                ``Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JmqTS'))``   
   **GUI:**      
