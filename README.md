@@ -7,7 +7,7 @@
 
 ## What is CleanWin
 An open source project to make your 🐌 PC faster.  
-**💡 Read documentation properly before running CleanWin.**
+`💡 Read documentation properly before running CleanWin`
 ## How to run
    
 #### Method 1 (recommended): Running the latest release 
@@ -39,7 +39,7 @@ An open source project to make your 🐌 PC faster.
 
 ## List of tasks
 This section contains the list of tasks that CleanWin performs. They're grouped in the following categories:   
-`💡 Tap on the sub-category names to expand or collapse them.`
+`💡 Tap on the sub-category names to expand or collapse then`
 ### Apps & Features
 <details>
   <summary>Apps</summary>
