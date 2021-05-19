@@ -7,39 +7,43 @@
 
 ## What is CleanWin
 An open source project to make your 🐌 PC faster.  
-`💡 Read documentation properly before running CleanWin`
+`
+💡 Read documentation properly before running CleanWin
+`
+
+## Wiki
+[Visit the Wiki](https://github.com/pratyakshm/CleanWin/wiki) to read in detail about testing, compatibility, using Winstall, customization, and more.
+***
 ## How to run
    
-#### Method 1 (recommended): Running the latest release 
-<details><summary>Tap here</summary>
-   
+#### Method 1 (recommended): Running the latest release    
    1. Download the latest release from [Releases](https://github.com/pratyakshm/CleanWin/releases).
    2. Unzip the ZIP file.
    3. Double tap to launch CLI or GUI.
         - CleanWin prebuilt binaries that ship via GitHub releases will not run unless administrator priviliges are provided.
-</details>
 
 #### Method 2: Running the latest code from main branch
-<details><summary>Tap here</summary>
 
    1. Choose if you want to run CleanWin CLI or GUI.
    2. Copy its corresponding code from the below section.
    3. Paste it into Windows PowerShell (Admin)  
-  **CLI:**     
-               ``Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JmqTS'))``   
+   
+  **CLI:**    
+   ```
+   Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JmqTS'))
+   ```
   **GUI:**      
-                ``Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jqcr0'))``     
-
-
+   ```
+   Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jqcr0'))
+   ```    
 ⚠️ Code from main branch is not quality tested or validated, as oppossed to prebuilt binaries from GitHub releases. Proceed with caution.   
-</details>
 
-## Wiki:
-[Visit the Wiki](https://github.com/pratyakshm/CleanWin/wiki).
 
-## List of tasks
+***
+## List of changes performed
 This section contains the list of tasks that CleanWin performs. They're grouped in the following categories:   
-`💡 Tap on the sub-category names to expand or collapse then`
+`💡 Tap on the points starting with a triangular bullet to expand or collapse them`
+
 ### Apps & Features
 <details>
   <summary>Apps</summary>
@@ -97,7 +101,6 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
   - Features installed:
     - Windows Subsystem for Linux
     - dotNET 3.5 
-
 
   - Features uninstalled:
     - Hello Face
@@ -198,8 +201,6 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
   - Set BIOS time to UTC
   </details>
 
-</details>
-
 
 ### Windows Explorer
 <details><summary>Core changes</summary>
@@ -218,13 +219,17 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
   - Use Print Screen key to open Snip & Sketch overlay
 </details>
 
-&nbsp;
+***
+
+## Known issues
+I'm tracking currently known issues [here](https://github.com/pratyakshm/CleanWin/issues/16).
+
+
+## Advanced usage
+  - Run CleanWin with your own custom preset - [Read here](https://github.com/pratyakshm/CleanWin/wiki/Using-a-custom-preset)
+
 
 ## Microsoft Docs
 - [Windows 10 Release Information](https://docs.microsoft.com/en-us/windows/release-information/)
 - [Windows 10 21H1 "May 2021 Update" - Known Issues tracker](https://docs.microsoft.com/en-us/windows/release-information/status-windows-10-21h1)
 - [Windows Blog](https://blogs.windows.com/)
-
-&nbsp;
-
-### Using an HDD as boot disk and expecting ultra fast Windows 10 experience after running CleanWin? [🪄Tap here🪄](https://www.amazon.com/s?k=SSD)
