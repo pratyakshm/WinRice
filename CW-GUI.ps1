@@ -516,10 +516,11 @@ $InstallWinGet.Add_Click( {
         else {
             write-host "Could not verify package hashes. WinGet won't be installed."
         }
+    }
     else {
         Write-Host "Could not connect to the internet. WinGet won't be installed."
     }
-})
+} )
 
 $Winstall.Add_Click( {
     Write-Host " "
