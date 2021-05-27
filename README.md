@@ -1,5 +1,5 @@
 # CleanWin
-![GitHub all releases](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=darkgreen&style=flat-square)
+![No. of Downloads](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=darkgreen&style=flat-square)
 ![Stars](https://img.shields.io/github/stars/pratyakshm/CleanWin?style=flat-square)
 [![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)](https://github.com/pratyakshm/CleanWin/releases)
 ![GitHub Release Date](https://img.shields.io/github/release-date/pratyakshm/CleanWin?color=blue&label=latest%20release&style=flat-square)
