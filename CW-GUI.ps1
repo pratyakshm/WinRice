@@ -495,7 +495,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 $InstallWinGet.Add_Click( {
     Write-Host " "
-    # Import BitsTransfer module, ping github - if success, proceed with installation, else print no connection message.
+    # Import BitsTransfer module, ping GitHub - if success, proceed with installation, else print no connection message.
     Import-Module BitsTransfer
 	$result = Test-NetConnection github.com
 	if( $result.PingSucceeded ) {
@@ -505,18 +505,18 @@ $InstallWinGet.Add_Click( {
 		# Hash the files, if hashes match, begin installation or write warning.
         $filehash1 =(Get-FileHash "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle" -Algorithm SHA256).Hash
         $filehash2 = (Get-FileHash "Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx" -Algorithm SHA256).Hash
-        if ( ($filehash1 -eq "859999DFD7FAAE1FB9AC56760736301950C937EA5BA4F66387CEEE7A76CB3D00") -and ($filehash2 -eq "6602159C341BAFEA747D0EDF15669AC72DF8817299FBFAA90469909E06794256") ) {
-            Write-Host "Successfully verified package hashes."
-            Write-Host "Installing WinGet..."
-            Add-AppxPackage -Path .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -DependencyPath .\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-            Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
-            Remove-Item Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-            Write-Host "Installed Windows Package Manager (WinGet)."
-        }
-        else {
-            write-host "Could not verify package hashes. WinGet won't be installed."
-        }
-    }
+			if ( ($filehash1 -eq "859999DFD7FAAE1FB9AC56760736301950C937EA5BA4F66387CEEE7A76CB3D00") -and ($filehash2 -eq "6602159C341BAFEA747D0EDF15669AC72DF8817299FBFAA90469909E06794256") ) {
+				Write-Host "Successfully verified package hashes."
+				Write-Host "Installing WinGet..."
+				Add-AppxPackage -Path .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -DependencyPath .\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+				Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
+				Remove-Item Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+				Write-Host "Installed Windows Package Manager (WinGet)."
+			}
+			else {
+				write-host "Package hashes mismatch. WinGet won't be installed."
+			}
+	}
     else {
         Write-Host "Could not connect to the internet. WinGet won't be installed."
     }
