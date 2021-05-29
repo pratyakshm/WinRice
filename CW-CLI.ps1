@@ -9,7 +9,6 @@ $tasks = @(
  	"Setup",
 	"CleanWin",
 	"ProductInformation",
-	"PowerShell7Ready",
 	"InternetStatus",
 	"CreateSystemRestore",
 
@@ -119,11 +118,6 @@ Function ChangesDone {
 	Write-Host "---------------------------"
 	Write-Host " "
 	Start-Sleep 1
-}
-
-# Import modules from Windows PowerShell 5.1 
-Function PowerShell7Ready {
-	Import-Module -Name Microsoft.PowerShell.Management, PackageManagement, Appx -UseWindowsPowerShell
 }
 
 # Test internet connection
