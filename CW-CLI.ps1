@@ -49,7 +49,6 @@ $tasks = @(
 	"DisableTelemetry",				# "EnableTelemetry",
 	"AutoLoginPostUpdate", 		    # "StayOnLockscreenPostUpdate",
 	"DisableMeltdownCompatFlag",    # "EnableMeltdownCompatFlag",
-	"HardenUAC", 					# "SoftenUAC",
 	"ChangesDone",
 
 ### Tasks & Services ###
@@ -1094,23 +1093,6 @@ Function DisableMeltdownCompatFlag {
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat" -Name "cadca5fe-87d3-4b96-b7fb-a231484277cc" -ErrorAction SilentlyContinue
 	Write-Host "Turned off Meltdown (CVE-2017-5754) compatibility flag."
 }
-
-# Harden user account control prompt by making it ask for passwords even in administrator accounts
-Function HardenUAC {
-	Write-Host " "
-	Write-Host "Hardening user account control consent..."
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name ConsentPromptBehaviorAdmin -Type DWord -Value 3
-	Write-Host "Done."
-}
-
-# Soften (?) user account control prompt by NOT making it ask for passwords when allowing a program to run as administrator
-Function SoftenUAC {
-	Write-Host " "
-	Write-Host "Resetting user account consent UI back to default setting..."
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name ConsentPromptBehaviorAdmin -Type DWord -Value 5
-	Write-Host "Reset user account consent UI back to default setting."
-}
-
 
 
 ####################################
