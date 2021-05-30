@@ -228,6 +228,13 @@ $UnpinStartTiles.Height = 43
 $UnpinStartTiles.Location = New-Object System.Drawing.Point(460,78)
 $UnpinStartTiles.Font = 'Segoe UI,10'
 
+$UnpinTaskbarApps = New-Object System.Windows.Forms.Button
+$UnpinTaskbarApps.Text = "Unpin apps from Taskbar"
+$UnpinTaskbarApps.Width = 140
+$UnpinTaskbarApps.Height = 43
+$UnpinTaskbarApps.Location = New-Object System.Drawing.Point(320,121)
+$UnpinTaskbarApps.Font = 'Segoe UI,10'
+
 
 ############# TASKS & SERVICES ###################
 
@@ -277,7 +284,7 @@ $Label7.Font = 'Segoe UI,6,style=Monospace'
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label7, $UninstallApps, 
 $UninstallSelectively, $InstallWinGet ,$Winstall, $EnableWSL, $UninstallFeatures, $DisableDataCollection, $DisableTelemetry,
-$EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $CleanExplorer, $RevertExplorer, $UnpinStartTiles, $ShowSeconds, 
+$EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $CleanExplorer, $RevertExplorer, $UnpinStartTiles, $UnpinTaskbarApps, $ShowSeconds, 
 $SetupWindowsUpdate, $ResetWindowsUpdate, $DisableTasksServices, $EnableTasksServices))
 
 $CWFolder = "C:\CleanWin"
@@ -828,7 +835,21 @@ $UnpinStartTiles.Add_Click( {
 	Write-Host "Unpinned all tiles in Start Menu."
 })
 
-
+$UnpinTaskbarApps.Add_Click( {
+$ErrorActionPreference = 'SilentlyContinue'
+	Write-Host " "
+	Write-Host "Unpinning apps from Taskbar..."
+	$AppNames = @(
+		"Microsoft Store"
+		"Office"
+		"Xbox"
+		"Mail"
+	)
+	ForEach ($AppName in $AppNames) {
+ 		((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | ?{$_.Name -eq $AppName}).Verbs() | ?{$_.Name.replace('&','') -match 'Unpin from taskbar'} | %{$_.DoIt(); $exec = $true} -ErrorAction SilentlyContinue | Out-Null
+	}
+	Write-Host "Unpinned apps from Taskbar."
+})
 
 
 #################
