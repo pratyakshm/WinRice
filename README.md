@@ -1,8 +1,7 @@
 # CleanWin
 ![No. of Downloads](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=darkgreen&style=flat-square)
 ![Stars](https://img.shields.io/github/stars/pratyakshm/CleanWin?style=flat-square)
-[![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)](https://github.com/pratyakshm/CleanWin/releases)
-![GitHub Release Date](https://img.shields.io/github/release-date/pratyakshm/CleanWin?color=blue&label=latest%20release&style=flat-square)
+[![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)](https://github.com/pratyakshm/CleanWin/releases/latest)
 &nbsp;
 
 ## What is CleanWin
@@ -49,6 +48,8 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
   <summary>Apps</summary>
 
   - Apps installed:
+  
+    - HEVC Video Extensions
     - Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/))
     - [7-zip](https://www.7-zip.org/)
     - Install your desired apps using [Winstall](https://github.com/pratyakshm/CleanWin/wiki/Winstall:-Installing-your-own-set-of-apps-using-a-simple-list).
@@ -64,6 +65,7 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
     - Get Help      
     - Get started  
     - Groove Music 
+    - HEVC Video Extensions
     - Mail and Calendar  
     - Messaging  
     - Maps  
@@ -85,13 +87,21 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
     - Sticky Notes  
     - Skype
     - Voice Recorder
-    - Windows Terminal
     - Whiteboard
     - Weather
     - Xbox
     - Xbox Game bar
     - Your Phone
+
+  - Unpin the following apps from Taskbar:
+    - Mail
+    - Microsoft Store
+    - Office
+    - Xbox
+
   - More changes include:
+
+    - Add the classic Windows Photo Viewer desktop app into the "Open with" menu for the following extensions: JPG, JPEG, GIF and PNG. 
     - Turn off automatic/silent installation of "suggested apps" / bloatware in layman's terms.
 </details>
 
@@ -104,7 +114,6 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 
   - Features uninstalled:
     - Hello Face
-    - Internet Explorer
     - Math Recognizer
     - Microsoft Paint (Desktop app)
     - OpenSSH Client
@@ -128,8 +137,9 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
   - Activity History
   - Advertising ID 
   - App suggestions
-  - Feedback
-  - Inking personalization
+  - Background apps
+  - Feedback notifications
+  - Inking & typing personalization
   - Location tracking 
   - Maps updates
   - Online speech recognition
@@ -199,6 +209,8 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
   - Turn off Reserved Storage
     - This setting will only take place after an update is installed.
   - Set BIOS time to UTC
+  - Turn on Storage Sense
+  - Turn on Num lock on startup
   </details>
 
 
