@@ -52,7 +52,7 @@ Add-Type -AssemblyName System.Windows.Forms
 Function screen {
     Clear-Host
     Start-Sleep 1
-    Write-Host "                                        CleanWin v0.3.8"
+    Write-Host "                                        pratyakshm's CleanWin"
     Write-Warning "The GUI window might freeze for an extended period of time while it's performing a task."
     Write-Host " "
     Write-Host " "
