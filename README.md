@@ -233,6 +233,9 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 
 ***
 
+## OS Builds supported
+CleanWin is tested and supported on Windows 11 Pro OS build 21996, Windows 10 21H1, and Windows 10 20H2
+
 ## Known issues
 I'm tracking currently known issues [here](https://github.com/pratyakshm/CleanWin/issues/16).
 
