@@ -1439,7 +1439,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
 	$channel = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name DisplayVersion
 	if ($channel -match "Dev") {
-		Write-Host "    - Delay feature updates by 2 days"
+		Write-Host "    - Delay weekly flights by 2 days"
   		Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 2
 	}
 	else {
