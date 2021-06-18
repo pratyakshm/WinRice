@@ -34,6 +34,7 @@ $tasks = @(
 	"DisableSpeechRecognition",		# "EnableSpeechRecognition",
 	"DisableTailoredExperiences",	# "EnableTailoredExperiences",
 	"DisableTelemetry",				# "EnableTelemetry",
+	"EnableClipboard",				# "DisableClipboard",
 	"AutoLoginPostUpdate", 		    # "StayOnLockscreenPostUpdate",
 	"DisableMeltdownCompatFlag",    # "EnableMeltdownCompatFlag",
 	"ChangesDone",
@@ -1036,6 +1037,30 @@ Function EnableTelemetry {
 	Set-ItemProperty -Path $Telemetry2 -Name "AllowTelemetry" -Type DWord -Value 3
 	Set-ItemProperty -Path $Telemetry3 -Name "AllowTelemetry" -Type DWord -Value 3
 	Write-Host "Turned off telemetry."
+}
+
+# Enable clipboard history
+Function EnableClipboard {
+	Write-Host " "
+	Write-Host "Turning on Clipboard History..."
+    New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
+	$Clipboard = "HKU:\S-1-5-21-957919921-2019213666-2206391487-1001\Software\Microsoft\Clipboard"
+	Set-ItemProperty -Path $Clipboard -Name "EnableClipboardHistory" -Value 1
+	Write-Host "Turned on Clipboard History."
+    Start-Sleep 1
+    Set-Clipboard "Demo text by CleanWin."
+	Write-Host "You can now copy multiple items to your clipboard."
+    Write-Host "Access your clipboard now using Windows key + V."
+}
+
+# Disable clipboard history
+Function DisableClipboard {
+	Write-Host " "
+	Write-Host "Turning off Clipboard History..."
+	New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
+	$Clipboard = "HKU:\S-1-5-21-957919921-2019213666-2206391487-1001\Software\Microsoft\Clipboard"
+	Set-ItemProperty -Path $Clipboard -Name "EnableClipboardHistory" -Type DWord -Value 0
+	Write-Host "Turned off Clipboard History."
 }
 
 Function AutoLoginPostUpdate {
