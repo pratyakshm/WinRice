@@ -1,4 +1,4 @@
-# CleanWin v0.3.8
+# pratyakshm's CleanWin
 # This file is a part of the CleanWin software
 # Copyright (c) 2021 PratyakshM <pratyakshm@protonmail.com>
 # All rights reserved.
@@ -79,7 +79,7 @@ screen
 
 $Form = New-Object System.Windows.Forms.Form
 $Form.ClientSize = '610,380'
-$Form.Text = "CleanWin v0.3.8"
+$Form.Text = "pratyakshm's CleanWin"
 $Form.TopMost = $false;
 $Form.MaximizeBox = $false
 
