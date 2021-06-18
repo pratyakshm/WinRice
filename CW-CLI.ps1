@@ -17,7 +17,7 @@ $tasks = @(
 	"DebloatApps", "UnpinStartTiles", "UnpinAppsFromTaskbar", "InstallWinGet", "UninstallOneDrive", "CleanupRegistry", 
 	"DisableBrowserRestoreAd",      # "EnableBrowserRestoreAd",
 	"UninstallFeatures", "EnableWSL", "EnabledotNET3.5", # "EnableSandbox",
-	"Install7zip", "Winstall", "InstallHEVC", "SetPhotoViewerAssociation", # "SetPhotoViewerAssociation",
+	"Install7zip", "Winstall", "InstallHEVC", "InstallFonts", "SetPhotoViewerAssociation", # "SetPhotoViewerAssociation",
 	"ChangesDone",
 
 ### Privacy & Security ###
@@ -649,6 +649,29 @@ Function InstallHEVC {
 	else {
 		Write-Host "HEVC Video Extensions are already installed on this device."
 	}
+}
+
+# Install fonts (part of code here was picked from https://github.com/code-rgb/CleanWin)
+Function InstallFonts {
+	$installed = "C:\Windows\Fonts\CascadiaCodePL.ttf"
+	if (Test-Path -Path $installed) {
+		Write-Host "Cascadia Code is already installed on this device."
+	}
+	else {
+		Import-Module BitsTransfer
+		Write-Host "Downloading the latest release of Cascadia Code..."
+		$response = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/cascadia-code/releases/latest"
+		Start-BitsTransfer -Source $response.assets.browser_download_url -Destination "CascadiaCode.zip"
+		Write-Host "Installing Cascadia Code..."
+		Expand-Archive CascadiaCode.zip
+		$font = $(Get-ChildItem "CascadiaCode\ttf\CascadiaCodePL.ttf").FullName
+		$installed = "C:\Windows\Fonts\CascadiaCodePL.ttf"
+		Move-Item $font $installed
+		Remove-Item CascadiaCode.zip
+		Remove-Item CascadiaCode -Recurse -Force
+		Write-Host "Installed Cascadia Code."
+	}
+
 }
 
 # Set Windows Photo Viewer association for bmp, gif, jpg, png and tif
