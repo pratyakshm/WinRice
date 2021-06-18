@@ -1310,16 +1310,27 @@ Function EnableTasks {
 
 Function SetupWindowsUpdate {
 	Write-Host " "
+    Write-Host "Checking Windows OS update channel..."
+    $channel = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name DisplayVersion
+    if ($channel -match "Dev") {
+        Write-Host "Device detected to be flighting in Windows Insider Dev channel."
+        Write-Host "Update policies will be configured in accordance with Insider Dev channel."
+    }
+    else {
+        Write-Host "Device was not detected to be in Dev channel."
+        Write-Host "General update policies will be configured."
+    }
+
+    Write-Host " "
 	Write-Host "Configuring Windows Update with the following policies..."
     $WinUpdatePolicies =@(
         "Turn off automatic updates"
         "Do not auto restart PC if users are signed in"
-        "Delay feature updates by 20 days"
-        "Delay quality updates by 4 days"
         "Turn off re-installation of bloatware after Windows Updates"
+		"Delay quality updates by 4 days"
     )
     ForEach ($WinUpdatePolicy in $WinUpdatePolicies) {
-        Write-Host "    - $WinUpdatePolicy"
+    	Write-Host "    - $WinUpdatePolicy"
     }
 
 	$Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
@@ -1331,11 +1342,19 @@ Function SetupWindowsUpdate {
 	Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
     Set-ItemProperty -Path $Update1 -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
     Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
-    Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
+	$channel = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name DisplayVersion
+	if ($channel -match "Dev") {
+		Write-Host "    - Delay feature updates by 2 days"
+  		Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 2
+	}
+	else {
+		Write-Host "    - Delay feature updates by 20 days"
+  		Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
+	}
     Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
 	Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
     Write-Host "Windows Update policies have been configured."
-    Write-Host "Note: These policies will only take effect if you're using Windows 10 Education, Pro, Enterprise or up."
+    Write-Host "Note: These policies will have no effect effect on Windows Core editions."
 }
 
 Function ResetWindowsUpdate {
