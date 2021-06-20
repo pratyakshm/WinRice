@@ -60,7 +60,7 @@ Function screen {
     Write-Host " "
     Write-Host " "
     Write-Host " "
-    Write-Host "Checking connetivity to the internet..."
+    Write-Host "Checking connectivity to the internet..."
     $result = Test-NetConnection github.com
 	if ($result.PingSucceeded ) { 
         Write-Host "This PC is connected."
