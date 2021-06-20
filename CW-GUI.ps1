@@ -774,7 +774,7 @@ $Winstall.Add_Click( {
         Get-Content 'Winstall.txt' | Foreach-Object {
             $App = $_.Split('=')
             Write-Host "Installing $App..."
-            winget install $App
+            winget install "$App"
         }
         Write-Host "Winstall has successfully installed the package(s)."
     }
