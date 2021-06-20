@@ -767,20 +767,28 @@ $InstallWinGet.Add_Click( {
 } )
 
 $Winstall.Add_Click( {
-    Write-Host " "
-	Write-Host "Finding Winstall.txt..."
-	If (Test-Path Winstall.txt) {
-		Write-Host "Found Winstall.txt! Beginning Winstall..."
-        Get-Content 'Winstall.txt' | Foreach-Object {
-            $App = $_.Split('=')
-            Write-Host "Installing $App..."
-            winget install "$App"
-        }
-        Write-Host "Winstall has successfully installed the package(s)."
-    }
-    else {
-        Write-Host "Could not find 'Winstall.txt'. Learn more at bit.ly/Winstall."
-    }
+	Write-Host " "
+	# Check if WinGet is installed, then proceed.
+    try {if(Get-Command winget) {
+        Write-Host "Looking for Winstall.txt"
+		if (Test-Path Winstall.txt) {
+			Write-Host "Found Winstall.txt! Beginning Winstall..."
+			Get-Content 'Winstall.txt' | ForEach-Object {
+				$App = $_.Split('=')
+				Write-Host "Installing $App..."
+				winget install "$App"
+			}
+			Write-Host "Winstall has successfully installed the package(s)."
+		}
+		else {
+			Write-Host "Winstall.txt was not found. Learn more at bit.ly/Winstall."
+		}
+        }}
+	# Inform user if WinGet is not installed.
+    catch {
+		Write-Host "WinGet is not installed. It is required to use Winstall."
+		Write-Host "Please install WinGet first before using Winstall."
+	}
 })
 
 
