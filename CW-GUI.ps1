@@ -729,7 +729,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 })
 
 $InstallWinGet.Add_Click( {
-    $ErrorActionPreference = "Stop"
+    $ErrorActionPreference = "Ignore"
 	Write-Host " "
 	# Check if WinGet is already installed.
     try {if(Get-Command winget) {

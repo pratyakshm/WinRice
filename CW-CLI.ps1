@@ -321,7 +321,7 @@ Function UnpinAppsFromTaskbar {
 
 # Install WinGet
 Function InstallWinGet {
-    $ErrorActionPreference = "Stop"
+    $ErrorActionPreference = "Ignore"
 	Write-Host " "
 	# Check if WinGet is already installed.
     try {if(Get-Command winget) {
