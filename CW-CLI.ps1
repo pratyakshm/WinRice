@@ -661,6 +661,7 @@ Function InstallHEVC {
 
 # Install fonts (part of code here was picked from https://github.com/code-rgb/CleanWin)
 Function InstallFonts {
+	Write-Host " "
 	$installed = "C:\Windows\Fonts\CascadiaCodePL.ttf"
 	if (Test-Path -Path $installed) {
 		Write-Host "Cascadia Code is already installed on this device."
