@@ -323,38 +323,30 @@ Function UnpinAppsFromTaskbar {
 Function InstallWinGet {
     $ErrorActionPreference = "Ignore"
 	Write-Host " "
-	# Check if WinGet is already installed.
-    try {if(Get-Command winget) {
-		# Inform user and skip ahead if installed.
-        Write-Host "WinGet is already installed on this device."
-        }}
-	# Install WinGet if not installed.
-    catch {
-		# Import BitsTransfer module, ping GitHub - if success, proceed with installation, else print no connection message.
-		Import-Module BitsTransfer
-		$result = Test-NetConnection github.com 	
-		if( $result.PingSucceeded ) {
-			Write-Host "Downloading Windows Package Manager installation packages..."
-			Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
-			Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-			# Hash the files, if hashes match, begin installation or write warning.
-			$filehash1 =(Get-FileHash "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle" -Algorithm SHA256).Hash
-			$filehash2 = (Get-FileHash "Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx" -Algorithm SHA256).Hash
-				if ( ($filehash1 -eq "CEE94DB96EB0995BA36FAA3D6417CA908C368A2829D4F24791D96D83BDE6F724") -and ($filehash2 -eq "6602159C341BAFEA747D0EDF15669AC72DF8817299FBFAA90469909E06794256") ) {
-					Write-Host "Successfully verified package hashes."
-					Write-Host "Installing Windows Package Manager..."
-					Add-AppxPackage -Path .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -DependencyPath .\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-					Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
-					Remove-Item Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-					Write-Host "Installed Windows Package Manager."
-				}
-				else {
-					write-host "Package hashes mismatch. Windows Package Manager won't be installed."
-				}
+	# Import BitsTransfer module, ping GitHub - if success, proceed with installation, else print no connection message.
+	Import-Module BitsTransfer
+	$result = Test-NetConnection github.com 	
+	if( $result.PingSucceeded ) {
+		Write-Host "Downloading Windows Package Manager installation packages..."
+		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
+		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+		# Hash the files, if hashes match, begin installation or write warning.
+		$filehash1 =(Get-FileHash "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle" -Algorithm SHA256).Hash
+	    $filehash2 = (Get-FileHash "Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx" -Algorithm SHA256).Hash
+			if ( ($filehash1 -eq "CEE94DB96EB0995BA36FAA3D6417CA908C368A2829D4F24791D96D83BDE6F724") -and ($filehash2 -eq "6602159C341BAFEA747D0EDF15669AC72DF8817299FBFAA90469909E06794256") ) {
+				Write-Host "Successfully verified package hashes."
+				Write-Host "Installing Windows Package Manager..."
+				Add-AppxPackage -Path .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -DependencyPath .\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+				Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
+				Remove-Item Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+				Write-Host "Installed Windows Package Manager."
+			}
+			else {
+				Write-Host "Package hashes mismatch. Windows Package Manager won't be installed."
+			}
 		}
-		else {
-			Write-Host "Could not connect to the internet. Windows Package Manager can't be installed."
-		}
+	else {
+		Write-Host "Could not connect to the internet. Windows Package Manager can't be installed."
 	}
 }
 
