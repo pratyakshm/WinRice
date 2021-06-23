@@ -172,7 +172,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	"Microsoft.PowerAutomateDesktop"
 	"Microsoft.Print3D" 
 	"Microsoft.SkypeApp"
-	"Microsoft.ScreenSketch"
 	"Microsoft.StorePurchaseApp" 
 	"Microsoft.Todos"
 	"Microsoft.WindowsAlarms"

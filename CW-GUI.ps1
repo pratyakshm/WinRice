@@ -328,6 +328,9 @@ $UninstallSelectively.Add_Click( {
         # Photos (and Video Editor)
         "Microsoft.Windows.Photos",
         "Microsoft.Photos.MediaEngineDLC",
+
+        # Snip & Sketch
+        "Microsoft.ScreenSketch",
     
         # Xbox apps
 		"Microsoft.GamingServices",
@@ -565,7 +568,6 @@ $ErrorActionPreference = 'SilentlyContinue'
     "Microsoft.PowerAutomateDesktop"
     "Microsoft.Print3D" 
     "Microsoft.SkypeApp"
-    "Microsoft.ScreenSketch"
     "Microsoft.StorePurchaseApp" 
     "Microsoft.Todos"
     "Microsoft.WindowsAlarms"
