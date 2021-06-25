@@ -1715,19 +1715,33 @@ Function RestoreMeetNow {
 	Write-Host "Restored Meet Now to Taskbar."
 }
 
-# Turn off News & interests feed.
+# Turn off News and interests feed.
 Function DisableTaskbarFeed {
 	Write-Host " "
 	Write-Host "Turning off News and interests..."
-	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
+	New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
+	# $Feed1 is for older Dev channel builds (might be for RTM as well).
+	# $Feed2 is for newer Dev channel builds and most likely newer RTM builds.
+	# Currently I'm not implementing any checks on this one since I am unsure of the registry behavior in different builds and channel and it needs testing.
+	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
+	$Feed2 = "HKU:\S-1-5-21-1241565009-1691527431-1215774449-1001\Software\Microsoft\Windows\CurrentVersion\Feeds"
+	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
+	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
 	Write-Host "Turned off News and interests."
 }
 
-# Turn on News & interests feed.
+# Turn on News and interests feed.
 Function EnableTaskbarFeed {
 	Write-Host " "
 	Write-Host "Turning on News and interests..."
-	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0
+	New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
+	# $Feed1 is for older Dev channel builds (might be for RTM as well).
+	# $Feed2 is for newer Dev channel builds and most likely newer RTM builds.
+	# Currently I'm not implementing any checks on this one since I am unsure of the registry behavior in different builds and channel and it needs testing.
+	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
+	$Feed2 = "HKU:\S-1-5-21-1241565009-1691527431-1215774449-1001\Software\Microsoft\Windows\CurrentVersion\Feeds"
+	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0 | Out-Null
+	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 0 | Out-Null
 	Write-Host "Turned on News and interests."
 }
 
@@ -1735,7 +1749,7 @@ Function EnableTaskbarFeed {
 
 ######### Tasks after successful run #########
 
-# Update status: Script execution successful.
+# Update status: CleanWin execution successful.
 Function RestartPC {
 	Stop-Process -Name explorer -Force
 	Start-Sleep 3
