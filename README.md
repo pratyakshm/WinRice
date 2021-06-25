@@ -14,14 +14,18 @@ An open source project to make your 🐌 PC faster.
 [Visit the Wiki](https://github.com/pratyakshm/CleanWin/wiki) to read in detail about testing, compatibility, using Winstall, customization, and more.
 ***
 ## How to run
-   
-#### Method 1 (recommended): Running the latest release    
+
+`💡 Tap on the points starting with a triangular bullet to expand or collapse them`
+
+<details><summary>Method 1 (recommended): Running the latest release</summary>
+
    1. Download the latest release from [Releases](https://github.com/pratyakshm/CleanWin/releases).
    2. Unzip the ZIP file.
    3. Double tap to launch CLI or GUI.
         - CleanWin prebuilt binaries that ship via GitHub releases will not run unless administrator priviliges are provided.
+</details>
+<details><summary>Method 2: Running the latest code from main branch</summary>
 
-#### Method 2: Running the latest code from main branch
 
    1. Choose if you want to run CleanWin CLI or GUI.
    2. Copy its corresponding code from the below section.
@@ -36,7 +40,7 @@ An open source project to make your 🐌 PC faster.
    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jqcr0'))
    ```    
 ⚠️ Code from main branch is not quality tested or validated, as oppossed to prebuilt binaries from GitHub releases. Proceed with caution.   
-
+</details>
 
 ***
 ## List of changes performed
