@@ -1532,9 +1532,8 @@ if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "E
     Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
     Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
     Write-Host "Notes:"
-    Write-Host "    1. These policies have no effect if your device isn't running Windows Pro or above."
     if ($winver -match "Windows 11") {
-        Write-Host "    2. Weekly flights won't be delayed since this device is running Windows 11."
+        Write-Host "    1. Weekly flights won't be delayed since this device is running Windows 11."
     }
     Write-Host "Set up Windows Update policies."
 }
