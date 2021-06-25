@@ -1123,8 +1123,20 @@ Function EnableClipboard {
 	Write-Host " "
 	Write-Host "Turning on Clipboard History..."
     New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
-	$Clipboard = "HKU:\S-1-5-21-957919921-2019213666-2206391487-1001\Software\Microsoft\Clipboard"
-	Set-ItemProperty -Path $Clipboard -Name "EnableClipboardHistory" -Value 1
+	$Clipboard11 = "HKU:\S-1-5-21-957919921-2019213666-2206391487-1001\Software\Microsoft\Clipboard"
+	$Clipboard10 = "HKU:\S-1-5-21-1241565009-1691527431-1215774449-1001\Software\Microsoft\Clipboard"
+	$winver = Get-ItemPropertyValue  'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName
+	if ($winver -match "Windows 11") {
+		# Write registry value specific to Windows 11.
+		Set-ItemProperty -Path $Clipboard11 -Name "EnableClipboardHistory" -Value 1 -ErrorAction SilentlyContinue
+	}
+	elseif ($winver -match "Windows 10") {
+		# Write registry value for Windows 10 (tested on Version Dev OS Build 21390).
+		Set-ItemProperty -Path $Clipboard10 -Name "EnableClipboardHistory" -Value 1 -ErrorAction SilentlyContinue
+	}
+	else {
+		# Do nothing.
+	}
 	Write-Host "Turned on Clipboard History."
     Start-Sleep 1
     Set-Clipboard "Demo text by CleanWin."
@@ -1136,9 +1148,21 @@ Function EnableClipboard {
 Function DisableClipboard {
 	Write-Host " "
 	Write-Host "Turning off Clipboard History..."
-	New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
-	$Clipboard = "HKU:\S-1-5-21-957919921-2019213666-2206391487-1001\Software\Microsoft\Clipboard"
-	Set-ItemProperty -Path $Clipboard -Name "EnableClipboardHistory" -Type DWord -Value 0
+    New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
+	$Clipboard11 = "HKU:\S-1-5-21-957919921-2019213666-2206391487-1001\Software\Microsoft\Clipboard"
+	$Clipboard10 = "HKU:\S-1-5-21-1241565009-1691527431-1215774449-1001\Software\Microsoft\Clipboard"
+	$winver = Get-ItemPropertyValue  'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName
+	if ($winver -match "Windows 11") {
+		# Write registry value specific to Windows 11.
+		Set-ItemProperty -Path $Clipboard11 -Name "EnableClipboardHistory" -Value 0 -ErrorAction SilentlyContinue
+	}
+	elseif ($winver -match "Windows 10") {
+		# Write registry value for Windows 10 (tested on Version Dev OS Build 21390).
+		Set-ItemProperty -Path $Clipboard10 -Name "EnableClipboardHistory" -Value 0 -ErrorAction SilentlyContinue
+	}
+	else {
+		# Do nothing.
+	}
 	Write-Host "Turned off Clipboard History."
 }
 
