@@ -15,7 +15,7 @@ $tasks = @(
 
 ### Apps & Features ###
 	"AppsFeatures",
-	"DebloatApps", "Activity", "UnpinStartTiles", "UnpinAppsFromTaskbar", "Activity", "InstallWinGet", "UninstallOneDrive", "CleanupRegistry", "Activity",
+	"DebloatApps", "Activity", "UnpinStartTiles", "Activity", "UnpinAppsFromTaskbar", "Activity", "InstallWinGet", "UninstallOneDrive", "CleanupRegistry", "Activity",
 	"DisableBrowserRestoreAd",      # "EnableBrowserRestoreAd",
 	"UninstallFeatures", "Activity", "EnableWSL", "Activity", "EnabledotNET3.5", "Activity", # "EnableSandbox",
 	"Install7zip", "Winstall", "InstallHEVC", "InstallFonts", "SetPhotoViewerAssociation", # "SetPhotoViewerAssociation",
