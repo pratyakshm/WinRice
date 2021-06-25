@@ -1485,52 +1485,63 @@ $ReserveBandwidth.Add_Click({
 
 $SetupWindowsUpdate.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
-	Write-Host " "
-    Write-Host "Checking Windows OS update channel..."
+if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) {
+    Write-Host " "
     $channel = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name DisplayVersion
+    $winver = Get-ItemPropertyValue  'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName
     if ($channel -match "Dev") {
-        Write-Host "Device detected to be flighting in Windows Insider Dev channel."
-        Write-Host "Update policies will be configured in accordance with Insider Dev channel."
+        Write-Host "Device registered in Windows Insider Program Dev channel, setting up Windows Update policies accordingly..."
     }
     else {
-        Write-Host "Device was not detected to be in Dev channel."
-        Write-Host "General update policies will be configured."
+        Write-Host "Setting up Windows Update policies..."
     }
 
-    Write-Host " "
-	Write-Host "Configuring Windows Update with the following policies..."
     $WinUpdatePolicies =@(
-        "Turn off automatic updates"
-        "Do not auto restart PC if users are signed in"
-        "Turn off re-installation of bloatware after Windows Updates"
-		"Delay quality updates by 4 days"
+        "Turned off automatic updates"
+        "Device will no longer auto restart if users are signed in"
+        "Turned off re-installation of bloatware after Windows Updates"
+        "Delayed quality updates by 4 days"
     )
     ForEach ($WinUpdatePolicy in $WinUpdatePolicies) {
-    	Write-Host "    - $WinUpdatePolicy"
+        Write-Host "    - $WinUpdatePolicy"
     }
 
-	$Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
+    $Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
     $Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
         If (!(Test-Path $Update1)) {
-          New-Item -Path $Update1 | Out-Null
-          New-Item -Path $Update2 | Out-Null
-          }
-	Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
+        New-Item -Path $Update1 | Out-Null
+        New-Item -Path $Update2 | Out-Null
+        }
+    Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
     Set-ItemProperty -Path $Update1 -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
     Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
-	$channel = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name DisplayVersion
-	if ($channel -match "Dev") {
-		Write-Host "    - Delay weekly flights by 2 days"
-  		Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 2
-	}
-	else {
-		Write-Host "    - Delay feature updates by 20 days"
-  		Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
-	}
+    if ($channel -match "Dev") {
+        if ($winver -match "Windows 11") {
+            # If Windows 11 and running Dev channel, do not delay flights.
+        }
+        else {
+            # If not Windows 11 and running Dev channel, delay flights by 2 days.
+            Write-Host "    - Delayed weekly flights by 2 days"
+            Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 2
+        }
+    }
+    else {
+        Write-Host "    - Delayed feature updates by 20 days"
+        Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
+    }
     Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
-	Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
-    Write-Host "Windows Update policies have been configured."
-    Write-Host "Note: These policies will have no effect effect on Windows Core editions."
+    Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
+    Write-Host "Notes:"
+    Write-Host "    1. These policies have no effect if your device isn't running Windows Pro or above."
+    if ($winver -match "Windows 11") {
+        Write-Host "    2. Weekly flights won't be delayed since this device is running Windows 11."
+    }
+    Write-Host "Set up Windows Update policies."
+}
+else {
+    Write-Host "You are running an edition of Windows that does not support setting up Windows Update policies."
+    Write-Host "Could not set up Windows Update policies."
+}
 })
 
 $ResetWindowsUpdate.Add_Click( {
