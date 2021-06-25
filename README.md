@@ -26,7 +26,6 @@ An open source project to make your 🐌 PC faster.
 </details>
 <details><summary>Method 2: Running the latest code from main branch</summary>
 
-
    1. Choose if you want to run CleanWin CLI or GUI.
    2. Copy its corresponding code from the below section.
    3. Paste it into Windows PowerShell (Admin)  
@@ -48,6 +47,7 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 `💡 Tap on the points starting with a triangular bullet to expand or collapse them`
 
 ### Apps & Features
+<details><summary>Apps & Features</summary>
 <details>
   <summary>Apps</summary>
 
@@ -131,6 +131,7 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
     - Windows Fax & Scan
     - XPS Viewer
     - XPS Printer
+</details>
 </details>
 
 
