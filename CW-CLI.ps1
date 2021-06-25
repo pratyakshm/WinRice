@@ -122,8 +122,11 @@ Function InternetStatus {
 
 # Create a system restore point with type MODIFY_SETTINGS, silently continue if already created within the past 24 hours
 Function CreateSystemRestore {
+	Write-Host " "
+	Write-Host "Creating a system restore point with type MODIFY_SETTINGS..."
 	Enable-ComputerRestore -Drive "C:\"
 	Checkpoint-Computer -Description "RestorePoint1" -RestorePointType "MODIFY_SETTINGS" -WarningAction SilentlyContinue
+	Write-Host "Created system restore point."
 }
 
 # Prevent the console output from freezing by emulating backspace key. (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Module/Sophia.psm1#L728-L767)
