@@ -548,14 +548,14 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		Add-Type @SetForegroundWindow
 	}
 
-	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "pratyaksm's CleanWin*"} | ForEach-Object -Process {
+	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "pratyakshm's CleanWin*"} | ForEach-Object -Process {
 		# Show window if minimized.
-		[WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10)
+		[WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10) | Out-Null
 
 		Start-Sleep -Milliseconds 100
 
 		# Move the console window to the foreground.
-		[WinAPI.ForegroundWindow]::SetForegroundWindow($_.MainWindowHandle)
+		[WinAPI.ForegroundWindow]::SetForegroundWindow($_.MainWindowHandle) | Out-Null
 
 		Start-Sleep -Milliseconds 100
 
@@ -890,12 +890,12 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 
 	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "pratyakshm's CleanWin*"} | ForEach-Object -Process {
 		# Show window if minimized.
-		[WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10)
+		[WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10) | Out-Null
 
 		Start-Sleep -Milliseconds 100
 
 		# Move the console window to the foreground.
-		[WinAPI.ForegroundWindow]::SetForegroundWindow($_.MainWindowHandle)
+		[WinAPI.ForegroundWindow]::SetForegroundWindow($_.MainWindowHandle) | Out-Null
 
 		Start-Sleep -Milliseconds 100
 
