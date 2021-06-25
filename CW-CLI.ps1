@@ -11,12 +11,13 @@ $tasks = @(
 	"ProductInformation",
 	"InternetStatus",
 	"CreateSystemRestore",
+	"Activity",
 
 ### Apps & Features ###
 	"AppsFeatures",
-	"DebloatApps", "UnpinStartTiles", "UnpinAppsFromTaskbar", "InstallWinGet", "UninstallOneDrive", "CleanupRegistry", 
+	"DebloatApps", "Activity", "UnpinStartTiles", "UnpinAppsFromTaskbar", "Activity", "InstallWinGet", "UninstallOneDrive", "CleanupRegistry", "Activity",
 	"DisableBrowserRestoreAd",      # "EnableBrowserRestoreAd",
-	"UninstallFeatures", "EnableWSL", "EnabledotNET3.5", # "EnableSandbox",
+	"UninstallFeatures", "Activity", "EnableWSL", "Activity", "EnabledotNET3.5", "Activity", # "EnableSandbox",
 	"Install7zip", "Winstall", "InstallHEVC", "InstallFonts", "SetPhotoViewerAssociation", # "SetPhotoViewerAssociation",
 	"ChangesDone",
 
@@ -125,6 +126,46 @@ Function CreateSystemRestore {
 	Checkpoint-Computer -Description "RestorePoint1" -RestorePointType "MODIFY_SETTINGS" -WarningAction SilentlyContinue
 }
 
+# Prevent the console output from freezing by emulating backspace key. (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Module/Sophia.psm1#L728-L767)
+Function Activity {
+	# Sleep for 500ms.
+	Start-Sleep -Milliseconds 500
+
+	Add-Type -AssemblyName System.Windows.Forms
+
+	$SetForegroundWindow = @{
+		Namespace = "WinAPI"
+		Name = "ForegroundWindow"
+		Language = "CSharp"
+		MemberDefinition = @"
+[DllImport("user32.dll")]
+public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
+[DllImport("user32.dll")]
+[return: MarshalAs(UnmanagedType.Bool)]
+public static extern bool SetForegroundWindow(IntPtr hWnd);
+"@
+	}
+
+	if (-not ("WinAPI.ForegroundWindow" -as [type]))
+	{
+		Add-Type @SetForegroundWindow
+	}
+
+	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "CleanWin*"} | ForEach-Object -Process {
+		# Show window if minimized.
+		[WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10)
+
+		Start-Sleep -Milliseconds 100
+
+		# Move the console window to the foreground.
+		[WinAPI.ForegroundWindow]::SetForegroundWindow($_.MainWindowHandle)
+
+		Start-Sleep -Milliseconds 100
+
+		# Emulate Backspace key.
+		[System.Windows.Forms.SendKeys]::SendWait("{BACKSPACE 1}")
+	}
+}
 
 
 ###################################
@@ -454,7 +495,7 @@ Function EnableEdgeStartupBoost {
 		}
 	New-ItemProperty -Path $EdgeStartupBoost -Name "StartupBoostEnabled" -Type DWord -Value 1 | Out-Null
 	Write-Host "Turned on Startup Boost in Microsoft Edge."
-}
+}	
 
 # Disable Startup boost in Microsoft Edge
 Function DisableEdgeStartupBoost {
