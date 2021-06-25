@@ -50,6 +50,7 @@ Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
 Function screen {
+    $host.UI.RawUI.WindowTitle = "pratyakshm's CleanWin"
     Clear-Host
     Start-Sleep 1
     Write-Host "                                        pratyakshm's CleanWin"
@@ -547,7 +548,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		Add-Type @SetForegroundWindow
 	}
 
-	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "CleanWin*"} | ForEach-Object -Process {
+	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "pratyaksm's CleanWin*"} | ForEach-Object -Process {
 		# Show window if minimized.
 		[WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10)
 
@@ -887,7 +888,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		Add-Type @SetForegroundWindow
 	}
 
-	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "CleanWin*"} | ForEach-Object -Process {
+	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "pratyakshm's CleanWin*"} | ForEach-Object -Process {
 		# Show window if minimized.
 		[WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10)
 
