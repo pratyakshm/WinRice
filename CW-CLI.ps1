@@ -96,7 +96,17 @@ Function ProductInformation {
 	Write-Host " "
 	Write-Host "OS Build info:"
 	Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName, ReleaseId, DisplayVersion, BuildLab
-	Start-Sleep 4
+	$winver = Get-ItemPropertyValue  'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName
+	if ( $winver -match "Windows 11" ) {
+		Write-Host " "
+		Write-Host "This PC is detected to be running Windows 11."
+		Write-Host "Please note that CleanWin's Windows 11 support is experimental and you might face issues."
+	}
+	Start-Sleep 2
+	Write-Host " "
+	Write-Host " "
+	Write-Host " "
+	Write-Host " "
 }
 
 # Changes performed
