@@ -288,7 +288,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 }
 
 
-# Unpin all start menu tiles
+# Unpin all start menu tiles.
 Function UnpinStartTiles {
 	Write-Host " "
 	Write-Host "Unpinning all tiles from Start Menu..."
@@ -356,7 +356,7 @@ Function UnpinStartTiles {
 	Write-Host "Unpinned all tiles from Start Menu."
 }
 
-# Unpin Apps from Taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html)
+# Unpin Apps from Taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
 Function UnpinAppsFromTaskbar {
 	Write-Host " "
 	Write-Host "Unpinning apps from Taskbar..."
@@ -374,7 +374,7 @@ Function UnpinAppsFromTaskbar {
 	Write-Host "Unpinned apps from Taskbar."
 }
 
-# Install WinGet
+# Install WinGet.
 Function InstallWinGet {
     $ErrorActionPreference = "Ignore"
 	Write-Host " "
@@ -470,7 +470,7 @@ $ErrorActionPreference = 'SilentlyContinue'
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
             
-        # Windows File
+        # Windows File.
         "HKCR:\Extensions\ContractId\Windows.File\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
             
         # Registry keys to delete if they aren't uninstalled by RemoveAppXPackage/RemoveAppXProvisionedPackage.
@@ -500,7 +500,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Write-Host "Deleted unnecessary registry keys."
 }
 
-# Enable Startup boost in Microsoft Edge
+# Enable Startup boost in Microsoft Edge.
 Function EnableEdgeStartupBoost {
 	Write-Host " "
 	Write-Host "Enabling Startup boost for Microsoft Edge..."
@@ -512,12 +512,12 @@ Function EnableEdgeStartupBoost {
 	Write-Host "Turned on Startup Boost in Microsoft Edge."
 }	
 
-# Disable Startup boost in Microsoft Edge
+# Disable Startup boost in Microsoft Edge.
 Function DisableEdgeStartupBoost {
 	Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Edge" -Recurse
 }
 
-# Disable "Web Browsing - Restore recommended promo in Settings"
+# Disable "Web Browsing - Restore recommended promo in Settings".
 Function DisableBrowserRestoreAd {
 	Write-Host " "
     Import-Module BitsTransfer 
@@ -535,6 +535,7 @@ Function DisableBrowserRestoreAd {
 	}
 }
 
+# Enable "Web Browsing - Restore recommended promo in Settings".
 Function EnableBrowserRestoreAd {
 	Write-Host " "
     Import-Module BitsTransfer 
@@ -551,11 +552,11 @@ Function EnableBrowserRestoreAd {
 	}
 }
 
-# Uninstall Features
+# Uninstall Windows Optional Features and Windows Capabilities.
 Function UninstallFeatures {
     Write-Host " "
     Write-Host "Disabling and uninstalling unnecessary features..."
-	# Uninstall capabilities
+	# Uninstall capabilities.
     $Capabilities = @(
 		"App.StepsRecorder*"
 		"App.Support.QuickAssist*"
@@ -572,7 +573,7 @@ Function UninstallFeatures {
     ForEach ($Capability in $Capabilities) {
 		Remove-WindowsCapability -Name $Capability -Online | Out-Null
 	}
-	# Print user friendly list of capabilities uninstalled
+	# Print user friendly list of capabilities uninstalled.
     $CapLists =@(
         "Math Recognizer"
 		"Microsoft Paint"
@@ -590,7 +591,7 @@ Function UninstallFeatures {
         Write-Host "    - Uninstalled $CapList"
     }
 
-	# Uninstall Optional features.
+	# Uninstall Optional Features.
     $OptionalFeatures = @(
         "WorkFolders-Client*"
         "Printing-XPSServices-Feature*"
@@ -598,15 +599,16 @@ Function UninstallFeatures {
     ForEach ($OptionalFeature in $OptionalFeatures) {
         Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq $OptionalFeature } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
     }
+	# Print user friendly list of features uninstalled.
     Write-Host "    - Disabled Work Folders Client."
 
     Write-Host "Finished disabling and uninstalling unnecessary features."
 }
 
-# Enable WSL
+# Enable Windows Subsystem for Linux
 Function EnableWSL {
     Write-Host " "
-    # Import BitsTransfer module, ping github - if success, enable WSL, else print no connection message.
+    # Import BitsTransfer module, ping GitHub - if success, enable WSL, else print no connection message.
     Import-Module BitsTransfer 
 	$result = Test-NetConnection github.com
 	if( $result.PingSucceeded ) {
@@ -617,11 +619,11 @@ Function EnableWSL {
         Write-Host "Enabled Windows Subsystem for Linux."
     } 
     else {
-        Write-Host "Could not connect to the internet. WSL won't be enabled."
+        Write-Host "Could not connect to the internet. Windows Subsystem for Linux won't be enabled."
     }
 }
 
-# Enable Sandbox
+# Enable Sandbox.
 Function EnableSandbox {
 	Write-Host " "
 	Write-Host "Enabling Windows Sandbox..."
@@ -629,22 +631,22 @@ Function EnableSandbox {
 	Write-Host "Enabled Windows Sandbox."
 }
 
-# Enable dotNET 3.5
+# Enable dotNET 3.5.
 Function EnabledotNET3.5 {
 	Write-Host " "
-	# Ping github - if success, enable WSL, else print no connection message.
+	# Ping github - if success, enable dotNET 3.5, else print no connection message.
 	$result = Test-NetConnection github.com
 	if( $result.PingSucceeded ) {
 		Write-Host "Enabling dotNET 3.5..."
 		Dism /online /Enable-Feature /FeatureName:NetFx3 /NoRestart /Quiet
-		Write-Host "Enabled dotNET 3.5"
+		Write-Host "Enabled dotNET 3.5."
 	}
 	Else {
-		Write-Host "Could not connect to the internet. dotNET 3.5 runtime won't be enabled."
+		Write-Host "Could not connect to the internet. dotNET 3.5 won't be enabled."
 	}
 }
 
-# Install 7zip
+# Install 7zip.
 Function Install7zip {
 	Write-Host " "
 	$7zip = "HKLM:\SOFTWARE\7-Zip"
@@ -657,7 +659,7 @@ Function Install7zip {
 	}
 }
 
-# Install apps from Winstall file (the Winstall.txt file must be on the same directory as CleanWin)
+# Install apps from Winstall file (the Winstall.txt file must be on the same directory as CleanWin).
 Function Winstall {
     $ErrorActionPreference = "Stop"
     Write-Host " "
@@ -682,10 +684,10 @@ Function Winstall {
 	}
 }
 
-# Install HEVC
+# Install HEVC.
 Function InstallHEVC {
 	Write-Host " "
-	# Import BitsTransfer module, ping github - if success, install HEVC Video Extensions, else print no connection message.
+	# Import BitsTransfer module, ping GitHub - if success, install HEVC Video Extensions, else print no connection message.
 	$result = Test-NetConnection github.com
 	if (-not (Get-AppxPackage -Name Microsoft.HEVCVideoExtension)) {
 		if( $result.PingSucceeded ) {
@@ -706,13 +708,15 @@ Function InstallHEVC {
 	}
 }
 
-# Install fonts (part of code here was picked from https://github.com/code-rgb/CleanWin)
+# Install fonts (part of code here was picked from https://github.com/code-rgb/CleanWin).
 Function InstallFonts {
 	Write-Host " "
+	# Check if Cascadia Code is installed and inform user.
 	$installed = "C:\Windows\Fonts\CascadiaCodePL.ttf"
 	if (Test-Path -Path $installed) {
 		Write-Host "Cascadia Code is already installed on this device."
 	}
+	# Install Cascadia Code if not already installed.
 	else {
 		Import-Module BitsTransfer
 		Write-Host "Downloading the latest release of Cascadia Code..."
@@ -730,7 +734,7 @@ Function InstallFonts {
 
 }
 
-# Set Windows Photo Viewer association for bmp, gif, jpg, png and tif
+# Set Windows Photo Viewer association for bmp, gif, jpg, png and tif.
 Function SetPhotoViewerAssociation {
 	Write-Host " "
 	Write-Output "Adding Windows Photo Viewer (classic) to the 'Open with' menu..."
@@ -747,7 +751,7 @@ Function SetPhotoViewerAssociation {
 
 }
 
-# Unset Windows Photo Viewer association for bmp, gif, jpg, png and tif
+# Unset Windows Photo Viewer association for bmp, gif, jpg, png and tif.
 Function UnsetPhotoViewerAssociation {
 	Write-Output "Removing Windows Photo Viewer (classic) from the 'Open with' menu..."
 	If (!(Test-Path "HKCR:")) {
@@ -780,7 +784,7 @@ Function PrivacySecurity {
 
 
 
-# Disable Activity History
+# Disable Activity History.
 Function DisableActivityHistory {
 	Write-Host " "
 	Write-Host "Turning off Activity History..."
@@ -791,7 +795,7 @@ Function DisableActivityHistory {
 	Write-Host "Turned off Activity History."
 }
 
-# Enable Activity History 
+# Enable Activity History.
 Function EnableActivityHistory {
 	Write-Host "Turning on Activity History..."
 	$ActivityHistory = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
@@ -801,7 +805,7 @@ Function EnableActivityHistory {
 	Write-Host "Turned on Activity History."
 }
 
-# Disable Advertising ID
+# Disable Advertising ID.
 Function DisableAdvertisingID {
 	Write-Host " "
 	Write-Host "Turning off Advertising ID..."
@@ -813,7 +817,7 @@ Function DisableAdvertisingID {
 	Write-Host "Turned off Advertising ID."
 }
 
-# Enable Advertising ID
+# Enable Advertising ID.
 Function EnableAdvertisingID {
 	Write-Host "Turning on Advertising ID..."
 	$Advertising = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
@@ -821,7 +825,7 @@ Function EnableAdvertisingID {
 	Write-Host "Turned on Advertising ID."
 }
 
-# Disable Background apps (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Sophia.psm1#L8988-L9033)
+# Disable Background apps (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Sophia.psm1#L8988-L9033).
 Function DisableBackgroundApps {
 	Write-Host " "
 	Write-Output "Turning off Background apps..."
@@ -848,7 +852,7 @@ Function DisableBackgroundApps {
 	Write-Host "Turned off Background apps."
 }
 
-# Enable Background apps 
+# Enable Background apps.
 Function EnableBackgroundApps {
 	Write-Host "Turning on Background apps..."
 	Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process {
@@ -857,7 +861,7 @@ Function EnableBackgroundApps {
 	Write-Host "Turned on Background apps."
 }
 
-# Disable Feedback
+# Disable Feedback.
 Function DisableFeedback {
 $ErrorActionPreference = "SilentlyContinue"
 	Write-Host " "
@@ -879,7 +883,7 @@ $ErrorActionPreference = "SilentlyContinue"
 	Write-Host "Turned off Feedback notifications."
 }
 
-# Enable Feedback
+# Enable Feedback.
 Function EnableFeedback {
 	Write-Host "Turning on Feedback notifications..."
 	$Feedback = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
@@ -890,7 +894,7 @@ Function EnableFeedback {
 	Write-Host "Turned on Feedback notifications."
 }
 
-# Disable inking personalization
+# Disable inking personalization.
 Function DisableInkHarvesting {
 	Write-Host " "
 	Write-Host "Turning off Inking & typing personalization..."
@@ -906,7 +910,7 @@ Function DisableInkHarvesting {
 	Write-Host "Turned off Inking & typing personalization."
 }
 
-# Enable inking personalization 
+# Enable inking personalization. 
 Function EnableInkHarvesting {
 	Write-Host " "
 	Write-Host "Turning on Inking & typing personalization..."
@@ -922,7 +926,7 @@ Function EnableInkHarvesting {
 	Write-Host "Turned on Inking & typing personalization."
 }
 
-# Disable "Let websites provide locally relevant content by accessing my language list"
+# Disable "Let websites provide locally relevant content by accessing my language list".
 Function DisableLangAccess {
 	Write-Host " "
 	Write-Host "Turning off websites' ability to provide you with locally relevant content by accessing your language list..."
@@ -932,7 +936,7 @@ Function DisableLangAccess {
 	Write-Host "Turned off websites' ability to provide you with locally relevant content by accessing your language list."
 }
 
-# Enable "Let websites provide locally relevant content by accessing my language list"
+# Enable "Let websites provide locally relevant content by accessing my language list".
 Function EnableLangAccess {
 	Write-Host "Turning on websites' ability to provide you with locally relevant content by accessing your language list..."
 	$LangAccess = "HKCU:\Control Panel\International\User Profile"
@@ -940,7 +944,7 @@ Function EnableLangAccess {
 	Write-Host "Turned on websites' ability to provide you with locally relevant content by accessing your language list."
 }
 
-# Disable Location Tracking
+# Disable Location Tracking.
 Function DisableLocationTracking {
 	Write-Host " "
 	Write-Host "Turning off location tracking..."
@@ -954,7 +958,7 @@ Function DisableLocationTracking {
 	Write-Host "Turned off Location tracking."
 }
 
-# Enable location tracking 
+# Enable location tracking.
 Function EnableLocationTracking {
 	Write-Host " "
 	Write-Host "Turning on Location tracking..."
@@ -968,7 +972,7 @@ Function EnableLocationTracking {
 	Write-Host "Turned on Location tracking."
 }
 
-# Disable automatic Maps updates
+# Disable automatic Maps updates.
 Function DisableMapUpdates {
 	Write-Host " "
 	Write-Host "Turning off automatic Maps updates..."
@@ -976,7 +980,7 @@ Function DisableMapUpdates {
 	Write-Host "Turned off automatic Maps updates."
 }
 
-# Enable maps updates
+# Enable maps updates.
 Function EnableMapsUpdates {
 	Write-Host " "
 	Write-Host "Turning on automatic Maps updates..."
@@ -984,7 +988,7 @@ Function EnableMapsUpdates {
 	Write-Host "Turned on automatic Maps updates."
 }
 
-# Disable app suggestions and automatic installation
+# Disable app suggestions and automatic installation.
 Function DisableSuggestions {
 	Write-Host " "
 	Write-Host "Turning off app suggestions and automatic app installation..."
@@ -1013,7 +1017,7 @@ Function DisableSuggestions {
 	Write-Host "Turned off app suggestions and automatic app installation."
 }
 
-# Enable app suggestions and automatic installation 
+# Enable app suggestions and automatic installation.
 Function EnableSuggestions {
 	Write-Host " "
 	Write-Host "Turning on app suggestions and automatic app installation..."
@@ -1042,7 +1046,7 @@ Function EnableSuggestions {
 	Write-Host "Turned on app suggestions and automatic app installation."
 }
 
-# Disable Speech Recognition
+# Disable Speech Recognition.
 Function DisableSpeechRecognition {
 	Write-Host " "
 	Write-Host "Turning off Online Speech recognition..."
@@ -1055,7 +1059,7 @@ Function DisableSpeechRecognition {
 	Write-Host "Turned off Online Speech recognition."
 }
 
-# Enable speech recognition 
+# Enable speech recognition. 
 Function EnableSpeechRecognition {
 	Write-Host " "
 	Write-Host "Turning on Speech recognition..."
@@ -1067,7 +1071,7 @@ Function EnableSpeechRecognition {
 	Write-Host "Turned on Online Speech recognition"
 }
 
-# Disable tailored experiences
+# Disable Tailored experiences.
 Function DisableTailoredExperiences {
 	Write-Host " "
 	Write-Host "Turning off Tailored experiences..."
@@ -1079,7 +1083,7 @@ Function DisableTailoredExperiences {
 	Write-Host "Turned off Tailored experiences."
 }
 
-# Enable Tailored experiences
+# Enable Tailored experiences.
 Function EnableTailoredExperiences {
 	Write-Host " "
 	Write-Host "Turning on Tailored experiences..."
@@ -1092,7 +1096,7 @@ Function EnableTailoredExperiences {
 	Write-Host "Turned on Tailed experiences."
 }
 
-# Disable telemetry 
+# Disable Telemetry. 
 Function DisableTelemetry {
 	Write-Host " "
 	Write-Host "Turning off telemetry..."
@@ -1105,7 +1109,7 @@ Function DisableTelemetry {
 	Write-Host "Turned off telemetry."
 }
 
-# Enable Telemetry
+# Enable Telemetry.
 Function EnableTelemetry {
 	Write-Host " "
 	Write-Host "Turning on Telemetry..."
@@ -1118,7 +1122,7 @@ Function EnableTelemetry {
 	Write-Host "Turned off telemetry."
 }
 
-# Enable clipboard history
+# Enable Clipboard History.
 Function EnableClipboard {
 	Write-Host " "
 	Write-Host "Turning on Clipboard History..."
@@ -1144,7 +1148,7 @@ Function EnableClipboard {
     Write-Host "Access your clipboard now using Windows key + V."
 }
 
-# Disable clipboard history
+# Disable Clipboard History.
 Function DisableClipboard {
 	Write-Host " "
 	Write-Host "Turning off Clipboard History..."
@@ -1170,17 +1174,17 @@ Function AutoLoginPostUpdate {
 	Write-Host " "
 	Write-Host "Turning on automatic login post updates..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 1
-	Write-Host "Turned on Automatic Login applying updates"
+	Write-Host "Turned on Automatic login applying updates"
 } 
 
 Function StayOnLockscreenPostUpdate {
 	Write-Host " "
 	Write-Host "Turning off automatic login post updates..."
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent"
-	Write-Host "Turned off Automatic Login after applying updates."
+	Write-Host "Turned off Automatic login after applying updates."
 }
 
-# Enable Meltdown (CVE-2017-5754) compatibility flag - Required for January 2018 and all subsequent Windows updates
+# Enable Meltdown (CVE-2017-5754) compatibility flag - Required for January 2018 and all subsequent Windows updates.
 # This flag is normally automatically enabled by compatible antivirus software (such as Windows Defender).
 # Use the tweak only if you have confirmed that your AV is compatible but unable to set the flag automatically or if you don't use any AV at all.
 # See https://support.microsoft.com/en-us/help/4072699/january-3-2018-windows-security-updates-and-antivirus-software for details.
@@ -1208,7 +1212,7 @@ Function DisableMeltdownCompatFlag {
 ######### TASKS & SERVICES #########
 ####################################
 
-# Update status
+# Update status.
 Function TasksServices {
 	Write-Host " "
 	Write-Host " "
@@ -1218,7 +1222,7 @@ Function TasksServices {
 	Write-Host " "
 }
 
-# Disable Autoplay
+# Disable Autoplay.
 Function DisableAutoplay {
 	Write-Host " "
 	Write-Host "Turning off AutoPlay..."
@@ -1226,7 +1230,7 @@ Function DisableAutoplay {
 	Write-Host "Turned off AutoPlay."
 }
 
-# Enable Autoplay
+# Enable Autoplay.
 Function EnableAutoplay {
 	Write-Host " "
 	Write-Host "Turning on Autoplay..."
@@ -1234,7 +1238,7 @@ Function EnableAutoplay {
 	Write-Host "Turned on AutoPlay."
 }
 
-# Disable Autorun for all drives
+# Disable Autorun for all drives.
 Function DisableAutorun {
 	Write-Host " "
 	Write-Host "Turning off Autorun for all drives..."
@@ -1246,7 +1250,7 @@ Function DisableAutorun {
 	Write-Host "Turned off Autorun for all drives."
 }
 
-# Enable Autorun for removable drives
+# Enable Autorun for removable drives.
 Function EnableAutorun {
 	Write-Host " "
 	Write-Host "Turning on Autorun for all drives..."
@@ -1254,7 +1258,7 @@ Function EnableAutorun {
 	Write-Host "Turned on Autorun for all drives."
 }
 
-# Set BIOS time to UTC
+# Set BIOS time to UTC.
 Function SetBIOSTimeUTC {
 	Write-Host " "
 	Write-Host "Setting BIOS time to UTC..."
@@ -1262,7 +1266,7 @@ Function SetBIOSTimeUTC {
 	Write-Host "BIOS Time is set to UTC."
 }
 
-# Set BIOS time to local time
+# Set BIOS time to local time.
 Function SetBIOSTimeLocal {
 	Write-Host " "
 	Write-Host "Setting BIOS time to Local time..."
@@ -1270,7 +1274,7 @@ Function SetBIOSTimeLocal {
 	Write-Host "BIOS Time is set to Local time."
 }
 
-# Enable Num lock on startup
+# Enable Num lock on startup.
 Function EnableNumLock {
 	Write-Host " "
 	Write-Host "Setting Num lock to turn on autoamtically on Startup..."
@@ -1278,14 +1282,14 @@ Function EnableNumLock {
 	Write-Host "Num lock will turn on automatically on Startup."
 }
 
-# Disable Num lock on startup 
+# Disable Num lock on startup.
 Function DisableNumLock {
 	Write-Host " "
 	New-ItemProperty -Path "Registry::HKEY_USERS\.DEFAULT\Control Panel\Keyboard" -Name InitialKeyboardIndicators -PropertyType String -Value 2147483648 -Force | Out-Null
 	Write-Host "Num lock will no longer turn on automatically on Startup."
 }
 
-# Enable Storage Sense 
+# Enable Storage Sense. 
 Function EnableStorageSense {
 	Write-Host " "
 	Write-Host "Turning on Storage Sense..."
@@ -1295,7 +1299,7 @@ Function EnableStorageSense {
 	Write-Host "Turned on Storage Sense."
 }
 
-# Disable Storage Sense 
+# Disable Storage Sense.
 Function DisableStorageSense {
 	Write-Host " "
 	Write-Host "Turning off Storage Sense..."
@@ -1305,7 +1309,7 @@ Function DisableStorageSense {
 	Write-Host "Turned off Storage Sense."
 }
 
-# Disable Reserved Storage 
+# Disable Reserved Storage. 
 Function DisableReservedStorage {
 	Write-Host " "
 	Write-Host "Turning off Reserved Storage..."
@@ -1313,7 +1317,7 @@ Function DisableReservedStorage {
 	Write-Host "Turned off Reserved Storage."
 }
 
-# Enable Reserved Storage 
+# Enable Reserved Storage. 
 Function EnableReservedStorage {
 	Write-Host " "
 	Write-Host "Turning on Reserved Storage..."
@@ -1321,7 +1325,7 @@ Function EnableReservedStorage {
 	Write-Host "Turned on Reserved Storage."
 }
 
-# Disable unnecessary services 
+# Disable unnecessary services.
 Function DisableServices {
 $ErrorActionPreference = 'SilentlyContinue'
 	Write-Host " "
@@ -1346,7 +1350,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Write-Host "Turned off unnecesarry services."
 }
 
-# Enable unnecessary services
+# Enable unnecessary services.
 Function EnableServices {
 $ErrorActionPreference = 'SilentlyContinue'
 	Write-Host " "
@@ -1371,6 +1375,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Write-Host "Turned on redundant services."
 }
 
+# Disable unnecessary scheduled tasks.
 Function DisableTasks {
 	Write-Host " "
 	Write-Host "Turning off unnecessary tasks..."
@@ -1392,6 +1397,7 @@ Function DisableTasks {
     Write-Host "Turned off unnecessary tasks."
 }
 
+# Enable unnecessary scheduled tasks.
 Function EnableTasks {
 	$Tasks = @(
 		"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser"
@@ -1411,18 +1417,24 @@ Function EnableTasks {
     Write-Host "Turned on redundant tasks."
 }
 
+# Intelligently setup Windows Update policies.
 Function SetupWindowsUpdate {
+	# Get Windows Edition, if its Professional, Education, or Enterprise.
     if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) {
         Write-Host " "
+		# Get OS flighting channel (Dev/RTM) and OS version (10/11).
         $channel = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name DisplayVersion
         $winver = Get-ItemPropertyValue  'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName
+		# If Dev channel, print Dev channel policies message.
         if ($channel -match "Dev") {
             Write-Host "Device registered in Windows Insider Program Dev channel, setting up Windows Update policies accordingly..."
         }
+		# Else, print general policies message.
         else {
             Write-Host "Setting up Windows Update policies..."
         }
 
+		# Print user friendly list of policies applied.
         $WinUpdatePolicies =@(
             "Turned off automatic updates"
             "Device will no longer auto restart if users are signed in"
@@ -1432,50 +1444,59 @@ Function SetupWindowsUpdate {
         ForEach ($WinUpdatePolicy in $WinUpdatePolicies) {
             Write-Host "    - $WinUpdatePolicy"
         }
-
+		# Declare registry keys locations.
         $Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
         $Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
             If (!(Test-Path $Update1)) {
             New-Item -Path $Update1 | Out-Null
             New-Item -Path $Update2 | Out-Null
             }
+		# Write common registry values that apply to all channels and OS versions.
         Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
         Set-ItemProperty -Path $Update1 -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
-        Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
+		Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
+        Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
+		# Check if device is registered in Dev channel.
         if ($channel -match "Dev") {
+			# If device is on Windows 11, do not delay flights.
             if ($winver -match "Windows 11") {
-                # If Windows 11 and running Dev channel, do not delay flights.
+                # Do nothing.
             }
-            else {
-                # If not Windows 11 and running Dev channel, delay flights by 2 days.
+			# Else, delay flights by two days.
+            else { 
                 Write-Host "    - Delayed weekly flights by 2 days"
+				Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
                 Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 2
             }
         }
+		# If device is not registered in Dev channel, delay feature updates by 20 days.
         else {
             Write-Host "    - Delayed feature updates by 20 days"
+			Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
             Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
         }
-        Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
-        Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
+		# Print more user messages
         Write-Host "Notes:"
         if ($winver -match "Windows 11") {
             Write-Host "    1. Weekly flights won't be delayed since this device is running Windows 11."
         }
         Write-Host "Set up Windows Update policies."
     }
+	# Print user message if device is running an edition that does not support setting up policies.
     else {
         Write-Host "You are running an edition of Windows that does not support setting up Windows Update policies."
 		Write-Host "Could not set up Windows Update policies."
     }
 }
 
+# Reset all Windows Update policies
 Function ResetWindowsUpdate {
     Write-Host " "
     Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Recurse
     Write-Host "All Windows Update policies were reset."
 }
 
+# A simple registry edit that fixes an issue where a small batch of devices turn back on after powering down.
 Function EnablePowerdownAfterShutdown {
 	Write-Host " "
 	Write-Host "Enabling full powerdown on shut down..."
@@ -1484,6 +1505,7 @@ Function EnablePowerdownAfterShutdown {
 	Write-Host "Enabled full power down on Shut down."
 }
 
+# Revert the EnablePowerdownAfterShutdown edit.
 Function DisablePowerdownAfterShutdown {
 	Write-Host " "
 	Write-Host "Disabling full powerdown on shut down..."
@@ -1497,7 +1519,7 @@ Function DisablePowerdownAfterShutdown {
 ######### WINDOWS EXPLORER #########
 ####################################
 
-# Update status: Explorer Changes
+# Update status: Explorer Changes.
 Function PrintExplorerChanges {	
 	Write-Host " "
 	Write-Host " "
@@ -1507,7 +1529,7 @@ Function PrintExplorerChanges {
 	Write-Host " "
 }
 
-# Enable use print screen key to open screen snipping
+# Use Print screen button to open screen skipping.
 Function EnablePrtScrToSnip {
 	Write-Host " "
 	Write-Host "Binding Print Screen key to launch Snip overlay..."
@@ -1515,7 +1537,7 @@ Function EnablePrtScrToSnip {
 	Write-Host "Bound Print Screen key to launch Snip overlay."
 }
 	
-# Disable use print screen key to open screen snipping
+# Don't use Print screen button to open screen skipping.
 Function DisablePrtScrSnip {
 	Write-Host " "
 	Write-Host "Unbinding Snip overlay launch from Print screen key...."
@@ -1523,23 +1545,23 @@ Function DisablePrtScrSnip {
 	Write-Host "Unbound Snip overlay launch from Print screen key."
 }
 
-# Disable Sticky keys prompt
+# Disable Sticky keys.
 Function DisableStickyKeys {
 	Write-Host " "
-	Write-Host "Turning off sticky keys prompt..."
+	Write-Host "Turning off sticky keys..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
-	Write-Host "Turned off Sticky keys prompt."
+	Write-Host "Turned off Sticky keys."
 }
 
-# Enable Sticky keys prompt
+# Enable Sticky keys.
 Function EnableStickyKeys {
 	Write-Host " "
-	Write-Host "Turning on sticky keys prompt..."
+	Write-Host "Turning on sticky keys..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "510"
-	Write-Host "Turned on sticky keys prompt."
+	Write-Host "Turned on sticky keys."
 }
 
-# Change default Explorer view to This PC
+# Change default File Explorer view to This PC.
 Function SetExplorerThisPC {
 	Write-Host " "
 	Write-Host "Setting default File Explorer view to This PC..."
@@ -1547,7 +1569,7 @@ Function SetExplorerThisPC {
 	Write-Host "Set default File Explorer view to This PC."
 }
 
-# Change default Explorer view to Quick Access
+# Change default File Explorer view to Quick Access.
 Function SetExplorerQuickAccess {
 	Write-Host " "
 	Write-Host "Setting default File Explorer view to Quick Access..."
@@ -1555,7 +1577,7 @@ Function SetExplorerQuickAccess {
 	Write-Host "Set default File Explorer view to Quick Access."
 }
 
-# Hide 3D Objects icon from This PC - The icon remains in personal folders and open/save dialogs
+# Hide 3D Objects icon from This PC - The icon remains in personal folders and open/save dialogs.
 Function Hide3DObjectsInThisPC {
 	Write-Host " "
 	Write-Host "Hiding 3D Objects from This PC..."
@@ -1563,7 +1585,7 @@ Function Hide3DObjectsInThisPC {
 	Write-Host "Hid 3D Objects from This PC."
 }
 
-# Restore 3D Objects icon in This PC
+# Restore 3D Objects icon in This PC.
 Function Restore3DObjectsInThisPC {
 	Write-Host " "
 	Write-Host "Restoring 3D Objects to This PC..."
@@ -1574,7 +1596,7 @@ Function Restore3DObjectsInThisPC {
 	Write-Host "Restored 3D Objects to This PC."
 }
 
-# Hide 3D Objects icon from Explorer namespace - Hides the icon also from personal folders and open/save dialogs
+# Hide 3D Objects icon from Explorer namespace - Also hides the icon from personal folders and open/save dialogs.
 Function Hide3DObjectsInExplorer {
 	Write-Host " "
 	Write-Host "Hiding 3D Objects from File Explorer.."
@@ -1591,7 +1613,7 @@ Function Hide3DObjectsInExplorer {
 	Write-Host "Hid 3D Objects from File Explorer."
 }
 
-# Restore 3D Objects icon in Explorer namespace
+# Restore 3D Objects icon in Explorer namespace.
 Function Restore3DObjectsInExplorer {
 	Write-Host " "
 	Write-Host "Restoring 3D Objects icon to File Explorer..."
@@ -1602,7 +1624,7 @@ Function Restore3DObjectsInExplorer {
 	Write-Host "Restored 3D Objects to File Explorer."
 }
 
-# Expand ribbon in File Explorer
+# Expand ribbon in File Explorer.
 Function ExpandRibbonInExplorer {
 	Write-Host " "
 	Write-Host "Expanding Ribbon in File Explorer..."
@@ -1612,7 +1634,7 @@ Function ExpandRibbonInExplorer {
 	Write-Host "Expanded Ribbon in File Explorer."
 }
 
-# Minimize ribbon in File Explorer
+# Minimize ribbon in File Explorer.
 Function MinimizeRibbonInExplorer {
 	Write-Host " "
 	Write-Host "Minimizing Ribbon in File Explorer..."
@@ -1622,7 +1644,7 @@ Function MinimizeRibbonInExplorer {
 	Write-Host "Minimized Ribbon in File Explorer."
 }
 
-# Hide Search bar from Taskbar
+# Hide Search bar from Taskbar.
 Function HideSearchBar {
 	Write-Host " "
 	Write-Host "Hiding Search bar from Taskbar..."
@@ -1630,7 +1652,7 @@ Function HideSearchBar {
 	Write-Host "Hid Search bar from Taskbar."
 }
 
-# Restore Search bar to Taskbar
+# Restore Search bar to Taskbar.
 Function RestoreSearchBar {
 	Write-Host " "
 	Write-Host "Restoring Search bar to Taskbar..."
@@ -1638,7 +1660,7 @@ Function RestoreSearchBar {
 	Write-Host "Restored Search bar to Taskbar."
 }
 
-# Hide Task View
+# Hide Task View.
 Function HideTaskView {
 	Write-Host " "
 	Write-Host "Hiding Task View from Taskbar..."
@@ -1646,7 +1668,7 @@ Function HideTaskView {
 	Write-Host "Hid Task View from Taskbar."
 }
 
-# Restore Task View button
+# Restore Task View button.
 Function RestoreTaskView {
 	Write-Host " "
 	Write-Host "Restoring Task View button..."
@@ -1654,7 +1676,7 @@ Function RestoreTaskView {
 	Write-Host "Restored Task View to Taskbar."
 }
 
-# Hide Cortana icon from Taskbar
+# Hide Cortana icon from Taskbar.
 Function HideCortana {
 	Write-Host " "
 	Write-Host "Hiding Cortana from Taskbar..."
@@ -1662,7 +1684,7 @@ Function HideCortana {
 	Write-Host "Hid Cortana from Taskbar."
 }
 
-# Restore Cortana button in Taskbar
+# Restore Cortana button in Taskbar.
 Function RestoreCortana {
 	Write-Host " "
 	Write-Host "Restoring Cortana to Taskbar..."
@@ -1670,7 +1692,7 @@ Function RestoreCortana {
 	Write-Host "Restored Cortana to Taskbar."
 }
 
-# Hide Meet Now icon from tray
+# Hide Meet Now icon from tray.
 Function HideMeetNow {
 	Write-Host " "
 	Write-Host "Hiding Meet Now from Taskbar..."
@@ -1681,7 +1703,7 @@ Function HideMeetNow {
 	Write-Host "Hid Meet Now from Taskbar."
 }
 
-# Restore Meet Now icon on tray
+# Restore Meet Now icon on tray.
 Function RestoreMeetNow {
 	Write-Host " "
 	Write-Host "Restoring Meet Now to tray..."
@@ -1692,7 +1714,7 @@ Function RestoreMeetNow {
 	Write-Host "Restored Meet Now to Taskbar."
 }
 
-# Turn off Taskbar feed
+# Turn off News & interests feed.
 Function DisableTaskbarFeed {
 	Write-Host " "
 	Write-Host "Turning off News and interests..."
@@ -1700,7 +1722,7 @@ Function DisableTaskbarFeed {
 	Write-Host "Turned off News and interests."
 }
 
-# Turn on Taskbar feed
+# Turn on News & interests feed.
 Function EnableTaskbarFeed {
 	Write-Host " "
 	Write-Host "Turning on News and interests..."
@@ -1708,9 +1730,11 @@ Function EnableTaskbarFeed {
 	Write-Host "Turned on News and interests."
 }
 
+
+
 ######### Tasks after successful run #########
 
-# Update status: Script execution successful
+# Update status: Script execution successful.
 Function RestartPC {
 	Stop-Process -Name explorer -Force
 	Start-Sleep 3

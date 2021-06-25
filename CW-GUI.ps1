@@ -15,7 +15,7 @@ $Ask = "Do you want to elevate CleanWin? This is compulsory to ensure proper usa
 If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]'Administrator')) {
     $Prompt = [System.Windows.MessageBox]::Show($Ask, "Elevation request", $Button, $ErrorIco) 
     Switch ($Prompt) {
-        #This will setup Windows 10
+        # This will setup Windows.
         Yes {
             Write-Host "CleanWin has been elevated. Launching GUI..."
             Start-Sleep 1
@@ -28,19 +28,19 @@ If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
     }
 }
 
-# import library code - located relative to this script
+# Import library code - located relative to this script.
 Function dotInclude() {
     Param(
         [Parameter(Mandatory)]
         [string]$includeFile
     )
-    # Look for the file in the same directory as this script
+    # Look for the file in the same directory as this script.
     $scriptPath = $PSScriptRoot
     if ( $PSScriptRoot -eq $null -and $psISE) {
         $scriptPath = (Split-Path -Path $psISE.CurrentFile.FullPath)
     }
     if ( test-path $scriptPath\$includeFile ) {
-        # import and immediately execute the requested file
+        # Import and immediately execute the requested file.
         . $scriptPath\$includeFile
     }
 }
@@ -304,17 +304,17 @@ $UninstallSelectively.Add_Click( {
 
     Add-Type -AssemblyName PresentationCore, PresentationFramework
 
-    #region Variables
-    # ArrayList containing the UWP apps to remove
+    #region Variables.
+    # ArrayList containing the UWP apps to remove.
     $AppxPackages = New-Object -TypeName System.Collections.ArrayList($null)
 
-    # List of UWP apps that won't be recommended for removal
+    # List of UWP apps that won't be recommended for removal.
     $UncheckedAppxPackages = @(
 
-        # Calculator
+        # Calculator.
         "Microsoft.WindowsCalculator",
     
-        # Microsoft Office
+        # Microsoft Office.
         "Microsoft.Office.Desktop.OneNote",
         "Microsoft.Office.Desktop.Word",
         "Microsoft.Office.Desktop",
@@ -323,17 +323,17 @@ $UninstallSelectively.Add_Click( {
         "Microsoft.Office.Desktop.Access",
         "Microsoft.Office.Desktop.PowerPoint",
     
-        # Microsoft Store
+        # Microsoft Store.
         "Microsoft.WindowsStore",
     
-        # Photos (and Video Editor)
+        # Photos (and Video Editor).
         "Microsoft.Windows.Photos",
         "Microsoft.Photos.MediaEngineDLC",
 
-        # Snip & Sketch
+        # Snip & Sketch.
         "Microsoft.ScreenSketch",
     
-        # Xbox apps
+        # Xbox apps.
 		"Microsoft.GamingServices",
         "Microsoft.XboxIdentityProvider",
         "Microsoft.Xbox.TCUI",
@@ -344,22 +344,22 @@ $UninstallSelectively.Add_Click( {
 
     # UWP apps that won't be shown in the form
     $ExcludedAppxPackages = @(
-		# HEVC Video Extensions from Device Manufacturer
+		# HEVC Video Extensions from Device Manufacturer.
 		"Microsoft.HEVCVideoExtension",
 
-		# Microsoft Store and appx dependencies
+		# Microsoft Store and appx dependencies.
 		"Microsoft.StorePurchaseApp",
         "Microsoft.DesktopAppInstaller",
     
-        # Web Media Extensions
+        # Web Media Extensions.
         "Microsoft.WebMediaExtensions"
 
-        # Windows Terminal
+        # Windows Terminal.
         "Microsoft.WindowsTerminal"
     )
-    #endregion Variables
+    #endregion Variables.
 
-    #region XAML Markup
+    #region XAML Markup.
     [xml]$XAML = '
     <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -410,7 +410,7 @@ $UninstallSelectively.Add_Click( {
         </Grid>
 </Window>
     '
-    #endregion XAML Markup
+    #endregion XAML Markup.
 
     $Reader = (New-Object -TypeName System.Xml.XmlNodeReader -ArgumentList $XAML)
     $Form = [Windows.Markup.XamlReader]::Load($Reader)
@@ -419,7 +419,7 @@ $UninstallSelectively.Add_Click( {
     }
 
 
-    #region Functions
+    #region Functions.
     function Get-CheckboxClicked
     {
         [CmdletBinding()]
@@ -500,18 +500,18 @@ $UninstallSelectively.Add_Click( {
         if ($UncheckedAppxPackages.Contains($AppxName))
         {
             $CheckBox.IsChecked = $false
-            # Exit function, item is not checked
+            # Exit function, item is not checked.
             return
         }
 
-        # If package checked, add to the array list to uninstall
+        # If package checked, add to the array list to uninstall.
         [void]$AppxPackages.Add($AppxName)
     }
-    #endregion Functions
+    #endregion Functions.
 
-    #region Events Handlers
+    #region Events Handlers.
 
-    # Window Loaded Event
+    # Window Loaded Event.
     $Window.Add_Loaded({
         $OFS = "|"
         (Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cnotmatch $ExcludedAppxPackages}).Name | ForEach-Object -Process {
@@ -524,7 +524,7 @@ $UninstallSelectively.Add_Click( {
         $Button.Content = "Uninstall"
     })
 
-    # Prevent the console output from freezing by emulating backspace key. (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Module/Sophia.psm1#L728-L767)
+    # Prevent the console output from freezing by emulating backspace key (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Module/Sophia.psm1#L728-L767).
     # Sleep for 500ms.
 	Start-Sleep -Milliseconds 500
 
@@ -563,13 +563,13 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		[System.Windows.Forms.SendKeys]::SendWait("{BACKSPACE 1}")
 	}
 
-    # Button Click Event
+    # Button Click Event.
     $Button.Add_Click({DeleteButton})
-    #endregion Events Handlers
+    #endregion Events Handlers.
 
     if (Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cnotmatch ($ExcludedAppxPackages -join "|")})
     {
-        # Display the dialog box
+        # Display the dialog box.
         $Form.ShowDialog() | Out-Null
     }
     else
@@ -582,7 +582,7 @@ $UninstallApps.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
     Write-Host " "
     
-    # Inbox UWP Apps
+    # Inbox UWP Apps.
     Write-Host "    Uninstalling unnecessary UWP apps..."
     $Bloatware = @(
     "Microsoft.549981C3F5F10"
@@ -622,7 +622,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     "Microsoft.ZuneMusic"
     "Microsoft.ZuneVideo"
 
-    # Sponsored Apps
+    # Sponsored Apps.
     "*EclipseManager*"
     "*ActiproSoftwareLLC*"
     "*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
@@ -647,14 +647,14 @@ $ErrorActionPreference = 'SilentlyContinue'
     }
     Write-Host "    Uninstalled unnecessary UWP apps."
 
-    # Remove Office webapps shortcuts
+    # Remove Office webapps shortcuts.
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Word.lnk"
     Write-Host "    Removed Office Online web-app shortcuts."
 
-    # Uninstall Connect App
+    # Uninstall Connect app.
 	Import-Module BitsTransfer
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
 	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
@@ -666,7 +666,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     Write-Host "    Deleting unnecessary registry keys..."
     $Keys = @(
         New-PSDrive HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
-        # Remove Background Tasks
+        # Remove Background Tasks.
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
@@ -674,36 +674,36 @@ $ErrorActionPreference = 'SilentlyContinue'
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
         "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
                 
-        # Windows File
+        # Windows File.
         "HKCR:\Extensions\ContractId\Windows.File\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
                 
-        # Registry keys to delete if they aren't uninstalled by RemoveAppXPackage/RemoveAppXProvisionedPackage
+        # Registry keys to delete if they aren't uninstalled by RemoveAppXPackage/RemoveAppXProvisionedPackage.
         "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
         "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
         "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
         "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
         "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
                 
-        # Scheduled Tasks to delete
+        # Scheduled Tasks to delete.
         "HKCR:\Extensions\ContractId\Windows.PreInstalledConfigTask\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
                 
-        # Windows Protocol Keys
+        # Windows Protocol Keys.
         "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
         "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
         "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
         "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
                 
-        # Windows Share Target
+        # Windows Share Target.
         "HKCR:\Extensions\ContractId\Windows.ShareTarget\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
         )
         
-    # Delete the keys
+    # Delete the keys.
     ForEach ($Key in $Keys) {
         Remove-Item $Key -Recurse 
     }
     Write-Host "    Deleted unnecessary registry keys."    
 
-    # Uninstall Microsoft OneDrive
+    # Uninstall Microsoft OneDrive.
     Write-Host "    Uninstalling Microsoft OneDrive..."
 	$OneDriveKey = 'HKLM:Software\Policies\Microsoft\Windows\OneDrive'
 	If (!(Test-Path $OneDriveKey)) {
@@ -744,7 +744,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Start-Process explorer.exe -NoNewWindow
 	Remove-Item env:OneDrive
 
-	# Uninstall Microsoft OneDrive 64-bit (in preview)
+	# Uninstall Microsoft OneDrive 64-bit (in preview).
 	Remove-Item "%LocalAppData%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
 	Remove-Item "%LocalAppData%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json.backup" -ErrorAction SilentlyContinue
 	Start-BitsTransfer -Source "https://raw.githubusercontent.com/CleanWin/Files/main/settings.json" -Destination "%LocalAppData%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
@@ -752,7 +752,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Remove-Item env:OneDrive
     Write-Host "    Uninstalled Microsoft OneDrive."
 
-    # Unpin apps from Taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html)
+    # Unpin apps from Taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
 	Write-Host "Unpinning apps from Taskbar..."
 	$AppNames = @(
 		"Microsoft Store"
@@ -864,7 +864,7 @@ $UninstallFeatures.Add_Click( {
 		Remove-WindowsCapability -Name $Capability -Online | Out-Null
 	}
     
-    # Prevent the console output from freezing by emulating backspace key. (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Module/Sophia.psm1#L728-L767)
+    # Prevent the console output from freezing by emulating backspace key (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Module/Sophia.psm1#L728-L767).
     # Sleep for 500ms.
 	Start-Sleep -Milliseconds 500
 
@@ -1307,7 +1307,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Write-Host "Disabled scheduled task: $Task."
 	}
 
-    # Print user messages to list every change
+    # Print user friendly messages to list every change.
     $PrivacySettings =@(
         "Activity History"
         "Advertising ID"
@@ -1485,62 +1485,74 @@ $ReserveBandwidth.Add_Click({
 
 $SetupWindowsUpdate.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
-if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) {
-    Write-Host " "
-    $channel = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name DisplayVersion
-    $winver = Get-ItemPropertyValue  'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName
-    if ($channel -match "Dev") {
-        Write-Host "Device registered in Windows Insider Program Dev channel, setting up Windows Update policies accordingly..."
-    }
-    else {
-        Write-Host "Setting up Windows Update policies..."
-    }
-
-    $WinUpdatePolicies =@(
-        "Turned off automatic updates"
-        "Device will no longer auto restart if users are signed in"
-        "Turned off re-installation of bloatware after Windows Updates"
-        "Delayed quality updates by 4 days"
-    )
-    ForEach ($WinUpdatePolicy in $WinUpdatePolicies) {
-        Write-Host "    - $WinUpdatePolicy"
-    }
-
-    $Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
-    $Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
-        If (!(Test-Path $Update1)) {
-        New-Item -Path $Update1 | Out-Null
-        New-Item -Path $Update2 | Out-Null
+	# Get Windows Edition, if its Professional, Education, or Enterprise.
+    if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) {
+        Write-Host " "
+		# Get OS flighting channel (Dev/RTM) and OS version (10/11).
+        $channel = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name DisplayVersion
+        $winver = Get-ItemPropertyValue  'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName
+		# If Dev channel, print Dev channel policies message.
+        if ($channel -match "Dev") {
+            Write-Host "Device registered in Windows Insider Program Dev channel, setting up Windows Update policies accordingly..."
         }
-    Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
-    Set-ItemProperty -Path $Update1 -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
-    Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
-    if ($channel -match "Dev") {
-        if ($winver -match "Windows 11") {
-            # If Windows 11 and running Dev channel, do not delay flights.
-        }
+		# Else, print general policies message.
         else {
-            # If not Windows 11 and running Dev channel, delay flights by 2 days.
-            Write-Host "    - Delayed weekly flights by 2 days"
-            Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 2
+            Write-Host "Setting up Windows Update policies..."
         }
+
+		# Print user friendly list of policies applied.
+        $WinUpdatePolicies =@(
+            "Turned off automatic updates"
+            "Device will no longer auto restart if users are signed in"
+            "Turned off re-installation of bloatware after Windows Updates"
+            "Delayed quality updates by 4 days"
+        )
+        ForEach ($WinUpdatePolicy in $WinUpdatePolicies) {
+            Write-Host "    - $WinUpdatePolicy"
+        }
+		# Declare registry keys locations.
+        $Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
+        $Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
+            If (!(Test-Path $Update1)) {
+            New-Item -Path $Update1 | Out-Null
+            New-Item -Path $Update2 | Out-Null
+            }
+		# Write common registry values that apply to all channels and OS versions.
+        Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
+        Set-ItemProperty -Path $Update1 -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
+		Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
+        Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
+		# Check if device is registered in Dev channel.
+        if ($channel -match "Dev") {
+			# If device is on Windows 11, do not delay flights.
+            if ($winver -match "Windows 11") {
+                # Do nothing.
+            }
+			# Else, delay flights by two days.
+            else { 
+                Write-Host "    - Delayed weekly flights by 2 days"
+				Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
+                Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 2
+            }
+        }
+		# If device is not registered in Dev channel, delay feature updates by 20 days.
+        else {
+            Write-Host "    - Delayed feature updates by 20 days"
+			Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
+            Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
+        }
+		# Print more user messages
+        Write-Host "Notes:"
+        if ($winver -match "Windows 11") {
+            Write-Host "    1. Weekly flights won't be delayed since this device is running Windows 11."
+        }
+        Write-Host "Set up Windows Update policies."
     }
+	# Print user message if device is running an edition that does not support setting up policies.
     else {
-        Write-Host "    - Delayed feature updates by 20 days"
-        Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
+        Write-Host "You are running an edition of Windows that does not support setting up Windows Update policies."
+		Write-Host "Could not set up Windows Update policies."
     }
-    Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
-    Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
-    Write-Host "Notes:"
-    if ($winver -match "Windows 11") {
-        Write-Host "    1. Weekly flights won't be delayed since this device is running Windows 11."
-    }
-    Write-Host "Set up Windows Update policies."
-}
-else {
-    Write-Host "You are running an edition of Windows that does not support setting up Windows Update policies."
-    Write-Host "Could not set up Windows Update policies."
-}
 })
 
 $ResetWindowsUpdate.Add_Click( {
