@@ -251,19 +251,21 @@ $ErrorActionPreference = 'SilentlyContinue'
 	"*Speed Test*"
 	"*Dolby*"
 	)
-	foreach ($Bloat in $Bloatware) {
+	ForEach ($Bloat in $Bloatware) {
 		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
 		Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
 	}
 	Write-Host "    Uninstalled unnecessary UWP apps."
 
     # Remove Office webapps shortcuts.
-	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
-	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
-	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
-	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Word.lnk"
-	Write-Host "    Removed Office Online web-app shortcuts."
-
+	if (Test-Path "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk") {
+		Write-Host "    Removing Office online web-app shortcuts..."
+		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
+		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
+		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
+		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Word.lnk"
+		Write-Host "    Removed Office Online web-app shortcuts."
+	}
 
 	# Uninstall Connect app.
 	Import-Module BitsTransfer

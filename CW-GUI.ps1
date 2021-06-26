@@ -654,11 +654,14 @@ $ErrorActionPreference = 'SilentlyContinue'
     Write-Host "    Uninstalled unnecessary UWP apps."
 
     # Remove Office webapps shortcuts.
-	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
-	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
-	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
-	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Word.lnk"
-    Write-Host "    Removed Office Online web-app shortcuts."
+	if (Test-Path "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk") {
+		Write-Host "    Removing Office online web-app shortcuts..."
+		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
+		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
+		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
+		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Word.lnk"
+		Write-Host "    Removed Office Online web-app shortcuts."
+	}
 
     # Uninstall Connect app.
 	Import-Module BitsTransfer
