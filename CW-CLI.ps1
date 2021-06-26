@@ -16,6 +16,7 @@ $tasks = @(
 	"AppsFeatures",
 	"DebloatApps", "Activity", "UnpinStartTiles", "Activity", "UnpinAppsFromTaskbar", "Activity", "InstallWinGet", "UninstallOneDrive", "Activity",
 	# "DisableBrowserRestoreAd",      # "EnableBrowserRestoreAd",
+	"DisableM365OnValueBanner", "RevertM365OnValueBanner",
 	"UninstallFeatures", "Activity", "EnableWSL", "Activity", "EnabledotNET3.5", "Activity", # "EnableSandbox",
 	"Install7zip", "Winstall", "InstallHEVC", "InstallFonts", "SetPhotoViewerAssociation", # "SetPhotoViewerAssociation",
 	"ChangesDone",
@@ -488,7 +489,7 @@ Function DisableBrowserRestoreAd {
     Import-Module BitsTransfer 
     Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Albacore.ViVe.dll
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/ViVeTool.exe
-    If (Test-Path ViVeTool.exe) {
+    if (Test-Path ViVeTool.exe) {
         Write-Host "Turning off 'Web browsing: Restore recommended' suggestion from Settings..."
 		./ViVeTool.exe delconfig 23531064 1 | Out-Null
 		Remove-Item ViVeTool.exe
@@ -506,7 +507,7 @@ Function EnableBrowserRestoreAd {
     Import-Module BitsTransfer 
     Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Albacore.ViVe.dll
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/ViVeTool.exe
-    If (Test-Path ViVeTool.exe) {
+    if (Test-Path ViVeTool.exe) {
 		./ViVeTool.exe addconfig 23531064 0 | Out-Null
 		Remove-Item ViVeTool.exe
 		Remove-Item Albacore.ViVe.dll
@@ -514,6 +515,54 @@ Function EnableBrowserRestoreAd {
 	} 
 	else {
 	  Write-Host "Could not connect to the internet. Browser Restore recommendation won't be turned on."
+	}
+}
+
+# Disable the Microsoft 365 banner in Settings app header (Windows 11 only as of now).
+Function DisableM365OnValueBanner {
+	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
+	if ($ProductName -match "Windows 11") {
+		Write-Host " "
+		Write-Host "Turning off Microsoft 365 suggestion banner in Settings..."
+		Import-Module BitsTransfer
+		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/mach2.exe
+		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/msdia140.dll
+		if (Test-Path mach2.exe) {
+			./mach2.exe disable 29174495 | Out-Null
+			Remove-Item mach2.exe -Force; Remove-Item msdia140.dll -Force
+			Write-Host "Turned off Microsoft 365 suggestion banner in Settings."
+		}
+		else {
+			Write-Host "Could not connect to the internet. Microsoft 365 suggestion banner could not be hidden."
+		}
+	}
+	else {
+		# Do nothing.
+	}
+}
+
+# Revert Microsoft 365 banner in Settings app header to the default configuration (Windows 11 only as of now).
+Function RevertM365OnValueBanner {
+	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
+	if ($ProductName -match "Windows 11") {
+		Write-Host " "
+		Write-Host "Restoring Microsoft 365 suggestion banner in Settings..."
+		Import-Module BitsTransfer
+		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/mach2.exe
+		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/msdia140.dll
+		if (Test-Path mach2.exe) {
+			./mach2.exe revert 29174495 | Out-Null
+			Remove-Item mach2.exe -Force; Remove-Item msdia140.dll -Force
+			Write-Host "Restored Microsoft 365 suggestion banner in Settings."
+		}
+		else {
+			Write-Host "Could not connect to the internet. Microsoft 365 suggestion banner could not be restored."
+		}
+	}
+	else {
+		# Do nothing.
 	}
 }
 
