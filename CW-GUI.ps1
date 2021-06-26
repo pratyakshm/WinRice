@@ -61,14 +61,20 @@ Function screen {
     Write-Host " "
     Write-Host " "
     Write-Host " "
-    Write-Host "Checking connectivity to the internet..."
-    $result = Test-NetConnection github.com
-	if ($result.PingSucceeded ) { 
-        Write-Host "This PC is connected."
-    }
-    else {
-        Write-Host "Can't connect to GitHub. Some features that require an internet connection will not work."
-    }
+    $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
+	$BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
+	$OSBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+	$DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
+	if ($ProductName -match "Windows 10") {
+		Write-Host "This PC is running $ProductName."
+		Write-Host "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
+	}
+	elseif ($ProductName -match "Windows 11") {
+		Write-Host "This PC is running $ProductName."
+		Write-Host "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
+		Write-Host "Note that CleanWin's Windows 11 support is experimental and you might face issues."
+	}
     Write-Host " "
     Write-Host "Please ensure that no other apps or programs run while CleanWin is working."
     Write-Host " "

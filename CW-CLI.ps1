@@ -8,8 +8,7 @@ $tasks = @(
 ### Maintenance Tasks ###
  	"Setup",
 	"CleanWin",
-	"ProductInformation",
-	"InternetStatus",
+	"OSBuildInfo",
 	"CreateSystemRestore",
 	"Activity",
 
@@ -89,16 +88,22 @@ Function Setup {
 	Set-ExecutionPolicy Unrestricted -Scope Process
 }
 
-# Product Information 
-Function ProductInformation {
+# OS Build
+Function OSBuildInfo {
 	Write-Host " "
-	Write-Host "OS Build info:"
-	Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName, ReleaseId, DisplayVersion, BuildLab
-	$winver = Get-ItemPropertyValue  'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName
-	if ( $winver -match "Windows 11" ) {
-		Write-Host " "
-		Write-Host "This PC is detected to be running Windows 11."
-		Write-Host "Please note that CleanWin's Windows 11 support is experimental and you might face issues."
+	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
+	$BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
+	$OSBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+	$DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
+	if ($ProductName -match "Windows 10") {
+		Write-Host "This PC is running $ProductName."
+		Write-Host "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
+	}
+	elseif ($ProductName -match "Windows 11") {
+		Write-Host "This PC is running $ProductName."
+		Write-Host "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
+		Write-Host "Note that CleanWin's Windows 11 support is experimental and you might face issues."
 	}
 	Start-Sleep 2
 	Write-Host " "
@@ -115,19 +120,6 @@ Function ChangesDone {
 	Write-Host "---------------------------"
 	Write-Host " "
 	Start-Sleep 1
-}
-
-# Test internet connection
-Function InternetStatus {
-	Write-Host " "
-	Write-Host "Checking connectivity to the internet..."
-	$result = Test-NetConnection github.com
-	if( $result.PingSucceeded ) {
-	  Write-Host "This PC is connected."
-		} 
-	else {
-	  Write-Host "Can't connect to GitHub. Some features that require an internet connection will not work."
-	}
 }
 
 # Create a system restore point with type MODIFY_SETTINGS, silently continue if already created within the past 24 hours
