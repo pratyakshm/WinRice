@@ -978,13 +978,16 @@ $ErrorActionPreference = 'SilentlyContinue'
     # Print list of changes done.
     Write-Host "Changelog:"
     Write-Host "    - Bound Print Screen key to launch Snip overlay"
-    Write-Host "    - Set default File Explorer View to This PC instead of Quick Access"
-    Write-Host "    - Turned off Sticky keys popup"
+    Write-Host "    - Set default File Explorer View to This PC"
+    Write-Host "    - Turned off Sticky keys"
     # Check if News and interests was turned off and inform user.
     $Feed = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
     $NIValue = Get-ItemPropertyValue -Path $Feed -Name ShellFeedsTaskbarViewMode
     if ($NIValue -eq 2) {
         Write-Host "    - Turned off News and interests in taskbar."
+    }
+    else {
+        # Do nothing.
     }
     $Hides =@(
         "3D Objects from File Explorer"
@@ -1058,6 +1061,31 @@ $RevertExplorer.Add_Click( {
 	else {
 		# Do nothing
 	}
+
+    # Print list of changes done.
+    Write-Host "Changelog:"
+    Write-Host "    - Unbound Print Screen key to launch Snip overlay"
+    Write-Host "    - Set default File Explorer view to Quick Access"
+    Write-Host "    - Turned on Sticky keys"
+    # Check if News and interests was turned on and inform user.
+    $Feed = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
+    $NIValue = Get-ItemPropertyValue -Path $Feed -Name ShellFeedsTaskbarViewMode
+    if ($NIValue -lt 2) {
+        Write-Host "    - Turned on News and interests in taskbar."
+    }
+    else {
+        # Do nothing.
+    }
+    $Restores =@(
+        "3D Objects in File Explorer"
+        "Search bar in taskbar"
+        "Task View in taskbar"
+        "Cortana in taskbar"
+        "Meet Now in taskbar"
+    )
+    ForEach ($Restore in $Restores) {
+        Write-Host "    - Restored $Restore."
+    }
 
     # Restart explorer.exe to reflect changes immeditately and then provide 2 seconds of breathing time.
     Stop-Process -ProcessName explorer
