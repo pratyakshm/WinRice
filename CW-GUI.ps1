@@ -4,30 +4,6 @@
 # All rights reserved.
 
 
-#This will self elevate the script so with a UAC prompt since this script needs to be run as an Administrator in order to function properly.
-
-$ErrorActionPreference = 'SilentlyContinue'
-
-$Button = [System.Windows.MessageBoxButton]::YesNoCancel
-$ErrorIco = [System.Windows.MessageBoxImage]::Warning
-$Ask = "Do you want to elevate CleanWin? This is compulsory to ensure proper usage."
-
-If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]'Administrator')) {
-    $Prompt = [System.Windows.MessageBox]::Show($Ask, "Elevation request", $Button, $ErrorIco) 
-    Switch ($Prompt) {
-        # This will setup Windows.
-        Yes {
-            Write-Host "CleanWin has been elevated. Launching GUI..."
-            Start-Sleep 1
-            Start-Process PowerShell.exe -ArgumentList ("-NoProfile -ExecutionPolicy Bypass -File `"{0}`"" -f $PSCommandPath) -Verb RunAs
-            Exit
-         }
-        No {
-            Break
-            }
-    }
-}
-
 # Import library code - located relative to this script.
 Function dotInclude() {
     Param(
@@ -102,7 +78,7 @@ $Label2.Location = New-Object System.Drawing.Point(10, 10)
 $Label2.Font = 'Segoe UI,12,style=Bold'
 
 $UninstallApps = New-Object System.Windows.Forms.Button
-$UninstallApps.Text = "Uninstall all bloat apps"
+$UninstallApps.Text = "Uninstall all apps"
 $UninstallApps.Width = 140
 $UninstallApps.Height = 45
 $UninstallApps.Location = New-Object System.Drawing.Point(10, 38)
@@ -137,7 +113,7 @@ $EnableWSL.Location = New-Object System.Drawing.Point(150,128)
 $EnableWSL.Font = 'Segoe UI,10'
 
 $UninstallFeatures = New-Object System.Windows.Forms.Button
-$UninstallFeatures.Text = "Uninstall bloat features"
+$UninstallFeatures.Text = "Uninstall features"
 $UninstallFeatures.Width = 140
 $UninstallFeatures.Height = 45
 $UninstallFeatures.Location = New-Object System.Drawing.Point(10,128)
@@ -204,43 +180,50 @@ $Label4.Text = "                Windows Explorer"
 $Label4.AutoSize = $true
 $Label4.Width = 25
 $Label4.Height = 10
-$Label4.Location = New-Object System.Drawing.Point(320,8)
+$Label4.Location = New-Object System.Drawing.Point(320,10)
 $Label4.Font = 'Segoe UI,12,style=Bold' 
 
 $CleanExplorer = New-Object System.Windows.Forms.Button
 $CleanExplorer.Text = "Clean Windows Explorer"
 $CleanExplorer.Width = 140
-$CleanExplorer.Height = 43
-$CleanExplorer.Location = New-Object System.Drawing.Point(320,35)
+$CleanExplorer.Height = 45
+$CleanExplorer.Location = New-Object System.Drawing.Point(320,38)
 $CleanExplorer.Font = 'Segoe UI,10'
 
 $RevertExplorer = New-Object System.Windows.Forms.Button
-$RevertExplorer.Text = "Revert Windows Explorer tweaks"
+$RevertExplorer.Text = "Revert Windows Explorer changes"
 $RevertExplorer.Width = 140
-$RevertExplorer.Height = 43
-$RevertExplorer.Location = New-Object System.Drawing.Point(460,35)
+$RevertExplorer.Height = 45
+$RevertExplorer.Location = New-Object System.Drawing.Point(460,38)
 $RevertExplorer.Font = 'Segoe UI,10'
 
 $ShowSeconds = New-Object System.Windows.Forms.Button
 $ShowSeconds.Text = "Show seconds in taskbar"
 $ShowSeconds.Width = 140
-$ShowSeconds.Height = 43
-$ShowSeconds.Location = New-Object System.Drawing.Point(320,78)
+$ShowSeconds.Height = 45
+$ShowSeconds.Location = New-Object System.Drawing.Point(320,83)
 $ShowSeconds.Font = 'Segoe UI,10'
 
 $UnpinStartTiles = New-Object System.Windows.Forms.Button
-$UnpinStartTiles.Text = "Unpin tiles in Start menu"
+$UnpinStartTiles.Text = "Unpin apps in Start menu"
 $UnpinStartTiles.Width = 140
-$UnpinStartTiles.Height = 43
-$UnpinStartTiles.Location = New-Object System.Drawing.Point(460,78)
+$UnpinStartTiles.Height = 45
+$UnpinStartTiles.Location = New-Object System.Drawing.Point(460,83)
 $UnpinStartTiles.Font = 'Segoe UI,10'
 
 $UnpinTaskbarApps = New-Object System.Windows.Forms.Button
 $UnpinTaskbarApps.Text = "Unpin apps from taskbar"
 $UnpinTaskbarApps.Width = 140
-$UnpinTaskbarApps.Height = 43
-$UnpinTaskbarApps.Location = New-Object System.Drawing.Point(320,121)
+$UnpinTaskbarApps.Height = 45
+$UnpinTaskbarApps.Location = New-Object System.Drawing.Point(320,128)
 $UnpinTaskbarApps.Font = 'Segoe UI,10'
+
+$NewsAndInterests = New-Object System.Windows.Forms.Button
+$NewsAndInterests.Text = "Turn off News and Interests"
+$NewsAndInterests.Width = 140
+$NewsAndInterests.Height = 45
+$NewsAndInterests.Location = New-Object System.Drawing.Point(460,128)
+$NewsAndInterests.Font = 'Segoe UI,10'
 
 
 ############# TASKS & SERVICES ###################
@@ -250,48 +233,48 @@ $Label5.Text = "             Tasks and Services"
 $Label5.AutoSize = $true
 $Label5.Width = 25
 $Label5.Height = 10
-$Label5.Location = New-Object System.Drawing.Point(320,218)
+$Label5.Location = New-Object System.Drawing.Point(320,190)
 $Label5.Font = 'Segoe UI,12,style=Bold' 
 
 $SetupWindowsUpdate = New-Object System.Windows.Forms.Button
 $SetupWindowsUpdate.Text = "Setup Windows Update"
 $SetupWindowsUpdate.Width = 140
 $SetupWindowsUpdate.Height = 40
-$SetupWindowsUpdate.Location = New-Object System.Drawing.Point(320,245)
+$SetupWindowsUpdate.Location = New-Object System.Drawing.Point(320,220)
 $SetupWindowsUpdate.Font = 'Segoe UI,10'
 
 $ResetWindowsUpdate = New-Object System.Windows.Forms.Button
 $ResetWindowsUpdate.Text = "Reset Windows Update"
 $ResetWindowsUpdate.Width = 140
 $ResetWindowsUpdate.Height = 40
-$ResetWindowsUpdate.Location = New-Object System.Drawing.Point(460,245)
+$ResetWindowsUpdate.Location = New-Object System.Drawing.Point(460,220)
 $ResetWindowsUpdate.Font = 'Segoe UI,10'
 
 $DisableTasksServices = New-Object System.Windows.Forms.Button
 $DisableTasksServices.Text = "Optimize Tasks and Services"
 $DisableTasksServices.Width = 140
 $DisableTasksServices.Height = 40
-$DisableTasksServices.Location = New-Object System.Drawing.Point(320,285)
+$DisableTasksServices.Location = New-Object System.Drawing.Point(320,260)
 $DisableTasksServices.Font = 'Segoe UI,10'
 
 $EnableTasksServices = New-Object System.Windows.Forms.Button
 $EnableTasksServices.Text = "Revert Tasks and Services changes"
 $EnableTasksServices.Width = 140
 $EnableTasksServices.Height = 40
-$EnableTasksServices.Location = New-Object System.Drawing.Point(460,285)
+$EnableTasksServices.Location = New-Object System.Drawing.Point(460,260)
 $EnableTasksServices.Font = 'Segoe UI,10'
 
 $Label7 = New-Object System.Windows.Forms.Label
-$Label7.Text = "CleanWin is FOSS, and shall only be downloaded from https://github.com/pratyakshm/CleanWin"
+$Label7.Text = "https://github.com/pratyakshm/CleanWin"
 $Label7.AutoSize = $true
 $Label7.Width = 25
 $Label7.Height = 10
-$Label7.Location = New-Object System.Drawing.Point(10,360)
+$Label7.Location = New-Object System.Drawing.Point(340,320)
 $Label7.Font = 'Segoe UI,6,style=Monospace' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label7, $UninstallApps, 
 $UninstallSelectively, $InstallWinGet ,$Winstall, $EnableWSL, $UninstallFeatures, $DisableDataCollection, $DisableTelemetry,
-$EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $CleanExplorer, $RevertExplorer, $UnpinStartTiles, $UnpinTaskbarApps, $ShowSeconds, 
+$EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $CleanExplorer, $RevertExplorer, $UnpinStartTiles, $UnpinTaskbarApps, $NewsAndInterests, $ShowSeconds, 
 $SetupWindowsUpdate, $ResetWindowsUpdate, $DisableTasksServices, $EnableTasksServices))
 
 $CWFolder = "C:\CleanWin"
@@ -960,7 +943,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
 	if ($ProductName -match "Windows 10") {
-		Write-Host " "
 		New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
@@ -1049,14 +1031,11 @@ $RevertExplorer.Add_Click( {
 	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
 	if ($ProductName -match "Windows 10") {
-		Write-Host " "
-		Write-Host "Turning on News and interests..."
 		New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0 | Out-Null
 		Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 0 | Out-Null
-		Write-Host "Turned on News and interests."
 	}
 	else {
 		# Do nothing
@@ -1195,6 +1174,20 @@ $ErrorActionPreference = 'SilentlyContinue'
 	}
 	Write-Host "Unpinned apps from taskbar."
 })
+
+$NewsAndInterests.Add_Click( {
+    Write-Host "Turning off News and interests..."
+    New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
+    $Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
+    $Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
+    Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
+    Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
+    Stop-Process -ProcessName explorer -Force
+    Start-Sleep 3
+    Write-Host "Turned off News and interests."
+    Write-Host "Use 'Revert Windows Explorer changes' to turn it back on."
+})
+
 
 
 #################
