@@ -222,7 +222,7 @@ $RevertExplorer.Location = New-Object System.Drawing.Point(460,35)
 $RevertExplorer.Font = 'Segoe UI,10'
 
 $ShowSeconds = New-Object System.Windows.Forms.Button
-$ShowSeconds.Text = "Show seconds in Taskbar"
+$ShowSeconds.Text = "Show seconds in taskbar"
 $ShowSeconds.Width = 140
 $ShowSeconds.Height = 43
 $ShowSeconds.Location = New-Object System.Drawing.Point(320,78)
@@ -236,7 +236,7 @@ $UnpinStartTiles.Location = New-Object System.Drawing.Point(460,78)
 $UnpinStartTiles.Font = 'Segoe UI,10'
 
 $UnpinTaskbarApps = New-Object System.Windows.Forms.Button
-$UnpinTaskbarApps.Text = "Unpin apps from Taskbar"
+$UnpinTaskbarApps.Text = "Unpin apps from taskbar"
 $UnpinTaskbarApps.Width = 140
 $UnpinTaskbarApps.Height = 43
 $UnpinTaskbarApps.Location = New-Object System.Drawing.Point(320,121)
@@ -761,8 +761,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Remove-Item env:OneDrive
     Write-Host "    Uninstalled Microsoft OneDrive."
 
-    # Unpin apps from Taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
-	Write-Host "Unpinning apps from Taskbar..."
+    # Unpin apps from taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
+	Write-Host "Unpinning apps from taskbar..."
 	$AppNames = @(
 		"Microsoft Store"
 		"Office"
@@ -771,10 +771,10 @@ $ErrorActionPreference = 'SilentlyContinue'
 	)
 	ForEach ($AppName in $AppNames) {
 		if ( $App = ((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | Where-Object { $_.Name -eq $AppName })) {
-			$App.Verbs() | Where-Object { $_.Name.replace('&', '') -match 'Unpin from taskbar' } | ForEach-Object { $_.DoIt(); $exec = $true } -ErrorAction SilentlyContinue | Out-Null
+			$App.Verbs() | Where-Object { $_.Name.replace('&', '') -match 'Unpin from taskbar' } | ForEach-Object { $_.DoIt() } -ErrorAction SilentlyContinue | Out-Null
 		}	
 	}
-	Write-Host "Unpinned apps from Taskbar."
+	Write-Host "Unpinned apps from taskbar."
 
     Write-Host "Removed all bloatware."
 })
@@ -976,22 +976,22 @@ $ErrorActionPreference = 'SilentlyContinue'
         }
     Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
 
-    # Hide search bar in Taskbar.
+    # Hide search bar in taskbar.
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
     
-    # Hide Task view icon in Taskbar.
+    # Hide Task view icon in taskbar.
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
     
-    # Hide Cortana icon in Taskbar.
+    # Hide Cortana icon in taskbar.
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
 
-    # Hide Meet Now icon in Taskbar.
+    # Hide Meet Now icon in taskbar.
 	$Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
 	$Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
 	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1 -ErrorAction SilentlyContinue
     Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
 
-    # Turn off News and interests in Taskbar.
+    # Turn off News and interests in taskbar.
     New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
 	$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
@@ -1010,10 +1010,10 @@ $ErrorActionPreference = 'SilentlyContinue'
     Write-Host "    - Turned off News and interests"
     $Hides =@(
         "3D Objects from File Explorer"
-        "Search bar in Taskbar"
-        "Task View in Taskbar"
-        "Cortana in Taskbar"
-        "Meet Now in Taskbar"
+        "Search bar in taskbar"
+        "Task View in taskbar"
+        "Cortana in taskbar"
+        "Meet Now in taskbar"
     )
     ForEach ($Hide in $Hides) {
         Write-Host "    - Hid $Hide."
@@ -1045,16 +1045,16 @@ $RevertExplorer.Add_Click( {
     Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy"
     Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy"
     
-    # Show search bar icon in Taskbar.
+    # Show search bar icon in taskbar.
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
     
-    # Show taskview icon in Taskbar.
+    # Show taskview icon in taskbar.
     Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton"
     
-    # Show Cortana icon in Taskbar.
+    # Show Cortana icon in taskbar.
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
 
-    # Show Meet now icon in Taskbar.
+    # Show Meet now icon in taskbar.
 	$Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
 	$Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
 	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 0
@@ -1063,7 +1063,7 @@ $RevertExplorer.Add_Click( {
     # No longer use print screen key to launch Snip overlay.
     Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
 
-    # Turn on News and interests in Taskbar.
+    # Turn on News and interests in taskbar.
     New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
 	$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
@@ -1082,7 +1082,7 @@ $ShowSeconds.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
     Stop-Process -ProcessName explorer
-    Write-Host "Showed Seconds in Taskbar. Changes will take effect on next restart."
+    Write-Host "Showed Seconds in taskbar. Changes will take effect on next restart."
 })
 
 $UnpinStartTiles.Add_Click( {
@@ -1155,7 +1155,7 @@ $UnpinStartTiles.Add_Click( {
 $UnpinTaskbarApps.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
 	Write-Host " "
-	Write-Host "Unpinning apps from Taskbar..."
+	Write-Host "Unpinning apps from taskbar..."
 	$AppNames = @(
 		"Microsoft Store"
 		"Office"
@@ -1163,9 +1163,9 @@ $ErrorActionPreference = 'SilentlyContinue'
 		"Mail"
 	)
 	ForEach ($AppName in $AppNames) {
- 		((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | ?{$_.Name -eq $AppName}).Verbs() | ?{$_.Name.replace('&','') -match 'Unpin from taskbar'} | %{$_.DoIt(); $exec = $true} -ErrorAction SilentlyContinue | Out-Null
+ 		((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | Where-Object {$_.Name -eq $AppName}).Verbs() | Where-Object {$_.Name.replace('&','') -match 'Unpin from taskbar'} | Where-Object {$_.DoIt()} -ErrorAction SilentlyContinue | Out-Null
 	}
-	Write-Host "Unpinned apps from Taskbar."
+	Write-Host "Unpinned apps from taskbar."
 })
 
 

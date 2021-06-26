@@ -348,10 +348,10 @@ Function UnpinStartTiles {
 	Write-Host "Unpinned all tiles from Start Menu."
 }
 
-# Unpin Apps from Taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
+# Unpin Apps from taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
 Function UnpinAppsFromTaskbar {
 	Write-Host " "
-	Write-Host "Unpinning apps from Taskbar..."
+	Write-Host "Unpinning apps from taskbar..."
 	$AppNames = @(
 		"Microsoft Store"
 		"Microsoft Teams"
@@ -361,10 +361,10 @@ Function UnpinAppsFromTaskbar {
 	)
 	ForEach ($AppName in $AppNames) {
 		if ( $App = ((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | Where-Object { $_.Name -eq $AppName })) {
-			$App.Verbs() | Where-Object { $_.Name.replace('&', '') -match 'Unpin from taskbar' } | ForEach-Object { $_.DoIt(); $exec = $true } -ErrorAction SilentlyContinue | Out-Null
+			$App.Verbs() | Where-Object { $_.Name.replace('&', '') -match 'Unpin from taskbar' } | ForEach-Object {$_.DoIt()} -ErrorAction SilentlyContinue | Out-Null
 		}	
 	}
-	Write-Host "Unpinned apps from Taskbar."
+	Write-Host "Unpinned apps from taskbar."
 }
 
 # Install WinGet.
@@ -1575,29 +1575,29 @@ Function Restore3DObjectsInExplorer {
 	Write-Host "Restored 3D Objects to File Explorer."
 }
 
-# Hide Search bar from Taskbar.
+# Hide Search bar from taskbar.
 Function HideSearchBar {
 	Write-Host " "
-	Write-Host "Hiding Search bar from Taskbar..."
+	Write-Host "Hiding Search bar from taskbar..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
-	Write-Host "Hid Search bar from Taskbar."
+	Write-Host "Hid Search bar from taskbar."
 	Start-Sleep -Milliseconds 200
 }
 
-# Restore Search bar to Taskbar.
+# Restore Search bar to taskbar.
 Function RestoreSearchBar {
 	Write-Host " "
-	Write-Host "Restoring Search bar to Taskbar..."
+	Write-Host "Restoring Search bar to taskbar..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
-	Write-Host "Restored Search bar to Taskbar."
+	Write-Host "Restored Search bar to taskbar."
 }
 
 # Hide Task View.
 Function HideTaskView {
 	Write-Host " "
-	Write-Host "Hiding Task View from Taskbar..."
+	Write-Host "Hiding Task View from taskbar..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
-	Write-Host "Hid Task View from Taskbar."
+	Write-Host "Hid Task View from taskbar."
 	Start-Sleep -Milliseconds 200
 }
 
@@ -1606,35 +1606,35 @@ Function RestoreTaskView {
 	Write-Host " "
 	Write-Host "Restoring Task View button..."
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -ErrorAction SilentlyContinue
-	Write-Host "Restored Task View to Taskbar."
+	Write-Host "Restored Task View button."
 }
 
-# Hide Cortana icon from Taskbar.
+# Hide Cortana icon from taskbar.
 Function HideCortana {
 	Write-Host " "
-	Write-Host "Hiding Cortana from Taskbar..."
+	Write-Host "Hiding Cortana from taskbar..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
-	Write-Host "Hid Cortana from Taskbar."
+	Write-Host "Hid Cortana from taskbar."
 	Start-Sleep -Milliseconds 200
 }
 
-# Restore Cortana button in Taskbar.
+# Restore Cortana button in taskbar.
 Function RestoreCortana {
 	Write-Host " "
-	Write-Host "Restoring Cortana to Taskbar..."
+	Write-Host "Restoring Cortana to taskbar..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
-	Write-Host "Restored Cortana to Taskbar."
+	Write-Host "Restored Cortana to taskbar."
 }
 
 # Hide Meet Now icon from tray.
 Function HideMeetNow {
 	Write-Host " "
-	Write-Host "Hiding Meet Now from Taskbar..."
+	Write-Host "Hiding Meet Now from taskbar..."
 	$Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
 	$Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
 	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1 -ErrorAction SilentlyContinue
 	Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
-	Write-Host "Hid Meet Now from Taskbar."
+	Write-Host "Hid Meet Now from taskbar."
 	Start-Sleep -Milliseconds 200
 }
 
