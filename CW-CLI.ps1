@@ -1489,6 +1489,7 @@ Function EnablePrtScrToSnip {
 	Write-Host "Binding Print Screen key to launch Snip overlay..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 1
 	Write-Host "Bound Print Screen key to launch Snip overlay."
+	Start-Sleep -Milliseconds 200
 }
 	
 # Don't use Print screen button to open screen skipping.
@@ -1505,6 +1506,7 @@ Function DisableStickyKeys {
 	Write-Host "Turning off sticky keys..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
 	Write-Host "Turned off Sticky keys."
+	Start-Sleep -Milliseconds 200
 }
 
 # Enable Sticky keys.
@@ -1521,6 +1523,7 @@ Function SetExplorerThisPC {
 	Write-Host "Setting default File Explorer view to This PC..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -Type DWord -Value 1
 	Write-Host "Set default File Explorer view to This PC."
+	Start-Sleep -Milliseconds 200
 }
 
 # Change default File Explorer view to Quick Access.
@@ -1565,6 +1568,7 @@ Function Hide3DObjectsInExplorer {
 		}
 	Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
 	Write-Host "Hid 3D Objects from File Explorer."
+	Start-Sleep -Milliseconds 200
 }
 
 # Restore 3D Objects icon in Explorer namespace.
@@ -1604,6 +1608,7 @@ Function HideSearchBar {
 	Write-Host "Hiding Search bar from Taskbar..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
 	Write-Host "Hid Search bar from Taskbar."
+	Start-Sleep -Milliseconds 200
 }
 
 # Restore Search bar to Taskbar.
@@ -1620,6 +1625,7 @@ Function HideTaskView {
 	Write-Host "Hiding Task View from Taskbar..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
 	Write-Host "Hid Task View from Taskbar."
+	Start-Sleep -Milliseconds 200
 }
 
 # Restore Task View button.
@@ -1636,6 +1642,7 @@ Function HideCortana {
 	Write-Host "Hiding Cortana from Taskbar..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
 	Write-Host "Hid Cortana from Taskbar."
+	Start-Sleep -Milliseconds 200
 }
 
 # Restore Cortana button in Taskbar.
@@ -1655,6 +1662,7 @@ Function HideMeetNow {
 	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1 -ErrorAction SilentlyContinue
 	Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
 	Write-Host "Hid Meet Now from Taskbar."
+	Start-Sleep -Milliseconds 200
 }
 
 # Restore Meet Now icon on tray.
@@ -1678,6 +1686,7 @@ Function DisableTaskbarFeed {
 	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
 	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
 	Write-Host "Turned off News and interests."
+	Start-Sleep 2
 }
 
 # Turn on News and interests feed.
