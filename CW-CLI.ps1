@@ -194,68 +194,68 @@ $ErrorActionPreference = 'SilentlyContinue'
 	# Inbox UWP apps.
 	Write-Host "    Uninstalling unnecessary UWP apps..."
 	$Bloatware = @(
-	"Microsoft.549981C3F5F10"
-	"Microsoft.BingNews"
-	"Microsoft.BingWeather"
-	"Microsoft.GamingApp"
-	"Microsoft.GamingServices" 
-	"Microsoft.GetHelp" 
-	"Microsoft.Getstarted" 
-	"Microsoft.Messaging"
-	"Microsoft.Microsoft3DViewer" 
-	"Microsoft.MicrosoftStickyNotes"  
-	"Microsoft.MSPaint"
-	"Microsoft.MicrosoftOfficeHub"
-	"Microsoft.Office.OneNote"
-	"Microsoft.MixedReality.Portal"
-	"Microsoft.MicrosoftSolitaireCollection" 
-	"Microsoft.NetworkSpeedTest" 
-	"Microsoft.News" 
-	"Microsoft.Office.Sway" 
-	"Microsoft.OneConnect"
-	"Microsoft.Paint"
-	"Microsoft.People" 
-	"Microsoft.PowerAutomateDesktop"
-	"Microsoft.Print3D" 
-	"Microsoft.SkypeApp"
-	"Microsoft.StorePurchaseApp" 
-	"Microsoft.Todos"
-	"Microsoft.WindowsAlarms"
-	"Microsoft.WindowsCamera"
-	"Microsoft.WindowsCommunicationsApps" 
-	"Microsoft.WindowsFeedbackHub" 
-	"Microsoft.WindowsMaps" 
-	"Microsoft.WindowsSoundRecorder"
-	"Microsoft.XboxApp"
-	"Microsoft.XboxGamingOverlay"
-	"Microsoft.YourPhone"
-	"Microsoft.ZuneMusic"
-	"Microsoft.ZuneVideo"
+		"Microsoft.549981C3F5F10"
+		"Microsoft.BingNews"
+		"Microsoft.BingWeather"
+		"Microsoft.GamingApp"
+		"Microsoft.GamingServices" 
+		"Microsoft.GetHelp" 
+		"Microsoft.Getstarted" 
+		"Microsoft.Messaging"
+		"Microsoft.Microsoft3DViewer" 
+		"Microsoft.MicrosoftStickyNotes"  
+		"Microsoft.MSPaint"
+		"Microsoft.MicrosoftOfficeHub"
+		"Microsoft.Office.OneNote"
+		"Microsoft.MixedReality.Portal"
+		"Microsoft.MicrosoftSolitaireCollection" 
+		"Microsoft.NetworkSpeedTest" 
+		"Microsoft.News" 
+		"Microsoft.Office.Sway" 
+		"Microsoft.OneConnect"
+		"Microsoft.Paint"
+		"Microsoft.People" 
+		"Microsoft.PowerAutomateDesktop"
+		"Microsoft.Print3D" 
+		"Microsoft.SkypeApp"
+		"Microsoft.StorePurchaseApp" 
+		"Microsoft.Todos"
+		"Microsoft.WindowsAlarms"
+		"Microsoft.WindowsCamera"
+		"Microsoft.WindowsCommunicationsApps" 
+		"Microsoft.WindowsFeedbackHub" 
+		"Microsoft.WindowsMaps" 
+		"Microsoft.WindowsSoundRecorder"
+		"Microsoft.XboxApp"
+		"Microsoft.XboxGamingOverlay"
+		"Microsoft.YourPhone"
+		"Microsoft.ZuneMusic"
+		"Microsoft.ZuneVideo"
 
-	# Sponsored Apps
-	"*EclipseManager*"
-	"*ActiproSoftwareLLC*"
-	"*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
-	"*Duolingo-LearnLanguagesforFree*"
-	"*PandoraMediaInc*"
-	"*CandyCrush*"
-	"*BubbleWitch3Saga*"
-	"*Wunderlist*"
-	"*Flipboard*"
-	"*Twitter*"
-	"*Facebook*"
-	"*Spotify*"
-	"*Minecraft*"
-	"*Royal Revolt*"
-	"*Sway*"
-	"*Speed Test*"
-	"*Dolby*"
+		# Sponsored Apps
+		"*EclipseManager*"
+		"*ActiproSoftwareLLC*"
+		"*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
+		"*Duolingo-LearnLanguagesforFree*"
+		"*PandoraMediaInc*"
+		"*CandyCrush*"
+		"*BubbleWitch3Saga*"
+		"*Wunderlist*"
+		"*Flipboard*"
+		"*Twitter*"
+		"*Facebook*"
+		"*Spotify*"
+		"*Minecraft*"
+		"*Royal Revolt*"
+		"*Sway*"
+		"*Speed Test*"
+		"*Dolby*"
 	)
 	ForEach ($Bloat in $Bloatware) {
 		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
 		Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
+		Write-Host "    Uninstalled unnecessary UWP apps."
 	}
-	Write-Host "    Uninstalled unnecessary UWP apps."
 
     # Remove Office webapps shortcuts.
 	if (Test-Path "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk") {
@@ -268,13 +268,18 @@ $ErrorActionPreference = 'SilentlyContinue'
 	}
 
 	# Uninstall Connect app.
-	Import-Module BitsTransfer
-	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
-	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
-	./connect.cmd | Out-Null
-	Remove-Item install_wim_tweak.exe
-	Remove-Item connect.cmd
-	Remove-Item Packages.txt
+	if (Get-AppxPackage Microsoft-PPIProjection-Package) {
+		Import-Module BitsTransfer
+		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
+		Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
+		./connect.cmd | Out-Null
+		Remove-Item install_wim_tweak.exe
+		Remove-Item connect.cmd
+		Remove-Item Packages.txt
+	}
+	else {
+		# Do nothing.
+	}
 
 	Write-Host "Removed all bloatware."
 }

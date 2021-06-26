@@ -663,14 +663,19 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Write-Host "    Removed Office Online web-app shortcuts."
 	}
 
-    # Uninstall Connect app.
-	Import-Module BitsTransfer
-	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
-	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
-	./connect.cmd | Out-Null
-	Remove-Item install_wim_tweak.exe
-	Remove-Item connect.cmd
-	Remove-Item Packages.txt
+	# Uninstall Connect app.
+	if (Get-AppxPackage Microsoft-PPIProjection-Package) {
+		Import-Module BitsTransfer
+		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
+		Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
+		./connect.cmd | Out-Null
+		Remove-Item install_wim_tweak.exe
+		Remove-Item connect.cmd
+		Remove-Item Packages.txt
+	}
+	else {
+		# Do nothing.
+	}
 
     Write-Host "    Deleting unnecessary registry keys..."
     $Keys = @(
