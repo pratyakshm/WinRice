@@ -1394,9 +1394,8 @@ Function SetupWindowsUpdate {
             Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
         }
 		# Print more user messages
-        Write-Host "Notes:"
         if ($winver -match "Windows 11") {
-            Write-Host "    1. Weekly flights won't be delayed since this device is running Windows 11."
+            Write-Host "    - Weekly flights won't be delayed since this device is running Windows 11."
         }
         Write-Host "Set up Windows Update policies."
     }
@@ -1420,7 +1419,7 @@ Function EnablePowerdownAfterShutdown {
 	Write-Host "Enabling full powerdown on shut down..."
 	Write-Host "This is known to fix issues where some PCs might boot up without user input after shutdown."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name PowerdownAfterShutdown -Type DWord -Value 1
-	Write-Host "Enabled full power down on Shut down."
+	Write-Host "Enabled full power down on shut down."
 }
 
 # Revert the EnablePowerdownAfterShutdown edit.

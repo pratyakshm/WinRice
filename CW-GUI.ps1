@@ -1523,9 +1523,8 @@ $ErrorActionPreference = 'SilentlyContinue'
             Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
         }
 		# Print more user messages
-        Write-Host "Notes:"
         if ($winver -match "Windows 11") {
-            Write-Host "    1. Weekly flights won't be delayed since this device is running Windows 11."
+            Write-Host "    - Weekly flights won't be delayed since this device is running Windows 11."
         }
         Write-Host "Set up Windows Update policies."
     }
