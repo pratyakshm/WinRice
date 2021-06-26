@@ -37,7 +37,6 @@ $tasks = @(
 	"DisableTelemetry",				# "EnableTelemetry",
 	"EnableClipboard",				# "DisableClipboard",
 	"AutoLoginPostUpdate", 		    # "StayOnLockscreenPostUpdate",
-	"DisableMeltdownCompatFlag",    # "EnableMeltdownCompatFlag",
 	"ChangesDone",
 
 ### Tasks & Services ###
@@ -1161,28 +1160,6 @@ Function StayOnLockscreenPostUpdate {
 	Write-Host "Turned off Automatic login after applying updates."
 }
 
-# Enable Meltdown (CVE-2017-5754) compatibility flag - Required for January 2018 and all subsequent Windows updates.
-# This flag is normally automatically enabled by compatible antivirus software (such as Windows Defender).
-# Use the tweak only if you have confirmed that your AV is compatible but unable to set the flag automatically or if you don't use any AV at all.
-# See https://support.microsoft.com/en-us/help/4072699/january-3-2018-windows-security-updates-and-antivirus-software for details.
-Function EnableMeltdownCompatFlag {
-	Write-Host " "
-	Write-Host "Turning on Meltdown (CVE-2017-5754) compatibility flag..."
-	$MeltdownCompat = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat"
-	If (!(Test-Path $MeltdownCompat)) {
-		New-Item -Path $MeltdownCompat | Out-Null
-	}
-	Set-ItemProperty -Path $MeltdownCompat -Name "cadca5fe-87d3-4b96-b7fb-a231484277cc" -Type DWord -Value 0
-	Write-Host "Turned on Meltdown (CVE-2017-5754) compatibility flag."
-}
-
-# Disable Meltdown (CVE-2017-5754) compatibility flag
-Function DisableMeltdownCompatFlag {
-	Write-Host " "
-	Write-Host "Turning off Meltdown (CVE-2017-5754) compatibility flag..."
-	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\QualityCompat" -Name "cadca5fe-87d3-4b96-b7fb-a231484277cc" -ErrorAction SilentlyContinue
-	Write-Host "Turned off Meltdown (CVE-2017-5754) compatibility flag."
-}
 
 
 ####################################
