@@ -3,25 +3,6 @@
 # Copyright (c) 2021 PratyakshM <pratyakshm@protonmail.com>
 # All rights reserved.
 
-
-# Import library code - located relative to this script.
-Function dotInclude() {
-    Param(
-        [Parameter(Mandatory)]
-        [string]$includeFile
-    )
-    # Look for the file in the same directory as this script.
-    $scriptPath = $PSScriptRoot
-    if ( $PSScriptRoot -eq $null -and $psISE) {
-        $scriptPath = (Split-Path -Path $psISE.CurrentFile.FullPath)
-    }
-    if ( test-path $scriptPath\$includeFile ) {
-        # Import and immediately execute the requested file.
-        . $scriptPath\$includeFile
-    }
-}
-
-
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
@@ -31,11 +12,6 @@ Function screen {
     Start-Sleep 1
     Write-Host "                                        pratyakshm's CleanWin"
     Write-Warning "The GUI window might freeze for an extended period of time while it's performing a task."
-    Write-Host " "
-    Write-Host " "
-    Write-Host " "
-    Write-Host " "
-    Write-Host " "
     Write-Host " "
     $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
@@ -61,7 +37,7 @@ screen
 ### BEGIN GUI ###
 
 $Form = New-Object System.Windows.Forms.Form
-$Form.ClientSize = '610,380'
+$Form.ClientSize = '610,355'
 $Form.Text = "pratyakshm's CleanWin"
 $Form.TopMost = $false;
 $Form.MaximizeBox = $false
@@ -269,8 +245,8 @@ $Label7.Text = "https://github.com/pratyakshm/CleanWin"
 $Label7.AutoSize = $true
 $Label7.Width = 25
 $Label7.Height = 10
-$Label7.Location = New-Object System.Drawing.Point(340,320)
-$Label7.Font = 'Segoe UI,6,style=Monospace' 
+$Label7.Location = New-Object System.Drawing.Point(340,315)
+$Label7.Font = 'Segoe UI,9' 
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label7, $UninstallApps, 
 $UninstallSelectively, $InstallWinGet ,$Winstall, $EnableWSL, $UninstallFeatures, $DisableDataCollection, $DisableTelemetry,
