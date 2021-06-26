@@ -47,7 +47,6 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 `💡 Tap on the points starting with a triangular bullet to expand or collapse them`
 
 ### Apps & Features
-<details><summary>Apps & Features</summary>
 <details>
   <summary>Apps</summary>
 
@@ -131,7 +130,6 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
     - Windows Fax & Scan
     - XPS Viewer
     - XPS Printer
-</details>
 </details>
 
 
