@@ -1128,20 +1128,8 @@ Function EnableClipboard {
 	Write-Host " "
 	Write-Host "Turning on Clipboard History..."
     New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
-	$Clipboard11 = "HKU:\S-1-5-21-957919921-2019213666-2206391487-1001\Software\Microsoft\Clipboard"
-	$Clipboard10 = "HKU:\S-1-5-21-1241565009-1691527431-1215774449-1001\Software\Microsoft\Clipboard"
-	$winver = Get-ItemPropertyValue  'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName
-	if ($winver -match "Windows 11") {
-		# Write registry value specific to Windows 11.
-		Set-ItemProperty -Path $Clipboard11 -Name "EnableClipboardHistory" -Value 1 -ErrorAction SilentlyContinue
-	}
-	elseif ($winver -match "Windows 10") {
-		# Write registry value for Windows 10 (tested on Version Dev OS Build 21390).
-		Set-ItemProperty -Path $Clipboard10 -Name "EnableClipboardHistory" -Value 1 -ErrorAction SilentlyContinue
-	}
-	else {
-		# Do nothing.
-	}
+	$Clipboard = "HKU:\S-1-5-21-*\Software\Microsoft\Clipboard"
+	Set-ItemProperty -Path $Clipboard -Name "EnableClipboardHistory" -Value 1 -ErrorAction SilentlyContinue
 	Write-Host "Turned on Clipboard History."
     Start-Sleep 1
     Set-Clipboard "Demo text by CleanWin."
@@ -1154,20 +1142,8 @@ Function DisableClipboard {
 	Write-Host " "
 	Write-Host "Turning off Clipboard History..."
     New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
-	$Clipboard11 = "HKU:\S-1-5-21-957919921-2019213666-2206391487-1001\Software\Microsoft\Clipboard"
-	$Clipboard10 = "HKU:\S-1-5-21-1241565009-1691527431-1215774449-1001\Software\Microsoft\Clipboard"
-	$winver = Get-ItemPropertyValue  'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName
-	if ($winver -match "Windows 11") {
-		# Write registry value specific to Windows 11.
-		Set-ItemProperty -Path $Clipboard11 -Name "EnableClipboardHistory" -Value 0 -ErrorAction SilentlyContinue
-	}
-	elseif ($winver -match "Windows 10") {
-		# Write registry value for Windows 10 (tested on Version Dev OS Build 21390).
-		Set-ItemProperty -Path $Clipboard10 -Name "EnableClipboardHistory" -Value 0 -ErrorAction SilentlyContinue
-	}
-	else {
-		# Do nothing.
-	}
+	$Clipboard = "HKU:\S-1-5-21-*\Software\Microsoft\Clipboard"
+	Set-ItemProperty -Path $Clipboard -Name "EnableClipboardHistory" -Value 0 -ErrorAction SilentlyContinue
 	Write-Host "Turned off Clipboard History."
 }
 
@@ -1712,7 +1688,7 @@ Function RestoreMeetNow {
 	$Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
 	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 0
 	Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 0
-	Write-Host "Restored Meet Now to Taskbar."
+	Write-Host "Restored Meet Now to tray."
 }
 
 # Turn off News and interests feed.
@@ -1720,11 +1696,8 @@ Function DisableTaskbarFeed {
 	Write-Host " "
 	Write-Host "Turning off News and interests..."
 	New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
-	# $Feed1 is for older Dev channel builds (might be for RTM as well).
-	# $Feed2 is for newer Dev channel builds and most likely newer RTM builds.
-	# Currently I'm not implementing any checks on this one since I am unsure of the registry behavior in different builds and channel and it needs testing.
 	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
-	$Feed2 = "HKU:\S-1-5-21-1241565009-1691527431-1215774449-1001\Software\Microsoft\Windows\CurrentVersion\Feeds"
+	$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
 	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
 	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
 	Write-Host "Turned off News and interests."
@@ -1739,7 +1712,7 @@ Function EnableTaskbarFeed {
 	# $Feed2 is for newer Dev channel builds and most likely newer RTM builds.
 	# Currently I'm not implementing any checks on this one since I am unsure of the registry behavior in different builds and channel and it needs testing.
 	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
-	$Feed2 = "HKU:\S-1-5-21-1241565009-1691527431-1215774449-1001\Software\Microsoft\Windows\CurrentVersion\Feeds"
+	$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
 	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0 | Out-Null
 	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 0 | Out-Null
 	Write-Host "Turned on News and interests."

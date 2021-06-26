@@ -989,11 +989,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 
     # Turn off News and interests in Taskbar.
     New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
-	# $Feed1 is for older Dev channel builds (might be for RTM as well).
-	# $Feed2 is for newer Dev channel builds and most likely newer RTM builds.
-	# Currently I'm not implementing any checks on this one since I am unsure of the registry behavior in different builds and channel and it needs testing.
 	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
-	$Feed2 = "HKU:\S-1-5-21-1241565009-1691527431-1215774449-1001\Software\Microsoft\Windows\CurrentVersion\Feeds"
+	$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
 	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
 	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
 
@@ -1070,11 +1067,8 @@ $RevertExplorer.Add_Click( {
 
     # Turn on News and interests in Taskbar.
     New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
-	# $Feed1 is for older Dev channel builds (might be for RTM as well).
-	# $Feed2 is for newer Dev channel builds and most likely newer RTM builds.
-	# Currently I'm not implementing any checks on this one since I am unsure of the registry behavior in different builds and channel and it needs testing.
 	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
-	$Feed2 = "HKU:\S-1-5-21-1241565009-1691527431-1215774449-1001\Software\Microsoft\Windows\CurrentVersion\Feeds"
+	$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
 	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0 | Out-Null
 	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 0 | Out-Null
 
