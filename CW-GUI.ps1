@@ -1230,7 +1230,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	$ExcludedApps = @(
 		"Microsoft.LockApp",
 		"Microsoft.Windows.ContentDeliveryManager",
-		"Microsoft.Windows.Cortana",
 		"Microsoft.549981C3F5F10",
 		"Microsoft.Windows.Search",
 		"Microsoft.Windows.SecHealthUI",
