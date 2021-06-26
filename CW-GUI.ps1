@@ -966,11 +966,6 @@ $ErrorActionPreference = 'SilentlyContinue'
         New-Item -Path $Hide3DObjects2 -Force | Out-Null
         }
     Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
-    
-    # Expand Ribbon in File Explorer.
-    $ExpandRibbonInExplorer = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Ribbon"
-	New-Item -Path $ExpandRibbonInExplorer -Force | Out-Null
-	New-ItemProperty -Path $ExpandRibbonInExplorer -Name MinimizedStateTabletModeOff -PropertyType DWord -Value 0 -Force
 
     # Hide search bar in Taskbar.
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
@@ -1002,7 +997,6 @@ $ErrorActionPreference = 'SilentlyContinue'
     Write-Host "Changelog:"
     Write-Host "    - Bound Print Screen key to launch Snip overlay"
     Write-Host "    - Set default File Explorer View to This PC instead of Quick Access"
-    Write-Host "    - Expanded Ribbon in File Explorer"
     Write-Host "    - Turned off Sticky keys popup"
     Write-Host "    - Turned off News and interests"
     $Hides =@(
@@ -1042,11 +1036,6 @@ $RevertExplorer.Add_Click( {
     Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy"
     Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy"
     
-    # Minimize Ribbon in File Explorer.
-	$MinimizeRibbonInExplorer = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Ribbon"
-	New-Item -Path $MinimizeRibbonInExplorer -Force | Out-Null
-	New-ItemProperty -Path $MinimizeRibbonInExplorer -Name MinimizedStateTabletModeOff -PropertyType DWord -Value 1 -Force
-
     # Show search bar icon in Taskbar.
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
     
