@@ -16,7 +16,7 @@ $tasks = @(
 ### Apps & Features ###
 	"AppsFeatures",
 	"DebloatApps", "Activity", "UnpinStartTiles", "Activity", "UnpinAppsFromTaskbar", "Activity", "InstallWinGet", "UninstallOneDrive", "CleanupRegistry", "Activity",
-	"DisableBrowserRestoreAd",      # "EnableBrowserRestoreAd",
+	# "DisableBrowserRestoreAd",      # "EnableBrowserRestoreAd",
 	"UninstallFeatures", "Activity", "EnableWSL", "Activity", "EnabledotNET3.5", "Activity", # "EnableSandbox",
 	"Install7zip", "Winstall", "InstallHEVC", "InstallFonts", "SetPhotoViewerAssociation", # "SetPhotoViewerAssociation",
 	"ChangesDone",
@@ -66,7 +66,7 @@ $tasks = @(
 	"HideTaskView",                # "RestoreTaskView",
 	"HideCortana",			       # "RestoreCortana",
 	"HideMeetNow",				   # "RestoreMeetNow",
-	"DisableTaskbarFeed",		   # "EnableTaskbarFeed",
+	"DisableTaskbarFeed",		   # "EnableTaskbarFeed",  (News and Interests)
 	"ChangesDone",
 
 ###  Tasks after successful run ###
