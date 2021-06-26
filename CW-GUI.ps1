@@ -957,11 +957,19 @@ $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
 
     # Turn off News and interests in taskbar.
-    New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
-	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
-	$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
-	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
-	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
+	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
+	if ($ProductName -match "Windows 10") {
+		Write-Host " "
+		New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
+		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
+		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
+		Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
+		Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
+	}
+	else {
+		# Do nothing
+	}
 
     # Restart explorer.exe to reflect changes immeditately and then provide 2 seconds of breathing time.
     Stop-Process -ProcessName explorer
@@ -972,7 +980,12 @@ $ErrorActionPreference = 'SilentlyContinue'
     Write-Host "    - Bound Print Screen key to launch Snip overlay"
     Write-Host "    - Set default File Explorer View to This PC instead of Quick Access"
     Write-Host "    - Turned off Sticky keys popup"
-    Write-Host "    - Turned off News and interests"
+    # Check if News and interests was turned off and inform user.
+    $Feed = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
+    $NIValue = Get-ItemPropertyValue -Path $Feed -Name ShellFeedsTaskbarViewMode
+    if ($NIValue -eq 2) {
+        Write-Host "    - Turned off News and interests in taskbar."
+    }
     $Hides =@(
         "3D Objects from File Explorer"
         "Search bar in taskbar"
@@ -983,6 +996,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     ForEach ($Hide in $Hides) {
         Write-Host "    - Hid $Hide."
     }
+
 
     Write-Host "Finished cleaning up Windows Explorer."
        
@@ -1029,11 +1043,21 @@ $RevertExplorer.Add_Click( {
     Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
 
     # Turn on News and interests in taskbar.
-    New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
-	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
-	$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
-	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0 | Out-Null
-	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 0 | Out-Null
+	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
+	if ($ProductName -match "Windows 10") {
+		Write-Host " "
+		Write-Host "Turning on News and interests..."
+		New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
+		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
+		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
+		Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0 | Out-Null
+		Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 0 | Out-Null
+		Write-Host "Turned on News and interests."
+	}
+	else {
+		# Do nothing
+	}
 
     # Restart explorer.exe to reflect changes immeditately and then provide 2 seconds of breathing time.
     Stop-Process -ProcessName explorer
