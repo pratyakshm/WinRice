@@ -25,16 +25,16 @@ $ErrorActionPreference = 'SilentlyContinue'
     Write-Warning "The GUI window might freeze for an extended period of time while it's performing a task."
     Write-Host " "
     $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
+	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	$BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
 	$OSBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	$DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
-	if ($ProductName -match "Windows 10") {
-		Write-Host "This PC is running $ProductName."
+	if ($CurrentBuild -lt 21996) {
+		Write-Host "This PC is running Windows 10."
 		Write-Host "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
 	}
-	elseif ($ProductName -match "Windows 11") {
-		Write-Host "This PC is running $ProductName."
+	elseif ($CurrentBuild -ge 22000) {
+		Write-Host "This PC is running Windows 11."
 		Write-Host "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
 		Write-Host "Note that CleanWin's Windows 11 support is experimental and you might face issues."
 	}
@@ -974,8 +974,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 
     # Turn off News and interests in taskbar.
 	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
-	if ($ProductName -match "Windows 10") {
+	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+	if ($CurrentBuild -lt 22000) {
 		New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
@@ -1062,8 +1062,8 @@ $RevertExplorer.Add_Click( {
 
     # Turn on News and interests in taskbar.
 	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
-	if ($ProductName -match "Windows 10") {
+	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+	if ($CurrentBuild -lt 22000) {
 		New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
@@ -1117,8 +1117,8 @@ $ShowSeconds.Add_Click( {
 $UnpinStartTiles.Add_Click( {
 	Write-Host " "
 	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
-	if ($ProductName -match "Windows 10") {
+	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+	if ($CurrentBuild -lt 22000) {
 		Write-Host "Unpinning all tiles from Start Menu..."
 		Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
 		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
@@ -1183,8 +1183,8 @@ $UnpinStartTiles.Add_Click( {
 		Remove-Item $layoutFile
 		Write-Host "Unpinned all tiles from Start Menu."
 	}
-	elseif ($ProductName -match "Windows 11") {
-		Write-Host "This device is currently on $ProductName"
+	elseif ($CurrentBuild -ge 22000) {
+		Write-Host "This device is currently on $CurrentBuild"
 		Write-Host "CleanWin currently cannot unpin apps from Start Menu in Windows 11."
 	}
 	else {
@@ -1549,7 +1549,7 @@ $ErrorActionPreference = 'SilentlyContinue'
         Write-Host " "
 		# Get OS flighting channel (Dev/RTM) and OS version (10/11).
         $channel = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name DisplayVersion
-        $winver = Get-ItemPropertyValue  'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName
+        $winver = Get-ItemPropertyValue  'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name CurrentBuild
 		# If Dev channel, print Dev channel policies message.
         if ($channel -match "Dev") {
             Write-Host "Device registered in Windows Insider Program Dev channel, setting up Windows Update policies accordingly..."
@@ -1584,7 +1584,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		# Check if device is registered in Dev channel.
         if ($channel -match "Dev") {
 			# If device is on Windows 11, do not delay flights.
-            if ($winver -match "Windows 11") {
+            if ($winver -ge 22000) {
                 # Do nothing.
             }
 			# Else, delay flights by two days.
@@ -1601,7 +1601,7 @@ $ErrorActionPreference = 'SilentlyContinue'
             Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
         }
 		# Print more user messages
-        if ($winver -match "Windows 11") {
+        if ($winver -ge 22000) {
             Write-Host "    - Weekly flights won't be delayed since this device is running Windows 11."
         }
         Write-Host "Set up Windows Update policies."

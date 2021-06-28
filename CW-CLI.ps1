@@ -108,16 +108,16 @@ $ErrorActionPreference = 'SilentlyContinue'
 Function OSBuildInfo {
 	Write-Host " "
 	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
+	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	$BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
 	$OSBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	$DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
-	if ($ProductName -match "Windows 10") {
+	if ($CurrentBuild -lt 22000) {
 		Write-Host "This PC is running $ProductName."
 		Write-Host "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
 	}
-	elseif ($ProductName -match "Windows 11") {
-		Write-Host "This PC is running $ProductName."
+	elseif ($CurrentBuild -ge 22000) {
+		Write-Host "This PC is running Windows 11."
 		Write-Host "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
 		Write-Host "Note that CleanWin's Windows 11 support is experimental and you might face issues."
 	}
@@ -310,8 +310,8 @@ $ProgressPreference = 'SilentlyContinue'
 Function UnpinStartTiles {
 	Write-Host " "
 	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
-	if ($ProductName -match "Windows 10") {
+	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+	if ($CurrentBuild -lt 22000) {
 		Write-Host "Unpinning all tiles from Start Menu..."
 		Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
 		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
@@ -376,8 +376,8 @@ Function UnpinStartTiles {
 		Remove-Item $layoutFile
 		Write-Host "Unpinned all tiles from Start Menu."
 	}
-	elseif ($ProductName -match "Windows 11") {
-		Write-Host "This device is currently on $ProductName"
+	elseif ($CurrentBuild -ge 22000) {
+		Write-Host "This device is currently on Windows 11"
 		Write-Host "CleanWin does not support unpinning apps from Start menu in Windows 11 yet."
 	}
 	else {
@@ -523,8 +523,8 @@ $ProgressPreference = 'SilentlyContinue'
 Function DisableM365OnValueBanner {
 $ProgressPreference = 'SilentlyContinue'
 	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
-	if ($ProductName -match "Windows 11") {
+	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+	if ($CurrentBuild -ge 22000) {
 		Write-Host " "
 		Write-Host "Turning off Microsoft 365 suggestion banner in Settings..."
 		Import-Module BitsTransfer
@@ -543,8 +543,8 @@ $ProgressPreference = 'SilentlyContinue'
 Function RevertM365OnValueBanner {
 $ProgressPreference = 'SilentlyContinue'
 	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
-	if ($ProductName -match "Windows 11") {
+	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+	if ($CurrentBuild -ge 22000) {
 		Write-Host " "
 		Write-Host "Restoring Microsoft 365 suggestion banner in Settings..."
 		Import-Module BitsTransfer
@@ -1384,7 +1384,7 @@ Function SetupWindowsUpdate {
         Write-Host " "
 		# Get OS flighting channel (Dev/RTM) and OS version (10/11).
         $channel = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name DisplayVersion
-        $winver = Get-ItemPropertyValue  'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName
+        $winver = Get-ItemPropertyValue  'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name CurrentBuild
 		# If Dev channel, print Dev channel policies message.
         if ($channel -match "Dev") {
             Write-Host "Device registered in Windows Insider Program Dev channel, setting up Windows Update policies accordingly..."
@@ -1419,7 +1419,7 @@ Function SetupWindowsUpdate {
 		# Check if device is registered in Dev channel.
         if ($channel -match "Dev") {
 			# If device is on Windows 11, do not delay flights.
-            if ($winver -match "Windows 11") {
+            if ($winver -ge 22000) {
                 # Do nothing.
             }
 			# Else, delay flights by two days.
@@ -1436,7 +1436,7 @@ Function SetupWindowsUpdate {
             Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
         }
 		# Print more user messages
-        if ($winver -match "Windows 11") {
+        if ($winver -ge 22000) {
             Write-Host "    - Weekly flights won't be delayed since this device is running Windows 11."
         }
         Write-Host "Set up Windows Update policies."
@@ -1664,8 +1664,8 @@ Function RestoreMeetNow {
 # Turn off News and interests feed.
 Function DisableTaskbarFeed {
 	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
-	if ($ProductName -match "Windows 10") {
+	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+	if ($CurrentBuild -lt 22000) {
 		Write-Host " "
 		Write-Host "Turning off News and interests..."
 		New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
@@ -1684,8 +1684,8 @@ Function DisableTaskbarFeed {
 # Turn on News and interests feed.
 Function EnableTaskbarFeed {
 	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
-	if ($ProductName -match "Windows 10") {
+	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+	if ($CurrentBuild -lt 22000) {
 		Write-Host " "
 		Write-Host "Turning on News and interests..."
 		New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
