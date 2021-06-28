@@ -687,53 +687,24 @@ $ErrorActionPreference = 'SilentlyContinue'
 	}
 
     # Uninstall Microsoft OneDrive.
-    Write-Host "    Uninstalling Microsoft OneDrive..."
-	$OneDriveKey = 'HKLM:Software\Policies\Microsoft\Windows\OneDrive'
-	If (!(Test-Path $OneDriveKey)) {
-		mkdir $OneDriveKey | Out-Null
-		Set-ItemProperty $OneDriveKey -Name OneDrive -Value DisableFileSyncNGSC
-	}
-	Set-ItemProperty $OneDriveKey -Name OneDrive -Value DisableFileSyncNGSC
-	New-PSDrive  HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT | Out-Null
-	$onedrive = "$env:SYSTEMROOT\SysWOW64\OneDriveSetup.exe"
-	$ExplorerReg1 = "HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
-	$ExplorerReg2 = "HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
-	Stop-Process -Name "OneDrive*"
-	Start-Sleep 2
-	If (!(Test-Path $onedrive)) {
-		$onedrive = "$env:SYSTEMROOT\System32\OneDriveSetup.exe"
-	}
-	Start-Process $onedrive "/uninstall" -NoNewWindow -Wait
-	If (Test-Path "$env:USERPROFILE\OneDrive") {
-		Remove-Item "$env:USERPROFILE\OneDrive" -Force -Recurse -ErrorAction SilentlyContinue
-	}
-	If (Test-Path "$env:LOCALAPPDATA\Microsoft\OneDrive") {
-		Remove-Item "$env:LOCALAPPDATA\Microsoft\OneDrive" -Force -Recurse -ErrorAction SilentlyContinue
-	}
-	If (Test-Path "$env:PROGRAMDATA\Microsoft OneDrive") {
-		Remove-Item "$env:PROGRAMDATA\Microsoft OneDrive" -Force -Recurse -ErrorAction SilentlyContinue
-	}
-	If (Test-Path "$env:SYSTEMDRIVE\OneDriveTemp") {
-		Remove-Item "$env:SYSTEMDRIVE\OneDriveTemp" -Force -Recurse -ErrorAction SilentlyContinue
-	}
-	If (!(Test-Path $ExplorerReg1)) {
-		New-Item $ExplorerReg1 | Out-Null
-	}
-	Set-ItemProperty $ExplorerReg1 System.IsPinnedToNameSpaceTree -Value 0 
-	If (!(Test-Path $ExplorerReg2)) {
-		New-Item $ExplorerReg2 | Out-Null
-	}
-	Set-ItemProperty $ExplorerReg2 System.IsPinnedToNameSpaceTree -Value 0
-	Start-Process explorer.exe -NoNewWindow
-	Remove-Item env:OneDrive
+    Write-Host " "
+	if (Get-Command winget) {
+		Write-Host "    Uninstalling Microsoft OneDrive..."
 
-	# Uninstall Microsoft OneDrive 64-bit (in preview).
-	Remove-Item "%LocalAppData%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
-	Remove-Item "%LocalAppData%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json.backup" -ErrorAction SilentlyContinue
-	Start-BitsTransfer -Source "https://raw.githubusercontent.com/CleanWin/Files/main/settings.json" -Destination "%LocalAppData%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
-	winget uninstall OneDriveSetup.exe | Out-Null
-	Remove-Item env:OneDrive
-    Write-Host "    Uninstalled Microsoft OneDrive."
+		# Uninstall using WinGet.
+		winget uninstall Microsoft.OneDrive | Out-Null
+
+		# Cleanup leftover folders if found.
+		Remove-Item "$env:USERPROFILE\OneDrive" -Recurse -Force
+		Remove-Item "$env:PROGRAMDATA\Microsoft OneDrive" -Recurse -Force
+		Remove-Item "$env:LOCALAPPDATA\Microsoft\OneDrive" -Recurse -Force
+		Remove-Item "$env:LOCALAPPDATA\OneDrive" -Recurse -Force
+		
+		Write-Host "    Uninstalled Microsoft OneDrive."
+        }
+	else {
+		Write-Host "    WinGet is not installed. Please install WinGet first before uninstalling Microsoft OneDrive."
+	}
 
     # Unpin apps from taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
 	Write-Host "Unpinning apps from taskbar..."
