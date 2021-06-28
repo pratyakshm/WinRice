@@ -123,12 +123,15 @@ Function ChangesDone {
 	Start-Sleep 1
 }
 
-# Create a system restore point with type MODIFY_SETTINGS, silently continue if already created within the past 24 hours
+# Create a system restore point with type MODIFY_SETTINGS
 Function CreateSystemRestore {
 	Write-Host " "
 	Write-Host "Creating a system restore point with type MODIFY_SETTINGS..."
-	Enable-ComputerRestore -Drive "C:\"
-	Checkpoint-Computer -Description "RestorePoint1" -RestorePointType "MODIFY_SETTINGS" -WarningAction SilentlyContinue
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name SystemRestorePointCreationFrequency -Type DWord -Value 0 -Force
+	Enable-ComputerRestore -Drive $env:SystemDrive
+	Checkpoint-Computer -Description "CleanWin" -RestorePointType "MODIFY_SETTINGS" -WarningAction SilentlyContinue
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name SystemRestorePointCreationFrequency -PropertyType DWord -Value 1440 -Force
+	Disable-ComputerRestore -Drive $env:SystemDrive
 	Write-Host "Created system restore point."
 }
 
