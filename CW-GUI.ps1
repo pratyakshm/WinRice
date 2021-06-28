@@ -7,7 +7,18 @@ Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
 Function screen {
-    $host.UI.RawUI.WindowTitle = "pratyakshm's CleanWin"
+$ProgressPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
+	Import-Module BitsTransfer
+	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
+	if (Test-Path File.txt) {
+        $host.UI.RawUI.WindowTitle = "pratyakshm's CleanWin"
+		Remove-Item File.txt
+	}
+	elseif (!(Test-Path File.txt)) {
+		Write-Host "Could not connect to the internet. CleanWin will not run."
+		exit
+	}
     Clear-Host
     Start-Sleep 1
     Write-Host "                                        pratyakshm's CleanWin"
@@ -595,6 +606,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 
 $UninstallApps.Add_Click( { 
 $ErrorActionPreference = 'SilentlyContinue'
+$ProgressPreference = 'SilentlyContinue'
     Write-Host " "
     
     # Inbox UWP Apps.
@@ -657,6 +669,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     "*Dolby*"
     )
     foreach ($Bloat in $Bloatware) {
+        Write-Host "        Uninstalling $Bloat..."
         Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
     }
@@ -725,78 +738,101 @@ $ErrorActionPreference = 'SilentlyContinue'
 })
 
 $InstallWinGet.Add_Click( {
-    $ErrorActionPreference = "Ignore"
+$ErrorActionPreference = 'SilentlyContinue'
+$ProgressPreference = 'SilentlyContinue'
 	Write-Host " "
-	# Import BitsTransfer module, ping GitHub - if success, proceed with installation, else print no connection message.
-	Import-Module BitsTransfer
-	$result = Test-NetConnection github.com 	
-	if( $result.PingSucceeded ) {
-		Write-Host "Downloading WinGet installation packages..."
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-		# Hash the files, if hashes match, begin installation or write warning.
-		$filehash1 =(Get-FileHash "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle" -Algorithm SHA256).Hash
-	    $filehash2 = (Get-FileHash "Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx" -Algorithm SHA256).Hash
-			if ( ($filehash1 -eq "CEE94DB96EB0995BA36FAA3D6417CA908C368A2829D4F24791D96D83BDE6F724") -and ($filehash2 -eq "6602159C341BAFEA747D0EDF15669AC72DF8817299FBFAA90469909E06794256") ) {
-				Write-Host "Successfully verified package hashes."
-				Write-Host "Installing WinGet..."
-				Add-AppxPackage -Path .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -DependencyPath .\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-				Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
-				Remove-Item Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-				Write-Host "Installed WinGet."
-			}
-			else {
-				Write-Host "Package hashes mismatch. WinGet won't be installed."
-			}
-		}
+	if (!(Get-Command winget)) {
+        Write-Host "Preparing download..."
+        # Create new folder and set location.
+        if (!(Test-Path CleanWin)) {
+            New-Item CleanWin -ItemType Directory | out-Null
+            $currentdir = $(Get-Location).Path
+            $dir = "$currentdir/CleanWin"
+            Set-Location $dir
+        }
+        else {
+            Set-Location CleanWin
+        }
+
+        # Download the packages.
+        Import-Module BitsTransfer
+        $WinGetURL = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
+        $VCLibsURL = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx"
+        Write-Host "Downloading WinGet installation packages..."
+        Start-BitsTransfer $WinGetURL.assets.browser_download_url ; Start-BitsTransfer $VCLibsURL 
+
+        # Install WinGet.
+        Write-Host "Installing WinGet..."
+        Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -DependencyPath Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+                
+        # Cleanup installers.
+        Set-Location ..
+        Remove-Item CleanWin -Recurse -Force
+
+        # Get-Command winget, if it works then print success message.
+        if (Get-Command winget) {
+            Write-Host "Installed WinGet."
+        }
+        else {
+             Write-Host "WinGet could not be installed."
+        }
+	}
 	else {
-		Write-Host "Could not connect to the internet. WinGet can't be installed."
+		Write-Host "WinGet is already installed on this device."
 	}
 } )
 
 $Winstall.Add_Click( {
-    $ErrorActionPreference = "Stop"
+$ErrorActionPreference = 'Stop'
     Write-Host " "
 	# Check if WinGet is installed, then proceed.
-    try {if(Get-Command winget) {
+    if (Get-Command winget) {
+		# Try Winstall.txt
 		if (Test-Path Winstall.txt) {
 			Write-Host "Starting Winstall..."
+			# Get each line from the text file and use winget install command on it.
 			Get-Content 'Winstall.txt' | ForEach-Object {
 				$App = $_.Split('=')
 				Write-Host "    Installing $App..."
 				winget install "$App"
 			}
-			Write-Host "Winstall has successfully installed the package(s)."
+			Write-Host "Winstall has successfully installed the app(s)."
+		}
+		# Try winstall.txt
+		elseif (Test-Path winstall.txt) {
+            Write-Host "Starting Winstall..."
+			# Get each line from the text file and use winget install command on it.
+			Get-Content 'winstall.txt' | ForEach-Object {
+				$App = $_.Split('=')
+				Write-Host "    Installing $App..."
+				winget install "$App"
+			}
+			Write-Host "Winstall has successfully installed the app(s)."
 		}
 		else {
-			Write-Host "Winstall.txt was not found. Learn more at bit.ly/Winstall."
+			# Do nothing.
 		}
-        }}
+	}
 	# Inform user if WinGet is not installed.
-    catch {
+    else {
 		Write-Host "WinGet is not installed. Please install WinGet first before using Winstall."
+		start "https://bit.ly/Winstall" 
 	}
 })
 
 
 $EnableWSL.Add_Click( {
+$ProgressPreference = 'SilentlyContinue'
     Write-Host " "
-    # Import BitsTransfer module, ping github - if success, enable WSL, else print no connection message.
-    Import-Module BitsTransfer 
-	$result = Test-NetConnection github.com
-	if( $result.PingSucceeded ) {
-        Write-Host "Enabling Windows Subsystem for Linux..."
-        Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-        Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-        Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-        Write-Host "Enabled Windows Subsystem for Linux."
-    } 
-    else {
-        Write-Host "Could not connect to the internet. WSL won't be enabled."
-    }
+    Write-Host "Enabling Windows Subsystem for Linux..."
+    Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+    Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+    Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+    Write-Host "Enabled Windows Subsystem for Linux."
 })
 
 $UninstallFeatures.Add_Click( {
+$ProgressPreference = 'SilentlyContinue'
     Write-Host " "
     Write-Host "Disabling and uninstalling unnecessary features..."
 

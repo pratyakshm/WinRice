@@ -6,6 +6,7 @@
 $tasks = @(
 
 ### Maintenance Tasks ###
+	"InternetStatus",
  	"Setup",
 	"CleanWin",
 	"OSBuildInfo",
@@ -69,7 +70,7 @@ $tasks = @(
 
 ###  Tasks after successful run ###
 	"Activity",
-	"RestartPC"
+	"End"
 )
 
 
@@ -87,6 +88,20 @@ Function CleanWin {
 # Set ExecutionPolicy to Unrestricted for session
 Function Setup {
 	Set-ExecutionPolicy Unrestricted -Scope Process
+}
+
+Function InternetStatus {
+$ProgressPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
+	Import-Module BitsTransfer
+	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
+	if (Test-Path File.txt) {
+		Remove-Item File.txt
+	}
+	elseif (!(Test-Path File.txt)) {
+		Write-Host "Could not connect to the internet. CleanWin will not run."
+		exit
+	}
 }
 
 # OS Build
@@ -194,6 +209,7 @@ Function AppsFeatures {
 # Debloat apps.
 Function DebloatApps {
 $ErrorActionPreference = 'SilentlyContinue'
+$ProgressPreference = 'SilentlyContinue'
 	Write-Host "Removing all bloatware..."
 	# Inbox UWP apps.
 	Write-Host "    Uninstalling unnecessary UWP apps..."
@@ -256,6 +272,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		"*Dolby*"
 	)
 	ForEach ($Bloat in $Bloatware) {
+		Write-Host "        Uninstalling $Bloat..."
 		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
 		Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
 		Write-Host "    Uninstalled unnecessary UWP apps."
@@ -389,32 +406,48 @@ Function UnpinAppsFromTaskbar {
 
 # Install WinGet (Windows Package Manager).
 Function InstallWinGet {
-    $ErrorActionPreference = "Ignore"
+$ErrorActionPreference = 'SilentlyContinue'
+$ProgressPreference = 'SilentlyContinue'
 	Write-Host " "
-	# Import BitsTransfer module, ping GitHub - if success, proceed with installation, else print no connection message.
-	Import-Module BitsTransfer
-	$result = Test-NetConnection github.com 	
-	if( $result.PingSucceeded ) {
-		Write-Host "Downloading WinGet installation packages..."
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-		# Hash the files, if hashes match, begin installation or write warning.
-		$filehash1 =(Get-FileHash "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle" -Algorithm SHA256).Hash
-	    $filehash2 = (Get-FileHash "Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx" -Algorithm SHA256).Hash
-			if ( ($filehash1 -eq "CEE94DB96EB0995BA36FAA3D6417CA908C368A2829D4F24791D96D83BDE6F724") -and ($filehash2 -eq "6602159C341BAFEA747D0EDF15669AC72DF8817299FBFAA90469909E06794256") ) {
-				Write-Host "Successfully verified package hashes."
-				Write-Host "Installing WinGet..."
-				Add-AppxPackage -Path .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle -DependencyPath .\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-				Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle
-				Remove-Item Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-				Write-Host "Installed WinGet."
-			}
-			else {
-				Write-Host "Package hashes mismatch. WinGet won't be installed."
-			}
+	if (!(Get-Command winget)) {
+		Write-Host "Preparing download..."
+		# Create new folder and set location.
+		if (!(Test-Path CleanWin)) {
+			New-Item CleanWin -ItemType Directory | out-Null
+			$currentdir = $(Get-Location).Path
+			$dir = "$currentdir/CleanWin"
+			Set-Location $dir
 		}
+		else {
+			Set-Location CleanWin
+		}
+
+		# Download the packages.
+		Import-Module BitsTransfer
+		$WinGetURL = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
+		$VCLibsURL = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx"
+		Write-Host "Downloading WinGet installation packages..."
+		Start-BitsTransfer $WinGetURL.assets.browser_download_url ; Start-BitsTransfer $VCLibsURL 
+
+		# Install WinGet.
+		Write-Host "Installing WinGet..."
+		Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -DependencyPath Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+			
+		# Cleanup installers.
+		Set-Location ..
+		Remove-Item CleanWin -Recurse -Force
+
+		# Get-Command winget, if it works then print success message.
+		if (Get-Command winget) {
+			Write-Host "Installed WinGet."
+		}
+		else {
+			Write-Host "WinGet could not be installed."
+		}
+
+	}
 	else {
-		Write-Host "Could not connect to the internet. WinGet can't be installed."
+		Write-Host "WinGet is already installed on this device."
 	}
 }
 
@@ -433,7 +466,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Remove-Item "$env:PROGRAMDATA\Microsoft OneDrive" -Recurse -Force
 		Remove-Item "$env:LOCALAPPDATA\Microsoft\OneDrive" -Recurse -Force
 		Remove-Item "$env:LOCALAPPDATA\OneDrive" -Recurse -Force
-		
+
 		Write-Host "Uninstalled Microsoft OneDrive."
         }
 	else {
@@ -460,41 +493,35 @@ Function DisableEdgeStartupBoost {
 
 # Disable "Web Browsing - Restore recommended promo in Settings".
 Function DisableBrowserRestoreAd {
+$ProgressPreference = 'SilentlyContinue'
 	Write-Host " "
     Import-Module BitsTransfer 
+	Write-Host "Turning off 'Web browsing: Restore recommended' suggestion from Settings..."
     Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Albacore.ViVe.dll
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/ViVeTool.exe
-    if (Test-Path ViVeTool.exe) {
-        Write-Host "Turning off 'Web browsing: Restore recommended' suggestion from Settings..."
-		./ViVeTool.exe delconfig 23531064 1 | Out-Null
-		Remove-Item ViVeTool.exe
-		Remove-Item Albacore.ViVe.dll
-        Write-Host "Turned off 'Web browsing: Restore recommended' suggestion from Settings."
-	} 
-	else {
-	  Write-Host "Could not connect to the internet. Browser Restore recommendation won't be turned off."
-	}
+	./ViVeTool.exe delconfig 23531064 1 | Out-Null
+	Remove-Item ViVeTool.exe
+	Remove-Item Albacore.ViVe.dll
+    Write-Host "Turned off 'Web browsing: Restore recommended' suggestion from Settings."
 }
 
 # Enable "Web Browsing - Restore recommended promo in Settings".
 Function EnableBrowserRestoreAd {
+$ProgressPreference = 'SilentlyContinue'
 	Write-Host " "
     Import-Module BitsTransfer 
+	Write-Host "Turning on 'Web browsing: Restore recommended' suggestion from Settings..."
     Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Albacore.ViVe.dll
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/ViVeTool.exe
-    if (Test-Path ViVeTool.exe) {
-		./ViVeTool.exe addconfig 23531064 0 | Out-Null
-		Remove-Item ViVeTool.exe
-		Remove-Item Albacore.ViVe.dll
-        Write-Host "Turned on 'Web browsing: Restore recommended' suggestion from Settings."
-	} 
-	else {
-	  Write-Host "Could not connect to the internet. Browser Restore recommendation won't be turned on."
-	}
+	./ViVeTool.exe addconfig 23531064 0 | Out-Null
+	Remove-Item ViVeTool.exe
+	Remove-Item Albacore.ViVe.dll
+    Write-Host "Turned on 'Web browsing: Restore recommended' suggestion from Settings."
 }
 
 # Disable the Microsoft 365 banner in Settings app header (Windows 11 only as of now).
 Function DisableM365OnValueBanner {
+$ProgressPreference = 'SilentlyContinue'
 	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
 	if ($ProductName -match "Windows 11") {
@@ -503,14 +530,9 @@ Function DisableM365OnValueBanner {
 		Import-Module BitsTransfer
 		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/mach2.exe
 		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/msdia140.dll
-		if (Test-Path mach2.exe) {
-			./mach2.exe disable 29174495 | Out-Null
-			Remove-Item mach2.exe -Force; Remove-Item msdia140.dll -Force
-			Write-Host "Turned off Microsoft 365 suggestion banner in Settings."
-		}
-		else {
-			Write-Host "Could not connect to the internet. Microsoft 365 suggestion banner could not be hidden."
-		}
+		./mach2.exe disable 29174495 | Out-Null
+		Remove-Item mach2.exe -Force; Remove-Item msdia140.dll -Force
+		Write-Host "Turned off Microsoft 365 suggestion banner in Settings."
 	}
 	else {
 		# Do nothing.
@@ -519,6 +541,7 @@ Function DisableM365OnValueBanner {
 
 # Revert Microsoft 365 banner in Settings app header to the default configuration (Windows 11 only as of now).
 Function RevertM365OnValueBanner {
+$ProgressPreference = 'SilentlyContinue'
 	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 	$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
 	if ($ProductName -match "Windows 11") {
@@ -527,14 +550,9 @@ Function RevertM365OnValueBanner {
 		Import-Module BitsTransfer
 		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/mach2.exe
 		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/msdia140.dll
-		if (Test-Path mach2.exe) {
-			./mach2.exe revert 29174495 | Out-Null
-			Remove-Item mach2.exe -Force; Remove-Item msdia140.dll -Force
-			Write-Host "Restored Microsoft 365 suggestion banner in Settings."
-		}
-		else {
-			Write-Host "Could not connect to the internet. Microsoft 365 suggestion banner could not be restored."
-		}
+		./mach2.exe revert 29174495 | Out-Null
+		Remove-Item mach2.exe -Force; Remove-Item msdia140.dll -Force
+		Write-Host "Restored Microsoft 365 suggestion banner in Settings."
 	}
 	else {
 		# Do nothing.
@@ -543,6 +561,7 @@ Function RevertM365OnValueBanner {
 
 # Uninstall Windows Optional Features and Windows Capabilities.
 Function UninstallFeatures {
+$ProgressPreference = 'SilentlyContinue'
     Write-Host " "
     Write-Host "Disabling and uninstalling unnecessary features..."
 	# Uninstall capabilities.
@@ -596,24 +615,20 @@ Function UninstallFeatures {
 
 # Enable Windows Subsystem for Linux
 Function EnableWSL {
+$ProgressPreference = 'SilentlyContinue'
     Write-Host " "
     # Import BitsTransfer module, ping GitHub - if success, enable WSL, else print no connection message.
     Import-Module BitsTransfer 
-	$result = Test-NetConnection github.com
-	if( $result.PingSucceeded ) {
-        Write-Host "Enabling Windows Subsystem for Linux..."
-        Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-        Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-        Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-        Write-Host "Enabled Windows Subsystem for Linux."
-    } 
-    else {
-        Write-Host "Could not connect to the internet. Windows Subsystem for Linux won't be enabled."
-    }
+    Write-Host "Enabling Windows Subsystem for Linux..."
+    Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+    Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+    Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+    Write-Host "Enabled Windows Subsystem for Linux."
 }
 
 # Enable Sandbox.
 Function EnableSandbox {
+$ProgressPreference = 'SilentlyContinue'
 	Write-Host " "
 	Write-Host "Enabling Windows Sandbox..."
 	Enable-WindowsOptionalFeature -FeatureName "Containers-DisposableClientVM" -All -Online -NoRestart -WarningAction Ignore | Out-Null
@@ -622,17 +637,11 @@ Function EnableSandbox {
 
 # Enable dotNET 3.5.
 Function EnabledotNET3.5 {
+$ProgressPreference = 'SilentlyContinue'
 	Write-Host " "
-	# Ping github - if success, enable dotNET 3.5, else print no connection message.
-	$result = Test-NetConnection github.com
-	if( $result.PingSucceeded ) {
-		Write-Host "Enabling dotNET 3.5..."
-		Dism /online /Enable-Feature /FeatureName:NetFx3 /NoRestart /Quiet
-		Write-Host "Enabled dotNET 3.5."
-	}
-	Else {
-		Write-Host "Could not connect to the internet. dotNET 3.5 won't be enabled."
-	}
+	Write-Host "Enabling dotNET 3.5..."
+	Dism /online /Enable-Feature /FeatureName:NetFx3 /NoRestart /Quiet
+	Write-Host "Enabled dotNET 3.5."
 }
 
 # Install 7zip.
@@ -650,47 +659,55 @@ Function Install7zip {
 
 # Install apps from Winstall file (the Winstall.txt file must be on the same directory as CleanWin).
 Function Winstall {
-    $ErrorActionPreference = "Stop"
+$ErrorActionPreference = 'Stop'
     Write-Host " "
 	# Check if WinGet is installed, then proceed.
-    try {if(Get-Command winget) {
+    if (Get-Command winget) {
+		# Try Winstall.txt
 		if (Test-Path Winstall.txt) {
 			Write-Host "Starting Winstall..."
+			# Get each line from the text file and use winget install command on it.
 			Get-Content 'Winstall.txt' | ForEach-Object {
 				$App = $_.Split('=')
 				Write-Host "    Installing $App..."
 				winget install "$App"
 			}
-			Write-Host "Winstall has successfully installed the package(s)."
+			Write-Host "Winstall has successfully installed the app(s)."
+		}
+		# Try winstall.txt
+		elseif (Test-Path winstall.txt) {
+            Write-Host "Starting Winstall..."
+			# Get each line from the text file and use winget install command on it.
+			Get-Content 'winstall.txt' | ForEach-Object {
+				$App = $_.Split('=')
+				Write-Host "    Installing $App..."
+				winget install "$App"
+			}
+			Write-Host "Winstall has successfully installed the app(s)."
 		}
 		else {
-			Write-Host "Winstall.txt was not found. Learn more at bit.ly/Winstall."
+			# Do nothing.
 		}
-        }}
+	}
 	# Inform user if WinGet is not installed.
-    catch {
+    else {
 		Write-Host "WinGet is not installed. Please install WinGet first before using Winstall."
+		start "https://bit.ly/Winstall" 
 	}
 }
 
 # Install HEVC.
 Function InstallHEVC {
+$ProgressPreference = 'SilentlyContinue'
 	Write-Host " "
-	# Import BitsTransfer module, ping GitHub - if success, install HEVC Video Extensions, else print no connection message.
-	$result = Test-NetConnection github.com
-	if (-not (Get-AppxPackage -Name Microsoft.HEVCVideoExtension)) {
-		if( $result.PingSucceeded ) {
-			Import-Module BitsTransfer
-			Write-Host "Downloading HEVC Video Extensions..."
-			Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.41023.0_x64__8wekyb3d8bbwe.Appx
-			Write-Host "Installing HEVC Video Extensions..."
-			Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.41023.0_x64__8wekyb3d8bbwe.Appx
-			Remove-Item Microsoft.HEVCVideoExtension_1.0.41023.0_x64__8wekyb3d8bbwe.Appx
-			Write-Host "Installed HEVC Video Extensions."
-		}
-		else {
-			Write-Host "Could not connect to the internet. HEVC Video Extensions won't be installed."
-		}
+	if (!(Get-AppxPackage -Name Microsoft.HEVCVideoExtension)) {
+	Import-Module BitsTransfer
+	Write-Host "Downloading HEVC Video Extensions..."
+	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.41023.0_x64__8wekyb3d8bbwe.Appx
+	Write-Host "Installing HEVC Video Extensions..."
+	Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.41023.0_x64__8wekyb3d8bbwe.Appx
+	Remove-Item Microsoft.HEVCVideoExtension_1.0.41023.0_x64__8wekyb3d8bbwe.Appx
+	Write-Host "Installed HEVC Video Extensions."
 	}
 	else {
 		Write-Host "HEVC Video Extensions are already installed on this device."
@@ -699,6 +716,7 @@ Function InstallHEVC {
 
 # Install fonts (part of code here was picked from https://github.com/code-rgb/CleanWin).
 Function InstallFonts {
+$ProgressPreference = 'SilentlyContinue'
 	Write-Host " "
 	# Check if Cascadia Code is installed and inform user.
 	$installed = "C:\Windows\Fonts\CascadiaCodePL.ttf"
@@ -1688,7 +1706,7 @@ Function EnableTaskbarFeed {
 ######### Tasks after successful run #########
 
 # Update status: CleanWin execution successful.
-Function RestartPC {
+Function End {
 	Stop-Process -Name explorer -Force
 	Start-Sleep 3
 	Write-Host "CleanWin has finished working."
