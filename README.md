@@ -51,11 +51,10 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
   <summary>Apps</summary>
 
   - Apps installed:
-  
+    - [7-zip](https://www.7-zip.org/)
     - HEVC Video Extensions
     - Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/))
-    - [7-zip](https://www.7-zip.org/)
-    - Install your desired apps using [Winstall](https://github.com/pratyakshm/CleanWin/wiki/Winstall:-Installing-your-own-set-of-apps-using-a-simple-list).
+    - Use [Winstall](https://github.com/pratyakshm/CleanWin/wiki/Winstall:-Installing-your-own-set-of-apps-using-a-simple-list) to install your own apps
 
   - Apps uninstalled:
     - 3D Viewer   
@@ -86,7 +85,6 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
     - Print 3D
     - People  
     - Sway
-    - Snip & Sketch
     - Sticky Notes  
     - Skype
     - Voice Recorder
@@ -149,12 +147,13 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
   - Tailored Experiences
   - Telemetry
   - Websites' access to language list to provide loaclly relevant content
+   
+ #### Turn on the following:
+  - Clipboard history 
   </details>
 
 <details><summary>Security</summary>
-
   - Turn on auto login post restart after Windows is updated.
-  - Turn off Meltdown compatibility.
 </details>
 
 
@@ -237,8 +236,8 @@ This section contains the list of tasks that CleanWin performs. They're grouped 
 ***
 
 ## OS Builds supported
-CleanWin is tested and supported on Windows 10 21H1, and Windows 10 20H2.  
-CleanWin has experimental support for Windows 11.
+CleanWin supports the two latest Windows 10 feature updates (20H2 and 21H1), and Windows 11 (experimental).  
+Its tested on the latest Windows 10 feature update (Windows 10 21H1 at the time of writing this) and the latest Windows 11 build in Dev channel.
 
 ## Known issues
 I'm tracking currently known issues [here](https://github.com/pratyakshm/CleanWin/issues/16).
