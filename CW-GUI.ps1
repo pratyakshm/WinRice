@@ -52,7 +52,6 @@ $Form.ClientSize = '610,355'
 $Form.Text = "pratyakshm's CleanWin"
 $Form.TopMost = $false;
 $Form.MaximizeBox = $false
-$Form.BackColor = [System.Drawing.ColorTranslator]::FromHtml("#252525")
 
 
 ############### APPS AND FEATURES ############################
@@ -64,61 +63,48 @@ $Label2.Width = 25
 $Label2.Height = 15
 $Label2.Location = New-Object System.Drawing.Point(10, 10)
 $Label2.Font = 'Segoe UI,12,style=Bold'
-$Label2.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $UninstallApps = New-Object System.Windows.Forms.Button
 $UninstallApps.Text = "Uninstall all apps"
 $UninstallApps.Width = 140
 $UninstallApps.Height = 45
-$UninstallApps.FlatStyle = 'Flat'
 $UninstallApps.Location = New-Object System.Drawing.Point(10, 38)
 $UninstallApps.Font = 'Segoe UI,10'
-$UninstallApps.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $UninstallSelectively = New-Object System.Windows.Forms.Button
 $UninstallSelectively.Text = "Uninstall apps selectively"
 $UninstallSelectively.Width = 140
 $UninstallSelectively.Height = 45
-$UninstallSelectively.FlatStyle = 'Flat'
 $UninstallSelectively.Location = New-Object System.Drawing.Point(150, 38)
 $UninstallSelectively.Font = 'Segoe UI,10'
-$UninstallSelectively.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $InstallWinGet = New-Object System.Windows.Forms.Button
 $InstallWinGet.Text = "Install WinGet"
 $InstallWinGet.Width = 140
 $InstallWinGet.Height = 45
-$InstallWinGet.FlatStyle = 'Flat'
 $InstallWinGet.Location = New-Object System.Drawing.Point(10,83)
 $InstallWinGet.Font = 'Segoe UI,10'
-$InstallWinGet.ForeColor    = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $Winstall = New-Object System.Windows.Forms.Button
 $Winstall.Text = "Winstall"
 $Winstall.Width = 140
 $Winstall.Height = 45
-$Winstall.FlatStyle = 'Flat'
 $Winstall.Location = New-Object System.Drawing.Point(150, 83)
 $Winstall.Font = 'Segoe UI,10'
-$Winstall.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $EnableWSL = New-Object System.Windows.Forms.Button
 $EnableWSL.Text = "Enable WSL"
 $EnableWSL.Width = 140
 $EnableWSL.Height = 45
-$EnableWSL.FlatStyle = 'Flat'
 $EnableWSL.Location = New-Object System.Drawing.Point(150,128)
 $EnableWSL.Font = 'Segoe UI,10'
-$EnableWSL.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $UninstallFeatures = New-Object System.Windows.Forms.Button
 $UninstallFeatures.Text = "Uninstall features"
 $UninstallFeatures.Width = 140
 $UninstallFeatures.Height = 45
-$UninstallFeatures.FlatStyle = 'Flat'
 $UninstallFeatures.Location = New-Object System.Drawing.Point(10,128)
 $UninstallFeatures.Font = 'Segoe UI,10'
-$UninstallFeatures.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 ####################### PRIVACY & SECURITY ##########################
 
@@ -129,61 +115,48 @@ $Label3.Width = 25
 $Label3.Height = 10
 $Label3.Location = New-Object System.Drawing.Point(10,190)
 $Label3.Font = 'Segoe UI,12,style=Bold'
-$Label3.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $DisableDataCollection = New-Object System.Windows.Forms.Button
 $DisableDataCollection.Text = "Disable Data collection"
 $DisableDataCollection.Width = 140
 $DisableDataCollection.Height = 40
-$DisableDataCollection.FlatStyle = 'Flat'
 $DisableDataCollection.Location = New-Object System.Drawing.Point(10,220)
 $DisableDataCollection.Font = 'Segoe UI,10'
-$DisableDataCollection.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $EnableDataCollection = New-Object System.Windows.Forms.Button
 $EnableDataCollection.Text = "Enable Data collection"
 $EnableDataCollection.Width = 140
 $EnableDataCollection.Height = 40
-$EnableDataCollection.FlatStyle = 'Flat'
 $EnableDataCollection.Location = New-Object System.Drawing.Point(150,220)
 $EnableDataCollection.Font = 'Segoe UI,10'
-$EnableDataCollection.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $DisableTelemetry = New-Object System.Windows.Forms.Button 
 $DisableTelemetry.Text = "Disable Telemetry"
 $DisableTelemetry.Width = 140
 $DisableTelemetry.Height = 40
-$DisableTelemetry.FlatStyle = 'Flat'
 $DisableTelemetry.Location = New-Object System.Drawing.Point(10, 260)
 $DisableTelemetry.Font = 'Segoe UI,10'
-$DisableTelemetry.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $EnableTelemetry = New-Object System.Windows.Forms.Button 
 $EnableTelemetry.Text = "Enable Telemetry"
 $EnableTelemetry.Width = 140
 $EnableTelemetry.Height = 40
-$EnableTelemetry.FlatStyle = 'Flat'
 $EnableTelemetry.Location = New-Object System.Drawing.Point(150, 260)
 $EnableTelemetry.Font = 'Segoe UI,10'
-$EnableTelemetry.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $FullBandwidth = New-Object System.Windows.Forms.Button 
 $FullBandwidth.Text = "Release Bandwidth"
 $FullBandwidth.Width = 140
 $FullBandwidth.Height = 40
-$FullBandwidth.FlatStyle = 'Flat'
 $FullBandwidth.Location = New-Object System.Drawing.Point(10, 300)
 $FullBandwidth.Font = 'Segoe UI,10'
-$FullBandwidth.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $ReserveBandwidth = New-Object System.Windows.Forms.Button 
 $ReserveBandwidth.Text = "Reserve Bandwidth"
 $ReserveBandwidth.Width = 140
 $ReserveBandwidth.Height = 40
-$ReserveBandwidth.FlatStyle = 'Flat'
 $ReserveBandwidth.Location = New-Object System.Drawing.Point(150, 300)
 $ReserveBandwidth.Font = 'Segoe UI,10'
-$ReserveBandwidth.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 
 
@@ -196,61 +169,48 @@ $Label4.Width = 25
 $Label4.Height = 10
 $Label4.Location = New-Object System.Drawing.Point(320,10)
 $Label4.Font = 'Segoe UI,12,style=Bold' 
-$Label4.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $CleanExplorer = New-Object System.Windows.Forms.Button
 $CleanExplorer.Text = "Clean Windows Explorer"
 $CleanExplorer.Width = 140
 $CleanExplorer.Height = 45
-$CleanExplorer.FlatStyle = 'Flat'
 $CleanExplorer.Location = New-Object System.Drawing.Point(320,38)
 $CleanExplorer.Font = 'Segoe UI,10'
-$CleanExplorer.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $RevertExplorer = New-Object System.Windows.Forms.Button
 $RevertExplorer.Text = "Revert Windows Explorer changes"
 $RevertExplorer.Width = 140
 $RevertExplorer.Height = 45
-$RevertExplorer.FlatStyle = 'Flat'
 $RevertExplorer.Location = New-Object System.Drawing.Point(460,38)
 $RevertExplorer.Font = 'Segoe UI,10'
-$RevertExplorer.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $ShowSeconds = New-Object System.Windows.Forms.Button
 $ShowSeconds.Text = "Show seconds in taskbar"
 $ShowSeconds.Width = 140
 $ShowSeconds.Height = 45
-$ShowSeconds.FlatStyle = 'Flat'
 $ShowSeconds.Location = New-Object System.Drawing.Point(320,83)
 $ShowSeconds.Font = 'Segoe UI,10'
-$ShowSeconds.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $UnpinStartTiles = New-Object System.Windows.Forms.Button
 $UnpinStartTiles.Text = "Unpin apps in Start menu"
 $UnpinStartTiles.Width = 140
 $UnpinStartTiles.Height = 45
-$UnpinStartTiles.FlatStyle = 'Flat'
 $UnpinStartTiles.Location = New-Object System.Drawing.Point(460,83)
 $UnpinStartTiles.Font = 'Segoe UI,10'
-$UnpinStartTiles.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $UnpinTaskbarApps = New-Object System.Windows.Forms.Button
 $UnpinTaskbarApps.Text = "Unpin apps from taskbar"
 $UnpinTaskbarApps.Width = 140
 $UnpinTaskbarApps.Height = 45
-$UnpinTaskbarApps.FlatStyle = 'Flat'
 $UnpinTaskbarApps.Location = New-Object System.Drawing.Point(320,128)
 $UnpinTaskbarApps.Font = 'Segoe UI,10'
-$UnpinTaskbarApps.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $NewsAndInterests = New-Object System.Windows.Forms.Button
 $NewsAndInterests.Text = "Turn off News and Interests"
 $NewsAndInterests.Width = 140
 $NewsAndInterests.Height = 45
-$NewsAndInterests.FlatStyle = 'Flat'
 $NewsAndInterests.Location = New-Object System.Drawing.Point(460,128)
 $NewsAndInterests.Font = 'Segoe UI,10'
-$NewsAndInterests.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 
 ############# TASKS & SERVICES ###################
@@ -262,43 +222,34 @@ $Label5.Width = 25
 $Label5.Height = 10
 $Label5.Location = New-Object System.Drawing.Point(320,190)
 $Label5.Font = 'Segoe UI,12,style=Bold' 
-$Label5.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $SetupWindowsUpdate = New-Object System.Windows.Forms.Button
 $SetupWindowsUpdate.Text = "Setup Windows Update"
 $SetupWindowsUpdate.Width = 140
 $SetupWindowsUpdate.Height = 40
-$SetupWindowsUpdate.FlatStyle = 'Flat'
 $SetupWindowsUpdate.Location = New-Object System.Drawing.Point(320,220)
 $SetupWindowsUpdate.Font = 'Segoe UI,10'
-$SetupWindowsUpdate.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $ResetWindowsUpdate = New-Object System.Windows.Forms.Button
 $ResetWindowsUpdate.Text = "Reset Windows Update"
 $ResetWindowsUpdate.Width = 140
 $ResetWindowsUpdate.Height = 40
-$ResetWindowsUpdate.FlatStyle = 'Flat'
 $ResetWindowsUpdate.Location = New-Object System.Drawing.Point(460,220)
 $ResetWindowsUpdate.Font = 'Segoe UI,10'
-$ResetWindowsUpdate.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $DisableTasksServices = New-Object System.Windows.Forms.Button
 $DisableTasksServices.Text = "Optimize Tasks and Services"
 $DisableTasksServices.Width = 140
 $DisableTasksServices.Height = 40
-$DisableTasksServices.FlatStyle = 'Flat'
 $DisableTasksServices.Location = New-Object System.Drawing.Point(320,260)
 $DisableTasksServices.Font = 'Segoe UI,10'
-$DisableTasksServices.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $EnableTasksServices = New-Object System.Windows.Forms.Button
 $EnableTasksServices.Text = "Revert Tasks and Services changes"
 $EnableTasksServices.Width = 140
 $EnableTasksServices.Height = 40
-$EnableTasksServices.FlatStyle = 'Flat'
 $EnableTasksServices.Location = New-Object System.Drawing.Point(460,260)
 $EnableTasksServices.Font = 'Segoe UI,10'
-$EnableTasksServices.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $Label7 = New-Object System.Windows.Forms.Label
 $Label7.Text = "https://github.com/pratyakshm/CleanWin"
@@ -307,7 +258,6 @@ $Label7.Width = 25
 $Label7.Height = 10
 $Label7.Location = New-Object System.Drawing.Point(340,315)
 $Label7.Font = 'Segoe UI,9' 
-$Label7.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#eeeeee")
 
 $Form.controls.AddRange(@( $Label2, $Label3, $Label3, $Label4, $Label5, $Label7, $UninstallApps, 
 $UninstallSelectively, $InstallWinGet ,$Winstall, $EnableWSL, $UninstallFeatures, $DisableDataCollection, $DisableTelemetry,
