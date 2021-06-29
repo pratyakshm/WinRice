@@ -45,6 +45,11 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 screen
 
+# Store CurrentBuild value for universal usage.
+$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+
+
 ### BEGIN GUI ###
 
 $Form = New-Object System.Windows.Forms.Form
@@ -926,8 +931,6 @@ $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -Type DWord -Value 1
 
     # Hide 3D objects in File Explorer.
-	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	if ($CurrentBuild -lt 22000) {
 		Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Recurse -ErrorAction SilentlyContinue
         $Hide3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
@@ -1029,8 +1032,6 @@ $RevertExplorer.Add_Click( {
     Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo"
 
     # Restore 3D objects in File Explorer.
-	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	if ($CurrentBuild -lt 22000) {
 		Write-Host " "
 		$Restore3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
@@ -1100,8 +1101,6 @@ $RevertExplorer.Add_Click( {
     else {
         # Do nothing.
     }
-	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	if ($CurrentBuild -lt 22000) {
         Write-Host "     - Restored 3D Objects to File Explorer"
         Write-Host "    - Restored Search bar to taskbar"
@@ -1130,8 +1129,6 @@ $ShowSeconds.Add_Click( {
 
 $UnpinStartTiles.Add_Click( {
 	Write-Host " "
-	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	if ($CurrentBuild -lt 22000) {
 		Write-Host "Unpinning all tiles from Start Menu..."
 		Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
@@ -1223,8 +1220,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 })
 
 $NewsAndInterests.Add_Click( {
-	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	if ($CurrentBuild -lt 22000) {
 		Write-Host " "
 		Write-Host "Turning off News and interests..."
