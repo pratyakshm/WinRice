@@ -796,7 +796,7 @@ $ErrorActionPreference = 'Stop'
 			Write-Host "Winstall has successfully installed the app(s)."
 		}
 		else {
-			# Do nothing.
+			Write-Host "Winstall text file was not found."
 		}
 	}
 	# Inform user if WinGet is not installed.
