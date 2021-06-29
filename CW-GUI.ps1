@@ -323,6 +323,34 @@ Else {
 
 Start-Transcript -OutputDirectory "${CWFolder}" | Out-Null 
 
+Add-Type -AssemblyName System.Windows.Forms
+
+$SetForegroundWindow = @{
+    Namespace = "WinAPI"
+    Name = "ForegroundWindow"
+    Language = "CSharp"
+    MemberDefinition = @"
+[DllImport("user32.dll")]
+public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
+[DllImport("user32.dll")]
+[return: MarshalAs(UnmanagedType.Bool)]
+public static extern bool SetForegroundWindow(IntPtr hWnd);
+"@
+}
+
+if (-not ("WinAPI.ForegroundWindow" -as [type]))
+{
+    Add-Type @SetForegroundWindow
+}
+
+Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "pratyakshm's CleanWin"} | ForEach-Object -Process {
+    # Show window if minimized.
+    [WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10) | Out-Null
+
+    # Move the console window to the foreground.
+    [WinAPI.ForegroundWindow]::SetForegroundWindow($_.MainWindowHandle) | Out-Null
+}
+
 #### BUTTONS CODE ###
 
 #### APPS ####
@@ -382,6 +410,9 @@ $UninstallSelectively.Add_Click( {
 
         # Windows Terminal.
         "Microsoft.WindowsTerminal"
+
+        # Web Experience (used for Widgets).
+        "MicrosoftWindows.Client.WebExperience"
     )
     #endregion Variables.
 
@@ -574,7 +605,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		Add-Type @SetForegroundWindow
 	}
 
-	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "pratyakshm's CleanWin*"} | ForEach-Object -Process {
+	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "Uninstall apps selectively"} | ForEach-Object -Process {
 		# Show window if minimized.
 		[WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10) | Out-Null
 
