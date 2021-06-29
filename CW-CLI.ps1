@@ -6,27 +6,39 @@
 $tasks = @(
 
 ### Maintenance Tasks ###
-	"InternetStatus",
- 	"Setup",
-	"CleanWin",
-	"OSBuildInfo",
-	"CreateSystemRestore",
-	"Activity",
+"InternetStatus",
+"Setup",
+"CleanWin",
+"OSBuildInfo",
+"CreateSystemRestore",
+"Activity",
 
 ### Apps & Features ###
 	"AppsFeatures",
-	"DebloatApps", "Activity", "UnpinStartTiles", "Activity", "UnpinAppsFromTaskbar", "Activity", "InstallWinGet", "UninstallOneDrive", "Activity",
-	# "DisableBrowserRestoreAd",      # "EnableBrowserRestoreAd",
+	"DebloatApps", "Activity", 
+	"UnpinStartTiles", "Activity", 
+	"UnpinAppsFromTaskbar", "Activity", 
+	"InstallWinGet", 
+	"UninstallOneDrive", 
+	"Activity",
+	# "DisableBrowserRestoreAd",	# "EnableBrowserRestoreAd",
 	"DisableM365OnValueBanner", "RevertM365OnValueBanner",
-	"UninstallFeatures", "Activity", "EnableWSL", "Activity", "EnabledotNET3.5", "Activity", # "EnableSandbox",
-	"Install7zip", "Winstall", "InstallHEVC", "InstallFonts", "SetPhotoViewerAssociation", # "SetPhotoViewerAssociation",
+	"UninstallFeatures", "Activity", 
+	"EnableWSL", "Activity", 
+	"EnabledotNET3.5", "Activity", 
+	# "EnableSandbox",
+	"Install7zip", 
+	"Winstall", 
+	"InstallHEVC", 
+	"InstallFonts", 
+	"SetPhotoViewerAssociation",	# "SetPhotoViewerAssociation",
 	"ChangesDone",
 
 ### Privacy & Security ###
 	"PrivacySecurity",
 	"DisableActivityHistory",		# "EnableActivityHistory",
 	"DisableAdvertisingID",			# "EnableAdvertisingID",
-	"DisableBackgroundApps",      # "EnableBackgroundApps",
+	"DisableBackgroundApps",        # "EnableBackgroundApps",
 	"DisableFeedback",		        # "EnableFeedback",
 	"DisableInkHarvesting",			# "EnableInkHarvesting",
 	"DisableLangAccess",  		    # "EnableLangAccess",
@@ -51,7 +63,7 @@ $tasks = @(
 	"DisableServices",			   # "EnableServices",
 	"DisableTasks",				   # "EnableTasks",
 	"SetupWindowsUpdate",		   # "ResetWindowsUpdate",
-	"EnablePowerdownAfterShutdown", # "DisablePowerdownAfterShutdown",
+	"EnablePowerdownAfterShutdown",# "DisablePowerdownAfterShutdown",
 	"ChangesDone",
 
 ### Windows Explorer ###
@@ -59,8 +71,7 @@ $tasks = @(
 	"EnablePrtScrToSnip",		   # "DisablePrtScrSnip",
 	"DisableStickyKeys",           # "EnableStickyKeys",
 	"SetExplorerThisPC",           # "SetExplorerQuickAccess",
-    "Hide3DObjectsInThisPC",       # "Restore3DObjectsInThisPC",
-	"Hide3DObjectsInExplorer",     # "Restore3DObjectsInExplorer",
+    "Hide3DObjects",      		   # "Restore3DObjects",
 	"HideSearchBar",			   # "RestoreSearchBar"
 	"HideTaskView",                # "RestoreTaskView",
 	"HideCortana",			       # "RestoreCortana",
@@ -70,7 +81,7 @@ $tasks = @(
 
 ###  Tasks after successful run ###
 	"Activity",
-	"End"
+	"Success"
 )
 
 
@@ -85,11 +96,12 @@ Function CleanWin {
 	Start-Sleep 1
 }
 
-# Set ExecutionPolicy to Unrestricted for session
+# Set ExecutionPolicy to Unrestricted for session.
 Function Setup {
 	Set-ExecutionPolicy Unrestricted -Scope Process
 }
 
+# Exit CleanWin if PC is not connected.
 Function InternetStatus {
 $ProgressPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
@@ -104,7 +116,11 @@ $ErrorActionPreference = 'SilentlyContinue'
 	}
 }
 
-# OS Build
+# Store CurrentBuild value for universal usage.
+$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+
+# OS Build.
 Function OSBuildInfo {
 	Write-Host " "
 	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
@@ -128,7 +144,7 @@ Function OSBuildInfo {
 	Write-Host " "
 }
 
-# Changes performed
+# Changes performed.
 Function ChangesDone {
 	Write-Host " "
 	Write-Host "---------------------------"
@@ -138,14 +154,15 @@ Function ChangesDone {
 	Start-Sleep 1
 }
 
-# Create a system restore point with type MODIFY_SETTINGS
+# Create a system restore point with type MODIFY_SETTINGS.
 Function CreateSystemRestore {
+$ProgressPreference = 'SilentlyContinue'
 	Write-Host " "
 	Write-Host "Creating a system restore point with type MODIFY_SETTINGS..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name SystemRestorePointCreationFrequency -Type DWord -Value 0 -Force
 	Enable-ComputerRestore -Drive $env:SystemDrive
 	Checkpoint-Computer -Description "CleanWin" -RestorePointType "MODIFY_SETTINGS" -WarningAction SilentlyContinue
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name SystemRestorePointCreationFrequency -PropertyType DWord -Value 1440 -Force
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name SystemRestorePointCreationFrequency -Type DWord -Value 1440 -Force
 	Disable-ComputerRestore -Drive $env:SystemDrive
 	Write-Host "Created system restore point."
 }
@@ -309,8 +326,6 @@ $ProgressPreference = 'SilentlyContinue'
 # Unpin all start menu tiles.
 Function UnpinStartTiles {
 	Write-Host " "
-	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	if ($CurrentBuild -lt 22000) {
 		Write-Host "Unpinning all tiles from Start Menu..."
 		Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
@@ -496,13 +511,13 @@ Function DisableBrowserRestoreAd {
 $ProgressPreference = 'SilentlyContinue'
 	Write-Host " "
     Import-Module BitsTransfer 
-	Write-Host "Turning off 'Web browsing: Restore recommended' suggestion from Settings..."
+	Write-Host "Turning off 'Web browsing: Restore recommended' suggestion in Settings..."
     Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Albacore.ViVe.dll
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/ViVeTool.exe
 	./ViVeTool.exe delconfig 23531064 1 | Out-Null
 	Remove-Item ViVeTool.exe
 	Remove-Item Albacore.ViVe.dll
-    Write-Host "Turned off 'Web browsing: Restore recommended' suggestion from Settings."
+    Write-Host "Turned off 'Web browsing: Restore recommended' suggestion in Settings."
 }
 
 # Enable "Web Browsing - Restore recommended promo in Settings".
@@ -510,20 +525,18 @@ Function EnableBrowserRestoreAd {
 $ProgressPreference = 'SilentlyContinue'
 	Write-Host " "
     Import-Module BitsTransfer 
-	Write-Host "Turning on 'Web browsing: Restore recommended' suggestion from Settings..."
+	Write-Host "Turning on 'Web browsing: Restore recommended' suggestion in Settings..."
     Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Albacore.ViVe.dll
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/ViVeTool.exe
 	./ViVeTool.exe addconfig 23531064 0 | Out-Null
 	Remove-Item ViVeTool.exe
 	Remove-Item Albacore.ViVe.dll
-    Write-Host "Turned on 'Web browsing: Restore recommended' suggestion from Settings."
+    Write-Host "Turned on 'Web browsing: Restore recommended' suggestion in Settings."
 }
 
 # Disable the Microsoft 365 banner in Settings app header (Windows 11 only as of now).
 Function DisableM365OnValueBanner {
 $ProgressPreference = 'SilentlyContinue'
-	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	if ($CurrentBuild -ge 22000) {
 		Write-Host " "
 		Write-Host "Turning off Microsoft 365 suggestion banner in Settings..."
@@ -542,17 +555,15 @@ $ProgressPreference = 'SilentlyContinue'
 # Revert Microsoft 365 banner in Settings app header to the default configuration (Windows 11 only as of now).
 Function RevertM365OnValueBanner {
 $ProgressPreference = 'SilentlyContinue'
-	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	if ($CurrentBuild -ge 22000) {
 		Write-Host " "
-		Write-Host "Restoring Microsoft 365 suggestion banner in Settings..."
+		Write-Host "Turning on Microsoft 365 suggestion banner in Settings..."
 		Import-Module BitsTransfer
 		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/mach2.exe
 		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/msdia140.dll
 		./mach2.exe revert 29174495 | Out-Null
 		Remove-Item mach2.exe -Force; Remove-Item msdia140.dll -Force
-		Write-Host "Restored Microsoft 365 suggestion banner in Settings."
+		Write-Host "Turned on Microsoft 365 suggestion banner in Settings."
 	}
 	else {
 		# Do nothing.
@@ -790,7 +801,6 @@ Function PrivacySecurity {
 }
 
 
-
 # Disable Activity History.
 Function DisableActivityHistory {
 	Write-Host " "
@@ -869,7 +879,7 @@ Function EnableBackgroundApps {
 
 # Disable Feedback.
 Function DisableFeedback {
-$ErrorActionPreference = "SilentlyContinue"
+$ErrorActionPreference = 'SilentlyContinue'
 	Write-Host " "
 	Write-Host "Turning off Feedback notifications..."
 	$Feedback1 = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
@@ -1384,7 +1394,6 @@ Function SetupWindowsUpdate {
         Write-Host " "
 		# Get OS flighting channel (Dev/RTM) and OS version (10/11).
         $channel = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name DisplayVersion
-        $winver = Get-ItemPropertyValue  'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name CurrentBuild
 		# If Dev channel, print Dev channel policies message.
         if ($channel -match "Dev") {
             Write-Host "Device registered in Windows Insider Program Dev channel, setting up Windows Update policies accordingly..."
@@ -1407,7 +1416,7 @@ Function SetupWindowsUpdate {
 		# Declare registry keys locations.
         $Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
         $Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
-            If (!(Test-Path $Update1)) {
+            if (!(Test-Path $Update1)) {
             New-Item -Path $Update1 | Out-Null
             New-Item -Path $Update2 | Out-Null
             }
@@ -1419,7 +1428,7 @@ Function SetupWindowsUpdate {
 		# Check if device is registered in Dev channel.
         if ($channel -match "Dev") {
 			# If device is on Windows 11, do not delay flights.
-            if ($winver -ge 22000) {
+            if ($CurrentBuild -ge 22000) {
                 # Do nothing.
             }
 			# Else, delay flights by two days.
@@ -1508,7 +1517,7 @@ Function DisablePrtScrSnip {
 # Disable Sticky keys.
 Function DisableStickyKeys {
 	Write-Host " "
-	Write-Host "Turning off sticky keys..."
+	Write-Host "Turning off Sticky keys..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
 	Write-Host "Turned off Sticky keys."
 	Start-Sleep -Milliseconds 200
@@ -1517,9 +1526,9 @@ Function DisableStickyKeys {
 # Enable Sticky keys.
 Function EnableStickyKeys {
 	Write-Host " "
-	Write-Host "Turning on sticky keys..."
+	Write-Host "Turning on Sticky keys..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "510"
-	Write-Host "Turned on sticky keys."
+	Write-Host "Turned on Sticky keys."
 }
 
 # Change default File Explorer view to This PC.
@@ -1539,132 +1548,173 @@ Function SetExplorerQuickAccess {
 	Write-Host "Set default File Explorer view to Quick Access."
 }
 
-# Hide 3D Objects icon from This PC - The icon remains in personal folders and open/save dialogs.
-Function Hide3DObjectsInThisPC {
-	Write-Host " "
-	Write-Host "Hiding 3D Objects from This PC..."
-	Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Recurse -ErrorAction SilentlyContinue
-	Write-Host "Hid 3D Objects from This PC."
-}
-
-# Restore 3D Objects icon in This PC.
-Function Restore3DObjectsInThisPC {
-	Write-Host " "
-	Write-Host "Restoring 3D Objects to This PC..."
-	$Restore3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
-	If (!(Test-Path $Restore3DObjects1)) {
-		New-Item -Path $Restore3DObjects1 | Out-Null
+# Hide 3D Objects.
+Function Hide3DObjects {
+	if ($CurrentBuild -lt 22000) {
+		Write-Host " "
+		Write-Host "Turning off 3D Objects..."
+		Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Recurse -ErrorAction SilentlyContinue
+		$Hide3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+		$Hide3DObjects2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+		If (!(Test-Path $Hide3DObjects1)) {
+			New-Item -Path $Hide3DObjects1 -Force | Out-Null
+			}
+		Set-ItemProperty -Path $Hide3DObjects1 -Name "ThisPCPolicy" -Type String -Value "Hide"
+		If (!(Test-Path $Hide3DObjects2)) {
+			New-Item -Path $Hide3DObjects2 -Force | Out-Null
+			}
+		Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
+		Write-Host "Turned off 3D Objects."
+		Start-Sleep -Milliseconds 200
 	}
-	Write-Host "Restored 3D Objects to This PC."
+	else {
+		# Do nothing
+	}
 }
 
-# Hide 3D Objects icon from Explorer namespace - Also hides the icon from personal folders and open/save dialogs.
-Function Hide3DObjectsInExplorer {
-	Write-Host " "
-	Write-Host "Hiding 3D Objects from File Explorer.."
-	$Hide3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-	$Hide3DObjects2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-	If (!(Test-Path $Hide3DObjects1)) {
-		New-Item -Path $Hide3DObjects1 -Force | Out-Null
+# Restore 3D Objects.
+Function Restore3DObjects {
+	if ($CurrentBuild -lt 22000) {
+		Write-Host " "
+		Write-Host "Turning on 3D Objects..."
+		$Restore3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
+		$Restore3DObjects2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+		$Restore3DObjects3 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+		if (!(Test-Path $Restore3DObjects1)) {
+			New-Item -Path $Restore3DObjects1 | Out-Null
 		}
-	Set-ItemProperty -Path $Hide3DObjects1 -Name "ThisPCPolicy" -Type String -Value "Hide"
-	If (!(Test-Path $Hide3DObjects2)) {
-		New-Item -Path $Hide3DObjects2 -Force | Out-Null
-		}
-	Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
-	Write-Host "Hid 3D Objects from File Explorer."
-	Start-Sleep -Milliseconds 200
-}
-
-# Restore 3D Objects icon in Explorer namespace.
-Function Restore3DObjectsInExplorer {
-	Write-Host " "
-	Write-Host "Restoring 3D Objects icon to File Explorer..."
-	$Restore3DObjects2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-	$Restore3DObjects3 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-	Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
-	Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
-	Write-Host "Restored 3D Objects to File Explorer."
+		Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
+		Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
+		Write-Host "Turned on 3D Objects."
+	}
+	else {
+		# Do nothing
+	}
 }
 
 # Hide Search bar from taskbar.
 Function HideSearchBar {
-	Write-Host " "
-	Write-Host "Hiding Search bar from taskbar..."
-	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
-	Write-Host "Hid Search bar from taskbar."
-	Start-Sleep -Milliseconds 200
+	if ($CurrentBuild -lt 22000) {
+		Write-Host " "
+		Write-Host "Turning off Search bar..."
+		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
+		Write-Host "Turned off Search bar."
+		Start-Sleep -Milliseconds 200
+	}
+	elseif ($CurrentBuild -ge 22000) {
+		Write-Host " "
+		Write-Host "Turning off Search icon..."
+		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
+		Write-Host "Turned off Search icon."
+		Start-Sleep -Milliseconds 200
+	}
+	else {
+		# Do nothing.
+	}
 }
 
 # Restore Search bar to taskbar.
 Function RestoreSearchBar {
-	Write-Host " "
-	Write-Host "Restoring Search bar to taskbar..."
-	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
-	Write-Host "Restored Search bar to taskbar."
+	if ($CurrentBuild -lt 22000) {
+		Write-Host " "
+		Write-Host "Turning on Search bar..."
+		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
+		Write-Host "Turned on Search bar."
+		Start-Sleep -Milliseconds 200
+	}
+	elseif ($CurrentBuild -ge 22000) {
+		Write-Host " "
+		Write-Host "Turning off Search icon..."
+		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 1
+		Write-Host "Turned off Search icon."
+		Start-Sleep -Milliseconds 200
+	}
+	else {
+		# Do nothing.
+	}
 }
 
 # Hide Task View.
 Function HideTaskView {
 	Write-Host " "
-	Write-Host "Hiding Task View from taskbar..."
+	Write-Host "Turning off Task view icon..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
-	Write-Host "Hid Task View from taskbar."
+	Write-Host "Turned off Task view icon."
 	Start-Sleep -Milliseconds 200
 }
 
 # Restore Task View button.
 Function RestoreTaskView {
 	Write-Host " "
-	Write-Host "Restoring Task View button..."
+	Write-Host "Turning on Task view icon..."
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -ErrorAction SilentlyContinue
-	Write-Host "Restored Task View button."
+	Write-Host "Turned on Task view icon."
 }
 
 # Hide Cortana icon from taskbar.
 Function HideCortana {
-	Write-Host " "
-	Write-Host "Hiding Cortana from taskbar..."
-	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
-	Write-Host "Hid Cortana from taskbar."
-	Start-Sleep -Milliseconds 200
+	if ($CurrentBuild -lt 22000) {
+		Write-Host " "
+		Write-Host "Turning off Cortana icon..."
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
+		Write-Host "Turned off Cortana icon."
+		Start-Sleep -Milliseconds 200
+	}
+	else {
+		# Do nothing
+	}
 }
 
 # Restore Cortana button in taskbar.
 Function RestoreCortana {
-	Write-Host " "
-	Write-Host "Restoring Cortana to taskbar..."
-	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
-	Write-Host "Restored Cortana to taskbar."
+	if ($CurrentBuild -lt 22000) {
+		Write-Host " "
+		Write-Host "Turning on Cortana icon..."
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
+		Write-Host "Turned on Cortana icon."
+	}
+	else {
+		# Do nothing
+	}
+	Start-Sleep -Milliseconds 200
 }
 
 # Hide Meet Now icon from tray.
 Function HideMeetNow {
-	Write-Host " "
-	Write-Host "Hiding Meet Now from taskbar..."
-	$Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-	$Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1 -ErrorAction SilentlyContinue
-	Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
-	Write-Host "Hid Meet Now from taskbar."
-	Start-Sleep -Milliseconds 200
+	if ($CurrentBuild -lt 22000) {
+		Write-Host " "
+		Write-Host "Turning off Meet now..."
+        $Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+        $Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+        Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1
+        Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
+		Write-Host "Turned off Meet now."
+		Start-Sleep -Milliseconds 200
+	}
+	else {
+		# Do nothing
+	}
 }
 
 # Restore Meet Now icon on tray.
 Function RestoreMeetNow {
-	Write-Host " "
-	Write-Host "Restoring Meet Now to tray..."
-	$Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-	$Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 0
-	Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 0
-	Write-Host "Restored Meet Now to tray."
+	if ($CurrentBuild -lt 22000) {
+		Write-Host " "
+		Write-Host "Turning on Meet now..."
+        $Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+        $Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+        Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 0
+        Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
+		Write-Host "Turned on Meet now."
+	}
+	else {
+		# Do nothing
+	}
+	Start-Sleep -Milliseconds 200
 }
 
 # Turn off News and interests feed.
 Function DisableTaskbarFeed {
-	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	if ($CurrentBuild -lt 22000) {
 		Write-Host " "
 		Write-Host "Turning off News and interests..."
@@ -1683,8 +1733,6 @@ Function DisableTaskbarFeed {
 
 # Turn on News and interests feed.
 Function EnableTaskbarFeed {
-	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	if ($CurrentBuild -lt 22000) {
 		Write-Host " "
 		Write-Host "Turning on News and interests..."
@@ -1706,7 +1754,7 @@ Function EnableTaskbarFeed {
 ######### Tasks after successful run #########
 
 # Update status: CleanWin execution successful.
-Function End {
+Function Success {
 	Stop-Process -Name explorer -Force
 	Start-Sleep 3
 	Write-Host "CleanWin has finished working."

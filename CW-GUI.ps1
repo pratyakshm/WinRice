@@ -976,36 +976,51 @@ $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -Type DWord -Value 1
 
     # Hide 3D objects in File Explorer.
-    Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Recurse -ErrorAction SilentlyContinue
-    $Hide3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-    $Hide3DObjects2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-    If (!(Test-Path $Hide3DObjects1)) {
-        New-Item -Path $Hide3DObjects1 -Force | Out-Null
-        }
-    Set-ItemProperty -Path $Hide3DObjects1 -Name "ThisPCPolicy" -Type String -Value "Hide"
-    If (!(Test-Path $Hide3DObjects2)) {
-        New-Item -Path $Hide3DObjects2 -Force | Out-Null
-        }
-    Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
+	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+	if ($CurrentBuild -lt 22000) {
+		Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Recurse -ErrorAction SilentlyContinue
+        $Hide3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+		$Hide3DObjects2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+		if (!(Test-Path $Hide3DObjects1)) {
+			New-Item -Path $Hide3DObjects1 -Force | Out-Null
+			}
+		Set-ItemProperty -Path $Hide3DObjects1 -Name "ThisPCPolicy" -Type String -Value "Hide"
+		if (!(Test-Path $Hide3DObjects2)) {
+			New-Item -Path $Hide3DObjects2 -Force | Out-Null
+			}
+		Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
+	}
+	else {
+		# Do nothing
+	}
 
-    # Hide search bar in taskbar.
+    # Hide search box/icon in taskbar.
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
     
     # Hide Task view icon in taskbar.
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
     
     # Hide Cortana icon in taskbar.
-    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
+	if ($CurrentBuild -lt 22000) {
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
+	}
+	else {
+		# Do nothing
+	}
 
     # Hide Meet Now icon in taskbar.
-	$Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-	$Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1 -ErrorAction SilentlyContinue
-    Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
-
+	if ($CurrentBuild -lt 22000) {
+        $Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+        $Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+        Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1
+        Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
+	}
+	else {
+		# Do nothing
+	}
+    
     # Turn off News and interests in taskbar.
-	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	if ($CurrentBuild -lt 22000) {
 		New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
@@ -1019,7 +1034,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 
     # Restart explorer.exe to reflect changes immeditately and then provide 2 seconds of breathing time.
     Stop-Process -ProcessName explorer
-    Start-Sleep 2
+    Start-Sleep 3
 
     # Print list of changes done.
     Write-Host "Changelog:"
@@ -1035,16 +1050,16 @@ $ErrorActionPreference = 'SilentlyContinue'
     else {
         # Do nothing.
     }
-    $Hides =@(
-        "3D Objects from File Explorer"
-        "Search bar in taskbar"
-        "Task View in taskbar"
-        "Cortana in taskbar"
-        "Meet Now in taskbar"
-    )
-    ForEach ($Hide in $Hides) {
-        Write-Host "    - Hid $Hide."
-    }
+	if ($CurrentBuild -lt 22000) {
+        Write-Host "     - Hid 3D Objects from File Explorer"
+        Write-Host "    - Hid Search bar from taskbar"
+        Write-Host "     - Hid Cortana from taskbar"
+        Write-Host "     - Hid Meet now from taskbar"
+	}
+	else {
+		Write-Host "    - Hid Search icon from taskbar"
+	}
+    Write-Host "    - Hid Task view from taskbar"
 
 
     Write-Host "Finished cleaning up Windows Explorer."
@@ -1064,36 +1079,52 @@ $RevertExplorer.Add_Click( {
     Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo"
 
     # Restore 3D objects in File Explorer.
-    $Restore3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
-    $Restore3DObjects2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-    $Restore3DObjects3 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-    If (!(Test-Path $Restore3DObjects1)) {
-        New-Item -Path $Restore3DObjects1 | Out-Null
-        }
-    Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy"
-    Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy"
+	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+	if ($CurrentBuild -lt 22000) {
+		Write-Host " "
+		$Restore3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
+        $Restore3DObjects2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+        $Restore3DObjects3 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+		if (!(Test-Path $Restore3DObjects1)) {
+			New-Item -Path $Restore3DObjects1 | Out-Null
+		}
+        Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
+        Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
+	}
+	else {
+		# Do nothing
+	}
     
-    # Show search bar icon in taskbar.
-    Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
-    
-    # Show taskview icon in taskbar.
+    # Show search bar/icon in taskbar.
+	if ($CurrentBuild -lt 22000) {
+		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
+	}
+	else {
+        Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 1
+	}    
+
+    # Show Task view icon in taskbar.
     Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton"
     
     # Show Cortana icon in taskbar.
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
 
     # Show Meet now icon in taskbar.
-	$Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-	$Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-	Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 0
-    Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 0
+	if ($CurrentBuild -lt 22000) {
+        $Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+        $Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+        Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 0
+        Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
+	}
+	else {
+		# Do nothing
+	}
     
     # No longer use print screen key to launch Snip overlay.
     Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
 
     # Turn on News and interests in taskbar.
-	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	if ($CurrentBuild -lt 22000) {
 		New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
@@ -1110,25 +1141,27 @@ $RevertExplorer.Add_Click( {
     Write-Host "    - Unbound Print Screen key to launch Snip overlay"
     Write-Host "    - Set default File Explorer view to Quick Access"
     Write-Host "    - Turned on Sticky keys"
-    # Check if News and interests was turned on and inform user.
+    # Check if News and interests was turned off and inform user.
     $Feed = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
     $NIValue = Get-ItemPropertyValue -Path $Feed -Name ShellFeedsTaskbarViewMode
-    if ($NIValue -lt 2) {
+    if ($NIValue -eq 0) {
         Write-Host "    - Turned on News and interests in taskbar."
     }
     else {
         # Do nothing.
     }
-    $Restores =@(
-        "3D Objects in File Explorer"
-        "Search bar in taskbar"
-        "Task View in taskbar"
-        "Cortana in taskbar"
-        "Meet Now in taskbar"
-    )
-    ForEach ($Restore in $Restores) {
-        Write-Host "    - Restored $Restore."
-    }
+	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+	if ($CurrentBuild -lt 22000) {
+        Write-Host "     - Restored 3D Objects to File Explorer"
+        Write-Host "    - Restored Search bar to taskbar"
+        Write-Host "     - Restored Cortana to taskbar"
+        Write-Host "     - Restored Meet now to taskbar"
+	}
+	else {
+		Write-Host "    - Restored Search icon to taskbar"
+	}
+    Write-Host "    - Restored Task view to taskbar"
 
     # Restart explorer.exe to reflect changes immeditately and then provide 2 seconds of breathing time.
     Stop-Process -ProcessName explorer
@@ -1240,16 +1273,22 @@ $ErrorActionPreference = 'SilentlyContinue'
 })
 
 $NewsAndInterests.Add_Click( {
-    Write-Host "Turning off News and interests..."
-    New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
-    $Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
-    $Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
-    Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
-    Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
-    Stop-Process -ProcessName explorer -Force
-    Start-Sleep 3
-    Write-Host "Turned off News and interests."
-    Write-Host "Use 'Revert Windows Explorer changes' to turn it back on."
+	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+	if ($CurrentBuild -lt 22000) {
+		Write-Host " "
+		Write-Host "Turning off News and interests..."
+		New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
+		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
+		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
+		Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
+		Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
+		Write-Host "Turned off News and interests."
+        Write-Host "Use 'Revert Windows Explorer changes' to turn it back on."
+	}
+	else {
+		Write-Host "This PC is running Windows 11. Windows 11 does not have News and interests."
+	}
 })
 
 
