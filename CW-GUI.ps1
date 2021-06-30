@@ -661,6 +661,12 @@ $ProgressPreference = 'SilentlyContinue'
     }
     Write-Host "    Uninstalled unnecessary UWP apps."
 
+    # Remove registry keys used to suggest apps.
+	Write-Host "Removing suggested apps references..."
+	Remove-Item -Path "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
+	Write-Host "Removed suggested apps references."
+
+
     # Remove Office webapps shortcuts.
 	if (Test-Path "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk") {
 		Write-Host "    Removing Office online web-app shortcuts..."
@@ -705,6 +711,7 @@ $ProgressPreference = 'SilentlyContinue'
 		Write-Host "    WinGet is not installed. Please install WinGet first before uninstalling Microsoft OneDrive."
 	}
 
+    
     # Unpin apps from taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
 	Write-Host "Unpinning apps from taskbar..."
 	$AppNames = @(

@@ -16,6 +16,7 @@ $tasks = @(
 ### Apps & Features ###
 	"AppsFeatures",
 	"DebloatApps", "Activity", 
+	"SuggestedApps",
 	"UnpinStartTiles", "Activity", 
 	"UnpinAppsFromTaskbar", "Activity", 
 	"InstallWinGet", 
@@ -398,6 +399,13 @@ Function UnpinStartTiles {
 	else {
 		# Do nothing.
 	}
+}
+
+
+Function SuggestedApps {
+	Write-Host "Removing suggested apps references..."
+	Remove-Item -Path "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
+	Write-Host "Removed suggested apps references."
 }
 
 # Unpin Apps from taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
