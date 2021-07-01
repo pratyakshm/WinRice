@@ -1453,7 +1453,7 @@ Function SetupWindowsUpdate {
             Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
         }
 		# Print more user messages
-        if ($winver -ge 22000) {
+        if ($CurrentBuild -ge 22000) {
             Write-Host "    - Weekly flights won't be delayed since this device is running Windows 11."
         }
         Write-Host "Set up Windows Update policies."
