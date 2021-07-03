@@ -6,16 +6,16 @@
 $tasks = @(
 
 ### Maintenance Tasks ###
-"InternetStatus",
-"Setup",
-"CleanWin",
-"OSBuildInfo",
-"CreateSystemRestore",
-"Activity",
+	"InternetStatus",
+	"Setup",
+	"CleanWin",
+	"OSBuildInfo",
+	"CreateSystemRestore",
+	"Activity",
 
 ### Apps & Features ###
 	"AppsFeatures",
-	"DebloatApps", "Activity", 
+	"UninstallApps", "Activity", 
 	"SuggestedApps",
 	"UnpinStartTiles", "Activity", 
 	"UnpinAppsFromTaskbar", "Activity", 
@@ -88,6 +88,43 @@ $tasks = @(
 
 ### Maintenance tasks ###
 
+# Exit CleanWin if PC is not connected.
+$ProgressPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
+	Write-Host "Please standby while internet connection status is determined."
+	Import-Module BitsTransfer
+	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
+	if (Test-Path File.txt) {
+		Remove-Item File.txt
+		Write-Host "This device is connected."
+		Clear-Host
+	}
+	elseif (!(Test-Path File.txt)) {
+		Write-Host "This device is not connected. CleanWin will now exit."
+		exit
+	}
+
+
+# Store CurrentBuild value for universal usage.
+$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+
+
+# Take user configs.
+Write-Host "Please answer the questions below with your choices."
+Write-Host " "
+$uninstallapps = Read-Host "Uninstall Windows apps? [y/n]"
+$onedrive = Read-Host "Uninstall Microsoft OneDrive?"
+$uninstallfeatures = Read-Host "Uninstall/disable unnecessary optional features?"
+$wsl = Read-Host "Enable Windows Subsystem for Linux?"
+$netfx3 = Read-Host "Enable dotNET 3.5?"
+$winstall = Read-Host "Use Winstall to install your choice of apps using a simple list? (bit.ly/Winstall)"
+Write-Host " "
+Write-Host "Choices saved."
+Start-Sleep -Milliseconds 1500
+
+
+
 # CleanWin
 Function CleanWin {
 	$host.UI.RawUI.WindowTitle = "pratyakshm's CleanWin"
@@ -97,29 +134,12 @@ Function CleanWin {
 	Start-Sleep 1
 }
 
+
 # Set ExecutionPolicy to Unrestricted for session.
 Function Setup {
 	Set-ExecutionPolicy Unrestricted -Scope Process
 }
 
-# Exit CleanWin if PC is not connected.
-Function InternetStatus {
-$ProgressPreference = 'SilentlyContinue'
-$ErrorActionPreference = 'SilentlyContinue'
-	Import-Module BitsTransfer
-	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
-	if (Test-Path File.txt) {
-		Remove-Item File.txt
-	}
-	elseif (!(Test-Path File.txt)) {
-		Write-Host "Could not connect to the internet. CleanWin will not run."
-		exit
-	}
-}
-
-# Store CurrentBuild value for universal usage.
-$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 
 # OS Build.
 Function OSBuildInfo {
@@ -225,102 +245,106 @@ Function AppsFeatures {
 }
 
 # Debloat apps.
-Function DebloatApps {
+Function UninstallApps {
 $ErrorActionPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
-	Write-Host "Removing all bloatware..."
-	# Inbox UWP apps.
-	Write-Host "    Uninstalling unnecessary UWP apps..."
-	$Bloatware = @(
-		"Microsoft.549981C3F5F10"
-		"Microsoft.BingNews"
-		"Microsoft.BingWeather"
-		"Microsoft.GamingApp"
-		"Microsoft.GamingServices" 
-		"Microsoft.GetHelp" 
-		"Microsoft.Getstarted" 
-		"Microsoft.Messaging"
-		"Microsoft.Microsoft3DViewer" 
-		"Microsoft.MicrosoftStickyNotes"  
-		"Microsoft.MSPaint"
-		"Microsoft.MicrosoftOfficeHub"
-		"Microsoft.Office.OneNote"
-		"Microsoft.MixedReality.Portal"
-		"Microsoft.MicrosoftSolitaireCollection" 
-		"Microsoft.NetworkSpeedTest" 
-		"Microsoft.News" 
-		"Microsoft.Office.Sway" 
-		"Microsoft.OneConnect"
-		"Microsoft.Paint"
-		"Microsoft.People" 
-		"Microsoft.PowerAutomateDesktop"
-		"Microsoft.Print3D" 
-		"Microsoft.SkypeApp"
-		"Microsoft.StorePurchaseApp" 
-		"Microsoft.Todos"
-		"Microsoft.WindowsAlarms"
-		"Microsoft.WindowsCamera"
-		"Microsoft.WindowsCommunicationsApps" 
-		"Microsoft.WindowsFeedbackHub" 
-		"Microsoft.WindowsMaps" 
-		"Microsoft.WindowsSoundRecorder"
-		"Microsoft.XboxApp"
-		"Microsoft.XboxGamingOverlay"
-		"Microsoft.YourPhone"
-		"Microsoft.ZuneMusic"
-		"Microsoft.ZuneVideo"
+	if ($uninstallapps -like "y") {
+		# Inbox UWP apps.
+		Write-Host "Uninstalling Windows apps..."
+		$Bloatware = @(
+			"Microsoft.549981C3F5F10"
+			"Microsoft.BingNews"
+			"Microsoft.BingWeather"
+			"Microsoft.GamingApp"
+			"Microsoft.GamingServices" 
+			"Microsoft.GetHelp" 
+			"Microsoft.Getstarted" 
+			"Microsoft.Messaging"
+			"Microsoft.Microsoft3DViewer" 
+			"Microsoft.MicrosoftStickyNotes"  
+			"Microsoft.MSPaint"
+			"Microsoft.MicrosoftOfficeHub"
+			"Microsoft.Office.OneNote"
+			"Microsoft.MixedReality.Portal"
+			"Microsoft.MicrosoftSolitaireCollection" 
+			"Microsoft.NetworkSpeedTest" 
+			"Microsoft.News" 
+			"Microsoft.Office.Sway" 
+			"Microsoft.OneConnect"
+			"Microsoft.Paint"
+			"Microsoft.People" 
+			"Microsoft.PowerAutomateDesktop"
+			"Microsoft.Print3D" 
+			"Microsoft.SkypeApp"
+			"Microsoft.StorePurchaseApp" 
+			"Microsoft.Todos"
+			"Microsoft.WindowsAlarms"
+			"Microsoft.WindowsCamera"
+			"Microsoft.WindowsCommunicationsApps" 
+			"Microsoft.WindowsFeedbackHub" 
+			"Microsoft.WindowsMaps" 
+			"Microsoft.WindowsSoundRecorder"
+			"Microsoft.XboxApp"
+			"Microsoft.XboxGamingOverlay"
+			"Microsoft.YourPhone"
+			"Microsoft.ZuneMusic"
+			"Microsoft.ZuneVideo"
 
-		# Sponsored Apps
-		"*EclipseManager*"
-		"*ActiproSoftwareLLC*"
-		"*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
-		"*Duolingo-LearnLanguagesforFree*"
-		"*PandoraMediaInc*"
-		"*CandyCrush*"
-		"*BubbleWitch3Saga*"
-		"*Wunderlist*"
-		"*Flipboard*"
-		"*Twitter*"
-		"*Facebook*"
-		"*Spotify*"
-		"*Minecraft*"
-		"*Royal Revolt*"
-		"*Sway*"
-		"*Speed Test*"
-		"*Dolby*"
-	)
-	ForEach ($Bloat in $Bloatware) {
-		Write-Host "        Uninstalling $Bloat..."
-		Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
-		Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
-		Write-Host "    Uninstalled unnecessary UWP apps."
-	}
+			# Sponsored Apps
+			"*EclipseManager*"
+			"*ActiproSoftwareLLC*"
+			"*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
+			"*Duolingo-LearnLanguagesforFree*"
+			"*PandoraMediaInc*"
+			"*CandyCrush*"
+			"*BubbleWitch3Saga*"
+			"*Wunderlist*"
+			"*Flipboard*"
+			"*Twitter*"
+			"*Facebook*"
+			"*Spotify*"
+			"*Minecraft*"
+			"*Royal Revolt*"
+			"*Sway*"
+			"*Speed Test*"
+			"*Dolby*"
+		)
+		ForEach ($Bloat in $Bloatware) {
+			Write-Host "     Uninstalling $Bloat..."
+			Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
+			Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
+		}
+		# Remove Office webapps shortcuts.
+		if (Test-Path "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk") {
+			Write-Host "     Uninstalling Office web-apps..."
+			Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
+			Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
+			Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
+			Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Word.lnk"
+			Write-Host "     Uninstalled Office web-apps."
+		}
 
-    # Remove Office webapps shortcuts.
-	if (Test-Path "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk") {
-		Write-Host "    Removing Office online web-app shortcuts..."
-		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
-		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
-		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
-		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Word.lnk"
-		Write-Host "    Removed Office Online web-app shortcuts."
-	}
 
-	# Uninstall Connect app.
-	if (Get-AppxPackage Microsoft-PPIProjection-Package) {
-		Import-Module BitsTransfer
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
-		Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
-		./connect.cmd | Out-Null
-		Remove-Item install_wim_tweak.exe
-		Remove-Item connect.cmd
-		Remove-Item Packages.txt
+		# Uninstall Connect app.
+		if (Get-AppxPackage Microsoft-PPIProjection-Package) {
+			Import-Module BitsTransfer
+			Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
+			Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
+			./connect.cmd | Out-Null
+			Remove-Item install_wim_tweak.exe
+			Remove-Item connect.cmd
+			Remove-Item Packages.txt
+		}
+		else {
+			# Do nothing.
+		}
+
+		Write-Host "Uninstalled Windows apps."
+
 	}
 	else {
 		# Do nothing.
 	}
-
-	Write-Host "Removed all bloatware."
 }
 
 
@@ -477,23 +501,28 @@ $ProgressPreference = 'SilentlyContinue'
 # Uninstall Microsoft OneDrive (supports 64-bit versions).
 Function UninstallOneDrive {
 $ErrorActionPreference = 'SilentlyContinue'
-	Write-Host " "
-	if (Get-Command winget) {
-		Write-Host "Uninstalling Microsoft OneDrive..."
+	if ($onedrive -like "y") {
+		Write-Host " "
+		if (Get-Command winget) {
+			Write-Host "Uninstalling Microsoft OneDrive..."
 
-		# Uninstall using WinGet.
-		winget uninstall Microsoft.OneDrive | Out-Null
+			# Uninstall using WinGet.
+			winget uninstall Microsoft.OneDrive | Out-Null
 
-		# Cleanup leftover folders if found.
-		Remove-Item "$env:USERPROFILE\OneDrive" -Recurse -Force
-		Remove-Item "$env:PROGRAMDATA\Microsoft OneDrive" -Recurse -Force
-		Remove-Item "$env:LOCALAPPDATA\Microsoft\OneDrive" -Recurse -Force
-		Remove-Item "$env:LOCALAPPDATA\OneDrive" -Recurse -Force
+			# Cleanup leftover folders if found.
+			Remove-Item "$env:USERPROFILE\OneDrive" -Recurse -Force
+			Remove-Item "$env:PROGRAMDATA\Microsoft OneDrive" -Recurse -Force
+			Remove-Item "$env:LOCALAPPDATA\Microsoft\OneDrive" -Recurse -Force
+			Remove-Item "$env:LOCALAPPDATA\OneDrive" -Recurse -Force
 
-		Write-Host "Uninstalled Microsoft OneDrive."
-        }
+			Write-Host "Uninstalled Microsoft OneDrive."
+			}
+		else {
+			Write-Host "WinGet is not installed. Microsoft OneDrive could not be uninstalled."
+		}
+	}
 	else {
-		Write-Host "WinGet is not installed. Microsoft OneDrive could not be uninstalled."
+		# Do nothing.
 	}
 }
 
@@ -581,68 +610,78 @@ $ProgressPreference = 'SilentlyContinue'
 # Uninstall Windows Optional Features and Windows Capabilities.
 Function UninstallFeatures {
 $ProgressPreference = 'SilentlyContinue'
-    Write-Host " "
-    Write-Host "Disabling and uninstalling unnecessary features..."
-	# Uninstall capabilities.
-    $Capabilities = @(
-		"App.StepsRecorder*"
-		"App.Support.QuickAssist*"
-        "Hello.Face*"
-        "MathRecognizer*"
-		"Media.WindowsMediaPlayer*"
-		"Microsoft-Windows-SnippingTool*"
-		"Microsoft.Windows.MSPaint*" 
-		"Microsoft.Windows.PowerShell.ISE*"
-		"Microsoft.Windows.WordPad*"
-		"Print.Fax.Scan*"
-		"XPS.Viewer*"
-    )
-    ForEach ($Capability in $Capabilities) {
-		Remove-WindowsCapability -Name $Capability -Online | Out-Null
+	if ($uninstallfeatures -like "y") {
+		Write-Host " "
+		Write-Host "Disabling and uninstalling unnecessary features..."
+		# Uninstall capabilities.
+		$Capabilities = @(
+			"App.StepsRecorder*"
+			"App.Support.QuickAssist*"
+			"Hello.Face*"
+			"MathRecognizer*"
+			"Media.WindowsMediaPlayer*"
+			"Microsoft-Windows-SnippingTool*"
+			"Microsoft.Windows.MSPaint*" 
+			"Microsoft.Windows.PowerShell.ISE*"
+			"Microsoft.Windows.WordPad*"
+			"Print.Fax.Scan*"
+			"XPS.Viewer*"
+		)
+		ForEach ($Capability in $Capabilities) {
+			Remove-WindowsCapability -Name $Capability -Online | Out-Null
+		}
+		# Print user friendly list of capabilities uninstalled.
+		$CapLists =@(
+			"Math Recognizer"
+			"Microsoft Paint"
+			"Quick Assist"
+			"Snipping Tool"
+			"Steps Recorder"
+			"Windows Fax & Scan"
+			"Windows Media Player"
+			"Windows Hello Face"
+			"Windows PowerShell ISE"
+			"Windows XPS Features"
+			"WordPad"
+		)
+		ForEach ($CapList in $CapLists) {
+			Write-Host "    - Uninstalled $CapList"
+		}
+	
+		# Uninstall Optional Features.
+		$OptionalFeatures = @(
+			"WorkFolders-Client*"
+			"Printing-XPSServices-Feature*"
+		)
+		ForEach ($OptionalFeature in $OptionalFeatures) {
+			Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq $OptionalFeature } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
+		}
+		# Print user friendly list of features uninstalled.
+		Write-Host "    - Disabled Work Folders Client."
+	
+		Write-Host "Finished disabling and uninstalling unnecessary features."
 	}
-	# Print user friendly list of capabilities uninstalled.
-    $CapLists =@(
-        "Math Recognizer"
-		"Microsoft Paint"
-		"Quick Assist"
-		"Snipping Tool"
-        "Steps Recorder"
-        "Windows Fax & Scan"
-        "Windows Media Player"
-        "Windows Hello Face"
-		"Windows PowerShell ISE"
-		"Windows XPS Features"
-		"WordPad"
-    )
-    ForEach ($CapList in $CapLists) {
-        Write-Host "    - Uninstalled $CapList"
-    }
-
-	# Uninstall Optional Features.
-    $OptionalFeatures = @(
-        "WorkFolders-Client*"
-        "Printing-XPSServices-Feature*"
-    )
-    ForEach ($OptionalFeature in $OptionalFeatures) {
-        Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq $OptionalFeature } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
-    }
-	# Print user friendly list of features uninstalled.
-    Write-Host "    - Disabled Work Folders Client."
-
-    Write-Host "Finished disabling and uninstalling unnecessary features."
+	else {
+		# Do nothing.
+	}
 }
 
 # Enable Windows Subsystem for Linux
 Function EnableWSL {
 $ProgressPreference = 'SilentlyContinue'
-    Write-Host " "
-    # Import BitsTransfer module, ping GitHub - if success, enable WSL, else print no connection message.
-    Import-Module BitsTransfer 
-    Write-Host "Enabling Windows Subsystem for Linux..."
-    Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-    Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-    Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-    Write-Host "Enabled Windows Subsystem for Linux."
+	if ($wsl -like "y") {
+		Write-Host " "
+		# Import BitsTransfer module, ping GitHub - if success, enable WSL, else print no connection message.
+		Import-Module BitsTransfer 
+		Write-Host "Enabling Windows Subsystem for Linux..."
+		Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+		Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+		Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+		Write-Host "Enabled Windows Subsystem for Linux."
+	}
+	else {
+		# Do nothing.
+	}
 }
 
 # Enable Sandbox.
@@ -657,10 +696,15 @@ $ProgressPreference = 'SilentlyContinue'
 # Enable dotNET 3.5.
 Function EnabledotNET3.5 {
 $ProgressPreference = 'SilentlyContinue'
-	Write-Host " "
-	Write-Host "Enabling dotNET 3.5..."
-	Dism /online /Enable-Feature /FeatureName:NetFx3 /NoRestart /Quiet
-	Write-Host "Enabled dotNET 3.5."
+	if ($netfx3 -like "y") {
+		Write-Host " "
+		Write-Host "Enabling dotNET 3.5..."
+		Dism /online /Enable-Feature /FeatureName:NetFx3 /NoRestart /Quiet
+		Write-Host "Enabled dotNET 3.5."
+	}
+	else {
+		# Do nothing.
+	}
 }
 
 # Install 7zip.
@@ -679,39 +723,44 @@ Function Install7zip {
 # Install apps from Winstall file (the Winstall.txt file must be on the same directory as CleanWin).
 Function Winstall {
 $ErrorActionPreference = 'Stop'
-    Write-Host " "
-	# Check if WinGet is installed, then proceed.
-    if (Get-Command winget) {
-		# Try Winstall.txt
-		if (Test-Path Winstall.txt) {
-			Write-Host "Starting Winstall..."
-			# Get each line from the text file and use winget install command on it.
-			Get-Content 'Winstall.txt' | ForEach-Object {
-				$App = $_.Split('=')
-				Write-Host "    Installing $App..."
-				winget install "$App"
+	if ($winstall -like "y") {
+		Write-Host " "
+		# Check if WinGet is installed, then proceed.
+		if (Get-Command winget) {
+			# Try Winstall.txt
+			if (Test-Path Winstall.txt) {
+				Write-Host "Starting Winstall..."
+				# Get each line from the text file and use winget install command on it.
+				Get-Content 'Winstall.txt' | ForEach-Object {
+					$App = $_.Split('=')
+					Write-Host "    Installing $App..."
+					winget install "$App"
+				}
+				Write-Host "Winstall has successfully installed the app(s)."
 			}
-			Write-Host "Winstall has successfully installed the app(s)."
-		}
-		# Try winstall.txt
-		elseif (Test-Path winstall.txt) {
-            Write-Host "Starting Winstall..."
-			# Get each line from the text file and use winget install command on it.
-			Get-Content 'winstall.txt' | ForEach-Object {
-				$App = $_.Split('=')
-				Write-Host "    Installing $App..."
-				winget install "$App"
+			# Try winstall.txt
+			elseif (Test-Path winstall.txt) {
+				Write-Host "Starting Winstall..."
+				# Get each line from the text file and use winget install command on it.
+				Get-Content 'winstall.txt' | ForEach-Object {
+					$App = $_.Split('=')
+					Write-Host "    Installing $App..."
+					winget install "$App"
+				}
+				Write-Host "Winstall has successfully installed the app(s)."
 			}
-			Write-Host "Winstall has successfully installed the app(s)."
+			else {
+				# Do nothing.
+			}
 		}
+		# Inform user if WinGet is not installed.
 		else {
-			# Do nothing.
+			Write-Host "WinGet is not installed. Please install WinGet first before using Winstall."
+			start "https://bit.ly/Winstall" 
 		}
 	}
-	# Inform user if WinGet is not installed.
-    else {
-		Write-Host "WinGet is not installed. Please install WinGet first before using Winstall."
-		start "https://bit.ly/Winstall" 
+	else {
+		# Do nothing.
 	}
 }
 
