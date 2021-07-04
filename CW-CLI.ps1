@@ -612,9 +612,12 @@ $ProgressPreference = 'SilentlyContinue'
 # Uninstall Windows Optional Features and Windows Capabilities.
 Function UninstallFeatures {
 $ProgressPreference = 'SilentlyContinue'
+$WarningPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
+
 	if ($uninstallfeatures -like "y") {
 		Write-Host " "
-		Write-Host "Disabling and uninstalling unnecessary features..."
+		Write-Host "Removing capabilites and features..."
 		# Uninstall capabilities.
 		$Capabilities = @(
 			"App.StepsRecorder*"
@@ -630,7 +633,7 @@ $ProgressPreference = 'SilentlyContinue'
 			"XPS.Viewer*"
 		)
 		ForEach ($Capability in $Capabilities) {
-			Remove-WindowsCapability -Name $Capability -Online | Out-Null
+			Get-WindowsCapability -Online | Where-Object {$_.Name -like $Capability} | Remove-WindowsCapability -Online | Out-Null
 		}
 		# Print user friendly list of capabilities uninstalled.
 		$CapLists =@(
@@ -647,21 +650,21 @@ $ProgressPreference = 'SilentlyContinue'
 			"WordPad"
 		)
 		ForEach ($CapList in $CapLists) {
+			Start-Sleep -Milliseconds 70
 			Write-Host "    - Uninstalled $CapList"
 		}
-	
-		# Uninstall Optional Features.
+
 		$OptionalFeatures = @(
 			"WorkFolders-Client*"
 			"Printing-XPSServices-Feature*"
 		)
 		ForEach ($OptionalFeature in $OptionalFeatures) {
-			Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq $OptionalFeature } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
+			Get-WindowsOptionalFeature -Online | Where-Object {$_.FeatureName -like $OptionalFeature} | Disable-WindowsOptionalFeature -Online -NoRestart | Out-Null
 		}
 		# Print user friendly list of features uninstalled.
 		Write-Host "    - Disabled Work Folders Client."
 	
-		Write-Host "Finished disabling and uninstalling unnecessary features."
+		Write-Host "Removed capabilities and features."
 	}
 	else {
 		# Do nothing.

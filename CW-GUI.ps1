@@ -855,8 +855,11 @@ $ProgressPreference = 'SilentlyContinue'
 
 $UninstallFeatures.Add_Click( {
 $ProgressPreference = 'SilentlyContinue'
+$WarningPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
+
     Write-Host " "
-    Write-Host "Disabling and uninstalling unnecessary features..."
+    Write-Host "Removing capabilites and features..."
 
     # Uninstall capabilities.
     $Capabilities = @(
@@ -873,7 +876,7 @@ $ProgressPreference = 'SilentlyContinue'
 		"XPS.Viewer*"
     )
     ForEach ($Capability in $Capabilities) {
-		Remove-WindowsCapability -Name $Capability -Online | Out-Null
+        Get-WindowsCapability -Online | Where-Object {$_.Name -like $Capability} | Remove-WindowsCapability -Online | Out-Null
 	}
     
     # Prevent the console output from freezing by emulating backspace key (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Module/Sophia.psm1#L728-L767).
@@ -930,6 +933,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		"WordPad"
     )
     ForEach ($CapList in $CapLists) {
+        Start-Sleep -Milliseconds 70
         Write-Host "    - Uninstalled $CapList"
     }
 
@@ -939,12 +943,12 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
         "Printing-XPSServices-Feature*"
     )
     ForEach ($OptionalFeature in $OptionalFeatures) {
-        Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq $OptionalFeature } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
+        Get-WindowsOptionalFeature -Online | Where-Object {$_.FeatureName -like $OptionalFeature} | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
     }
     # Print the friendly list of optional features uninstalled.
     Write-Host "    - Disabled Work Folders Client."
 
-    Write-Host "Finished disabling and uninstalling unnecessary features."
+    Write-Host "Removed capabilities and features."
 })
 
 
