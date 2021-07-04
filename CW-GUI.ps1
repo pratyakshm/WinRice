@@ -341,15 +341,8 @@ $UninstallSelectively.Add_Click( {
         "Microsoft.Photos.MediaEngineDLC",
 
         # Snip & Sketch.
-        "Microsoft.ScreenSketch",
-    
-        # Xbox apps.
-		"Microsoft.GamingServices",
-        "Microsoft.XboxIdentityProvider",
-        "Microsoft.Xbox.TCUI",
-        "Microsoft.XboxSpeechToTextOverlay",
-        "Microsoft.XboxGamingOverlay",
-        "Microsoft.XboxGameOverlay"
+        "Microsoft.ScreenSketch"
+
     )
 
     # UWP apps that won't be shown in the form
@@ -364,11 +357,22 @@ $UninstallSelectively.Add_Click( {
         # Web Media Extensions.
         "Microsoft.WebMediaExtensions"
 
+        # Media Engine DLC
+        "Microsoft.Photos.MediaEngineDLC"
+
         # Windows Terminal.
         "Microsoft.WindowsTerminal"
 
         # Web Experience (used for Widgets).
         "MicrosoftWindows.Client.WebExperience"
+            
+        # Xbox apps.
+		"Microsoft.GamingServices",
+        "Microsoft.XboxIdentityProvider",
+        "Microsoft.Xbox.TCUI",
+        "Microsoft.XboxSpeechToTextOverlay",
+        "Microsoft.XboxGamingOverlay",
+        "Microsoft.XboxGameOverlay"
     )
     #endregion Variables.
 
@@ -597,7 +601,7 @@ $ProgressPreference = 'SilentlyContinue'
     Write-Host " "
     
     # Inbox UWP Apps.
-    Write-Host "    Uninstalling unnecessary UWP apps..."
+    Write-Host "Uninstalling apps..."
     $Bloatware = @(
     "Microsoft.549981C3F5F10"
     "Microsoft.BingNews"
@@ -660,12 +664,13 @@ $ProgressPreference = 'SilentlyContinue'
         Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
     }
-    Write-Host "    Uninstalled unnecessary UWP apps."
+    Write-Host "    Uninstalled unnecessary apps."
 
     # Remove registry keys used to suggest apps.
-	Write-Host "Removing suggested apps references..."
+    Write-Host " "
+	Write-Host "    Removing suggested apps references..."
 	Remove-Item -Path "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
-	Write-Host "Removed suggested apps references."
+	Write-Host "    Removed suggested apps references."
 
 
     # Remove Office webapps shortcuts.
@@ -693,8 +698,8 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 
     # Uninstall Microsoft OneDrive.
-    Write-Host " "
 	if (Get-Command winget) {
+        Write-Host " "
 		Write-Host "    Uninstalling Microsoft OneDrive..."
 
 		# Uninstall using WinGet.
@@ -714,7 +719,8 @@ $ProgressPreference = 'SilentlyContinue'
 
     
     # Unpin apps from taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
-	Write-Host "Unpinning apps from taskbar..."
+    Write-Host " "
+    Write-Host "    Unpinning apps from taskbar..."
 	$AppNames = @(
 		"Microsoft Store"
 		"Office"
@@ -726,9 +732,9 @@ $ProgressPreference = 'SilentlyContinue'
 			$App.Verbs() | Where-Object { $_.Name.replace('&', '') -match 'Unpin from taskbar' } | ForEach-Object { $_.DoIt() } -ErrorAction SilentlyContinue | Out-Null
 		}	
 	}
-	Write-Host "Unpinned apps from taskbar."
+	Write-Host "    Unpinned apps from taskbar."
 
-    Write-Host "Removed all bloatware."
+    Write-Host "Uninstalled apps."
 })
 
 $InstallWinGet.Add_Click( {
