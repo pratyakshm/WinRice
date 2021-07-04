@@ -752,13 +752,33 @@ $ErrorActionPreference = 'Stop'
 				Write-Host "Winstall has successfully installed the app(s)."
 			}
 			else {
-				# Do nothing.
+				[System.Reflection.Assembly]::LoadWithPartialName(“System.Windows.Forms”) | Out-Null
+				Write-Host "Select Winstall text file from File Picker UI"
+				$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
+				$OpenFileDialog.InitialDirectory = $initialDirectory
+				$OpenFileDialog.Filter = "Text file (*.txt)| *.txt”
+				$OpenFileDialog.ShowDialog() | Out-Null
+				if ($OpenFileDialog.FileName) {
+					Write-Host "Starting Winstall..."
+					Get-Content $OpenFileDialog.FileName | ForEach-Object {
+						$App = $_.Split('=')
+						Write-Host "    Installing $App..."
+						winget install "$App"
+					}
+					Write-Host "Winstall has successfully installed the app(s)."
+				}
+				elseif (!($OpenFileDialog.FileName)) {
+					Write-Host "Winstall not selected."
+				}
+				else {
+					# Do nothing.
+				}
 			}
 		}
 		# Inform user if WinGet is not installed.
 		else {
 			Write-Host "WinGet is not installed. Please install WinGet first before using Winstall."
-			start "https://bit.ly/Winstall" 
+			Start-Process "https://bit.ly/Winstall" 
 		}
 	}
 	else {
@@ -767,12 +787,10 @@ $ErrorActionPreference = 'Stop'
 }
 
 Function WinGetImport {
-	if ($WinGetImport -like "y") {
+	if ($wingetimport -like "y") {
 		if (Get-Command winget) {
 			[System.Reflection.Assembly]::LoadWithPartialName(“System.Windows.Forms”) | Out-Null
-			Write-Host "Select the exported JSON"
-			Start-Sleep -Milliseconds 200
-			Write-Host "Waiting for user input..."
+			Write-Host "Select the exported JSON from File Picker UI"
 			$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
 			$OpenFileDialog.InitialDirectory = $initialDirectory
 			$OpenFileDialog.Filter = “JSON (*.json)| *.json”
