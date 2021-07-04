@@ -607,7 +607,6 @@ $ProgressPreference = 'SilentlyContinue'
     "Microsoft.BingNews"
     "Microsoft.BingWeather"
     "Microsoft.GamingApp"
-    "Microsoft.GamingServices" 
     "Microsoft.GetHelp" 
     "Microsoft.Getstarted" 
     "Microsoft.Messaging"
@@ -635,7 +634,6 @@ $ProgressPreference = 'SilentlyContinue'
     "Microsoft.WindowsMaps" 
     "Microsoft.WindowsSoundRecorder" 
     "Microsoft.XboxApp"
-    "Microsoft.XboxGamingOverlay"
     "Microsoft.YourPhone"
     "Microsoft.ZuneMusic"
     "Microsoft.ZuneVideo"
@@ -733,7 +731,7 @@ $ProgressPreference = 'SilentlyContinue'
 		}	
 	}
 	Write-Host "    Unpinned apps from taskbar."
-
+    Write-Host " "
     Write-Host "Uninstalled apps."
 })
 
