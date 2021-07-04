@@ -804,11 +804,11 @@ $Winstall.Add_Click( {
             }
             else {
                 # File picker UI to manually pick the file.
-                [System.Reflection.Assembly]::LoadWithPartialName(“System.Windows.Forms”) | Out-Null
+                [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
                 Write-Host "Select Winstall text file from File Picker UI"
                 $OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
                 $OpenFileDialog.InitialDirectory = $initialDirectory
-                $OpenFileDialog.Filter = "Text file (*.txt)| *.txt”
+                $OpenFileDialog.Filter = "Text file (*.txt)| *.txt"
                 $OpenFileDialog.ShowDialog() | Out-Null
                 if ($OpenFileDialog.FileName) {
                     Write-Host "Starting Winstall..."

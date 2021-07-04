@@ -760,11 +760,11 @@ $ErrorActionPreference = 'Stop'
 				Write-Host "Winstall has successfully installed the app(s)."
 			}
 			else {
-				[System.Reflection.Assembly]::LoadWithPartialName(“System.Windows.Forms”) | Out-Null
+				[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
 				Write-Host "Select Winstall text file from File Picker UI"
 				$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
 				$OpenFileDialog.InitialDirectory = $initialDirectory
-				$OpenFileDialog.Filter = "Text file (*.txt)| *.txt”
+				$OpenFileDialog.Filter = "Text file (*.txt)| *.txt"
 				$OpenFileDialog.ShowDialog() | Out-Null
 				if ($OpenFileDialog.FileName) {
 					Write-Host "Starting Winstall..."
@@ -774,9 +774,6 @@ $ErrorActionPreference = 'Stop'
 						winget install "$App"
 					}
 					Write-Host "Winstall has successfully installed the app(s)."
-				}
-				elseif (!($OpenFileDialog.FileName)) {
-					Write-Host "Winstall not selected."
 				}
 				else {
 					# Do nothing.
@@ -798,11 +795,11 @@ $ErrorActionPreference = 'Stop'
 Function WinGetImport {
 	if ($wingetimport -like "y") {
 		if (Get-Command winget) {
-			[System.Reflection.Assembly]::LoadWithPartialName(“System.Windows.Forms”) | Out-Null
+			[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
 			Write-Host "Select the exported JSON from File Picker UI"
 			$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
 			$OpenFileDialog.InitialDirectory = $initialDirectory
-			$OpenFileDialog.Filter = “JSON (*.json)| *.json”
+			$OpenFileDialog.Filter = "JSON (*.json)| *.json"
 			$OpenFileDialog.ShowDialog() | Out-Null
 			if ($OpenFileDialog.FileName) {
 				Write-Host "Initializing JSON file..."
