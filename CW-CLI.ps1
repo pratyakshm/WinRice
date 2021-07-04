@@ -120,6 +120,7 @@ $uninstallfeatures = Read-Host "Uninstall/disable unnecessary optional features?
 $wsl = Read-Host "Enable Windows Subsystem for Linux?"
 $netfx3 = Read-Host "Enable dotNET 3.5?"
 $winstall = Read-Host "Use Winstall to install your choice of apps using a simple list? (bit.ly/Winstall)"
+$wingetimport = Read-Host "Use winget import?"
 Write-Host " "
 Write-Host "Choices saved."
 Start-Sleep -Milliseconds 1500
@@ -765,6 +766,35 @@ $ErrorActionPreference = 'Stop'
 	}
 }
 
+Function WinGetImport {
+	if ($WinGetImport -like "y") {
+		if (Get-Command winget) {
+			[System.Reflection.Assembly]::LoadWithPartialName(“System.Windows.Forms”) | Out-Null
+			Write-Host "Select the exported JSON"
+			Start-Sleep -Milliseconds 200
+			Write-Host "Waiting for user input..."
+			$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
+			$OpenFileDialog.InitialDirectory = $initialDirectory
+			$OpenFileDialog.Filter = “JSON (*.json)| *.json”
+			$OpenFileDialog.ShowDialog() | Out-Null
+			if ($OpenFileDialog.FileName) {
+				Write-Host "Initializing JSON file..."
+				Start-Sleep -Milliseconds 200
+				winget import $OpenFileDialog.FileName
+			}
+			elseif (!($OpenFileDialog.FileName)) {
+				Write-Host "No JSON selected."
+			}
+		}
+		else {
+			Write-Host "WinGet is not installed. Please install WinGet first before using winget import."
+		}
+	}
+	else {
+		# Do nothing.
+	}
+}
+
 # Install HEVC.
 Function InstallHEVC {
 $ProgressPreference = 'SilentlyContinue'
@@ -1394,8 +1424,9 @@ Function DisableTasks {
 	$Tasks = @(
 		"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser"
 		"Microsoft\Windows\Application Experience\ProgramDataUpdater"
-		"Microsoft\Windows\Customer Experience Improvement Program\Consolidator"
+        "Microsoft\Windows\Application Experience\PcaPatchDbTask"
 		"Microsoft\Windows\Autochk\Proxy"
+        "Microsoft\Windows\Customer Experience Improvement Program\Consolidator"
 		"Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" 
 		"Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" 
 		"Microsoft\Windows\Windows Error Reporting\QueueReporting" 
