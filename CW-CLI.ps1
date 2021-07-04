@@ -23,7 +23,7 @@ $tasks = @(
 	"UninstallOneDrive", 
 	"Activity",
 	# "DisableBrowserRestoreAd",	# "EnableBrowserRestoreAd",
-	"DisableM365OnValueBanner", "RevertM365OnValueBanner",
+	"DisableM365OnValueBanner",   # "RevertM365OnValueBanner",
 	"UninstallFeatures", "Activity", 
 	"EnableWSL", "Activity", 
 	"EnabledotNET3.5", "Activity", 
@@ -435,6 +435,7 @@ Function UnpinStartTiles {
 
 
 Function SuggestedApps {
+	Write-Host " "
 	Write-Host "Removing suggested apps references..."
 	Remove-Item -Path "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
 	Write-Host "Removed suggested apps references."
