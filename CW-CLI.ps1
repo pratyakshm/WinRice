@@ -114,7 +114,8 @@ $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 # Take user configs.
 Write-Host "Please answer the questions below with your choices."
 Write-Host " "
-$uninstallapps = Read-Host "Uninstall Windows apps? [y/N]"
+$systemrestore = Read-Host "Create a system restore point? [y/N]"
+$uninstallapps = Read-Host "Uninstall Windows apps?"
 $onedrive = Read-Host "Uninstall Microsoft OneDrive?"
 $uninstallfeatures = Read-Host "Uninstall/disable unnecessary optional features?"
 $wsl = Read-Host "Enable Windows Subsystem for Linux?"
@@ -180,14 +181,19 @@ Function ChangesDone {
 # Create a system restore point with type MODIFY_SETTINGS.
 Function CreateSystemRestore {
 $ProgressPreference = 'SilentlyContinue'
-	Write-Host " "
-	Write-Host "Creating a system restore point with type MODIFY_SETTINGS..."
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name SystemRestorePointCreationFrequency -Type DWord -Value 0 -Force
-	Enable-ComputerRestore -Drive $env:SystemDrive
-	Checkpoint-Computer -Description "CleanWin" -RestorePointType "MODIFY_SETTINGS" -WarningAction SilentlyContinue
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name SystemRestorePointCreationFrequency -Type DWord -Value 1440 -Force
-	Disable-ComputerRestore -Drive $env:SystemDrive
-	Write-Host "Created system restore point."
+	if ($systemrestore -like "y") {
+		Write-Host " "
+		Write-Host "Creating a system restore point with type MODIFY_SETTINGS..."
+		Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name SystemRestorePointCreationFrequency -Type DWord -Value 0 -Force
+		Enable-ComputerRestore -Drive $env:SystemDrive
+		Checkpoint-Computer -Description "CleanWin" -RestorePointType "MODIFY_SETTINGS" -WarningAction SilentlyContinue
+		Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name SystemRestorePointCreationFrequency -Type DWord -Value 1440 -Force
+		Disable-ComputerRestore -Drive $env:SystemDrive
+		Write-Host "Created system restore point."
+	}
+	else {
+		# Do nothing.
+	}
 }
 
 # Prevent the console output from freezing by emulating backspace key. (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Module/Sophia.psm1#L728-L767)
