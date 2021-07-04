@@ -106,9 +106,10 @@ $ErrorActionPreference = 'SilentlyContinue'
 	}
 
 
-# Store CurrentBuild value for universal usage.
+# Do universal stuff
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 
 
 # Take user configs.
@@ -162,8 +163,6 @@ Function OSBuildInfo {
 		Write-Host "Note that CleanWin's Windows 11 support is experimental and you might face issues."
 	}
 	Start-Sleep 2
-	Write-Host " "
-	Write-Host " "
 	Write-Host " "
 	Write-Host " "
 }
@@ -437,7 +436,6 @@ Function UnpinStartTiles {
 Function SuggestedApps {
 	Write-Host " "
 	Write-Host "Removing suggested apps references..."
-	Remove-Item -Path "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
 	Write-Host "Removed suggested apps references."
 }
 
@@ -783,7 +781,7 @@ $ErrorActionPreference = 'Stop'
 					Write-Host "Winstall has successfully installed the app(s)."
 				}
 				else {
-					# Do nothing.
+					Write-ost " "
 				}
 			}
 		}
@@ -1149,6 +1147,7 @@ Function DisableSuggestions {
 	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-353696Enabled" -Type DWord -Value 0
 	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-353698Enabled" -Type DWord -Value 0
 	Set-ItemProperty -Path $Suggestions -Name "SystemPaneSuggestionsEnabled" -Type DWord -Value 0
+	Remove-Item -Path "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
 	Write-Host "Turned off app suggestions and automatic app installation."
 }
 
@@ -1261,7 +1260,6 @@ Function EnableTelemetry {
 Function EnableClipboard {
 	Write-Host " "
 	Write-Host "Turning on Clipboard History..."
-    New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 	$Clipboard = "HKU:\S-1-5-21-*\Software\Microsoft\Clipboard"
 	Set-ItemProperty -Path $Clipboard -Name "EnableClipboardHistory" -Value 1 -ErrorAction SilentlyContinue
 	Write-Host "Turned on Clipboard History."
@@ -1275,7 +1273,6 @@ Function EnableClipboard {
 Function DisableClipboard {
 	Write-Host " "
 	Write-Host "Turning off Clipboard History..."
-    New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 	$Clipboard = "HKU:\S-1-5-21-*\Software\Microsoft\Clipboard"
 	Set-ItemProperty -Path $Clipboard -Name "EnableClipboardHistory" -Value 0 -ErrorAction SilentlyContinue
 	Write-Host "Turned off Clipboard History."
@@ -1822,7 +1819,6 @@ Function DisableTaskbarFeed {
 	if ($CurrentBuild -lt 22000) {
 		Write-Host " "
 		Write-Host "Turning off News and interests..."
-		New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
@@ -1840,7 +1836,6 @@ Function EnableTaskbarFeed {
 	if ($CurrentBuild -lt 22000) {
 		Write-Host " "
 		Write-Host "Turning on News and interests..."
-		New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0 | Out-Null

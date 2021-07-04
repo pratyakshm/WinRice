@@ -45,9 +45,10 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 screen
 
-# Store CurrentBuild value for universal usage.
+# Universal stuff.
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 
 
 ### BEGIN GUI ###
@@ -1263,7 +1264,6 @@ $NewsAndInterests.Add_Click( {
 	if ($CurrentBuild -lt 22000) {
 		Write-Host " "
 		Write-Host "Turning off News and interests..."
-		New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
