@@ -845,8 +845,12 @@ $ProgressPreference = 'SilentlyContinue'
     Write-Host "Enabling Windows Subsystem for Linux..."
     Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
     Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-    Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-    Write-Host "Enabled Windows Subsystem for Linux."
+    if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) {
+        Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+    }
+    else {
+        Write-Host "Could not enable optional feature: Hyper-V, since this edition of Windows does not support it. "
+    }    Write-Host "Enabled Windows Subsystem for Linux."
 })
 
 $UninstallFeatures.Add_Click( {
