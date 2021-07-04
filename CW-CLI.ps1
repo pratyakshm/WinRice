@@ -791,6 +791,7 @@ $ErrorActionPreference = 'Stop'
 	}
 }
 
+# Use winget import (optional) (part of code used here was picked from https://devblogs.microsoft.com/scripting/hey-scripting-guy-can-i-open-a-file-dialog-box-with-windows-powershell/)
 Function WinGetImport {
 	if ($wingetimport -like "y") {
 		if (Get-Command winget) {
