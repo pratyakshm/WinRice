@@ -1649,15 +1649,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     Write-Host "Disabling unnecessary tasks & services..."
     $Services = @(
 		"DiagTrack"
-		"dmwapppushservice"
 		"SysMain"
-		"RetailDemo"
-		"diagnosticshub.standardcollector.service"
-		"MapsBroker"
-		"NetTcpPortSharing"
-		"RemoteRegistry"
-		"SharedAccess"
-		"TrkWks"
     )
     ForEach ($Service in $Services) {
 		Stop-Service $Service | Out-Null
@@ -1691,15 +1683,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 
     $Services = @(
 		"DiagTrack"
-		"dmwapppushservice"
 		"SysMain"
-		"RetailDemo"
-		"diagnosticshub.standardcollector.service"
-		"MapsBroker"
-		"NetTcpPortSharing"
-		"RemoteRegistry"
-		"SharedAccess"
-		"TrkWks"
     )
     ForEach ($Service in $Services) {
 		Start-Service $Service | Out-Null

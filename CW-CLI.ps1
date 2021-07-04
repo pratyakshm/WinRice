@@ -52,6 +52,7 @@ $tasks = @(
 	"EnableClipboard",				# "DisableClipboard",
 	"AutoLoginPostUpdate", 		    # "StayOnLockscreenPostUpdate",
 	"ChangesDone",
+	# To revert all privacy changes, use CleanWin GUI -> "Enable data collection".
 
 ### Tasks & Services ###
 	"TasksServices",
@@ -113,7 +114,7 @@ $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 # Take user configs.
 Write-Host "Please answer the questions below with your choices."
 Write-Host " "
-$uninstallapps = Read-Host "Uninstall Windows apps? [y/n]"
+$uninstallapps = Read-Host "Uninstall Windows apps? [y/N]"
 $onedrive = Read-Host "Uninstall Microsoft OneDrive?"
 $uninstallfeatures = Read-Host "Uninstall/disable unnecessary optional features?"
 $wsl = Read-Host "Enable Windows Subsystem for Linux?"
@@ -1359,15 +1360,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Write-Host "Turning off unnecessary services..."
     	$Services = @(
 		"DiagTrack"
-		"dmwapppushservice"
 		"SysMain"
-		"RetailDemo"
-		"diagnosticshub.standardcollector.service"
-		"MapsBroker"
-		"NetTcpPortSharing"
-		"RemoteRegistry"
-		"SharedAccess"
-		"TrkWks"
     )
     ForEach ($Service in $Services) {
 		Stop-Service $Service | Out-Null
@@ -1384,15 +1377,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Write-Host "Turning on unnecessary services..."
     	$Services = @(
 		"DiagTrack"
-		"dmwapppushservice"
 		"SysMain"
-		"RetailDemo"
-		"diagnosticshub.standardcollector.service"
-		"MapsBroker"
-		"NetTcpPortSharing"
-		"RemoteRegistry"
-		"SharedAccess"
-		"TrkWks"
     )
     ForEach ($Service in $Services) {
 		Start-Service $Service | Out-Null
