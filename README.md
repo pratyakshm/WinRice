@@ -2,6 +2,7 @@
 ![No. of Downloads](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=darkgreen&style=flat-square)
 ![Stars](https://img.shields.io/github/stars/pratyakshm/CleanWin?style=flat-square)
 [![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)](https://github.com/pratyakshm/CleanWin/releases/latest)
+[![Pre-Release](https://img.shields.io/github/v/release/pratyakshm/CleanWin?include_prereleases&label=pre-release&logo=vNext&style=flat-square)](https://github.com/pratyakshm/CleanWin/releases/tag/vNext)
 &nbsp;
 
 ## What is CleanWin
