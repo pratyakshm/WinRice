@@ -9,6 +9,7 @@ Add-Type -AssemblyName System.Windows.Forms
 Function screen {
 $ProgressPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
+    Write-Host "Please standby while internet connection status is determined."
 	Import-Module BitsTransfer
 	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
 	if (Test-Path File.txt) {
@@ -48,8 +49,6 @@ screen
 # Universal stuff.
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
-New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
-
 
 ### BEGIN GUI ###
 
@@ -667,7 +666,9 @@ $ProgressPreference = 'SilentlyContinue'
     # Remove registry keys used to suggest apps.
     Write-Host " "
 	Write-Host "    Removing suggested apps references..."
+    New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 	Remove-Item -Path "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
+    Remove-PSDrive -Name HKU
 	Write-Host "    Removed suggested apps references."
 
 
@@ -965,6 +966,7 @@ $CleanExplorer.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
     Write-Host " "
     Write-Host "Cleaning up Windows Explorer..."
+    New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 
     # Turn off Sticky keys prompt.
     Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
@@ -1020,7 +1022,6 @@ $ErrorActionPreference = 'SilentlyContinue'
     
     # Turn off News and interests in taskbar.
 	if ($CurrentBuild -lt 22000) {
-		New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
@@ -1059,16 +1060,18 @@ $ErrorActionPreference = 'SilentlyContinue'
 	}
     Write-Host "    - Hid Task view from taskbar"
 
-
+    Remove-PSDrive -Name HKU
     Write-Host "Finished cleaning up Windows Explorer."
        
 })
 
 $RevertExplorer.Add_Click( {
-    Write-Host " "
-    $ErrorActionPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
 
+    Write-Host " "
     Write-Host "Reverting to default Windows Explorer settings..."
+
+    New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 
     # Enable Sticky keys prompt.
     Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "510"
@@ -1122,11 +1125,11 @@ $RevertExplorer.Add_Click( {
 
     # Turn on News and interests in taskbar.
 	if ($CurrentBuild -lt 22000) {
-		New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0 | Out-Null
 		Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 0 | Out-Null
+        Remove-PSDrive -Name HKU
 	}
 	else {
 		# Do nothing
@@ -1266,6 +1269,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 $NewsAndInterests.Add_Click( {
 	if ($CurrentBuild -lt 22000) {
+        New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 		Write-Host " "
 		Write-Host "Turning off News and interests..."
 		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
@@ -1274,6 +1278,7 @@ $NewsAndInterests.Add_Click( {
 		Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
 		Write-Host "Turned off News and interests."
         Write-Host "Use 'Revert Windows Explorer changes' to turn it back on."
+        Remove-PSDrive -Name HKU
 	}
 	else {
 		Write-Host "This PC is running Windows 11. Windows 11 does not have News and interests."
@@ -1745,8 +1750,5 @@ $ErrorActionPreference = 'SilentlyContinue'
 	}
     Write-Host "Undid tasks and services changes."
 })
-
-# Remove created PSDrives
-Remove-PSDrive -Name HKU
 
 [void]$Form.ShowDialog()
