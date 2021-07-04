@@ -48,7 +48,7 @@ screen
 # Universal stuff.
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
-New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
+New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
 
 
 ### BEGIN GUI ###
@@ -1745,5 +1745,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 	}
     Write-Host "Undid tasks and services changes."
 })
+
+# Remove created PSDrives
+Remove-PSDrive -Name HKU
 
 [void]$Form.ShowDialog()

@@ -109,7 +109,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 # Do universal stuff
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
-New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
+New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
 
 
 # Take user configs.
@@ -1846,7 +1846,9 @@ Function EnableTaskbarFeed {
 	Start-Sleep 2
 }
 
-
+# Remove created PSDrives
+Remove-PSDrive -Name HKCR
+Remove-PSDrive -Name HKU
 
 ######### Tasks after successful run #########
 
