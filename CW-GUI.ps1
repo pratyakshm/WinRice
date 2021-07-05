@@ -9,21 +9,83 @@ Add-Type -AssemblyName System.Windows.Forms
 Function screen {
 $ProgressPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
-    Write-Host "Please standby while internet connection status is determined."
+    Clear-Host 
+    Write-Host "                                        CleanWin pre-execution environment"
+    Start-Sleep 1
+    Write-Host "Please standby while internet connection status is determined..."
 	Import-Module BitsTransfer
 	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
 	if (Test-Path File.txt) {
         $host.UI.RawUI.WindowTitle = "pratyakshm's CleanWin"
 		Remove-Item File.txt
+        Write-Host "This device is connected."
 	}
 	elseif (!(Test-Path File.txt)) {
 		Write-Host "Could not connect to the internet. CleanWin will not run."
 		exit
 	}
+    # Check for updates and exit if found (part of code used here is picked from https://gist.github.com/Grimthorr/44727ea8cf5d3df11cf7).
+    Write-Host " "
+    Write-Host "Checking for Windows updates..."
+    $UpdateSession = New-Object -ComObject Microsoft.Update.Session
+    $UpdateSearcher = $UpdateSession.CreateUpdateSearcher()
+    $Updates = @($UpdateSearcher.Search("IsHidden=0 and IsInstalled=0 and AutoSelectOnWebSites=1").Updates)
+    $Title = $($Updates).Title
+    if (!($Title)) {
+        Write-Host "This device is updated. "
+    }
+    elseif ($Title -notlike "Advanced Micro Devices, Inc." -or "Intel" -or "Dell") {
+        Write-Host "The following updates are pending:"
+        $($Updates).Title
+        Start-Sleep 1
+        Write-Host "Please apply all pending updates and restart your device to use CleanWin."
+        exit
+    }
+    Start-Sleep -Milliseconds 600
+    Write-Host " "
+    Write-Host "Checking for pending restart..."
+    Start-Sleep 1
+    param (
+        [Parameter(
+        Mandatory = $false,
+        ValueFromPipeline=$true,
+        ValueFromPipelineByPropertyName=$true,
+        Position=0
+        )]
+        [string[]]  $ComputerName = $env:COMPUTERNAME
+        )
+    ForEach ($Computer in $ComputerName) {
+        $PendingReboot = $false
+        $HKLM = [UInt32] "0x80000002"
+        $WMI_Reg = [WMIClass] "\\$Computer\root\default:StdRegProv"
+        if ($WMI_Reg) {
+            if (($WMI_Reg.EnumKey($HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\")).sNames -contains 'RebootPending') {$PendingReboot = $true}
+            if (($WMI_Reg.EnumKey($HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\")).sNames -contains 'RebootRequired') {$PendingReboot = $true}
+        
+            #Checking for SCCM namespace
+            $SCCM_Namespace = Get-WmiObject -Namespace ROOT\CCM\ClientSDK -List -ComputerName $Computer -ErrorAction Ignore
+            if ($SCCM_Namespace) {
+                if (([WmiClass]"\\$Computer\ROOT\CCM\ClientSDK:CCM_ClientUtilities").DetermineIfRebootPending().RebootPending -eq $true) {$PendingReboot = $true}
+            }
+        
+            if ($PendingReboot -eq $true) {
+                Write-Host "A device restart is pending."
+                Write-Host "Please restart this device then run CleanWin."
+            }
+            else {
+                Write-Host "No pending restarts detected."
+                Start-Sleep 2
+                Clear-Host
+            }
+            #Clearing Variables
+            $WMI_Reg        = $null
+            $SCCM_Namespace = $null
+        }   
+    }
     Clear-Host
     Start-Sleep 1
     Write-Host "                                        pratyakshm's CleanWin"
-    Write-Warning "The GUI window might freeze for an extended period of time while it's performing a task."
+    Write-Warning "The GUI window will freeze for an extended period of time while it's performing a task."
     Write-Host " "
     $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild

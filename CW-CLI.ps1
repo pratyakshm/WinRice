@@ -6,8 +6,7 @@
 $tasks = @(
 
 ### Maintenance Tasks ###
-	"InternetStatus",
-	"Setup",
+	"ExecutionPolicy",
 	"CleanWin",
 	"OSBuildInfo",
 	"CreateSystemRestore",
@@ -86,26 +85,91 @@ $tasks = @(
 )
 
 
-### Maintenance tasks ###
-
+### Pre-execution tasks ###
+Clear-Host
+Write-Host "                                        CleanWin pre-execution environment"
+Start-Sleep 1
 # Exit CleanWin if PC is not connected.
 $ProgressPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
-	Write-Host "Please standby while internet connection status is determined."
-	Import-Module BitsTransfer
-	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
-	if (Test-Path File.txt) {
-		Remove-Item File.txt
-		Write-Host "This device is connected."
-		Clear-Host
-	}
-	elseif (!(Test-Path File.txt)) {
-		Write-Host "This device is not connected. CleanWin will now exit."
-		exit
-	}
 
+Write-Host " "
+Write-Host " "
+Write-Host "Checking if this device is connected..."
+Import-Module BitsTransfer
+Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
+if (Test-Path File.txt) {
+	Remove-Item File.txt
+	Write-Host "This device is connected."
+}
+elseif (!(Test-Path File.txt)) {
+	Write-Host "This device is not connected. CleanWin will now exit."
+	exit
+}
+Start-Sleep -Milliseconds 600
 
-# Do universal stuff
+# Check for updates and exit if found (part of code used here is picked from https://gist.github.com/Grimthorr/44727ea8cf5d3df11cf7).
+Write-Host " "
+Write-Host "Checking for Windows updates..."
+$UpdateSession = New-Object -ComObject Microsoft.Update.Session
+$UpdateSearcher = $UpdateSession.CreateUpdateSearcher()
+$Updates = @($UpdateSearcher.Search("IsHidden=0 and IsInstalled=0 and AutoSelectOnWebSites=1").Updates)
+$Title = $($Updates).Title
+if (!($Title)) {
+	Write-Host "This device is updated. "
+}
+elseif ($Title -notlike "Advanced Micro Devices, Inc." -or "Intel" -or "Dell") {
+	Write-Host "The following updates are pending:"
+	$($Updates).Title
+	Start-Sleep 1
+	Write-Host "Please apply all pending updates and restart your device to use CleanWin."
+	exit
+}
+Start-Sleep -Milliseconds 600
+
+# Check for pending restart (part of code used here was picked from https://thesysadminchannel.com/remotely-check-pending-reboot-status-powershell).
+Write-Host " "
+Write-Host "Checking for pending restart..."
+Start-Sleep 1
+param (
+    [Parameter(
+    Mandatory = $false,
+    ValueFromPipeline=$true,
+    ValueFromPipelineByPropertyName=$true,
+    Position=0
+    )]
+    [string[]]  $ComputerName = $env:COMPUTERNAME
+    )
+ForEach ($Computer in $ComputerName) {
+    $PendingReboot = $false
+    $HKLM = [UInt32] "0x80000002"
+    $WMI_Reg = [WMIClass] "\\$Computer\root\default:StdRegProv"
+    if ($WMI_Reg) {
+        if (($WMI_Reg.EnumKey($HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\")).sNames -contains 'RebootPending') {$PendingReboot = $true}
+        if (($WMI_Reg.EnumKey($HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\")).sNames -contains 'RebootRequired') {$PendingReboot = $true}
+     
+        #Checking for SCCM namespace
+        $SCCM_Namespace = Get-WmiObject -Namespace ROOT\CCM\ClientSDK -List -ComputerName $Computer -ErrorAction Ignore
+        if ($SCCM_Namespace) {
+            if (([WmiClass]"\\$Computer\ROOT\CCM\ClientSDK:CCM_ClientUtilities").DetermineIfRebootPending().RebootPending -eq $true) {$PendingReboot = $true}
+        }
+     
+        if ($PendingReboot -eq $true) {
+            Write-Host "A device restart is pending."
+            Write-Host "Please restart this device then run CleanWin."
+        }
+        else {
+            Write-Host "No pending restart detected."
+			Start-Sleep 2
+			Clear-Host
+        }
+        #Clearing Variables
+        $WMI_Reg        = $null
+        $SCCM_Namespace = $null
+    }   
+}
+
+# Store values, create PSDrives and get current window title
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
@@ -115,9 +179,10 @@ if (!(Test-Path "C:\CleanWin")) {
 else {
 	# Do nothing.
 }
+$currenttitle = $(Get-Process | Where-Object {$_.MainWindowTitle -like "*PowerShell*" }).MainWindowTitle
 
 # Take user configs.
-Write-Host "Please answer the questions below with your choices."
+Write-Host "Please take your time to answer the questions below in order to save user config."
 Write-Host " "
 $systemrestore = Read-Host "Create a system restore point? [y/N]"
 $uninstallapps = Read-Host "Uninstall Windows apps?"
@@ -128,10 +193,9 @@ $netfx3 = Read-Host "Enable dotNET 3.5?"
 $winstall = Read-Host "Use Winstall? (bit.ly/Winstall)"
 $wingetimport = Read-Host "Use winget import?"
 Write-Host " "
-Write-Host "Choices saved."
+Start-Sleep -Milliseconds 200
+Write-Host "Choices saved, starting CleanWin..."
 Start-Sleep -Milliseconds 1500
-
-
 
 # CleanWin
 Function CleanWin {
@@ -144,7 +208,7 @@ Function CleanWin {
 
 
 # Set ExecutionPolicy to Unrestricted for session.
-Function Setup {
+Function ExecutionPolicy {
 	Set-ExecutionPolicy Unrestricted -Scope Process
 }
 
@@ -1828,6 +1892,7 @@ Function EnableTaskbarFeed {
 # Remove created PSDrives
 Remove-PSDrive -Name HKCR
 Remove-PSDrive -Name HKU
+$host.UI.RawUI.WindowTitle = $currenttitle
 
 ######### Tasks after successful run #########
 
