@@ -1294,26 +1294,25 @@ $ErrorActionPreference = 'SilentlyContinue'
     Write-Host "Turning off data collection..."
     
 	# Disable suggestions and silent installation of sponsored apps.
-	$Suggestions = "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
-	Set-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SystemPaneSuggestionsEnabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SoftLandingEnabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "ContentDeliveryAllowed" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "OemPreInstalledAppsEnabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEnabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEverEnabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-310093Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-314559Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-338387Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-338388Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-338389Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-338393Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-353694Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-353696Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-353698Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SystemPaneSuggestionsEnabled" -Type DWord -Value 0
+	if (!(Test-Path "C:\CleanWin\Suggestions.reg")) {
+		reg export "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" "C:\CleanWin\Suggestions.reg" | Out-Null
+	}
+	else {
+		reg export "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" "C:\CleanWin\SuggestionsThisMustWork.reg" | Out-Null
+	}
+	$SyncNotification = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+	Set-ItemProperty -Path $SyncNotification -Name "ShowSyncProviderNotifications" -Type DWord -Value 0
+	Remove-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled"
+	Remove-ItemProperty -Path $Suggestions -Name "SystemPaneSuggestionsEnabled"
+	Remove-ItemProperty -Path $Suggestions -Name "SoftLandingEnabled"
+	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent"
+	Remove-ItemProperty -Path $Suggestions -Name "ContentDeliveryAllowed"
+	Remove-ItemProperty -Path $Suggestions -Name "OemPreInstalledAppsEnabled"
+	Remove-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEnabled"
+	Remove-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEverEnabled"
+	Remove-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled"
+	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent*"
+	Remove-Item -Path "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
     
     # Disable Tailored experiences.
 	$CloudContent = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"

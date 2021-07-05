@@ -16,7 +16,6 @@ $tasks = @(
 ### Apps & Features ###
 	"AppsFeatures",
 	"UninstallApps", "Activity", 
-	"SuggestedApps",
 	"UnpinStartTiles", "Activity", 
 	"UnpinAppsFromTaskbar", "Activity", 
 	"InstallWinGet", 
@@ -25,6 +24,7 @@ $tasks = @(
 	# "DisableBrowserRestoreAd",	# "EnableBrowserRestoreAd",
 	"DisableM365OnValueBanner",   # "RevertM365OnValueBanner",
 	"UninstallFeatures", "Activity", 
+	"DisableSuggestions",		    # "EnableSuggestions",
 	"EnableWSL", "Activity", 
 	"EnabledotNET3.5", "Activity", 
 	# "EnableSandbox",
@@ -45,7 +45,6 @@ $tasks = @(
 	"DisableLangAccess",  		    # "EnableLangAccess",
 	"DisableLocationTracking",      # "EnableLocationTracking",
 	"DisableMapUpdates",			# "EnableMapsUpdates",
-	"DisableSuggestions",		    # "EnableSuggestions",
 	"DisableSpeechRecognition",		# "EnableSpeechRecognition",
 	"DisableTailoredExperiences",	# "EnableTailoredExperiences",
 	"DisableTelemetry",				# "EnableTelemetry",
@@ -110,7 +109,12 @@ $ErrorActionPreference = 'SilentlyContinue'
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
-
+if (!(Test-Path "C:\CleanWin")) {
+	New-Item "C:\CleanWin" -ItemType Directory | Out-Null
+}
+else {
+	# Do nothing.
+}
 
 # Take user configs.
 Write-Host "Please answer the questions below with your choices."
@@ -430,13 +434,6 @@ Function UnpinStartTiles {
 	}
 }
 
-
-Function SuggestedApps {
-	Write-Host " "
-	Write-Host "Removing suggested apps references..."
-	Write-Host "Removed suggested apps references."
-}
-
 # Unpin Apps from taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
 Function UnpinAppsFromTaskbar {
 	Write-Host " "
@@ -669,6 +666,49 @@ $ErrorActionPreference = 'SilentlyContinue'
 	}
 	else {
 		# Do nothing.
+	}
+}
+
+# Disable app suggestions and automatic installation.
+Function DisableSuggestions {
+	Write-Host " "
+	Write-Host "Turning off app suggestions and automatic app installation..."
+	if (!(Test-Path "C:\CleanWin\Suggestions.reg")) {
+		reg export "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" "C:\CleanWin\Suggestions.reg" | Out-Null
+	}
+	else {
+		reg export "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" "C:\CleanWin\SuggestionsThisMustWork.reg" | Out-Null
+	}
+	$SyncNotification = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+	Set-ItemProperty -Path $SyncNotification -Name "ShowSyncProviderNotifications" -Type DWord -Value 0
+	Remove-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled"
+	Remove-ItemProperty -Path $Suggestions -Name "SystemPaneSuggestionsEnabled"
+	Remove-ItemProperty -Path $Suggestions -Name "SoftLandingEnabled"
+	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent"
+	Remove-ItemProperty -Path $Suggestions -Name "ContentDeliveryAllowed"
+	Remove-ItemProperty -Path $Suggestions -Name "OemPreInstalledAppsEnabled"
+	Remove-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEnabled"
+	Remove-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEverEnabled"
+	Remove-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled"
+	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent*"
+	Remove-Item -Path "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
+	Write-Host "Turned off app suggestions and automatic app installation."
+}
+
+# Enable app suggestions and automatic installation.
+Function EnableSuggestions {
+	Write-Host " "
+	Write-Host "Turning on app suggestions and automatic app installation..."
+	if (Test-Path "C:\CleanWin\Suggestions.reg") {
+		reg import "C:\CleanWin\Suggestions.reg" | Out-Null
+		Write-Host "Turned on app suggestions and automatic app installation."
+	}
+	elseif (Test-Path "C:\CleanWin\SuggestionsThisMustWork.reg") {
+		reg import "C:\CleanWin\SuggestionsThisMustWork.reg" | Out-Null
+		Write-Host "Turned on app suggestions and automatic app installation."
+	}
+	else {
+		Write-Host "Could not turn on suggestions and automatic app installation because the exported registry key was likely deleted."
 	}
 }
 
@@ -1115,65 +1155,6 @@ Function EnableMapsUpdates {
 	Write-Host "Turning on automatic Maps updates..."
 	Remove-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled"
 	Write-Host "Turned on automatic Maps updates."
-}
-
-# Disable app suggestions and automatic installation.
-Function DisableSuggestions {
-	Write-Host " "
-	Write-Host "Turning off app suggestions and automatic app installation..."
-	$Suggestions = "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
-	$SyncNotification = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-	Set-ItemProperty -Path $SyncNotification -Name "ShowSyncProviderNotifications" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SystemPaneSuggestionsEnabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SoftLandingEnabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "ContentDeliveryAllowed" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "OemPreInstalledAppsEnabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEnabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEverEnabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-310093Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-314559Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-338387Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-338388Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-338389Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-338393Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-353694Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-353696Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SubscribedContent-353698Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $Suggestions -Name "SystemPaneSuggestionsEnabled" -Type DWord -Value 0
-	Remove-Item -Path "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
-	Write-Host "Turned off app suggestions and automatic app installation."
-}
-
-# Enable app suggestions and automatic installation.
-Function EnableSuggestions {
-	Write-Host " "
-	Write-Host "Turning on app suggestions and automatic app installation..."
-	$Suggestions = "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
-	$SyncNotification = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-	Remove-ItemProperty -Path $SyncNotification -Name "ShowSyncProviderNotifications"
-	Remove-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SystemPaneSuggestionsEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SoftLandingEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent"
-	Remove-ItemProperty -Path $Suggestions -Name "ContentDeliveryAllowed"
-	Remove-ItemProperty -Path $Suggestions -Name "OemPreInstalledAppsEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEverEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent-310093Enabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent-314559Enabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent-338387Enabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent-338388Enabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent-338389Enabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent-338393Enabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent-353694Enabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent-353696Enabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent-353698Enabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SystemPaneSuggestionsEnabled"
-	Write-Host "Turned on app suggestions and automatic app installation."
 }
 
 # Disable Speech Recognition.
