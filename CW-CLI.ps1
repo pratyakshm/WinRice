@@ -624,7 +624,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 		# Uninstall capabilities.
 		$Capabilities = @(
 			"App.StepsRecorder*"
-			"App.Support.QuickAssist*"
 			"Hello.Face*"
 			"MathRecognizer*"
 			"Media.WindowsMediaPlayer*"
@@ -642,7 +641,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 		$CapLists =@(
 			"Math Recognizer"
 			"Microsoft Paint"
-			"Quick Assist"
 			"Snipping Tool"
 			"Steps Recorder"
 			"Windows Fax & Scan"
