@@ -362,9 +362,9 @@ Function UninstallApps {
 $ErrorActionPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
 	if ($uninstallapps -like "y") {
-		# Inbox UWP apps.
+		# Remove Windows inbox apps.
 		Write-Host "Uninstalling Windows apps..."
-		$Bloatware = @(
+		$InboxApps = @(
 			"Microsoft.549981C3F5F10"
 			"Microsoft.BingNews"
 			"Microsoft.BingWeather"
@@ -400,31 +400,40 @@ $ProgressPreference = 'SilentlyContinue'
 			"Microsoft.YourPhone"
 			"Microsoft.ZuneMusic"
 			"Microsoft.ZuneVideo"
+		)
+		ForEach ($InboxApp in $InboxApps) {
+			if (Get-AppxPackage $InboxApp) {
+				Write-Host "     Uninstalling $InboxApp..."
+				Get-AppxPackage -Name $InboxApp| Remove-AppxPackage 
+				Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $InboxApp | Remove-AppxProvisionedPackage -Online | Out-Null
+			}
+			else {
+				# Do nothing.
+			}
+		}
 
-			# Sponsored Apps
-			"*EclipseManager*"
-			"*ActiproSoftwareLLC*"
-			"*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
-			"*Duolingo-LearnLanguagesforFree*"
-			"*PandoraMediaInc*"
+		# Remove Sponsored apps.
+		$SponsoredApps = @(
+			"*AdobePhotoshopExpress*"
 			"*CandyCrush*"
 			"*BubbleWitch3Saga*"
-			"*Wunderlist*"
-			"*Flipboard*"
 			"*Twitter*"
 			"*Facebook*"
 			"*Spotify*"
 			"*Minecraft*"
-			"*Royal Revolt*"
-			"*Sway*"
-			"*Speed Test*"
 			"*Dolby*"
 		)
-		ForEach ($Bloat in $Bloatware) {
-			Write-Host "     Uninstalling $Bloat..."
-			Get-AppxPackage -Name $Bloat| Remove-AppxPackage 
-			Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $Bloat | Remove-AppxProvisionedPackage -Online | Out-Null
+		ForEach ($SponsoredApp in $SponsoredApps) {
+			if (Get-AppxPackage $SponsoredApp) {
+				Write-Host "     Uninstalling $SponsoredApp.."
+				Get-AppxPackage -Name $SponsoredApp| Remove-AppxPackage 
+				Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $SponsoredApp | Remove-AppxProvisionedPackage -Online | Out-Null
+			}
+			else {
+				# Do nothing.
+			}
 		}
+
 		# Remove Office webapps shortcuts.
 		if (Test-Path "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk") {
 			Write-Host "     Uninstalling Office web-apps..."
