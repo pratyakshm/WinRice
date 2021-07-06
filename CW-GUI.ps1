@@ -1674,72 +1674,57 @@ $ReserveBandwidth.Add_Click({
 
 $SetupWindowsUpdate.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
-	# Get Windows Edition, if its Professional, Education, or Enterprise.
-    if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) {
-        Write-Host " "
-		# Get OS flighting channel (Dev/RTM) and OS version (10/11).
-        $channel = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name DisplayVersion
-        $winver = Get-ItemPropertyValue  'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name CurrentBuild
-		# If Dev channel, print Dev channel policies message.
-        if ($channel -match "Dev") {
-            Write-Host "Device registered in Windows Insider Program Dev channel, setting up Windows Update policies accordingly..."
-        }
-		# Else, print general policies message.
-        else {
-            Write-Host "Setting up Windows Update policies..."
-        }
+    Write-Host " "
+    if ($CurrentBuild -lt 22000) {
+        # Get Windows Edition, if its Professional, Education, or Enterprise.
+        if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) {
+                Write-Host "Setting up Windows Update policies..."
 
-		# Print user friendly list of policies applied.
-        $WinUpdatePolicies =@(
-            "Turned off automatic updates"
-            "Device will no longer auto restart if users are signed in"
-            "Turned off re-installation of bloatware after Windows Updates"
-            "Delayed quality updates by 4 days"
-        )
-        ForEach ($WinUpdatePolicy in $WinUpdatePolicies) {
-            Write-Host "    - $WinUpdatePolicy"
-        }
-		# Declare registry keys locations.
-        $Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
-        $Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
-            If (!(Test-Path $Update1)) {
-            New-Item -Path $Update1 | Out-Null
-            New-Item -Path $Update2 | Out-Null
+                # Declare registry keys locations.
+                $Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
+                $Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
+                if (!(Test-Path $Update1)) {
+                    New-Item -Path $Update1 | Out-Null
+                    New-Item -Path $Update2 | Out-Null
+                }
+
+                # Write registry values.
+                Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
+                Set-ItemProperty -Path $Update1 -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
+                Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
+                Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
+                Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
+                Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
+
+                # Print user message; policies applied.
+                $WinUpdatePolicies =@(
+                    "Turned off automatic updates"
+                    "Device will no longer auto restart if users are signed in"
+                    "Turned off re-installation of apps after Windows Updates"
+                    "Delayed quality updates by 4 days"
+                    "Delayed feature updates by 20 days"
+                )
+                ForEach ($WinUpdatePolicy in $WinUpdatePolicies) {
+                    Write-Host "    - $WinUpdatePolicy"
+                }
+                
+                Write-Host "Set up Windows Update policies."
+
             }
-		# Write common registry values that apply to all channels and OS versions.
-        Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
-        Set-ItemProperty -Path $Update1 -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
-		Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
-        Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
-		# Check if device is registered in Dev channel.
-        if ($channel -match "Dev") {
-			# If device is on Windows 11, do not delay flights.
-            if ($winver -ge 22000) {
-                # Do nothing.
-            }
-			# Else, delay flights by two days.
-            else { 
-                Write-Host "    - Delayed weekly flights by 2 days"
-				Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
-                Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 2
-            }
-        }
-		# If device is not registered in Dev channel, delay feature updates by 20 days.
+
+        # Print user message if unsupported edition.
         else {
-            Write-Host "    - Delayed feature updates by 20 days"
-			Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
-            Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
+            Write-Host "You are running an edition of Windows that does not support setting up Windows Update policies."
+            Write-Host "Could not set up Windows Update policies."
         }
-		# Print more user messages
-        if ($winver -ge 22000) {
-            Write-Host "    - Weekly flights won't be delayed since this device is running Windows 11."
-        }
-        Write-Host "Set up Windows Update policies."
     }
-	# Print user message if device is running an edition that does not support setting up policies.
+
+    elseif ($CurrentBuild -ge 22000) {
+        Write-Host "CleanWin currently cannot set up Windows Update policies on Windows 11."
+    }
+
     else {
-        Write-Host "You are running an edition of Windows that does not support setting up Windows Update policies."
-		Write-Host "Could not set up Windows Update policies."
+        # Do nothing.
     }
 })
 
