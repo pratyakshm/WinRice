@@ -383,12 +383,10 @@ $ProgressPreference = 'SilentlyContinue'
 			"Microsoft.News" 
 			"Microsoft.Office.Sway" 
 			"Microsoft.OneConnect"
-			"Microsoft.Paint"
 			"Microsoft.People" 
 			"Microsoft.PowerAutomateDesktop"
 			"Microsoft.Print3D" 
 			"Microsoft.SkypeApp"
-			"Microsoft.StorePurchaseApp" 
 			"Microsoft.Todos"
 			"Microsoft.WindowsAlarms"
 			"Microsoft.WindowsCamera"
@@ -889,7 +887,7 @@ Function Install7zip {
 	$7zip = "HKLM:\SOFTWARE\7-Zip"
 	If (!(Test-Path $7zip)) {
 		Write-Host "Installing 7-zip..."
-		winget install 7zip
+		winget install 7zip --silent
 	}
 	else {
 		Write-Host "7-zip is already installed on this device."
@@ -910,7 +908,7 @@ $ErrorActionPreference = 'Stop'
 				Get-Content 'Winstall.txt' | ForEach-Object {
 					$App = $_.Split('=')
 					Write-Host "    Installing $App..."
-					winget install "$App"
+					winget install "$App" --silent 
 				}
 				Write-Host "Winstall has successfully installed the app(s)."
 			}
@@ -921,7 +919,7 @@ $ErrorActionPreference = 'Stop'
 				Get-Content 'winstall.txt' | ForEach-Object {
 					$App = $_.Split('=')
 					Write-Host "    Installing $App..."
-					winget install "$App"
+					winget install "$App" --silent
 				}
 				Write-Host "Winstall has successfully installed the app(s)."
 			}
@@ -936,7 +934,7 @@ $ErrorActionPreference = 'Stop'
 					Write-Host "Starting Winstall..."
 					Get-Content $OpenFileDialog.FileName | ForEach-Object {
 						$App = $_.Split('=')
-						Write-Host "    Installing $App..."
+						Write-Host "    Installing $App..." --silent
 						winget install "$App"
 					}
 					Write-Host "Winstall has successfully installed the app(s)."
