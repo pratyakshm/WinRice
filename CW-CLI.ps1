@@ -32,6 +32,10 @@ $tasks = @(
 	# "EnableSandbox",
 	"Install7zip", 
 	"Winstall", 
+	"Activity",
+	"EnableExperimentsWinget",
+	"WinGetImport",
+	"Activity",
 	"InstallHEVC", 
 	"InstallFonts", 
 	"SetPhotoViewerAssociation",
@@ -228,7 +232,7 @@ $wsl = Read-Host "Enable Windows Subsystem for Linux?"
 $netfx3 = Read-Host "Enable dotNET 3.5?"
 $winstall = Read-Host "Use Winstall? (bit.ly/Winstall)"
 $wingetimport = Read-Host "Use winget import?"
-$enablewingetexperimentalfeatures = Read-Host "Enable experimental features in WinGet?"
+$enableexperimentswinget = Read-Host "Enable experimental features in WinGet?"
 
 Write-Host " "
 Start-Sleep -Milliseconds 200
@@ -560,6 +564,7 @@ Function UnpinAppsFromTaskbar {
 		}	
 	}
 	Write-Host "Unpinned apps from taskbar."
+	Start-Sleep 1
 }
 
 # Install WinGet (Windows Package Manager).
@@ -598,18 +603,6 @@ $ProgressPreference = 'SilentlyContinue'
 		# Get-Command winget, if it works then print success message.
 		if (Get-Command winget) {
 			Write-Host "Installed WinGet."
-			if ($enablewingetexperimentalfeatures -like "y") {
-				Write-Host "Turning on all experimental features in WinGet..."
-				$currentdir = $(Get-Location).Path
-				Set-Location "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\"
-				Rename-Item settings.json settings.json.backup
-				Start-BitsTransfer "https://raw.githubusercontent.com/CleanWin/Files/main/settings.json"
-				Set-Location $currentdir
-				Write-Host "Turned on all experimental features in WinGet."
-			}
-			else {
-				# Do nothing.
-			}
 		}
 		else {
 			Write-Host "WinGet could not be installed."
@@ -934,8 +927,8 @@ $ErrorActionPreference = 'Stop'
 					Write-Host "Starting Winstall..."
 					Get-Content $OpenFileDialog.FileName | ForEach-Object {
 						$App = $_.Split('=')
-						Write-Host "    Installing $App..." --silent
-						winget install "$App"
+						Write-Host "    Installing $App..."
+						winget install "$App" --silent
 					}
 					Write-Host "Winstall has successfully installed the app(s)."
 				}
@@ -954,6 +947,23 @@ $ErrorActionPreference = 'Stop'
 		# Do nothing.
 	}
 }
+
+# Enable all experimental features in WinGet.
+Function EnableExperimentsWinget {
+	if ($enableexperimentswinget -like "y") {
+		Write-Host "Turning on all experimental features in WinGet..."
+		$currentdir = $(Get-Location).Path
+		Set-Location "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\"
+		Rename-Item settings.json settings.json.backup
+		Start-BitsTransfer "https://raw.githubusercontent.com/CleanWin/Files/main/settings.json"
+		Set-Location $currentdir
+		Write-Host "Turned on all experimental features in WinGet."
+	}
+	else {
+		# Do nothing.
+	}
+}
+
 
 # Use winget import (optional) (part of code used here was picked from https://devblogs.microsoft.com/scripting/hey-scripting-guy-can-i-open-a-file-dialog-box-with-windows-powershell/)
 Function WinGetImport {
