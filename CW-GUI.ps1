@@ -790,10 +790,12 @@ $ProgressPreference = 'SilentlyContinue'
     Write-Host " "
     Write-Host "    Unpinning apps from taskbar..."
 	$AppNames = @(
+		"Mail"
+		"Microsoft Edge"
 		"Microsoft Store"
+		"Microsoft Teams"
 		"Office"
 		"Xbox"
-		"Mail"
 	)
 	ForEach ($AppName in $AppNames) {
 		if ( $App = ((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | Where-Object { $_.Name -eq $AppName })) {

@@ -552,11 +552,12 @@ Function UnpinAppsFromTaskbar {
 	Write-Host " "
 	Write-Host "Unpinning apps from taskbar..."
 	$AppNames = @(
+		"Mail"
+		"Microsoft Edge"
 		"Microsoft Store"
 		"Microsoft Teams"
 		"Office"
 		"Xbox"
-		"Mail"
 	)
 	ForEach ($AppName in $AppNames) {
 		if ( $App = ((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | Where-Object { $_.Name -eq $AppName })) {
@@ -565,53 +566,6 @@ Function UnpinAppsFromTaskbar {
 	}
 	Write-Host "Unpinned apps from taskbar."
 	Start-Sleep 1
-}
-
-# Install WinGet (Windows Package Manager).
-Function InstallWinGet {
-$ErrorActionPreference = 'SilentlyContinue'
-$ProgressPreference = 'SilentlyContinue'
-	Write-Host " "
-	if (!(Get-Command winget)) {
-		Write-Host "Preparing download..."
-		# Create new folder and set location.
-		if (!(Test-Path CleanWin)) {
-			New-Item CleanWin -ItemType Directory | out-Null
-			$currentdir = $(Get-Location).Path
-			$dir = "$currentdir/CleanWin"
-			Set-Location $dir
-		}
-		else {
-			Set-Location CleanWin
-		}
-
-		# Download the packages.
-		Import-Module BitsTransfer
-		$WinGetURL = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
-		$VCLibsURL = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx"
-		Write-Host "Downloading WinGet installation packages..."
-		Start-BitsTransfer $WinGetURL.assets.browser_download_url ; Start-BitsTransfer $VCLibsURL 
-
-		# Install WinGet.
-		Write-Host "Installing WinGet..."
-		Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -DependencyPath Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-			
-		# Cleanup installers.
-		Set-Location ..
-		Remove-Item CleanWin -Recurse -Force
-
-		# Get-Command winget, if it works then print success message.
-		if (Get-Command winget) {
-			Write-Host "Installed WinGet."
-		}
-		else {
-			Write-Host "WinGet could not be installed."
-		}
-
-	}
-	else {
-		Write-Host "WinGet is already installed on this device."
-	}
 }
 
 # Uninstall Microsoft OneDrive (supports 64-bit versions).
@@ -874,6 +828,54 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 }
 
+
+# Install WinGet (Windows Package Manager).
+Function InstallWinGet {
+$ErrorActionPreference = 'SilentlyContinue'
+$ProgressPreference = 'SilentlyContinue'
+		Write-Host " "
+		if (!(Get-Command winget)) {
+			Write-Host "Preparing download..."
+			# Create new folder and set location.
+			if (!(Test-Path CleanWin)) {
+				New-Item CleanWin -ItemType Directory | out-Null
+				$currentdir = $(Get-Location).Path
+				$dir = "$currentdir/CleanWin"
+				Set-Location $dir
+			}
+			else {
+				Set-Location CleanWin
+			}
+	
+			# Download the packages.
+			Import-Module BitsTransfer
+			$WinGetURL = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
+			$VCLibsURL = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx"
+			Write-Host "Downloading WinGet installation packages..."
+			Start-BitsTransfer $WinGetURL.assets.browser_download_url ; Start-BitsTransfer $VCLibsURL 
+	
+			# Install WinGet.
+			Write-Host "Installing WinGet..."
+			Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -DependencyPath Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+				
+			# Cleanup installers.
+			Set-Location ..
+			Remove-Item CleanWin -Recurse -Force
+	
+			# Get-Command winget, if it works then print success message.
+			if (Get-Command winget) {
+				Write-Host "Installed WinGet."
+			}
+			else {
+				Write-Host "WinGet could not be installed."
+			}
+	
+		}
+		else {
+			Write-Host "WinGet is already installed on this device."
+		}
+}
+
 # Install 7zip.
 Function Install7zip {
 	Write-Host " "
@@ -951,6 +953,7 @@ $ErrorActionPreference = 'Stop'
 # Enable all experimental features in WinGet.
 Function EnableExperimentsWinget {
 	if ($enableexperimentswinget -like "y") {
+		Write-Host " "
 		Write-Host "Turning on all experimental features in WinGet..."
 		$currentdir = $(Get-Location).Path
 		Set-Location "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\"
