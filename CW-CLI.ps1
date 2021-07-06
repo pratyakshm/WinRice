@@ -22,7 +22,7 @@ $tasks = @(
 	"Activity",
 	# "DisableBrowserRestoreAd",
 	# "EnableBrowserRestoreAd",
-	"DisableM365OnValueBanner", 
+	# "DisableM365OnValueBanner", 
 	# "RevertM365OnValueBanner",
 	"UninstallFeatures", "Activity", 
 	"DisableSuggestions",		    
