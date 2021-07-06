@@ -228,6 +228,8 @@ $wsl = Read-Host "Enable Windows Subsystem for Linux?"
 $netfx3 = Read-Host "Enable dotNET 3.5?"
 $winstall = Read-Host "Use Winstall? (bit.ly/Winstall)"
 $wingetimport = Read-Host "Use winget import?"
+$enablewingetexperimentalfeatures = Read-Host "Enable experimental features in WinGet?"
+
 Write-Host " "
 Start-Sleep -Milliseconds 200
 Write-Host "Choices saved, starting CleanWin..."
@@ -589,6 +591,18 @@ $ProgressPreference = 'SilentlyContinue'
 		# Get-Command winget, if it works then print success message.
 		if (Get-Command winget) {
 			Write-Host "Installed WinGet."
+			if ($enablewingetexperimentalfeatures -like "y") {
+				Write-Host "Turning on all experimental features in WinGet..."
+				$currentdir = $(Get-Location).Path
+				Set-Location "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\"
+				Rename-Item settings.json settings.json.backup
+				Start-BitsTransfer "https://raw.githubusercontent.com/CleanWin/Files/main/settings.json"
+				Set-Location $currentdir
+				Write-Host "Turned on all experimental features in WinGet."
+			}
+			else {
+				# Do nothing.
+			}
 		}
 		else {
 			Write-Host "WinGet could not be installed."
@@ -768,6 +782,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 		# Do nothing.
 	}
 }
+
+
 
 # Disable app suggestions and automatic installation.
 Function DisableSuggestions {
