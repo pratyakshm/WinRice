@@ -1,6 +1,6 @@
 # pratyakshm's CleanWin
 # This file is a part of the CleanWin software
-# Copyright (c) 2021 PratyakshM <pratyakshm@protonmail.com>
+# Copyright (c) 2021 Pratyaksh Mehrotra <pratyakshm@protonmail.com>
 # All rights reserved.
 
 Add-Type -AssemblyName System.Windows.Forms
@@ -10,9 +10,11 @@ Function screen {
 $ProgressPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
     Clear-Host 
-    Write-Host "                                        CleanWin pre-execution environment"
+    Write-Host "CleanWin pre-execution environment"
     Start-Sleep 1
-    Write-Host "Please standby while internet connection status is determined..."
+
+    # Check if device is connected.
+    Write-Host "Checking if this device is connected..."
 	Import-Module BitsTransfer
 	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
 	if (Test-Path File.txt) {
@@ -21,10 +23,11 @@ $ErrorActionPreference = 'SilentlyContinue'
         Write-Host "This device is connected."
 	}
 	elseif (!(Test-Path File.txt)) {
-		Write-Host "Could not connect to the internet. CleanWin will not run."
+		Write-Host "This device is not connected. CleanWin will now exit."
 		exit
 	}
-    # Check for updates and exit if found (part of code used here is picked from https://gist.github.com/Grimthorr/44727ea8cf5d3df11cf7).
+
+    # Check for for pending updates (part of code used here is picked from https://gist.github.com/Grimthorr/44727ea8cf5d3df11cf7).
     Write-Host " "
     Write-Host "Checking for Windows updates..."
     $UpdateSession = New-Object -ComObject Microsoft.Update.Session
@@ -34,14 +37,17 @@ $ErrorActionPreference = 'SilentlyContinue'
     if (!($Title)) {
         Write-Host "This device is updated. "
     }
-    elseif ($Title -notlike "Advanced Micro Devices, Inc." -or "Intel" -or "Dell") {
+    else {
         Write-Host "The following updates are pending:"
         $($Updates).Title
         Start-Sleep 1
-        Write-Host "Please apply all pending updates and restart your device to use CleanWin."
+        Write-Host " "
+        Write-Host "Please update your device before running CleanWin."
         exit
     }
     Start-Sleep -Milliseconds 600
+
+    # Check for pending restarts.
     Write-Host " "
     Write-Host "Checking for pending restart..."
     Start-Sleep 1
@@ -84,8 +90,12 @@ $ErrorActionPreference = 'SilentlyContinue'
     }
     Clear-Host
     Start-Sleep 1
-    Write-Host "                                        pratyakshm's CleanWin"
-    Write-Warning "The GUI window will freeze for an extended period of time while it's performing a task."
+	Write-Host "pratyakshm's CleanWin"
+	Start-Sleep -Milliseconds 100
+	Write-Host " "
+	Write-Host "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
+	Start-Sleep -Milliseconds 100
+    Write-Warning "GUI will freeze while CleanWin is performing a task."
     Write-Host " "
     $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild

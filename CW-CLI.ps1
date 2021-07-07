@@ -1,5 +1,5 @@
 # This file is a part of the CleanWin software
-# Copyright (c) 2021 PratyakshM <pratyakshm@protonmail.com>
+# Copyright (c) 2021 Pratyaksh Mehrotra <pratyakshm@protonmail.com>
 # All rights reserved.
 
 # Default preset
@@ -127,12 +127,17 @@ $tasks = @(
 
 ### Pre-execution tasks ###
 Clear-Host
-Write-Host "                                        CleanWin pre-execution environment"
+Write-Host "CleanWin pre-execution environment"
+Start-Sleep -Milliseconds 100
+Write-Host " "
+Write-Host "Copyright (c) Pratyaksh Mehrotra and contributors"
+Start-Sleep -Milliseconds 100
+Write-Host "https://github.com/pratyakshm/CleanWin"
 Start-Sleep 1
+
 # Exit CleanWin if PC is not connected.
 $ProgressPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
-
 Write-Host " "
 Write-Host " "
 Write-Host "Checking if this device is connected..."
@@ -158,11 +163,12 @@ $Title = $($Updates).Title
 if (!($Title)) {
 	Write-Host "This device is updated. "
 }
-elseif ($Title -notlike "Advanced Micro Devices, Inc." -or "Intel" -or "Dell") {
+else {
 	Write-Host "The following updates are pending:"
 	$($Updates).Title
 	Start-Sleep 1
-	Write-Host "Please apply all pending updates and restart your device to use CleanWin."
+	Write-Host " "
+	Write-Host "Please update your device before running CleanWin."
 	exit
 }
 Start-Sleep -Milliseconds 600
@@ -188,7 +194,7 @@ ForEach ($Computer in $ComputerName) {
         if (($WMI_Reg.EnumKey($HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\")).sNames -contains 'RebootPending') {$PendingReboot = $true}
         if (($WMI_Reg.EnumKey($HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\")).sNames -contains 'RebootRequired') {$PendingReboot = $true}
      
-        #Checking for SCCM namespace
+        # Check for SCCM namespace.
         $SCCM_Namespace = Get-WmiObject -Namespace ROOT\CCM\ClientSDK -List -ComputerName $Computer -ErrorAction Ignore
         if ($SCCM_Namespace) {
             if (([WmiClass]"\\$Computer\ROOT\CCM\ClientSDK:CCM_ClientUtilities").DetermineIfRebootPending().RebootPending -eq $true) {$PendingReboot = $true}
@@ -203,13 +209,13 @@ ForEach ($Computer in $ComputerName) {
 			Start-Sleep 2
 			Clear-Host
         }
-        #Clearing Variables
+        # Clear variables.
         $WMI_Reg        = $null
         $SCCM_Namespace = $null
     }   
 }
 
-# Store values, create PSDrives and get current window title
+# Store values, create PSDrives and get current window title.
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
@@ -239,21 +245,19 @@ Start-Sleep -Milliseconds 200
 Write-Host "Choices saved, starting CleanWin..."
 Start-Sleep -Milliseconds 1500
 
-# CleanWin
+# Intro.
 Function CleanWin {
 	$host.UI.RawUI.WindowTitle = "pratyakshm's CleanWin"
 	Clear-Host
 	Write-Host " "
-	Write-Host "                                        pratyakshm's CleanWin"
+	Write-Host "pratyakshm's CleanWin"
+	Start-Sleep -Milliseconds 100
+	Write-Host " "
+	Write-Host "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
+	Start-Sleep -Milliseconds 100
+	Write-Host "https://github.com/pratyakshm/CleanWin"
 	Start-Sleep 1
 }
-
-
-# Set ExecutionPolicy to Unrestricted for session.
-Function ExecutionPolicy {
-	Set-ExecutionPolicy Unrestricted -Scope Process
-}
-
 
 # OS Build.
 Function OSBuildInfo {
@@ -264,7 +268,7 @@ Function OSBuildInfo {
 	$OSBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 	$DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
 	if ($CurrentBuild -lt 22000) {
-		Write-Host "This PC is running $ProductName."
+		Write-Host "This PC is running Windows 10."
 		Write-Host "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
 	}
 	elseif ($CurrentBuild -ge 22000) {
@@ -353,7 +357,6 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 
 # Update status
 Function AppsFeatures {
-	Write-Host " "
 	Write-Host " "
 	Write-Host "-------------------------"
 	Write-Host "     APPS & FEATURES     "
