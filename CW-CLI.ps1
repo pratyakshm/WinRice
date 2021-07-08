@@ -17,6 +17,7 @@ $tasks = @(
 	"UninstallApps", "Activity", 
 	"UnpinStartTiles", "Activity", 
 	"UnpinAppsFromTaskbar", "Activity", 
+	"InstallFrameworks",
 	"InstallWinGet", 
 	"UninstallOneDrive", 
 	"Activity",
@@ -834,6 +835,51 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 }
 
+# Install runtime packages 
+Function InstallFrameworks {
+	Write-Host " "
+	if (!(Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop")) {
+		Write-Host "Preparing download..."
+		# Create new folder and set location.
+		if (!(Test-Path CleanWin)) {
+			New-Item CleanWin -ItemType Directory | out-Null
+			$currentdir = $(Get-Location).Path; $dir = "$currentdir/CleanWin"; Set-Location $dir
+		}
+		else {
+			Set-Location CleanWin
+		}
+		# Download frameworks.
+		Write-Host "Downloading app frameworks..."
+		$VCLibs1 = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx"
+		$VCLibs2 = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x86__8wekyb3d8bbwe.Appx"
+		$VCLibs3 = "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx"
+		$VCLibs4 = "https://aka.ms/Microsoft.VCLibs.x86.14.00.Desktop.appx"
+		Start-BitsTransfer $VCLibs1; Start-BitsTransfer $VCLibs2; Start-BitsTransfer $VCLibs3; Start-BitsTransfer $VCLibs4
+
+		# Install frameworks.
+		Write-Host "Installing app frameworks..."
+		$VCLibs1 = "Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx"
+		$VCLibs2 = "Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x86__8wekyb3d8bbwe.Appx"
+		$VCLibs3 = "Microsoft.VCLibs.x64.14.00.Desktop.appx"
+		$VCLibs4 = "Microsoft.VCLibs.x86.14.00.Desktop.appx"
+		Add-AppxPackage $VCLibs1; Add-AppxPackage $VCLibs2; Add-AppxPackage $VCLibs3; Add-AppxPackage $VCLibs4
+
+		# Cleanup installers.
+		Set-Location ..
+		Remove-Item CleanWin -Recurse -Force
+		
+		# Get-Command VCLibs, if it works then print success message.
+		if (Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop") {
+			Write-Host "Installed app frameworks."
+		}
+		elseif (!(Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop")) {
+			Write-Host "Could not install app frameworks."
+		}
+		else {
+			# Do nothing.
+		}
+	}
+}
 
 # Install WinGet (Windows Package Manager).
 Function InstallWinGet {
@@ -855,13 +901,12 @@ $ProgressPreference = 'SilentlyContinue'
 	
 			# Download the packages.
 			$WinGetURL = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
-			$VCLibsURL = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx"
 			Write-Host "Downloading WinGet installation packages..."
-			Start-BitsTransfer $WinGetURL.assets.browser_download_url ; Start-BitsTransfer $VCLibsURL 
+			Start-BitsTransfer $WinGetURL.assets.browser_download_url
 	
 			# Install WinGet.
 			Write-Host "Installing WinGet..."
-			Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -DependencyPath Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
+			Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
 				
 			# Cleanup installers.
 			Set-Location ..
