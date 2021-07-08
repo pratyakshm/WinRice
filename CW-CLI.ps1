@@ -790,18 +790,26 @@ Function EnableWSL {
 $ProgressPreference = 'SilentlyContinue'
 	if ($wsl -like "y") {
 		Write-Host " "
-		# Import BitsTransfer module, ping GitHub - if success, enable WSL, else print no connection message.
-		Import-Module BitsTransfer 
-		Write-Host "Enabling Windows Subsystem for Linux..."
-		Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-		Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-		if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) {
-			Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+		if ($CurrentBuild -lt 22000) {
+			Write-Host "Enabling Windows Subsystem for Linux..."
+			Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+			Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+			if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) {
+				Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+			}
+			else {
+				Write-Host "Could not enable optional feature: Hyper-V, since this edition of Windows does not support it. "
+			}
+			Write-Host "Enabled Windows Subsystem for Linux."
+		}
+		elseif ($CurrentBuild -ge 22000) {
+			Write-Host "Enabling Windows Subsystem for Linux version 2 along with GUI App support..."
+			wsl --install | Out-Null
+			Write-Host "Enabled Windows Subsystem for Linux."
 		}
 		else {
-			Write-Host "Could not enable optional feature: Hyper-V, since this edition of Windows does not support it. "
+			# Do nothing.
 		}
-		Write-Host "Enabled Windows Subsystem for Linux."
 	}
 	else {
 		# Do nothing.
