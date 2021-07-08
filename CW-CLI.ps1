@@ -452,7 +452,6 @@ $ProgressPreference = 'SilentlyContinue'
 
 		# Uninstall Connect app.
 		if (Get-AppxPackage Microsoft-PPIProjection-Package) {
-			Import-Module BitsTransfer
 			Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
 			Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
 			./connect.cmd | Out-Null
@@ -620,7 +619,6 @@ Function DisableEdgeStartupBoost {
 Function DisableBrowserRestoreAd {
 $ProgressPreference = 'SilentlyContinue'
 	Write-Host " "
-    Import-Module BitsTransfer 
 	Write-Host "Turning off 'Web browsing: Restore recommended' suggestion in Settings..."
     Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Albacore.ViVe.dll
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/ViVeTool.exe
@@ -634,7 +632,6 @@ $ProgressPreference = 'SilentlyContinue'
 Function EnableBrowserRestoreAd {
 $ProgressPreference = 'SilentlyContinue'
 	Write-Host " "
-    Import-Module BitsTransfer 
 	Write-Host "Turning on 'Web browsing: Restore recommended' suggestion in Settings..."
     Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Albacore.ViVe.dll
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/ViVeTool.exe
@@ -650,7 +647,6 @@ $ProgressPreference = 'SilentlyContinue'
 	if ($CurrentBuild -ge 22000) {
 		Write-Host " "
 		Write-Host "Turning off Microsoft 365 suggestion banner in Settings..."
-		Import-Module BitsTransfer
 		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/mach2.exe
 		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/msdia140.dll
 		./mach2.exe disable 29174495 | Out-Null
@@ -668,7 +664,6 @@ $ProgressPreference = 'SilentlyContinue'
 	if ($CurrentBuild -ge 22000) {
 		Write-Host " "
 		Write-Host "Turning on Microsoft 365 suggestion banner in Settings..."
-		Import-Module BitsTransfer
 		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/mach2.exe
 		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/msdia140.dll
 		./mach2.exe revert 29174495 | Out-Null
@@ -859,7 +854,6 @@ $ProgressPreference = 'SilentlyContinue'
 			}
 	
 			# Download the packages.
-			Import-Module BitsTransfer
 			$WinGetURL = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
 			$VCLibsURL = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx"
 			Write-Host "Downloading WinGet installation packages..."
@@ -1012,7 +1006,6 @@ Function InstallHEVC {
 $ProgressPreference = 'SilentlyContinue'
 	Write-Host " "
 	if (!(Get-AppxPackage -Name Microsoft.HEVCVideoExtension)) {
-	Import-Module BitsTransfer
 	Write-Host "Downloading HEVC Video Extensions..."
 	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.41023.0_x64__8wekyb3d8bbwe.Appx
 	Write-Host "Installing HEVC Video Extensions..."
@@ -1036,7 +1029,6 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 	# Install Cascadia Code if not already installed.
 	else {
-		Import-Module BitsTransfer
 		Write-Host "Downloading the latest release of Cascadia Code..."
 		$response = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/cascadia-code/releases/latest"
 		Start-BitsTransfer -Source $response.assets.browser_download_url -Destination "CascadiaCode.zip"
