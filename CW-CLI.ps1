@@ -1006,12 +1006,27 @@ Function InstallHEVC {
 $ProgressPreference = 'SilentlyContinue'
 	Write-Host " "
 	if (!(Get-AppxPackage -Name Microsoft.HEVCVideoExtension)) {
-	Write-Host "Downloading HEVC Video Extensions..."
-	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.41023.0_x64__8wekyb3d8bbwe.Appx
-	Write-Host "Installing HEVC Video Extensions..."
-	Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.41023.0_x64__8wekyb3d8bbwe.Appx
-	Remove-Item Microsoft.HEVCVideoExtension_1.0.41023.0_x64__8wekyb3d8bbwe.Appx
-	Write-Host "Installed HEVC Video Extensions."
+		$OSArchitecture = (Get-WmiObject Win32_OperatingSystem).OSArchitecture
+		if ($OSArchitecture -like "64-bit") {
+			Write-Host "Downloading HEVC Video Extensions..."
+			Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.41483.0_x64__8wekyb3d8bbwe.Appx
+			Write-Host "Installing HEVC Video Extensions..."
+			Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.41483.0_x64__8wekyb3d8bbwe.Appx
+			Remove-Item Microsoft.HEVCVideoExtension_1.0.41483.0_x64__8wekyb3d8bbwe.Appx
+			Write-Host "Installed HEVC Video Extensions."
+		}
+		elseif ($OSArchitecture -like "32-bit") {
+			Write-Host "Downloading HEVC Video Extensions..."
+			Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.41483.0_x86__8wekyb3d8bbwe.Appx
+			Write-Host "Installing HEVC Video Extensions..."
+			Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.41483.0_x86__8wekyb3d8bbwe.Appx
+			Remove-Item Microsoft.HEVCVideoExtension_1.0.41483.0_x86__8wekyb3d8bbwe.Appx
+			Write-Host "Installed HEVC Video Extensions."
+		}
+		else {
+			# Error out.
+			Write-Host "Could not install HEVC Video Extensions."
+		}
 	}
 	else {
 		Write-Host "HEVC Video Extensions are already installed on this device."
