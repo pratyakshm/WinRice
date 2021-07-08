@@ -11,9 +11,33 @@ $ProgressPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
     Clear-Host 
     Write-Host "CleanWin pre-execution environment"
+    Start-Sleep -Milliseconds 100
+    Write-Host " "
+    Write-Host "Copyright (c) Pratyaksh Mehrotra and contributors"
+    Start-Sleep -Milliseconds 100
+    Write-Host "https://github.com/pratyakshm/CleanWin"
     Start-Sleep 1
 
+    # Check if session is elevated.
+    Write-Host " "
+    Write-Host "Checking if current session is elevated..."
+    Start-Sleep 2
+    $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+    $admin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    if ($admin -like "False") {
+        Write-Host "Please run CleanWin in an elevated PowerShell session."
+        exit
+    }
+    elseif ($admin -like "True") {
+        Write-Host "Session is elevated. Going ahead."
+        # Do nothing.
+    }
+    else {
+        # Do nothing.
+    }
+
     # Check if device is connected.
+    Write-Host " "
     Write-Host "Checking if this device is connected..."
 	Import-Module BitsTransfer
 	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
