@@ -271,6 +271,12 @@ Write-Host " "
 Write-Host "Press Enter to proceed after answering a question."
 $systemrestore = Read-Host "Create a system restore point? [y/N]"
 $uninstallapps = Read-Host "Uninstall Windows apps?"
+if ($CurrentBuild -ge 22000) {
+	$widgets = Read-Host "Remove Widgets?"
+}
+else {
+	# Do nothing.
+}
 $onedrive = Read-Host "Uninstall Microsoft OneDrive?"
 $uninstallfeatures = Read-Host "Uninstall unnecessary optional features?"
 $wsl = Read-Host "Enable Windows Subsystem for Linux?"
@@ -1116,24 +1122,53 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 }
 
-# Update MicrosoftWindows.Client.WebExperience
-Function UpdateWidgets {
-	if ($CurrentBuild -ge 22000) {
-		$version = (Get-AppxPackage "MicrosoftWindows.Client.WebExperience").Version
-		if ($version -lt 421.17400.0.0) {
-			Write-Host " "
-			Write-Host "Updating Widgets..."
-			Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/MicrosoftWindows.Client.WebExperience_421.17400.0.0_neutral___cw5n1h2txyewy.AppxBundle
-			Add-AppxPackage MicrosoftWindows.Client.WebExperience_421.17400.0.0_neutral___cw5n1h2txyewy.AppxBundle
+# Widgets
+Function Widgets {
+$ProgressPreference = 'SilentlyContinue'
+	Write-Host " "
+	if ($widgets -like "n") {
+		if ($CurrentBuild -ge 22000) {
+			Write-Host "Checking if Widgets are updated..."
 			$version = (Get-AppxPackage "MicrosoftWindows.Client.WebExperience").Version
-			Remove-Item MicrosoftWindows.Client.WebExperience_421.17400.0.0_neutral___cw5n1h2txyewy.AppxBundle
-			if ($version -ge 421.17400.0.0) {
-				Write-Host "Updated Widgets."
-
+			if ($version -lt 421.17400.0.0) {
+				Write-Host "Updating Widgets..."
+				Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/MicrosoftWindows.Client.WebExperience_421.17400.0.0_neutral___cw5n1h2txyewy.AppxBundle
+				Add-AppxPackage MicrosoftWindows.Client.WebExperience_421.17400.0.0_neutral___cw5n1h2txyewy.AppxBundle
+				$version = (Get-AppxPackage "MicrosoftWindows.Client.WebExperience").Version
+				Remove-Item MicrosoftWindows.Client.WebExperience_421.17400.0.0_neutral___cw5n1h2txyewy.AppxBundle
+				if ($version -ge 421.17400.0.0) {
+					Write-Host "Updated Widgets."
+				}
+				else {
+					Write-Host "Could not update Widgets."
+				}
 			}
-			else {
-				Write-Host "Could not update Widgets."
+			elseif ($version -ge 421.17400.0.0) {
+				Write-Host "Widgets are already updated."
 			}
+		}
+		elseif ($CurrentBuild -lt 22000) {
+			Write-Host "This device is not running Windows 11. Widgets can't be updated on older versions of Windows."
+		}
+		else {
+			# Do nothing.
+		}
+	}
+	elseif ($widgets -like "y") {
+		if (Get-AppxPackage "MicrosoftWindows.Client.WebExperience") {
+			Write-Host "Removing Widgets..."
+			Get-AppxPackage "MicrosoftWindows.Client.WebExperience" | Remove-AppxPackage
+			if (!(Get-AppxPackage "MicrosoftWindows.Client.WebExperience")) {
+				Stop-Process -name explorer
+				Start-Sleep 2
+				Write-Host "Removed Widgets."
+			}
+			elseif (Get-AppxPackage "MicrosoftWindows.Client.WebExperience") {
+				Write-Host "Could not remove Widgets."
+			}
+		}
+		elseif (!(Get-AppxPackage "MicrosoftWindows.Client.WebExperience")) {
+			Write-Host "Widgets may have already been removed."
 		}
 		else {
 			# Do nothing.
