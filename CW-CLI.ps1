@@ -38,6 +38,7 @@ $tasks = @(
 	"WinGetImport",
 	"Activity",
 	"InstallHEVC", 
+	"UpdateWidgets",
 	"InstallFonts", 
 	"SetPhotoViewerAssociation",
 	# "SetPhotoViewerAssociation",
@@ -134,7 +135,36 @@ Write-Host " "
 Write-Host "Copyright (c) Pratyaksh Mehrotra and contributors"
 Start-Sleep -Milliseconds 100
 Write-Host "https://github.com/pratyakshm/CleanWin"
+Write-Host " "
 Start-Sleep 1
+
+# Store values, create PSDrives and get current window title.
+$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+$DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
+New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
+if (!(Test-Path "C:\CleanWin")) {
+	New-Item "C:\CleanWin" -ItemType Directory | Out-Null
+}
+else {
+	# Do nothing.
+}
+$currenttitle = $(Get-Process | Where-Object {$_.MainWindowTitle -like "*PowerShell*" }).MainWindowTitle
+
+# Check if supported OS build.
+Write-Host " "
+Write-Host "Checking if CleanWin supports this version of Windows..."
+Start-Sleep 1
+if ($CurrentBuild -lt 19042) {
+	Write-Host "This device is running Windows 10 $DisplayVersion OS Build $CurrentBuild."
+	Write-Host "CleanWin does not support this version. Please update your device."
+	Write-Host "CleanWin will now exit."
+	exit
+}
+elseif ($CurrentBuild -ge 19042) {
+	Write-Host "This version of Windows is supported."
+}
+Start-Sleep -Milliseconds 600
 
 # Check if session is elevated.
 Write-Host " "
@@ -147,12 +177,13 @@ if ($admin -like "False") {
 	exit
 }
 elseif ($admin -like "True") {
-	Write-Host "Session is elevated. Going ahead."
+	Write-Host "Session is elevated."
 	# Do nothing.
 }
 else {
 	# Do nothing.
 }
+Start-Sleep -Milliseconds 600
 
 # Exit CleanWin if PC is not connected.
 $ProgressPreference = 'SilentlyContinue'
@@ -183,6 +214,7 @@ if (!($Title)) {
 }
 else {
 	Write-Host "The following updates are pending:"
+	Write-Host " "
 	$($Updates).Title
 	Start-Sleep 1
 	Write-Host " "
@@ -193,7 +225,7 @@ Start-Sleep -Milliseconds 600
 
 # Check for pending restart (part of code used here was picked from https://thesysadminchannel.com/remotely-check-pending-reboot-status-powershell).
 Write-Host " "
-Write-Host "Checking for pending restart..."
+Write-Host "Checking for pending restarts..."
 Start-Sleep 1
 param (
     [Parameter(
@@ -223,7 +255,7 @@ ForEach ($Computer in $ComputerName) {
             Write-Host "Please restart this device then run CleanWin."
         }
         else {
-            Write-Host "No pending restart detected."
+            Write-Host "No pending restarts detected."
 			Start-Sleep 2
 			Clear-Host
         }
@@ -233,21 +265,10 @@ ForEach ($Computer in $ComputerName) {
     }   
 }
 
-# Store values, create PSDrives and get current window title.
-$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
-New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
-if (!(Test-Path "C:\CleanWin")) {
-	New-Item "C:\CleanWin" -ItemType Directory | Out-Null
-}
-else {
-	# Do nothing.
-}
-$currenttitle = $(Get-Process | Where-Object {$_.MainWindowTitle -like "*PowerShell*" }).MainWindowTitle
-
 # Take user configs.
 Write-Host "Please take your time to answer the questions below in order to save user config."
 Write-Host " "
+Write-Host "Press Enter to proceed after answering a question."
 $systemrestore = Read-Host "Create a system restore point? [y/N]"
 $uninstallapps = Read-Host "Uninstall Windows apps?"
 $onedrive = Read-Host "Uninstall Microsoft OneDrive?"
@@ -854,8 +875,8 @@ $ProgressPreference = 'SilentlyContinue'
 
 # Install runtime packages 
 Function InstallFrameworks {
-	Write-Host " "
 	if (!(Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop")) {
+		Write-Host " "
 		Write-Host "Preparing download..."
 		# Create new folder and set location.
 		if (!(Test-Path CleanWin)) {
@@ -1092,6 +1113,34 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 	else {
 		Write-Host "HEVC Video Extensions are already installed on this device."
+	}
+}
+
+# Update MicrosoftWindows.Client.WebExperience
+Function UpdateWidgets {
+	if ($CurrentBuild -ge 22000) {
+		$version = (Get-AppxPackage "MicrosoftWindows.Client.WebExperience").Version
+		if ($version -lt 421.17400.0.0) {
+			Write-Host " "
+			Write-Host "Updating Widgets..."
+			Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/MicrosoftWindows.Client.WebExperience_421.17400.0.0_neutral___cw5n1h2txyewy.AppxBundle
+			Add-AppxPackage MicrosoftWindows.Client.WebExperience_421.17400.0.0_neutral___cw5n1h2txyewy.AppxBundle
+			$version = (Get-AppxPackage "MicrosoftWindows.Client.WebExperience").Version
+			Remove-Item MicrosoftWindows.Client.WebExperience_421.17400.0.0_neutral___cw5n1h2txyewy.AppxBundle
+			if ($version -ge 421.17400.0.0) {
+				Write-Host "Updated Widgets."
+
+			}
+			else {
+				Write-Host "Could not update Widgets."
+			}
+		}
+		else {
+			# Do nothing.
+		}
+	}
+	else {
+		# Do nothing.
 	}
 }
 
