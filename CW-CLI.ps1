@@ -624,7 +624,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 			Write-Host "Uninstalling Microsoft OneDrive..."
 
 			# Uninstall using WinGet.
-			winget uninstall Microsoft.OneDrive | Out-Null
+			winget uninstall Microsoft.OneDrive --silent | Out-Null
 
 			# Cleanup leftover folders if found.
 			Remove-Item "$env:USERPROFILE\OneDrive" -Recurse -Force
@@ -985,7 +985,7 @@ Function Install7zip {
 
 # Install apps from Winstall file (the Winstall.txt file must be on the same directory as CleanWin).
 Function Winstall {
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Continue'
 	if ($winstall -like "y") {
 		Write-Host " "
 		# Check if WinGet is installed, then proceed.
@@ -997,7 +997,7 @@ $ErrorActionPreference = 'Stop'
 				Get-Content 'Winstall.txt' | ForEach-Object {
 					$App = $_.Split('=')
 					Write-Host "    Installing $App..."
-					winget install "$App" --silent 
+					winget install "$App" --silent | Out-Null
 				}
 				Write-Host "Winstall has successfully installed the app(s)."
 			}
@@ -1008,7 +1008,7 @@ $ErrorActionPreference = 'Stop'
 				Get-Content 'winstall.txt' | ForEach-Object {
 					$App = $_.Split('=')
 					Write-Host "    Installing $App..."
-					winget install "$App" --silent
+					winget install "$App" --silent | Out-Null
 				}
 				Write-Host "Winstall has successfully installed the app(s)."
 			}
@@ -1024,12 +1024,12 @@ $ErrorActionPreference = 'Stop'
 					Get-Content $OpenFileDialog.FileName | ForEach-Object {
 						$App = $_.Split('=')
 						Write-Host "    Installing $App..."
-						winget install "$App" --silent
+						winget install "$App" --silent | Out-Null
 					}
 					Write-Host "Winstall has successfully installed the app(s)."
 				}
 				else {
-					Write-ost " "
+					Write-Host "No text file was picked."
 				}
 			}
 		}

@@ -887,66 +887,63 @@ $ProgressPreference = 'SilentlyContinue'
 } )
 
 $Winstall.Add_Click( {
-    if ($winstall -like "y") {
-        Write-Host " "
-        # Check if WinGet is installed, then proceed.
-        if (Get-Command winget) {
-            # Try Winstall.txt
-            if (Test-Path Winstall.txt) {
-                Write-Host "Starting Winstall..."
-                # Get each line from the text file and use winget install command on it.
-                Get-Content 'Winstall.txt' | ForEach-Object {
-                    $App = $_.Split('=')
-                    Write-Host "    Installing $App..."
-                    winget install "$App"
-                }
-                Write-Host "Winstall has successfully installed the app(s)."
-            }
-            # Try winstall.txt
-            elseif (Test-Path winstall.txt) {
-                Write-Host "Starting Winstall..."
-                # Get each line from the text file and use winget install command on it.
-                Get-Content 'winstall.txt' | ForEach-Object {
-                    $App = $_.Split('=')
-                    Write-Host "    Installing $App..."
-                    winget install "$App"
-                }
-                Write-Host "Winstall has successfully installed the app(s)."
-            }
-            else {
-                # File picker UI to manually pick the file.
-                [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
-                Write-Host "Select Winstall text file from File Picker UI"
-                $OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
-                $OpenFileDialog.InitialDirectory = $initialDirectory
-                $OpenFileDialog.Filter = "Text file (*.txt)| *.txt"
-                $OpenFileDialog.ShowDialog() | Out-Null
-                if ($OpenFileDialog.FileName) {
-                    Write-Host "Starting Winstall..."
-                    Get-Content $OpenFileDialog.FileName | ForEach-Object {
-                        $App = $_.Split('=')
-                        Write-Host "    Installing $App..."
-                        winget install "$App"
-                    }
-                    Write-Host "Winstall has successfully installed the app(s)."
-                }
-                elseif (!($OpenFileDialog.FileName)) {
-                    Write-Host "Winstall not selected."
-                }
-                else {
-                    # Do nothing.
-                }
-            }
-        }
-        # Inform user if WinGet is not installed.
-        else {
-            Write-Host "WinGet is not installed. Please install WinGet first before using Winstall."
-            Start-Process "https://bit.ly/Winstall" 
-        }
-    }
-    else {
-        # Do nothing.
-    }
+$ErrorActionPreference = 'Continue'
+	if ($winstall -like "y") {
+		Write-Host " "
+		# Check if WinGet is installed, then proceed.
+		if (Get-Command winget) {
+			# Try Winstall.txt
+			if (Test-Path Winstall.txt) {
+				Write-Host "Starting Winstall..."
+				# Get each line from the text file and use winget install command on it.
+				Get-Content 'Winstall.txt' | ForEach-Object {
+					$App = $_.Split('=')
+					Write-Host "    Installing $App..."
+					winget install "$App" --silent | Out-Null
+				}
+				Write-Host "Winstall has successfully installed the app(s)."
+			}
+			# Try winstall.txt
+			elseif (Test-Path winstall.txt) {
+				Write-Host "Starting Winstall..."
+				# Get each line from the text file and use winget install command on it.
+				Get-Content 'winstall.txt' | ForEach-Object {
+					$App = $_.Split('=')
+					Write-Host "    Installing $App..."
+					winget install "$App" --silent | Out-Null
+				}
+				Write-Host "Winstall has successfully installed the app(s)."
+			}
+			else {
+				[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
+				Write-Host "Select Winstall text file from File Picker UI"
+				$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
+				$OpenFileDialog.InitialDirectory = $initialDirectory
+				$OpenFileDialog.Filter = "Text file (*.txt)| *.txt"
+				$OpenFileDialog.ShowDialog() | Out-Null
+				if ($OpenFileDialog.FileName) {
+					Write-Host "Starting Winstall..."
+					Get-Content $OpenFileDialog.FileName | ForEach-Object {
+						$App = $_.Split('=')
+						Write-Host "    Installing $App..."
+						winget install "$App" --silent | Out-Null
+					}
+					Write-Host "Winstall has successfully installed the app(s)."
+				}
+				else {
+					Write-Host "No text file was picked."
+				}
+			}
+		}
+		# Inform user if WinGet is not installed.
+		else {
+			Write-Host "WinGet is not installed. Please install WinGet first before using Winstall."
+			Start-Process "https://bit.ly/Winstall" 
+		}
+	}
+	else {
+		# Do nothing.
+	}
 })
 
 
