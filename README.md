@@ -1,58 +1,51 @@
 # CleanWin
+
 ![No. of Downloads](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=darkgreen&style=flat-square)
 ![Stars](https://img.shields.io/github/stars/pratyakshm/CleanWin?style=flat-square)
 [![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)](https://github.com/pratyakshm/CleanWin/releases/latest)
 [![Pre-Release](https://img.shields.io/github/v/release/pratyakshm/CleanWin?include_prereleases&label=pre-release&logo=vNext&style=flat-square)](https://github.com/pratyakshm/CleanWin/releases/tag/vNext)
-&nbsp;
+&nbsp;  
 
-## What is CleanWin
-An open source project to make your 🐌 PC faster.  
-`
-💡 Read documentation properly before running CleanWin
-`
+### 💡 Read documentation properly before running CleanWin
+
+
+## Explain in one line 
+Cool underrated code that sets up Windows.
+
+
+## Ok - in all seriousness
+Everything from removing junk (your hardware doesn't count, yet), cleaning up the Windows UI, setting up privacy policies, Windows Update policies, installing your own apps, disabling unnecessary features and enabling useful ones meanwhile retaining maximum app compatibility. Sounds pretty cool, eh?
+
+#### Get into details: [tap tap](https://github.com/pratyakshm/CleanWin/wiki/Detailed-list-of-tasks-CleanWin-performs)
+
+### Can I revert changes? 
+The answer is yes. **Sometimes**. Read [functions](https://github.com/pratyakshm/CleanWin/blob/main/CW-CLI.ps1#L6-L127) to learn what you can and can't revert. 
+
+## Running CleanWin
+You can use either of the two following methods:
+### 1. GitHub release
+   It's simple - tap [this link](https://github.com/pratyakshm/CleanWin/releases/latest) to get to the latest release or browse all releases [here](https://github.com/pratyakshm/CleanWin/releases).
+### 2. Main branch
+Open Windows Terminal as Administrator, make you're using Windows PowerShell and NOT [PowerShell](https://github.com/powershell/powershell).  
+**P.S.:** Using Windows 11? Do yourself a favour - run the latest code from main branch instead of using the latest release.  
+
+To run **CLI** (based and redpilled), paste  
+`Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JmqTS'))`   
+
+Oh you wanna run **GUI** (cringe and bluepilled)? Paste    
+`Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jqcr0'))`   
+And press Enter, I mean - obviously.   
 
 ## Wiki
 [Visit the Wiki](https://github.com/pratyakshm/CleanWin/wiki) to read in detail about testing, compatibility, using Winstall, customization, and more.
 
-## How to run
 
-`💡 Tap on the points starting with a triangular bullet to expand or collapse them`
+## Supported Windows OSes
+CleanWin supports the most recent Windows 10 feature update: version 21H1 (OS Build 19043). Windows 11 support is experimental and I strongly suggest running code from main branch if you're using CleanWin on Windows 11.
 
-<details><summary>Method 1 (recommended): Running the latest release</summary>
-
-   1. Download the latest release from [Releases](https://github.com/pratyakshm/CleanWin/releases).
-   2. Unzip the ZIP file.
-   3. Double tap to launch CLI or GUI.
-        - CleanWin prebuilt binaries that ship via GitHub releases will not run unless administrator priviliges are provided.
-</details>
-<details><summary>Method 2: Running the latest code from main branch</summary>
-
-   1. Choose if you want to run CleanWin CLI or GUI.
-   2. Copy its corresponding code from the below section.
-   3. Paste it into Windows PowerShell (Admin)  
-   
-  **CLI:**    
-   ```
-   Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JmqTS'))
-   ```
-  **GUI:**      
-   ```
-   Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jqcr0'))
-   ```    
-⚠️ Code from main branch is not quality tested or validated, as oppossed to prebuilt binaries from GitHub releases. Proceed with caution.   
-</details>
-
-
-## List of changes performed
-Please [check here](https://github.com/pratyakshm/CleanWin/wiki/Detailed-list-of-tasks-CleanWin-performs).
-
-
-## OS Builds supported
-CleanWin supports the two latest Windows 10 feature updates (20H2 and 21H1), and Windows 11 (experimental).  
-Its tested on the latest Windows 10 feature update (Windows 10 21H1 at the time of writing this) and the latest Windows 11 build in Dev channel.
 
 ## Known issues
-I'm tracking currently known issues [here](https://github.com/pratyakshm/CleanWin/issues/16).
+Known issues are being tracked [here](https://github.com/pratyakshm/CleanWin/issues/16).  
 
 
 ## Advanced usage
