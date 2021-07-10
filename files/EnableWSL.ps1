@@ -2,17 +2,24 @@
 # Copyright (c) 2021 PratyakshM <pratyakshm@protonmail.com>
 # All rights reserved.
 
-# Import BitsTransfer module and download NetTestFile
-Import-Module BitsTransfer 
-Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/NetTestFile
-# If the file exists, proceed with installing WSL, else inform user about no internet connection.
-If (Test-Path NetTestFile) {
-    Remove-Item NetTestFile
+if ($CurrentBuild -lt 22000) {
     Write-Host "Enabling Windows Subsystem for Linux..."
     Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
     Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-    Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-} 
+    if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) {
+        Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
+    }
+    else {
+        $ProductName = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ProductName
+        Write-Host "Could not enable Hyper-V since $ProductName does not support it."
+    }
+    Write-Host "Enabled Windows Subsystem for Linux."
+}
+elseif ($CurrentBuild -ge 22000) {
+    Write-Host "Enabling Windows Subsystem for Linux version 2 along with GUI App support..."
+    wsl --install | Out-Null
+    Write-Host "Enabled Windows Subsystem for Linux."
+}
 else {
-    Write-Host "Windows Subsystem for Linux can't be installed. Are you sure you're connected to the internet?"
+    # Do nothing.
 }

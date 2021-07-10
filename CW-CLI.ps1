@@ -838,7 +838,8 @@ $ProgressPreference = 'SilentlyContinue'
 				Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
 			}
 			else {
-				Write-Host "Could not enable optional feature: Hyper-V, since this edition of Windows does not support it. "
+				$ProductName = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ProductName
+				Write-Host "Could not enable Hyper-V since $ProductName does not support it."
 			}
 			Write-Host "Enabled Windows Subsystem for Linux."
 		}
@@ -1807,8 +1808,8 @@ Function SetupWindowsUpdate {
 
 		# Print user message if unsupported edition.
 		else {
-			Write-Host "You are running an edition of Windows that does not support setting up Windows Update policies."
-			Write-Host "Could not set up Windows Update policies."
+			$ProductName = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ProductName
+			Write-Host "$ProductName does not support setting up Windows Update policies."
 		}
 	}
 	
