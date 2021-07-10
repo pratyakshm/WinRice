@@ -20,6 +20,3 @@ elseif ($CurrentBuild -ge 22000) {
     wsl --install | Out-Null
     Write-Host "Enabled Windows Subsystem for Linux."
 }
-else {
-    # Do nothing.
-}

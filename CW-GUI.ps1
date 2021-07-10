@@ -6,145 +6,188 @@
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
-Function screen {
-$ProgressPreference = 'SilentlyContinue'
-$ErrorActionPreference = 'SilentlyContinue'
-    Clear-Host 
-    Write-Host "CleanWin pre-execution environment"
-    Start-Sleep -Milliseconds 100
-    Write-Host " "
-    Write-Host "Copyright (c) Pratyaksh Mehrotra and contributors"
-    Start-Sleep -Milliseconds 100
-    Write-Host "https://github.com/pratyakshm/CleanWin"
-    Start-Sleep 1
-
-    # Check if session is elevated.
-    Write-Host " "
-    Write-Host "Checking if current session is elevated..."
-    Start-Sleep 2
-    $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
-    $admin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-    if ($admin -like "False") {
-        Write-Host "Please run CleanWin in an elevated PowerShell session."
-        exit
-    }
-    elseif ($admin -like "True") {
-        Write-Host "Session is elevated. Going ahead."
-        # Do nothing.
-    }
-    else {
-        # Do nothing.
-    }
-
-    # Check if device is connected.
-    Write-Host " "
-    Write-Host "Checking if this device is connected..."
-	Import-Module BitsTransfer
-	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
-	if (Test-Path File.txt) {
-        $host.UI.RawUI.WindowTitle = "pratyakshm's CleanWin"
-		Remove-Item File.txt
-        Write-Host "This device is connected."
-	}
-	elseif (!(Test-Path File.txt)) {
-		Write-Host "This device is not connected. CleanWin will now exit."
-		exit
-	}
-
-    # Check for for pending updates (part of code used here is picked from https://gist.github.com/Grimthorr/44727ea8cf5d3df11cf7).
-    Write-Host " "
-    Write-Host "Checking for Windows updates..."
-    $UpdateSession = New-Object -ComObject Microsoft.Update.Session
-    $UpdateSearcher = $UpdateSession.CreateUpdateSearcher()
-    $Updates = @($UpdateSearcher.Search("IsHidden=0 and IsInstalled=0 and AutoSelectOnWebSites=1").Updates)
-    $Title = $($Updates).Title
-    if (!($Title)) {
-        Write-Host "This device is updated. "
-    }
-    else {
-        Write-Host "The following updates are pending:"
-        $($Updates).Title
-        Start-Sleep 1
-        Write-Host " "
-        Write-Host "Please update your device before running CleanWin."
-        exit
-    }
-    Start-Sleep -Milliseconds 600
-
-    # Check for pending restarts.
-    Write-Host " "
-    Write-Host "Checking for pending restart..."
-    Start-Sleep 1
-    param (
-        [Parameter(
-        Mandatory = $false,
-        ValueFromPipeline=$true,
-        ValueFromPipelineByPropertyName=$true,
-        Position=0
-        )]
-        [string[]]  $ComputerName = $env:COMPUTERNAME
-        )
-    ForEach ($Computer in $ComputerName) {
-        $PendingReboot = $false
-        $HKLM = [UInt32] "0x80000002"
-        $WMI_Reg = [WMIClass] "\\$Computer\root\default:StdRegProv"
-        if ($WMI_Reg) {
-            if (($WMI_Reg.EnumKey($HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\")).sNames -contains 'RebootPending') {$PendingReboot = $true}
-            if (($WMI_Reg.EnumKey($HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\")).sNames -contains 'RebootRequired') {$PendingReboot = $true}
-        
-            #Checking for SCCM namespace
-            $SCCM_Namespace = Get-WmiObject -Namespace ROOT\CCM\ClientSDK -List -ComputerName $Computer -ErrorAction Ignore
-            if ($SCCM_Namespace) {
-                if (([WmiClass]"\\$Computer\ROOT\CCM\ClientSDK:CCM_ClientUtilities").DetermineIfRebootPending().RebootPending -eq $true) {$PendingReboot = $true}
-            }
-        
-            if ($PendingReboot -eq $true) {
-                Write-Host "A device restart is pending."
-                Write-Host "Please restart this device then run CleanWin."
-            }
-            else {
-                Write-Host "No pending restarts detected."
-                Start-Sleep 2
-                Clear-Host
-            }
-            #Clearing Variables
-            $WMI_Reg        = $null
-            $SCCM_Namespace = $null
-        }   
-    }
-    Clear-Host
-    Start-Sleep 1
-	Write-Host "pratyakshm's CleanWin"
-	Start-Sleep -Milliseconds 100
+Clear-Host 
+Function space {
 	Write-Host " "
-	Write-Host "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
-	Start-Sleep -Milliseconds 100
-    Write-Warning "GUI will freeze while CleanWin is performing a task."
-    Write-Host " "
-    $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
-	$BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
-	$OSBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
-	$DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
-	if ($CurrentBuild -lt 21996) {
-		Write-Host "This PC is running Windows 10."
-		Write-Host "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
-	}
-	elseif ($CurrentBuild -ge 22000) {
-		Write-Host "This PC is running Windows 11."
-		Write-Host "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
-		Write-Host "Note that CleanWin's Windows 11 support is experimental and you might face issues."
-	}
-    Write-Host " "
-    Write-Host "Please ensure that no other apps or programs run while CleanWin is working."
-    Write-Host " "
 }
 
-screen
+Function print($text) {
+	Write-Host $text
+}
 
-# Universal stuff.
+Function preventfreeze {
+        # Prevent the console output from freezing by emulating backspace key (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Module/Sophia.psm1#L728-L767).
+    # Sleep for 500ms.
+	Start-Sleep -Milliseconds 500
+
+	Add-Type -AssemblyName System.Windows.Forms
+
+	$SetForegroundWindow = @{
+		Namespace = "WinAPI"
+		Name = "ForegroundWindow"
+		Language = "CSharp"
+		MemberDefinition = @"
+[DllImport("user32.dll")]
+public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
+[DllImport("user32.dll")]
+[return: MarshalAs(UnmanagedType.Bool)]
+public static extern bool SetForegroundWindow(IntPtr hWnd);
+"@
+	}
+
+	if (-not ("WinAPI.ForegroundWindow" -as [type]))
+	{
+		Add-Type @SetForegroundWindow
+	}
+
+	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "pratyakshm's CleanWin*"} | ForEach-Object -Process {
+		# Show window if minimized.
+		[WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10) | Out-Null
+
+		Start-Sleep -Milliseconds 100
+
+		# Move the console window to the foreground.
+		[WinAPI.ForegroundWindow]::SetForegroundWindow($_.MainWindowHandle) | Out-Null
+
+		Start-Sleep -Milliseconds 100
+
+		# Emulate Backspace key.
+		[System.Windows.Forms.SendKeys]::SendWait("{BACKSPACE 1}")
+	}
+}
+
+print "CleanWin pre-execution environment"
+Start-Sleep -Milliseconds 100
+space
+print "Copyright (c) Pratyaksh Mehrotra and contributors"
+Start-Sleep -Milliseconds 100
+print "https://github.com/pratyakshm/CleanWin"
+Start-Sleep 1
+
+# Check if session is elevated.
+space
+print "Checking if current session is elevated..."
+Start-Sleep 2
+$currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+$admin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+if ($admin -like "False") {
+    print "Please run CleanWin in an elevated PowerShell session."
+    exit
+}
+elseif ($admin -like "True") {
+    print "Session is elevated. Going ahead."
+}
+
+# Check if device is connected.
+space
+print "Checking if this device is connected..."
+Import-Module BitsTransfer
+Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
+if (Test-Path File.txt) {
+    Remove-Item File.txt
+    print "This device is connected."
+}
+elseif (!(Test-Path File.txt)) {
+    print "This device is not connected. CleanWin will now exit."
+    exit
+}
+
+$host.UI.RawUI.WindowTitle = "pratyakshm's CleanWin"
+
+
+# Check for for pending updates (part of code used here is picked from https://gist.github.com/Grimthorr/44727ea8cf5d3df11cf7).
+space
+print "Checking for Windows updates..."
+$UpdateSession = New-Object -ComObject Microsoft.Update.Session
+$UpdateSearcher = $UpdateSession.CreateUpdateSearcher()
+$Updates = @($UpdateSearcher.Search("IsHidden=0 and IsInstalled=0 and AutoSelectOnWebSites=1").Updates)
+$Title = $($Updates).Title
+if (!($Title)) {
+    print "This device is updated. "
+}
+else {
+    print "The following updates are pending:"
+    $($Updates).Title
+    Start-Sleep 1
+    space
+    print "Please update your device before running CleanWin."
+    exit
+}
+Start-Sleep -Milliseconds 600
+
+# Check for pending restarts.
+space
+print "Checking for pending restarts..."
+Start-Sleep 1
+param (
+    [Parameter(
+    Mandatory = $false,
+    ValueFromPipeline=$true,
+    ValueFromPipelineByPropertyName=$true,
+    Position=0
+    )]
+    [string[]]  $ComputerName = $env:COMPUTERNAME
+    )
+ForEach ($Computer in $ComputerName) {
+    $PendingReboot = $false
+    $HKLM = [UInt32] "0x80000002"
+    $WMI_Reg = [WMIClass] "\\$Computer\root\default:StdRegProv"
+    if ($WMI_Reg) {
+        if (($WMI_Reg.EnumKey($HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\")).sNames -contains 'RebootPending') {$PendingReboot = $true}
+        if (($WMI_Reg.EnumKey($HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\")).sNames -contains 'RebootRequired') {$PendingReboot = $true}
+    
+        #Checking for SCCM namespace
+        $SCCM_Namespace = Get-WmiObject -Namespace ROOT\CCM\ClientSDK -List -ComputerName $Computer -ErrorAction Ignore
+        if ($SCCM_Namespace) {
+            if (([WmiClass]"\\$Computer\ROOT\CCM\ClientSDK:CCM_ClientUtilities").DetermineIfRebootPending().RebootPending -eq $true) {$PendingReboot = $true}
+        }
+    
+        if ($PendingReboot -eq $true) {
+            print "A device restart is pending."
+            print "Please restart this device then run CleanWin."
+        }
+        else {
+            print "No pending restarts detected."
+            Start-Sleep 2
+            Clear-Host
+        }
+        #Clearing Variables
+        $WMI_Reg        = $null
+        $SCCM_Namespace = $null
+    }   
+}
+Clear-Host
+Start-Sleep 1
+print "pratyakshm's CleanWin"
+Start-Sleep -Milliseconds 100
+space
+print "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
+Start-Sleep -Milliseconds 100
+print "https://github.com/pratyakshm/CleanWin"
+Start-Sleep 1
+Write-Warning "GUI will freeze while CleanWin is performing a task."
+
+space
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+$BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
+$OSBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+$DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
+if ($CurrentBuild -lt 21996) {
+    print "This PC is running Windows 10."
+    print "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
+}
+elseif ($CurrentBuild -ge 22000) {
+print "This PC is running Windows 11."
+print "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
+print "Note that CleanWin's Windows 11 support is experimental and you might face issues."
+}
+space
+print "Please ensure that no other apps or programs run while CleanWin is working."
+space
+$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+
 
 ### BEGIN GUI ###
 
@@ -366,7 +409,7 @@ $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $Cle
 $SetupWindowsUpdate, $ResetWindowsUpdate, $DisableTasksServices, $EnableTasksServices))
 
 $CWFolder = "C:\CleanWin"
-If (Test-Path $CWFolder) {
+if (Test-Path $CWFolder) {
 }
 Else {
     New-Item -Path "${CWFolder}" -ItemType Directory | Out-Null 
@@ -374,35 +417,8 @@ Else {
 
 Start-Transcript -OutputDirectory "${CWFolder}" | Out-Null 
 
-Add-Type -AssemblyName System.Windows.Forms
+preventfreeze
 
-$SetForegroundWindow = @{
-    Namespace = "WinAPI"
-    Name = "ForegroundWindow"
-    Language = "CSharp"
-    MemberDefinition = @"
-[DllImport("user32.dll")]
-public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
-[DllImport("user32.dll")]
-[return: MarshalAs(UnmanagedType.Bool)]
-public static extern bool SetForegroundWindow(IntPtr hWnd);
-"@
-}
-
-if (-not ("WinAPI.ForegroundWindow" -as [type]))
-{
-    Add-Type @SetForegroundWindow
-}
-
-Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "pratyakshm's CleanWin"} | ForEach-Object -Process {
-    # Show window if minimized.
-    [WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10) | Out-Null
-
-    # Move the console window to the foreground.
-    [WinAPI.ForegroundWindow]::SetForegroundWindow($_.MainWindowHandle) | Out-Null
-}
-
-#### BUTTONS CODE ###
 
 #### APPS ####
 $UninstallSelectively.Add_Click( {
@@ -570,15 +586,15 @@ $UninstallSelectively.Add_Click( {
         $OFS = "|"
         if ($CheckboxRemoveAll.IsChecked)
         {   
-            Write-Host "Uninstalling selected apps..."
+            print "Uninstalling selected apps..."
             Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage -AllUsers
-            Write-Host "Done."
+            print "Done."
         }
         else
         {  
-            Write-Host "Uninstalling selected apps..."
+            print "Uninstalling selected apps..."
             Get-AppxPackage -PackageTypeFilter Bundle | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage
-            Write-Host "Done."
+            print "Done."
         }
         $OFS = " "
     }
@@ -636,44 +652,7 @@ $UninstallSelectively.Add_Click( {
         $Button.Content = "Uninstall"
     })
 
-    # Prevent the console output from freezing by emulating backspace key (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Module/Sophia.psm1#L728-L767).
-    # Sleep for 500ms.
-	Start-Sleep -Milliseconds 500
-
-	Add-Type -AssemblyName System.Windows.Forms
-
-	$SetForegroundWindow = @{
-		Namespace = "WinAPI"
-		Name = "ForegroundWindow"
-		Language = "CSharp"
-		MemberDefinition = @"
-[DllImport("user32.dll")]
-public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
-[DllImport("user32.dll")]
-[return: MarshalAs(UnmanagedType.Bool)]
-public static extern bool SetForegroundWindow(IntPtr hWnd);
-"@
-	}
-
-	if (-not ("WinAPI.ForegroundWindow" -as [type]))
-	{
-		Add-Type @SetForegroundWindow
-	}
-
-	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "Uninstall apps selectively"} | ForEach-Object -Process {
-		# Show window if minimized.
-		[WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10) | Out-Null
-
-		Start-Sleep -Milliseconds 100
-
-		# Move the console window to the foreground.
-		[WinAPI.ForegroundWindow]::SetForegroundWindow($_.MainWindowHandle) | Out-Null
-
-		Start-Sleep -Milliseconds 100
-
-		# Emulate Backspace key.
-		[System.Windows.Forms.SendKeys]::SendWait("{BACKSPACE 1}")
-	}
+    preventfreeze
 
     # Button Click Event.
     $Button.Add_Click({DeleteButton})
@@ -686,17 +665,17 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
     }
     else
     {
-        Write-Host "Nothing to display."
+        print "Nothing to display."
     }
 })
 
 $UninstallApps.Add_Click( { 
 $ErrorActionPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
-    Write-Host " "
+    space
     
     # Remove Windows inbox apps.
-    Write-Host "Uninstalling Windows apps..."
+    print "Uninstalling Windows apps..."
     $InboxApps = @(
         "Microsoft.549981C3F5F10"
         "Microsoft.BingNews"
@@ -734,12 +713,9 @@ $ProgressPreference = 'SilentlyContinue'
     )
     ForEach ($InboxApp in $InboxApps) {
         if (Get-AppxPackage $InboxApp) {
-            Write-Host "     Uninstalling $InboxApp..."
+            print "     Uninstalling $InboxApp..."
             Get-AppxPackage -Name $InboxApp| Remove-AppxPackage 
             Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $InboxApp | Remove-AppxProvisionedPackage -Online | Out-Null
-        }
-        else {
-            # Do nothing.
         }
     }
 
@@ -756,33 +732,30 @@ $ProgressPreference = 'SilentlyContinue'
 	)
 	ForEach ($SponsoredApp in $SponsoredApps) {
 	    if (Get-AppxPackage $SponsoredApp) {
-			Write-Host "     Uninstalling $SponsoredApp.."
+			print "     Uninstalling $SponsoredApp.."
 			Get-AppxPackage -Name $SponsoredApp| Remove-AppxPackage 
 			Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $SponsoredApp | Remove-AppxProvisionedPackage -Online | Out-Null
 		}
-		else {
-			# Do nothing.
-		}
     }
-    Write-Host "    Uninstalled unnecessary apps."
+    print "    Uninstalled unnecessary apps."
 
     # Remove registry keys used to suggest apps.
-    Write-Host " "
-	Write-Host "    Removing suggested apps references..."
+    space
+	print "    Removing suggested apps references..."
     New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 	Remove-Item -Path "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
     Remove-PSDrive -Name HKU
-	Write-Host "    Removed suggested apps references."
+	print "    Removed suggested apps references."
 
 
     # Remove Office webapps shortcuts.
 	if (Test-Path "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk") {
-		Write-Host "    Removing Office online web-app shortcuts..."
+		print "    Removing Office online web-app shortcuts..."
 		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
 		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
 		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
 		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Word.lnk"
-		Write-Host "    Removed Office Online web-app shortcuts."
+		print "    Removed Office Online web-app shortcuts."
 	}
 
 	# Uninstall Connect app.
@@ -795,14 +768,11 @@ $ProgressPreference = 'SilentlyContinue'
 		Remove-Item connect.cmd
 		Remove-Item Packages.txt
 	}
-	else {
-		# Do nothing.
-	}
 
     # Uninstall Microsoft OneDrive.
 	if (Get-Command winget) {
-        Write-Host " "
-		Write-Host "    Uninstalling Microsoft OneDrive..."
+        space
+		print "    Uninstalling Microsoft OneDrive..."
 
 		# Uninstall using WinGet.
 		winget uninstall Microsoft.OneDrive | Out-Null
@@ -813,16 +783,16 @@ $ProgressPreference = 'SilentlyContinue'
 		Remove-Item "$env:LOCALAPPDATA\Microsoft\OneDrive" -Recurse -Force
 		Remove-Item "$env:LOCALAPPDATA\OneDrive" -Recurse -Force
 		
-		Write-Host "    Uninstalled Microsoft OneDrive."
+		print "    Uninstalled Microsoft OneDrive."
         }
 	else {
-		Write-Host "    WinGet is not installed. Please install WinGet first before uninstalling Microsoft OneDrive."
+		print "    WinGet is not installed. Please install WinGet first before uninstalling Microsoft OneDrive."
 	}
 
     
     # Unpin apps from taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
-    Write-Host " "
-    Write-Host "    Unpinning apps from taskbar..."
+    space
+    print "    Unpinning apps from taskbar..."
 	$AppNames = @(
 		"Mail"
 		"Microsoft Edge"
@@ -836,140 +806,134 @@ $ProgressPreference = 'SilentlyContinue'
 			$App.Verbs() | Where-Object { $_.Name.replace('&', '') -match 'Unpin from taskbar' } | ForEach-Object { $_.DoIt() } -ErrorAction SilentlyContinue | Out-Null
 		}	
 	}
-	Write-Host "    Unpinned apps from taskbar."
-    Write-Host " "
-    Write-Host "Uninstalled apps."
+	print "    Unpinned apps from taskbar."
+    space
+    print "Uninstalled apps."
 })
 
 $InstallWinGet.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
-	Write-Host " "
-	if (!(Get-Command winget)) {
-        Write-Host "Preparing download..."
-        # Create new folder and set location.
-        if (!(Test-Path CleanWin)) {
-            New-Item CleanWin -ItemType Directory | out-Null
-            $currentdir = $(Get-Location).Path
-            $dir = "$currentdir/CleanWin"
-            Set-Location $dir
-        }
-        else {
-            Set-Location CleanWin
-        }
+    space
+    if (Get-Command winget) {
+        print "WinGet is already installed on this device."
+        return 
+    }
+    print "Preparing download..."
+    # Create new folder and set location.
+    if (!(Test-Path CleanWin)) {
+        New-Item CleanWin -ItemType Directory | out-Null
+        $currentdir = $(Get-Location).Path
+        $dir = "$currentdir/CleanWin"
+        Set-Location $dir
+    }
+    else {
+        Set-Location CleanWin
+    }
 
-        # Download the packages.
-        Import-Module BitsTransfer
-        $WinGetURL = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
-        $VCLibsURL = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx"
-        Write-Host "Downloading WinGet installation packages..."
-        Start-BitsTransfer $WinGetURL.assets.browser_download_url ; Start-BitsTransfer $VCLibsURL 
+    # Download the packages.
+    $WinGetURL = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
+    print "Downloading WinGet installation packages..."
+    Start-BitsTransfer $WinGetURL.assets.browser_download_url;
 
-        # Install WinGet.
-        Write-Host "Installing WinGet..."
-        Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -DependencyPath Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx
-                
-        # Cleanup installers.
-        Set-Location ..
-        Remove-Item CleanWin -Recurse -Force
+    if (!(Get-AppxPackage Microsoft.VCLibs.**.UWPDesktop*)) {
+        $VCLibs = "Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx"
+        Start-BitsTransfer $VCLibs
+        Add-AppxPackage Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx
+    }
+    
+    # Install WinGet.
+    print "Installing WinGet..."
+    Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+        
+    # Cleanup installers.
+    Set-Location ..
+    Remove-Item CleanWin -Recurse -Force
 
-        # Get-Command winget, if it works then print success message.
-        if (Get-Command winget) {
-            Write-Host "Installed WinGet."
-        }
-        else {
-             Write-Host "WinGet could not be installed."
-        }
-	}
-	else {
-		Write-Host "WinGet is already installed on this device."
-	}
+    # Get-Command winget, if it works then print success message.
+    if (Get-Command winget) {
+        print "Installed WinGet."
+    }
+    else {
+        print "WinGet could not be installed."
+    }
 } )
 
 $Winstall.Add_Click( {
 $ErrorActionPreference = 'Continue'
-	if ($winstall -like "y") {
-		Write-Host " "
-		# Check if WinGet is installed, then proceed.
-		if (Get-Command winget) {
-			# Try Winstall.txt
-			if (Test-Path Winstall.txt) {
-				Write-Host "Starting Winstall..."
-				# Get each line from the text file and use winget install command on it.
-				Get-Content 'Winstall.txt' | ForEach-Object {
-					$App = $_.Split('=')
-					Write-Host "    Installing $App..."
-					winget install "$App" --silent | Out-Null
-				}
-				Write-Host "Winstall has successfully installed the app(s)."
-			}
-			# Try winstall.txt
-			elseif (Test-Path winstall.txt) {
-				Write-Host "Starting Winstall..."
-				# Get each line from the text file and use winget install command on it.
-				Get-Content 'winstall.txt' | ForEach-Object {
-					$App = $_.Split('=')
-					Write-Host "    Installing $App..."
-					winget install "$App" --silent | Out-Null
-				}
-				Write-Host "Winstall has successfully installed the app(s)."
-			}
-			else {
-				[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
-				Write-Host "Select Winstall text file from File Picker UI"
-				$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
-				$OpenFileDialog.InitialDirectory = $initialDirectory
-				$OpenFileDialog.Filter = "Text file (*.txt)| *.txt"
-				$OpenFileDialog.ShowDialog() | Out-Null
-				if ($OpenFileDialog.FileName) {
-					Write-Host "Starting Winstall..."
-					Get-Content $OpenFileDialog.FileName | ForEach-Object {
-						$App = $_.Split('=')
-						Write-Host "    Installing $App..."
-						winget install "$App" --silent | Out-Null
-					}
-					Write-Host "Winstall has successfully installed the app(s)."
-				}
-				else {
-					Write-Host "No text file was picked."
-				}
-			}
-		}
-		# Inform user if WinGet is not installed.
-		else {
-			Write-Host "WinGet is not installed. Please install WinGet first before using Winstall."
-			Start-Process "https://bit.ly/Winstall" 
-		}
-	}
-	else {
-		# Do nothing.
-	}
+	# Check if WinGet installed - otherwise return.
+    space
+    if (!(Get-Command winget)) { 
+        print "WinGet is not installed. Please install WinGet first before using Winstall."
+        Start-Process "https://bit.ly/Winstall" 
+        return
+    }
+    # Try Winstall.txt
+    if (Test-Path Winstall.txt) {
+        print "Starting Winstall..."
+        # Get each line from the text file and use winget install command on it.
+        Get-Content 'Winstall.txt' | ForEach-Object {
+            $App = $_.Split('=')
+            print "    Installing $App..."
+            winget install "$App" --silent | Out-Null
+        }
+        print "Winstall has successfully installed the app(s)."
+    }
+    # Try winstall.txt
+    elseif (Test-Path winstall.txt) {
+        print "Starting Winstall..."
+        # Get each line from the text file and use winget install command on it.
+        Get-Content 'winstall.txt' | ForEach-Object {
+            $App = $_.Split('=')
+            print "    Installing $App..."
+            winget install "$App" --silent | Out-Null
+        }
+        print "Winstall has successfully installed the app(s)."
+    }
+    else {
+        [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
+        print "Select Winstall text file from File Picker UI"
+        $OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
+        $OpenFileDialog.InitialDirectory = $initialDirectory
+        $OpenFileDialog.Filter = "Text file (*.txt)| *.txt"
+        $OpenFileDialog.ShowDialog() | Out-Null
+        if ($OpenFileDialog.FileName) {
+            print "Starting Winstall..."
+            Get-Content $OpenFileDialog.FileName | ForEach-Object {					$App = $_.Split('=')
+                print "    Installing $App..."
+                winget install "$App" --silent | Out-Null
+            }
+            print "Winstall has successfully installed the app(s)."
+        }
+        else {
+            print "No text file was picked."
+        }
+    }
 })
 
 
 $EnableWSL.Add_Click( {
 $ProgressPreference = 'SilentlyContinue'
-    Write-Host " "
+    if (!(check($wsl))) { 
+        return 
+    }
+    space
     if ($CurrentBuild -lt 22000) {
-        Write-Host "Enabling Windows Subsystem for Linux..."
+        print "Enabling Windows Subsystem for Linux..."
         Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
         Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
         if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) {
             Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
         }
         else {
-            $ProductName = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ProductName
-            Write-Host "Could not enable Hyper-V since $ProductName does not support it."       
+            print "Could not enable Hyper-V since $ProductName does not support it."
         }
-        Write-Host "Enabled Windows Subsystem for Linux."
+        print "Enabled Windows Subsystem for Linux."
     }
     elseif ($CurrentBuild -ge 22000) {
-        Write-Host "Enabling Windows Subsystem for Linux version 2 along with GUI App support..."
+        print "Enabling Windows Subsystem for Linux version 2 along with GUI App support..."
         wsl --install | Out-Null
-        Write-Host "Enabled Windows Subsystem for Linux."
-    }
-    else {
-        # Do nothing.
+        print "Enabled Windows Subsystem for Linux."
     }
 })
 
@@ -978,8 +942,8 @@ $ProgressPreference = 'SilentlyContinue'
 $WarningPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
 
-    Write-Host " "
-    Write-Host "Removing capabilites and features..."
+    space
+    print "Removing capabilites and features..."
 
     # Uninstall capabilities.
     $Capabilities = @(
@@ -998,44 +962,7 @@ $ErrorActionPreference = 'SilentlyContinue'
         Get-WindowsCapability -Online | Where-Object {$_.Name -like $Capability} | Remove-WindowsCapability -Online | Out-Null
 	}
     
-    # Prevent the console output from freezing by emulating backspace key (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Module/Sophia.psm1#L728-L767).
-    # Sleep for 500ms.
-	Start-Sleep -Milliseconds 500
-
-	Add-Type -AssemblyName System.Windows.Forms
-
-	$SetForegroundWindow = @{
-		Namespace = "WinAPI"
-		Name = "ForegroundWindow"
-		Language = "CSharp"
-		MemberDefinition = @"
-[DllImport("user32.dll")]
-public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
-[DllImport("user32.dll")]
-[return: MarshalAs(UnmanagedType.Bool)]
-public static extern bool SetForegroundWindow(IntPtr hWnd);
-"@
-	}
-
-	if (-not ("WinAPI.ForegroundWindow" -as [type]))
-	{
-		Add-Type @SetForegroundWindow
-	}
-
-	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "pratyakshm's CleanWin*"} | ForEach-Object -Process {
-		# Show window if minimized.
-		[WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10) | Out-Null
-
-		Start-Sleep -Milliseconds 100
-
-		# Move the console window to the foreground.
-		[WinAPI.ForegroundWindow]::SetForegroundWindow($_.MainWindowHandle) | Out-Null
-
-		Start-Sleep -Milliseconds 100
-
-		# Emulate Backspace key.
-		[System.Windows.Forms.SendKeys]::SendWait("{BACKSPACE 1}")
-	}
+    preventfreeze
 
     # Print the friendly names list of capabilities uninstalled.
     $CapLists =@(
@@ -1052,7 +979,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
     )
     ForEach ($CapList in $CapLists) {
         Start-Sleep -Milliseconds 70
-        Write-Host "    - Uninstalled $CapList"
+        print "    - Uninstalled $CapList"
     }
 
     # Uninstall optional features.
@@ -1064,9 +991,9 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
         Get-WindowsOptionalFeature -Online | Where-Object {$_.FeatureName -like $OptionalFeature} | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
     }
     # Print the friendly list of optional features uninstalled.
-    Write-Host "    - Disabled Work Folders Client."
+    print "    - Disabled Work Folders Client."
 
-    Write-Host "Removed capabilities and features."
+    print "Removed capabilities and features."
 })
 
 
@@ -1076,8 +1003,8 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 
 $CleanExplorer.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
-    Write-Host " "
-    Write-Host "Cleaning up Windows Explorer..."
+    space
+    print "Cleaning up Windows Explorer..."
     New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 
     # Turn off Sticky keys prompt.
@@ -1148,40 +1075,37 @@ $ErrorActionPreference = 'SilentlyContinue'
     Start-Sleep 3
 
     # Print list of changes done.
-    Write-Host "Changelog:"
-    Write-Host "    - Bound Print Screen key to launch Snip overlay"
-    Write-Host "    - Set default File Explorer View to This PC"
-    Write-Host "    - Turned off Sticky keys"
+    print "Changelog:"
+    print "    - Bound Print Screen key to launch Snip overlay"
+    print "    - Set default File Explorer View to This PC"
+    print "    - Turned off Sticky keys"
     # Check if News and interests was turned off and inform user.
     $Feed = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
     $NIValue = Get-ItemPropertyValue -Path $Feed -Name ShellFeedsTaskbarViewMode
     if ($NIValue -eq 2) {
-        Write-Host "    - Turned off News and interests in taskbar."
-    }
-    else {
-        # Do nothing.
+        print "    - Turned off News and interests in taskbar."
     }
 	if ($CurrentBuild -lt 22000) {
-        Write-Host "     - Hid 3D Objects from File Explorer"
-        Write-Host "    - Hid Search bar from taskbar"
-        Write-Host "     - Hid Cortana from taskbar"
-        Write-Host "     - Hid Meet now from taskbar"
+        print "     - Hid 3D Objects from File Explorer"
+        print "    - Hid Search bar from taskbar"
+        print "     - Hid Cortana from taskbar"
+        print "     - Hid Meet now from taskbar"
 	}
 	else {
-		Write-Host "    - Hid Search icon from taskbar"
+		print "    - Hid Search icon from taskbar"
 	}
-    Write-Host "    - Hid Task view from taskbar"
+    print "    - Hid Task view from taskbar"
 
     Remove-PSDrive -Name HKU
-    Write-Host "Finished cleaning up Windows Explorer."
+    print "Finished cleaning up Windows Explorer."
        
 })
 
 $RevertExplorer.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
 
-    Write-Host " "
-    Write-Host "Reverting to default Windows Explorer settings..."
+    space
+    print "Reverting to default Windows Explorer settings..."
 
     New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 
@@ -1193,7 +1117,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 
     # Restore 3D objects in File Explorer.
 	if ($CurrentBuild -lt 22000) {
-		Write-Host " "
+		space
 		$Restore3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
         $Restore3DObjects2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
         $Restore3DObjects3 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
@@ -1248,49 +1172,46 @@ $ErrorActionPreference = 'SilentlyContinue'
 	}
 
     # Print list of changes done.
-    Write-Host "Changelog:"
-    Write-Host "    - Unbound Print Screen key to launch Snip overlay"
-    Write-Host "    - Set default File Explorer view to Quick Access"
-    Write-Host "    - Turned on Sticky keys"
+    print "Changelog:"
+    print "    - Unbound Print Screen key to launch Snip overlay"
+    print "    - Set default File Explorer view to Quick Access"
+    print "    - Turned on Sticky keys"
     # Check if News and interests was turned off and inform user.
     $Feed = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
     $NIValue = Get-ItemPropertyValue -Path $Feed -Name ShellFeedsTaskbarViewMode
     if ($NIValue -eq 0) {
-        Write-Host "    - Turned on News and interests in taskbar."
-    }
-    else {
-        # Do nothing.
+        print "    - Turned on News and interests in taskbar."
     }
 	if ($CurrentBuild -lt 22000) {
-        Write-Host "     - Restored 3D Objects to File Explorer"
-        Write-Host "    - Restored Search bar to taskbar"
-        Write-Host "     - Restored Cortana to taskbar"
-        Write-Host "     - Restored Meet now to taskbar"
+        print "     - Restored 3D Objects to File Explorer"
+        print "    - Restored Search bar to taskbar"
+        print "     - Restored Cortana to taskbar"
+        print "     - Restored Meet now to taskbar"
 	}
 	else {
-		Write-Host "    - Restored Search icon to taskbar"
+		print "    - Restored Search icon to taskbar"
 	}
-    Write-Host "    - Restored Task view to taskbar"
+    print "    - Restored Task view to taskbar"
 
     # Restart explorer.exe to reflect changes immeditately and then provide 2 seconds of breathing time.
     Stop-Process -ProcessName explorer
     Start-Sleep 2
 
-    Write-Host "Reverted to default Windows Explorer settings."
+    print "Reverted to default Windows Explorer settings."
 })
 
 $ShowSeconds.Add_Click( {
-    Write-Host " "
+    space
     $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowSecondsInSystemClock" -Type DWord -Value 1
     Stop-Process -ProcessName explorer
-    Write-Host "Showed Seconds in taskbar. Changes will take effect on next restart."
+    print "Showed Seconds in taskbar. Changes will take effect on next restart."
 })
 
 $UnpinStartTiles.Add_Click( {
-	Write-Host " "
+	space
 	if ($CurrentBuild -lt 22000) {
-		Write-Host "Unpinning all tiles from Start Menu..."
+		print "Unpinning all tiles from Start Menu..."
 		Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
 		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
 		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <DefaultLayoutOverride>'
@@ -1319,7 +1240,7 @@ $UnpinStartTiles.Add_Click( {
 "@
 		$layoutFile="C:\Windows\StartMenuLayout.xml"
 		# Delete layout file if it already exists.
-		If(Test-Path $layoutFile)
+		if(Test-Path $layoutFile)
 		{
 			Remove-Item $layoutFile
 		}
@@ -1352,21 +1273,18 @@ $UnpinStartTiles.Add_Click( {
 		# Uncomment the next line to make clean start menu default for all new users.
 		Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
 		Remove-Item $layoutFile
-		Write-Host "Unpinned all tiles from Start Menu."
+		print "Unpinned all tiles from Start Menu."
 	}
 	elseif ($CurrentBuild -ge 22000) {
-		Write-Host "This device is currently on $CurrentBuild"
-		Write-Host "CleanWin currently cannot unpin apps from Start Menu in Windows 11."
-	}
-	else {
-		# Do nothing.
+		print "This device is currently on $CurrentBuild"
+		print "CleanWin currently cannot unpin apps from Start Menu in Windows 11."
 	}
 })
 
 $UnpinTaskbarApps.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
-	Write-Host " "
-	Write-Host "Unpinning apps from taskbar..."
+	space
+	print "Unpinning apps from taskbar..."
 	$AppNames = @(
 		"Microsoft Store"
 		"Office"
@@ -1376,24 +1294,24 @@ $ErrorActionPreference = 'SilentlyContinue'
 	ForEach ($AppName in $AppNames) {
  		((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | Where-Object {$_.Name -eq $AppName}).Verbs() | Where-Object {$_.Name.replace('&','') -match 'Unpin from taskbar'} | Where-Object {$_.DoIt()} -ErrorAction SilentlyContinue | Out-Null
 	}
-	Write-Host "Unpinned apps from taskbar."
+	print "Unpinned apps from taskbar."
 })
 
 $NewsAndInterests.Add_Click( {
 	if ($CurrentBuild -lt 22000) {
         New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
-		Write-Host " "
-		Write-Host "Turning off News and interests..."
+		space
+		print "Turning off News and interests..."
 		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
 		Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
-		Write-Host "Turned off News and interests."
-        Write-Host "Use 'Revert Windows Explorer changes' to turn it back on."
+		print "Turned off News and interests."
+        print "Use 'Revert Windows Explorer changes' to turn it back on."
         Remove-PSDrive -Name HKU
 	}
 	else {
-		Write-Host "This PC is running Windows 11. Windows 11 does not have News and interests."
+		print "This PC is running Windows 11. Windows 11 does not have News and interests."
 	}
 })
 
@@ -1404,8 +1322,8 @@ $NewsAndInterests.Add_Click( {
 #################
 $DisableDataCollection.Add_Click( { 
 $ErrorActionPreference = 'SilentlyContinue'
-    Write-Host " "
-    Write-Host "Turning off data collection..."
+    space
+    print "Turning off data collection..."
     
 	# Disable suggestions and silent installation of sponsored apps.
 	if (!(Test-Path "C:\CleanWin\Suggestions.reg")) {
@@ -1430,7 +1348,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     
     # Disable Tailored experiences.
 	$CloudContent = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
-	If (!(Test-Path $CloudContent )) {
+	if (!(Test-Path $CloudContent )) {
 		New-Item $CloudContent -Force | Out-Null
 		}
 	Set-ItemProperty -Path $CloudContent -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
@@ -1455,7 +1373,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     
     # Turn off Advertising ID.
     $AdvertisingID = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
-    If (!(Test-Path $AdvertisingID)) {
+    if (!(Test-Path $AdvertisingID)) {
         New-Item -Path $AdvertisingID | Out-Null
     }
     Set-ItemProperty -Path $AdvertisingID -Name "DisabledByGroupPolicy" -Type DWord -Value 1
@@ -1465,11 +1383,11 @@ $ErrorActionPreference = 'SilentlyContinue'
     $Feedback2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
     $Feedback3 = "Microsoft\Windows\Feedback\Siuf\DmClient"
     $Feedback4 = "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
-    If (!(Test-Path $Feedback1)) {
+    if (!(Test-Path $Feedback1)) {
         New-Item -Path $Feedback1 -Force | Out-Null
     }
     Set-ItemProperty -Path $Feedback1 -Name "NumberOfSIUFInPeriod" -Type DWord -Value 1
-    If (!(Test-Path $Feedback2)) {
+    if (!(Test-Path $Feedback2)) {
         New-Item -Path $Feedback2 -Force | Out-Null
     }
     Set-ItemProperty -Path $Feedback2 -Name "DoNotShowFeedbackNotifications" -Type DWord -Value 1
@@ -1500,7 +1418,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     # Turn off Location permission.
     $Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
     $Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
-    If (!(Test-Path $Location1)) {
+    if (!(Test-Path $Location1)) {
         New-Item -Path $Location1 -Force | Out-Null
     }
     Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Deny"
@@ -1510,7 +1428,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	$Ink1 = "HKCU:\Software\Microsoft\InputPersonalization"
 	$Ink2 = "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore"
 	$Ink3 = "HKCU:\Software\Microsoft\Personalization\Settings"
-	If (!(Test-Path $Ink1)) {
+	if (!(Test-Path $Ink1)) {
 		New-Item -Path $Ink1 -Force | Out-Null
 	}
 	New-ItemProperty -Path $Ink1 -Name "RestrictImplicitInkCollection" -Type DWord -Value 1 -Force | Out-Null 
@@ -1538,7 +1456,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     )
     ForEach ($Task in $Tasks) {
 		Disable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
-		Write-Host "Disabled scheduled task: $Task."
+		print "Disabled scheduled task: $Task."
 	}
 
     # Print user friendly messages to list every change.
@@ -1556,19 +1474,19 @@ $ErrorActionPreference = 'SilentlyContinue'
         "Telemetry"
         "Websites access to language list to provide locally relevant content"
     )
-    Write-Host "Turned off:"
+    print "Turned off:"
     ForEach ($PrivacySetting in $PrivacySettings) {
-        Write-Host "    - $PrivacySetting"
+        print "    - $PrivacySetting"
     }
 
-    Write-Host "Data collection was turned off."
+    print "Data collection was turned off."
 })
 
 
 $EnableDataCollection.Add_Click( { 
     $ErrorActionPreference = 'SilentlyContinue'
-    Write-Host " "
-    Write-Host "Turning on data collection..."
+    space
+    print "Turning on data collection..."
 
 	# Turn on Advertising ID.
     $Advertising = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
@@ -1582,7 +1500,7 @@ $EnableDataCollection.Add_Click( {
 	
 	# Turn on Feedback notifications.
     $Feedback = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
-    If (!(Test-Path $Feedback )) {
+    if (!(Test-Path $Feedback )) {
         New-Item $Feedback -Force | Out-Null
     }
     Remove-ItemProperty -Path $Feedback -Name "NumberOfSIUFInPeriod"
@@ -1600,7 +1518,7 @@ $EnableDataCollection.Add_Click( {
 	# Turn on location permission.
     $Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
     $Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
-    If (!(Test-Path $Location1)) {
+    if (!(Test-Path $Location1)) {
         New-Item -Path $Location1 -Force | Out-Null
     }
     Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Allow"
@@ -1610,7 +1528,7 @@ $EnableDataCollection.Add_Click( {
     $Ink1 = "HKCU:\Software\Microsoft\InputPersonalization"
 	$Ink2 = "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore"
 	$Ink3 = "HKCU:\Software\Microsoft\Personalization\Settings"
-	If (!(Test-Path $Ink1)) {
+	if (!(Test-Path $Ink1)) {
 		New-Item -Path $Ink1 -Force | Out-Null
 	}
 	New-ItemProperty -Path $Ink1 -Name "RestrictImplicitInkCollection" -Type DWord -Value 0 -Force | Out-Null 
@@ -1663,53 +1581,53 @@ $EnableDataCollection.Add_Click( {
         "Telemetry"
         "Websites access to language list to provide locally relevant content"
     )
-    Write-Host "Turned on:"
+    print "Turned on:"
     ForEach ($PrivacySetting in $PrivacySettings) {
-        Write-Host "    - $PrivacySetting"
+        print "    - $PrivacySetting"
     }
   
-    Write-Host "Data collection has been turned on."
+    print "Data collection has been turned on."
 })
 
 $DisableTelemetry.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
-    Write-Host " "
+    space
     $Telemetry = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
     Set-ItemProperty -Path $Telemetry -Name "AllowCommericalDataPipeline" -Type DWord -Value 1
     Set-ItemProperty -Path $Telemetry -Name "AllowDeviceNameInTelemetry" -Type DWord -Value 0
     Set-ItemProperty -Path $Telemetry -Name "AllowTelemetry" -Type DWord -Value 0
     Set-ItemProperty -Path $Telemetry -Name "DoNotShowFeedbackNotifications" -Type DWord -Value 1
     Set-ItemProperty -Path $Telemetry -Name "LimitEnhancedDiagnosticDataWindowsAnalytics" -Type DWord -Value 0
-    Write-Host "Telemetry / Diagnostic Data collection has been turned off."
+    print "Telemetry / Diagnostic Data collection has been turned off."
 })
 
 $EnableTelemetry.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
-    Write-Host " "
+    space
     $Telemetry = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
     Remove-ItemProperty -Path $Telemetry -Name "AllowTelemetry"
     Remove-ItemProperty -Path $Telemetry -Name "AllowCommericalDataPipeline"
     Remove-ItemProperty -Path $Telemetry -Name "DoNotShowFeedbackNotifications"
     Remove-ItemProperty -Path $Telemetry -Name "LimitEnhancedDiagnosticDataWindowsAnalytics"
     Remove-ItemProperty -Path $Telemetry -Name "AllowDeviceNameInTelemetry"
-    Write-Host "Telemetry / Diagnostic Data collection has been turned on."
+    print "Telemetry / Diagnostic Data collection has been turned on."
 })
 
 $FullBandwidth.Add_Click( {
     $ErrorActionPreference = 'SilentlyContinue'
-    Write-Host " "
+    space
     $Bandwidth = "HKLM:\SOFTWARE\Policies\Microsoft\Psched"
     New-Item -Path $Bandwidth -ItemType Directory -Force
     Set-ItemProperty -Path $Bandwidth -Name "NonBestEffortLimit" -Type DWord -Value 0
-    Write-Host "Released full bandwidth to user."
+    print "Released full bandwidth to user."
 })
 
 $ReserveBandwidth.Add_Click({
     $ErrorActionPreference = 'SilentlyContinue'
-    Write-Host " "
+    space
     $Bandwidth = "HKLM:\SOFTWARE\Policies\Microsoft\Psched"
     Remove-ItemProperty -Path $Bandwidth -Name "NonBestEffortLimit"
-    Write-Host "Implemented default setting of reserving 20% internet bandwidth to OS."
+    print "Implemented default setting of reserving 20% internet bandwidth to OS."
 })
 
 
@@ -1719,72 +1637,61 @@ $ReserveBandwidth.Add_Click({
 
 $SetupWindowsUpdate.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
-    Write-Host " "
-    if ($CurrentBuild -lt 22000) {
-        # Get Windows Edition, if its Professional, Education, or Enterprise.
-        if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) {
-                Write-Host "Setting up Windows Update policies..."
+    space
+    if ($CurrentBuild -ge 22000) {
+        print "CleanWin currently cannot set up Windows Update policies on Windows 11."
+        return 
+    }
+    # Get Windows Edition, if its Professional, Education, or Enterprise.
+    if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) {
+        print "$ProductName does not support setting up Windows Update policies."
+        return
+    }
+    print "Setting up Windows Update policies..."
 
-                # Declare registry keys locations.
-                $Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
-                $Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
-                if (!(Test-Path $Update1)) {
-                    New-Item -Path $Update1 | Out-Null
-                    New-Item -Path $Update2 | Out-Null
-                }
-
-                # Write registry values.
-                Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
-                Set-ItemProperty -Path $Update1 -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
-                Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
-                Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
-                Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
-                Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
-
-                # Print user message; policies applied.
-                $WinUpdatePolicies =@(
-                    "Turned off automatic updates"
-                    "Device will no longer auto restart if users are signed in"
-                    "Turned off re-installation of apps after Windows Updates"
-                    "Delayed quality updates by 4 days"
-                    "Delayed feature updates by 20 days"
-                )
-                ForEach ($WinUpdatePolicy in $WinUpdatePolicies) {
-                    Write-Host "    - $WinUpdatePolicy"
-                }
-                
-                Write-Host "Set up Windows Update policies."
-
-            }
-
-        # Print user message if unsupported edition.
-        else {
-			$ProductName = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ProductName
-			Write-Host "$ProductName does not support setting up Windows Update policies."
-        }
+    # Declare registry keys locations.
+    $Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
+    $Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
+    if (!(Test-Path $Update1)) {
+        New-Item -Path $Update1 | Out-Null
+        New-Item -Path $Update2 | Out-Null
     }
 
-    elseif ($CurrentBuild -ge 22000) {
-        Write-Host "CleanWin currently cannot set up Windows Update policies on Windows 11."
+    # Write registry values.
+    Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
+    Set-ItemProperty -Path $Update1 -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
+    Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
+    Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
+    Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
+    Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
+
+    # Print user message; policies applied.
+    $WinUpdatePolicies =@(
+        "Turned off automatic updates"
+        "Device will no longer auto restart if users are signed in"
+        "Turned off re-installation of apps after Windows Updates"
+        "Delayed quality updates by 4 days"
+        "Delayed feature updates by 20 days"
+    )
+    ForEach ($WinUpdatePolicy in $WinUpdatePolicies) {
+        print "    - $WinUpdatePolicy"
     }
 
-    else {
-        # Do nothing.
-    }
+    print "Set up Windows Update policies."
 })
 
 $ResetWindowsUpdate.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
-    Write-Host " "
+    space
     Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Recurse
-    Write-Host "All Windows Update policies were reset."
+    print "All Windows Update policies were reset."
 })
 
 
 $DisableTasksServices.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
-    Write-Host " "
-    Write-Host "Disabling unnecessary tasks & services..."
+    space
+    print "Disabling unnecessary tasks & services..."
     $Services = @(
 		"DiagTrack"
 		"SysMain"
@@ -1792,7 +1699,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     ForEach ($Service in $Services) {
 		Stop-Service $Service | Out-Null
 		Set-Service $Service -StartupType Disabled
-		Write-Host "    Stopped service: $Service."
+		print "    Stopped service: $Service."
 	}
 
 	$Tasks = @(
@@ -1808,16 +1715,16 @@ $ErrorActionPreference = 'SilentlyContinue'
     )
     ForEach ($Task in $Tasks) {
 		Disable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
-		Write-Host "    Turned off task: $Task."
+		print "    Turned off task: $Task."
 	}
 
-    Write-Host "Optimized tasks and services."
+    print "Optimized tasks and services."
 })
 
 $EnableTasksServices.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
-    Write-Host " "
-    Write-Host "Reverting changes made to tasks & services..."
+    space
+    print "Reverting changes made to tasks & services..."
 
     $Services = @(
 		"DiagTrack"
@@ -1826,7 +1733,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     ForEach ($Service in $Services) {
 		Start-Service $Service | Out-Null
 		Set-Service $Service -StartupType Automatic
-		Write-Host "    Started service: $Service."
+		print "    Started service: $Service."
 	}
 
 	$Tasks = @(
@@ -1842,9 +1749,9 @@ $ErrorActionPreference = 'SilentlyContinue'
     )
     ForEach ($Task in $Tasks) {
 		Enable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
-		Write-Host "    Turned on task: $Task."
+		print "    Turned on task: $Task."
 	}
-    Write-Host "Undid tasks and services changes."
+    print "Undid tasks and services changes."
 })
 
 [void]$Form.ShowDialog()
