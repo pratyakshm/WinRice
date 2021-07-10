@@ -119,7 +119,6 @@ Start-Sleep -Milliseconds 600
 space
 print "Checking for pending restarts..."
 Start-Sleep 1
-param (
     [Parameter(
     Mandatory = $false,
     ValueFromPipeline=$true,
@@ -127,7 +126,7 @@ param (
     Position=0
     )]
     [string[]]  $ComputerName = $env:COMPUTERNAME
-    )
+
 ForEach ($Computer in $ComputerName) {
     $PendingReboot = $false
     $HKLM = [UInt32] "0x80000002"
@@ -135,23 +134,24 @@ ForEach ($Computer in $ComputerName) {
     if ($WMI_Reg) {
         if (($WMI_Reg.EnumKey($HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\")).sNames -contains 'RebootPending') {$PendingReboot = $true}
         if (($WMI_Reg.EnumKey($HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\")).sNames -contains 'RebootRequired') {$PendingReboot = $true}
-    
-        #Checking for SCCM namespace
+     
+        # Check for SCCM namespace.
         $SCCM_Namespace = Get-WmiObject -Namespace ROOT\CCM\ClientSDK -List -ComputerName $Computer -ErrorAction Ignore
         if ($SCCM_Namespace) {
             if (([WmiClass]"\\$Computer\ROOT\CCM\ClientSDK:CCM_ClientUtilities").DetermineIfRebootPending().RebootPending -eq $true) {$PendingReboot = $true}
         }
-    
+     
         if ($PendingReboot -eq $true) {
             print "A device restart is pending."
             print "Please restart this device then run CleanWin."
+			cwexit
         }
         else {
             print "No pending restarts detected."
-            Start-Sleep 2
-            Clear-Host
+			Start-Sleep 2
+			Clear-Host
         }
-        #Clearing Variables
+        # Clear variables.
         $WMI_Reg        = $null
         $SCCM_Namespace = $null
     }   

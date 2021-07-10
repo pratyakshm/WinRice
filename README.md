@@ -34,7 +34,6 @@ To run **CLI** (based and redpilled), paste
 
 Oh you wanna run **GUI** (cringe and bluepilled)? Paste    
 `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jqcr0'))`   
-And press Enter, I mean - obviously.   
 
 ## Wiki
 [Visit the Wiki](https://github.com/pratyakshm/CleanWin/wiki) to read in detail about testing, compatibility, using Winstall, customization, and more.
