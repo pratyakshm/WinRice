@@ -23,7 +23,7 @@ $WinGetURL = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/wing
 print "Downloading WinGet installation packages..."
 Start-BitsTransfer $WinGetURL.assets.browser_download_url;
 
-if (!(Get-AppxPackage Microsoft.VCLibs.**.UWPDesktop*)) {
+if (!(Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop")) {
 	$VCLibs = "Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx"
 	Start-BitsTransfer $VCLibs
 	Add-AppxPackage Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx
