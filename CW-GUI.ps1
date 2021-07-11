@@ -118,8 +118,8 @@ $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 $DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
 $ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
 New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
-$currenttitle = $(Get-Process | Where-Object {$_.MainWindowTitle -like "*PowerShell*" }).MainWindowTitle
-
+# Source: https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%207/Module/Sophia.psm1#L825.
+$hkeyuser = (Get-CimInstance -ClassName Win32_UserAccount | Where-Object -FilterScript {$_.Name -eq $env:USERNAME}).SID
 
 ####### BEGIN CHECKS #########
 
@@ -829,9 +829,7 @@ $ProgressPreference = 'SilentlyContinue'
     # Remove registry keys used to suggest apps.
     space
 	print "    Removing suggested apps references..."
-    New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
-	Remove-Item -Path "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
-    Remove-PSDrive -Name HKU
+	Remove-Item -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
 	print "    Removed suggested apps references."
 
 
@@ -1092,7 +1090,6 @@ $CleanExplorer.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
     space
     print "Cleaning up Windows Explorer..."
-    New-PSDrive HKU -PSProvider Registry -Root HKEY_Users | Out-Null
 
     # Turn off Sticky keys prompt.
     Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
@@ -1140,7 +1137,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     # Turn off News and interests in taskbar.
 	if ($CurrentBuild -lt 22000) {
 		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
-		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
+		$Feed2 = "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
 		Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
 	}
@@ -1155,7 +1152,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     print "    - Set default File Explorer View to This PC"
     print "    - Turned off Sticky keys"
     # Check if News and interests was turned off and inform user.
-    $Feed = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
+    $Feed = "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Feeds"
     $NIValue = Get-ItemPropertyValue -Path $Feed -Name ShellFeedsTaskbarViewMode
     if ($NIValue -eq 2) {
         print "    - Turned off News and interests in taskbar."
@@ -1231,7 +1228,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     # Turn on News and interests in taskbar.
 	if ($CurrentBuild -lt 22000) {
 		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
-		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
+		$Feed2 = "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0 | Out-Null
 		Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 0 | Out-Null
         Remove-PSDrive -Name HKU
@@ -1243,7 +1240,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     print "    - Set default File Explorer view to Quick Access"
     print "    - Turned on Sticky keys"
     # Check if News and interests was turned off and inform user.
-    $Feed = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
+    $Feed = "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Feeds"
     $NIValue = Get-ItemPropertyValue -Path $Feed -Name ShellFeedsTaskbarViewMode
     if ($NIValue -eq 0) {
         print "    - Turned on News and interests in taskbar."
@@ -1369,7 +1366,7 @@ $NewsAndInterests.Add_Click( {
 		space
 		print "Turning off News and interests..."
 		$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
-		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
+		$Feed2 = "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
 		Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
 		print "Turned off News and interests."
@@ -1410,7 +1407,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Remove-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEverEnabled"
 	Remove-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled"
 	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent*"
-	Remove-Item -Path "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
+	Remove-Item -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
     
     # Disable Tailored experiences.
 	$CloudContent = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"

@@ -212,6 +212,8 @@ $DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
 $ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
 New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
 $currenttitle = $(Get-Process | Where-Object {$_.MainWindowTitle -like "*PowerShell*" }).MainWindowTitle
+# Source: https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%207/Module/Sophia.psm1#L825.
+$hkeyuser = (Get-CimInstance -ClassName Win32_UserAccount | Where-Object -FilterScript {$_.Name -eq $env:USERNAME}).SID
 
 
 ####### BEGIN CHECKS #########
@@ -526,7 +528,7 @@ $ProgressPreference = 'SilentlyContinue'
 		Get-AppxPackage "Microsoft.WindowsCamera" | Remove-AppxPackage
 		Get-AppxProvisionedPackage -Online "Microsoft.WindowsCamera" | Remove-AppxProvisionedPackage 
 	}
-	
+
 	# Remove Sponsored apps.
 	$SponsoredApps = @(
 		"*AdobePhotoshopExpress*"
@@ -912,7 +914,7 @@ Function DisableSuggestions {
 	Remove-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEverEnabled"
 	Remove-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled"
 	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent*"
-	Remove-Item -Path "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
+	Remove-Item -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
 	print "Turned off app suggestions and automatic app installation."
 }
 
@@ -1764,7 +1766,7 @@ Function EnableTelemetry {
 Function EnableClipboard {
 	space
 	print "Turning on Clipboard History..."
-	$Clipboard = "HKU:\S-1-5-21-*\Software\Microsoft\Clipboard"
+	$Clipboard = "HKU:\$hkeyuser\Software\Microsoft\Clipboard"
 	Set-ItemProperty -Path $Clipboard -Name "EnableClipboardHistory" -Value 1 -ErrorAction SilentlyContinue
 	print "Turned on Clipboard History."
     Start-Sleep 1
@@ -1777,7 +1779,7 @@ Function EnableClipboard {
 Function DisableClipboard {
 	space
 	print "Turning off Clipboard History..."
-	$Clipboard = "HKU:\S-1-5-21-*\Software\Microsoft\Clipboard"
+	$Clipboard = "HKU:\$hkeyuser\Software\Microsoft\Clipboard"
 	Set-ItemProperty -Path $Clipboard -Name "EnableClipboardHistory" -Value 0 -ErrorAction SilentlyContinue
 	print "Turned off Clipboard History."
 }
@@ -2280,7 +2282,7 @@ Function DisableTaskbarFeed {
 	space
 	print "Turning off News and interests..."
 	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
-	$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
+	$Feed2 = "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Feeds"
 	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
 	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
 	print "Turned off News and interests."
@@ -2294,7 +2296,7 @@ Function EnableTaskbarFeed {
 	}
 	print "Turning on News and interests..."
 	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
-	$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
+	$Feed2 = "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Feeds"
 	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0 | Out-Null
 	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 0 | Out-Null
 	print "Turned on News and interests."
