@@ -504,7 +504,6 @@ $ProgressPreference = 'SilentlyContinue'
 		"Microsoft.SkypeApp"
 		"Microsoft.Todos"
 		"Microsoft.WindowsAlarms"
-		"Microsoft.WindowsCamera"
 		"Microsoft.WindowsCommunicationsApps" 
 		"Microsoft.WindowsFeedbackHub" 
 		"Microsoft.WindowsMaps" 
@@ -522,6 +521,12 @@ $ProgressPreference = 'SilentlyContinue'
 		}
 	}
 
+	if (!(Get-CimInstance -ClassName Win32_PnPEntity | Where-Object -FilterScript {($_.PNPClass -eq "Camera") -or ($_.PNPClass -eq "Image")})) {
+		print "     Uninstalling Microsoft.WindowsCamera"
+		Get-AppxPackage "Microsoft.WindowsCamera" | Remove-AppxPackage
+		Get-AppxProvisionedPackage -Online "Microsoft.WindowsCamera" | Remove-AppxProvisionedPackage 
+	}
+	
 	# Remove Sponsored apps.
 	$SponsoredApps = @(
 		"*AdobePhotoshopExpress*"
@@ -784,7 +789,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	# Uninstall capabilities.
 	$Capabilities = @(
 		"App.StepsRecorder*"
-		"Hello.Face*"
 		"MathRecognizer*"
 		"Media.WindowsMediaPlayer*"
 		"Microsoft-Windows-SnippingTool*"
@@ -796,6 +800,10 @@ $ErrorActionPreference = 'SilentlyContinue'
 	)
 	ForEach ($Capability in $Capabilities) {
 		Get-WindowsCapability -Online | Where-Object {$_.Name -like $Capability} | Remove-WindowsCapability -Online | Out-Null
+	}
+	if (!(Get-CimInstance -ClassName Win32_PnPEntity | Where-Object -FilterScript {($_.PNPClass -eq "Camera") -or ($_.PNPClass -eq "Image")})) {
+		print "    - Uninstalled Windows Hello Face"
+		Get-WindowsCapability -Online "Hello.Face*" | Remove-WindowsCapability -Online | Out-Null
 	}
 	# Print user friendly list of capabilities uninstalled.
 	$CapLists =@(

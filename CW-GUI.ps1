@@ -667,12 +667,14 @@ $UninstallSelectively.Add_Click( {
         if ($CheckboxRemoveAll.IsChecked)
         {   
             print "Uninstalling selected apps..."
+            print "    Uninstalling $Name..."
             Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage -AllUsers
             print "Done."
         }
         else
         {  
             print "Uninstalling selected apps..."
+            print "    Uninstalling $Name..."
             Get-AppxPackage -PackageTypeFilter Bundle | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage
             print "Done."
         }
@@ -727,8 +729,8 @@ $UninstallSelectively.Add_Click( {
         }
         $OFS = " "
 
-        $TextblockRemoveAll.Text = "Remove for all users"
-        $Window.Title = "Uninstall apps selectively"
+        $TextblockRemoveAll.Text = "All users"
+        $Window.Title = "App selection menu"
         $Button.Content = "Uninstall"
     })
 
@@ -781,7 +783,6 @@ $ProgressPreference = 'SilentlyContinue'
         "Microsoft.SkypeApp"
         "Microsoft.Todos"
         "Microsoft.WindowsAlarms"
-        "Microsoft.WindowsCamera"
         "Microsoft.WindowsCommunicationsApps" 
         "Microsoft.WindowsFeedbackHub" 
         "Microsoft.WindowsMaps" 
@@ -798,6 +799,12 @@ $ProgressPreference = 'SilentlyContinue'
             Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $InboxApp | Remove-AppxProvisionedPackage -Online | Out-Null
         }
     }
+
+	if (!(Get-CimInstance -ClassName Win32_PnPEntity | Where-Object -FilterScript {($_.PNPClass -eq "Camera") -or ($_.PNPClass -eq "Image")})) {
+		print "     Uninstalling Microsoft.WindowsCamera"
+		Get-AppxPackage "Microsoft.WindowsCamera" | Remove-AppxPackage
+		Get-AppxProvisionedPackage -Online "Microsoft.WindowsCamera" | Remove-AppxProvisionedPackage 
+	}
 
     # Remove Sponsored apps.
 	$SponsoredApps = @(
