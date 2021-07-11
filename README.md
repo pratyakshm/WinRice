@@ -58,5 +58,5 @@ Known issues are being tracked [here](https://github.com/pratyakshm/CleanWin/iss
 - [Windows Blog](https://blogs.windows.com/)
 
 ## Testimonials 
-![based as fuck](https://i.imgur.com/CbI97e3.png)  
-\- KenHV ([@KenHV](https://github.com/KenHV))
+> ![based AF](https://i.imgur.com/CbI97e3.png)  
+> \- KenHV ([@KenHV](https://github.com/KenHV)) (July 11th, 2021)

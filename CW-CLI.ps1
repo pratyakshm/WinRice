@@ -166,8 +166,10 @@ Function space {
 Function print($text) {
 	Write-Host $text
 }
-
-
+if (!(Test-Path C:\CleanWin)) {
+	New-Item C:\CleanWin -ItemType Directory | Out-Null 
+}
+Start-Transcript -OutputDirectory "C:\CleanWin" | Out-Null 
 
 ### Pre-execution tasks ###
 
@@ -186,7 +188,7 @@ $hasReadDoc = ask "Have you read the documentation? [y/n]"
 if (check($hasReadDoc)) {
 	$knowWinstall = ask "Cool! You know Winstall?"
 	if (check($knowWinstall)) {
-		log "Aight good job."
+		log "Aight good job." 
 	}
 	elseif (!(check($knowWinstall))) {
 		log "Read the documentation properly this time?"
@@ -209,78 +211,69 @@ $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 $DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
 $ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
 New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
-if (!(Test-Path "C:\CleanWin")) {
-	New-Item "C:\CleanWin" -ItemType Directory | Out-Null
-}
 $currenttitle = $(Get-Process | Where-Object {$_.MainWindowTitle -like "*PowerShell*" }).MainWindowTitle
 
 
+####### BEGIN CHECKS #########
+
 # Check if supported OS build.
 space
-print "Checking if CleanWin supports this version of Windows..."
-Start-Sleep 1
+Write-Host "Checking if CleanWin supports this version of Windows..." -NoNewline
 if ($CurrentBuild -lt 19042) {
-	print "This device is running Windows 10 $DisplayVersion OS Build $CurrentBuild."
-	print "CleanWin does not support this version. Please update your device."
+	Write-Host "  Unsupported." -ForegroundColor DarkRed
 	cwexit
 }
 elseif ($CurrentBuild -ge 19042) {
-	print "This version of Windows is supported."
+	Write-Host "  Supported." -ForegroundColor Green
 }
 
 # Check if session is elevated.
-space
-print "Checking if current session is elevated..."
-Start-Sleep 2
+Write-Host "Checking if current PowerShell session is elevated..." -NoNewline
+Start-Sleep -Milliseconds 250 
 $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 $admin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if ($admin -like "False") {
-	print "Please run CleanWin in an elevated PowerShell session."
+	Write-Host " Not elevated." -ForegroundColor DarkRed
 	cwexit
 }
 elseif ($admin -like "True") {
-	print "Session is elevated."
+	Write-Host "  Elevated." -ForegroundColor Green
 }
 
 # Exit CleanWin if PC is not connected.
 $ProgressPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
-space
-print "Checking if this device is connected..."
+Write-Host "Checking if this device is connected..." -NoNewline
 Import-Module BitsTransfer
 Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
 if (Test-Path File.txt) {
 	Remove-Item File.txt
-	print "This device is connected."
+	Write-Host "  Connected." -ForegroundColor Green
 }
 elseif (!(Test-Path File.txt)) {
-	print "This device is not connected."
+	Write-Host "  Not connected." -ForegroundColor DarkRed
 	cwexit
 }
 
 # Check for updates and exit if found (part of code used here is picked from https://gist.github.com/Grimthorr/44727ea8cf5d3df11cf7).
-space
-print "Checking for Windows updates..."
+Write-Host "Checking if device is up-to-date..." -NoNewline
 $UpdateSession = New-Object -ComObject Microsoft.Update.Session
 $UpdateSearcher = $UpdateSession.CreateUpdateSearcher()
 $Updates = @($UpdateSearcher.Search("IsHidden=0 and IsInstalled=0 and AutoSelectOnWebSites=1").Updates)
 $Title = $($Updates).Title
 if (!($Title)) {
-	print "This device is updated. "
+	Write-Host "  Passed." -ForegroundColor Green
 }
 else {
-	print "The following updates are pending:"
-	$($Updates).Title
-	Start-Sleep 1
+	Write-Host "  Updates found." -ForegroundColor DarkRed
+	Write-Host "Ensure your device is up to date before executing CleanWin."
 	space
-	print "Please update your device before running CleanWin."
-	exit
+	cwexit
 }
 
 # Check for pending restart (part of code used here was picked from https://thesysadminchannel.com/remotely-check-pending-reboot-status-powershell).
-space
-print "Checking for pending restarts..."
-Start-Sleep 1
+Write-Host "Checking for pending restarts..." -NoNewline
+Start-Sleep -Milliseconds 100
 param (
     [Parameter(
     Mandatory = $false,
@@ -305,20 +298,37 @@ ForEach ($Computer in $ComputerName) {
         }
      
         if ($PendingReboot -eq $true) {
-            print "A device restart is pending."
-            print "Please restart this device then run CleanWin."
+            Write-Host "  Pending." -ForegroundColor DarkRed
 			cwexit
         }
         else {
-            print "No pending restarts detected."
-			Start-Sleep 2
-			Clear-Host
+            Write-Host "  None." -ForegroundColor Green
+			Start-Sleep -Milliseconds 100
         }
         # Clear variables.
         $WMI_Reg        = $null
         $SCCM_Namespace = $null
     }   
 }
+
+# Check PowerShell version and import required modules.
+if ((($PSVersionTable).PSVersion).Major -eq "7") { 
+$WarningPreference = 'SilentlyContinue'
+	Write-Host "PowerShell 7 detected, loading required modules..." -NoNewLine
+	Import-Module -Name Appx, Microsoft.PowerShell.Management, PackageManagement -UseWindowsPowerShell | Out-Null
+	Write-Host "  Loaded." -ForegroundColor Green
+} 
+elseif ((($PSVersionTable).PSVersion).Major -eq "5") { 
+	print "Windows PowerShell 5 detected."
+}
+else {
+	print "An error occured."
+	cwexit
+}
+
+Start-Sleep 2
+
+Clear-Host
 
 # Take user configs.
 print "Please take your time to answer the questions below in order to save user config."
@@ -373,7 +383,7 @@ Function OSBuildInfo {
 		print "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
 		print "Note that CleanWin's Windows 11 support is experimental and you might face issues."
 	}
-	Start-Sleep 2
+	Start-Sleep -Milliseconds 500
 	space
 	space
 }
@@ -2298,6 +2308,7 @@ Function Success {
 	print "This PC is set to restart in 10 seconds, please close this window if you want to halt the restart."
 	print "Thank you for using CleanWin."
 	Start-Sleep 10
+	Stop-Transcript
 	Restart-Computer
 }
 

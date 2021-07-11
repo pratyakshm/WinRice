@@ -7,6 +7,30 @@ Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
 Clear-Host 
+Function Log($text) {
+	Start-Sleep -Milliseconds 200
+    Write-Host $text
+}
+
+Function check($test) {
+    if ($test -like "y" -or $test -like "yeah" -or $test -like "yes" -or $test -like "yep" -or $test -like "yea" -or $test -like "yah") { 
+		return $true
+	}
+	elseif ($test -like "n" -or $test -like "nope" -or $test -like "no" -or $test -like "nada" -or $test -like "nah" -or $test -like "naw") {
+		return $false
+	}
+}
+
+Function cwexit {
+	Write-Host "CleanWin will now exit."
+	Start-Sleep -Milliseconds 200
+	exit
+}
+
+Function ask($question) {
+	Read-Host $question
+}
+
 Function space {
 	Write-Host " "
 }
@@ -56,69 +80,108 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 	}
 }
 
+Clear-Host
 print "CleanWin pre-execution environment"
 Start-Sleep -Milliseconds 100
 space
 print "Copyright (c) Pratyaksh Mehrotra and contributors"
 Start-Sleep -Milliseconds 100
 print "https://github.com/pratyakshm/CleanWin"
+space
 Start-Sleep 1
 
-# Check if session is elevated.
+# Did you read the docs? (Funny stuff).
+$hasReadDoc = ask "Have you read the documentation? [y/n]"
+if (check($hasReadDoc)) {
+	$knowWinstall = ask "Cool! You know Winstall?"
+	if (check($knowWinstall)) {
+		log "Aight good job." 
+	}
+	elseif (!(check($knowWinstall))) {
+		log "Read the documentation properly this time?"
+		log "Ctrl + left click https://github.com/pratyakshm/CleanWin/blob/main/README.md"
+		log "You're welcome."
+		exit 
+	}
+}
+elseif (!(check($hasReadDoc))) {
+	log "I didn't write the documentation for nothing."
+	log "Go ahead, read it."
+	log "Ctrl + left click https://github.com/pratyakshm/CleanWin/blob/main/README.md"
+	log "You're welcome."
+	exit
+}
+
+# Store values, create PSDrives and get current window title.
+$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
+$DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
+$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
+New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
+$currenttitle = $(Get-Process | Where-Object {$_.MainWindowTitle -like "*PowerShell*" }).MainWindowTitle
+
+
+####### BEGIN CHECKS #########
+
+# Check if supported OS build.
 space
-print "Checking if current session is elevated..."
-Start-Sleep 2
+Write-Host "Checking if CleanWin supports this version of Windows..." -NoNewline
+if ($CurrentBuild -lt 19042) {
+	Write-Host "  Unsupported." -ForegroundColor DarkRed
+	cwexit
+}
+elseif ($CurrentBuild -ge 19042) {
+	Write-Host "  Supported." -ForegroundColor Green
+}
+
+# Check if session is elevated.
+Write-Host "Checking if current PowerShell session is elevated..." -NoNewline
+Start-Sleep -Milliseconds 250 
 $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 $admin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if ($admin -like "False") {
-    print "Please run CleanWin in an elevated PowerShell session."
-    exit
+	Write-Host " Not elevated." -ForegroundColor DarkRed
+	cwexit
 }
 elseif ($admin -like "True") {
-    print "Session is elevated. Going ahead."
+	Write-Host "  Elevated." -ForegroundColor Green
 }
 
-# Check if device is connected.
-space
-print "Checking if this device is connected..."
+# Exit CleanWin if PC is not connected.
+$ProgressPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
+Write-Host "Checking if this device is connected..." -NoNewline
 Import-Module BitsTransfer
 Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
 if (Test-Path File.txt) {
-    Remove-Item File.txt
-    print "This device is connected."
+	Remove-Item File.txt
+	Write-Host "  Connected." -ForegroundColor Green
 }
 elseif (!(Test-Path File.txt)) {
-    print "This device is not connected. CleanWin will now exit."
-    exit
+	Write-Host "  Not connected." -ForegroundColor DarkRed
+	cwexit
 }
 
-$host.UI.RawUI.WindowTitle = "pratyakshm's CleanWin"
-
-
-# Check for for pending updates (part of code used here is picked from https://gist.github.com/Grimthorr/44727ea8cf5d3df11cf7).
-space
-print "Checking for Windows updates..."
+# Check for updates and exit if found (part of code used here is picked from https://gist.github.com/Grimthorr/44727ea8cf5d3df11cf7).
+Write-Host "Checking if device is up-to-date..." -NoNewline
 $UpdateSession = New-Object -ComObject Microsoft.Update.Session
 $UpdateSearcher = $UpdateSession.CreateUpdateSearcher()
 $Updates = @($UpdateSearcher.Search("IsHidden=0 and IsInstalled=0 and AutoSelectOnWebSites=1").Updates)
 $Title = $($Updates).Title
 if (!($Title)) {
-    print "This device is updated. "
+	Write-Host "  Passed." -ForegroundColor Green
 }
 else {
-    print "The following updates are pending:"
-    $($Updates).Title
-    Start-Sleep 1
-    space
-    print "Please update your device before running CleanWin."
-    exit
+	Write-Host "  Updates found." -ForegroundColor DarkRed
+	Write-Host "Ensure your device is up to date before executing CleanWin."
+	space
+	cwexit
 }
-Start-Sleep -Milliseconds 600
 
-# Check for pending restarts.
-space
-print "Checking for pending restarts..."
-Start-Sleep 1
+# Check for pending restart (part of code used here was picked from https://thesysadminchannel.com/remotely-check-pending-reboot-status-powershell).
+Write-Host "Checking for pending restarts..." -NoNewline
+Start-Sleep -Milliseconds 100
+param (
     [Parameter(
     Mandatory = $false,
     ValueFromPipeline=$true,
@@ -126,7 +189,7 @@ Start-Sleep 1
     Position=0
     )]
     [string[]]  $ComputerName = $env:COMPUTERNAME
-
+    )
 ForEach ($Computer in $ComputerName) {
     $PendingReboot = $false
     $HKLM = [UInt32] "0x80000002"
@@ -142,30 +205,37 @@ ForEach ($Computer in $ComputerName) {
         }
      
         if ($PendingReboot -eq $true) {
-            print "A device restart is pending."
-            print "Please restart this device then run CleanWin."
+            Write-Host "  Pending." -ForegroundColor DarkRed
 			cwexit
         }
         else {
-            print "No pending restarts detected."
-			Start-Sleep 2
-			Clear-Host
+            Write-Host "  None." -ForegroundColor Green
+			Start-Sleep -Milliseconds 100
         }
         # Clear variables.
         $WMI_Reg        = $null
         $SCCM_Namespace = $null
     }   
 }
+
+# Check PowerShell version and import required modules.
+if ((($PSVersionTable).PSVersion).Major -eq "7") { 
+$WarningPreference = 'SilentlyContinue'
+	Write-Host "PowerShell 7 detected, loading required modules..." -NoNewLine
+	Import-Module -Name Appx, Microsoft.PowerShell.Management, PackageManagement -UseWindowsPowerShell | Out-Null
+	Write-Host "  Loaded." -ForegroundColor Green
+} 
+elseif ((($PSVersionTable).PSVersion).Major -eq "5") { 
+	print "Windows PowerShell 5 detected."
+}
+else {
+	print "An error occured."
+	cwexit
+}
+
+Start-Sleep 2
+
 Clear-Host
-Start-Sleep 1
-print "pratyakshm's CleanWin"
-Start-Sleep -Milliseconds 100
-space
-print "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
-Start-Sleep -Milliseconds 100
-print "https://github.com/pratyakshm/CleanWin"
-Start-Sleep 1
-Write-Warning "GUI will freeze while CleanWin is performing a task."
 
 space
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
@@ -188,6 +258,16 @@ space
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 
+$host.UI.RawUI.WindowTitle = "pratyakshm's CleanWin"
+Clear-Host
+space
+print "pratyakshm's CleanWin"
+Start-Sleep -Milliseconds 100
+space
+print "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
+Start-Sleep -Milliseconds 100
+print "https://github.com/pratyakshm/CleanWin"
+Start-Sleep 1
 
 ### BEGIN GUI ###
 
