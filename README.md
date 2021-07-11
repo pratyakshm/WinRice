@@ -19,7 +19,7 @@ Everything from removing junk (your hardware doesn't count, yet), cleaning up th
 #### Get into details: [tap tap](https://github.com/pratyakshm/CleanWin/wiki/Detailed-list-of-tasks-CleanWin-performs)
 
 ### Can I revert changes? 
-The answer is yes. **Sometimes**. Read [functions](https://github.com/pratyakshm/CleanWin/blob/main/CW-CLI.ps1#L6-L127) to learn what you can and can't revert. 
+The answer is yes for the most part. Check Irreversible changes section of [this document](https://github.com/pratyakshm/CleanWin/wiki/Reverting-changes) to learn more.
 
 ## Running CleanWin
 You can use either of the two following methods:
