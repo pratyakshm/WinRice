@@ -17,30 +17,39 @@ $tasks = @(
 	"UnpinStartTiles", "Activity", 
 	"UnpinAppsFromTaskbar", "Activity", 
 	"InstallFrameworks",
+	# "UninstallFrameworks",
 	"InstallWinGet", 
-	"UninstallOneDrive", 
-	"Activity",
+	"UninstallOneDrive", "Activity",
+	# "InstallOneDrive",
 	# "DisableBrowserRestoreAd",
 	# "EnableBrowserRestoreAd",
 	# "DisableM365OnValueBanner", 
 	# "RevertM365OnValueBanner",
 	"UninstallFeatures", "Activity", 
+	# "InstallFeatures", "Activity", 
 	"DisableSuggestions",		    
 	# "EnableSuggestions",
 	"EnableWSL", "Activity", 
+	# "DisableWSL",
 	"EnabledotNET3.5", "Activity", 
-	# "EnableSandbox",
+	# "DisabledotNET3.5",
+	"EnableSandbox",
+	# "DisableSandbox",
 	"Install7zip", 
+	# "Uninstall7zip",
 	"Winstall", 
 	"Activity",
-	"EnableExperimentsWinget",
+	"EnableExperimentsWinGet",
+	# "DisableExperimentsWinGet",
 	"WinGetImport",
 	"Activity",
 	"InstallHEVC", 
-	"UpdateWidgets",
+	# "UninstallHEVC",
+	"Widgets",
 	"InstallFonts", 
+	# "UninstallFonts",
 	"SetPhotoViewerAssociation",
-	# "SetPhotoViewerAssociation",
+	# "UnsetPhotoViewerAssociation",
 	"ChangesDone",
 
 ### Privacy & Security ###
@@ -665,6 +674,22 @@ $ErrorActionPreference = 'SilentlyContinue'
 	print "Uninstalled Microsoft OneDrive."
 }
 
+# Install Microsoft OneDrive 
+Function InstallOneDrive {
+	if (!(Get-Command winget)) {
+		print "WinGet is not installed. Could not install Microsoft OneDrive."
+		return
+	}
+	print "Installing Microsoft OneDrive."
+	winget install Microsoft.OneDrive --silent | Out-Null
+	$check = winget list Microsoft.OneDrive
+	if ($check -like "No installed package found matching input criteria.") {
+		print "Could not install Microsoft OneDrive."
+		return
+	}
+	print "Installed Microsoft OneDrive."
+}
+
 # Enable Startup boost in Microsoft Edge.
 Function EnableEdgeStartupBoost {
 	space
@@ -793,7 +818,59 @@ $ErrorActionPreference = 'SilentlyContinue'
 	print "Removed capabilities and features."
 }
 
+# Install Windows Optional Features and Windows Capabilities.
+Function InstallFeatures {
+$ProgressPreference = 'SilentlyContinue'
+$WarningPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
+	space
+	print "Adding capabilites and features..."
+	# Install capabilities.
+	$Capabilities = @(
+		"App.StepsRecorder*"
+		"Hello.Face*"
+		"MathRecognizer*"
+		"Media.WindowsMediaPlayer*"
+		"Microsoft-Windows-SnippingTool*"
+		"Microsoft.Windows.MSPaint*" 
+		"Microsoft.Windows.PowerShell.ISE*"
+		"Microsoft.Windows.WordPad*"
+		"Print.Fax.Scan*"
+		"XPS.Viewer*"
+	)
+	ForEach ($Capability in $Capabilities) {
+		Get-WindowsCapability -Online | Where-Object {$_.Name -like $Capability} | Add-WindowsCapability -Online | Out-Null
+	}
+	# Print user friendly list of capabilities installed.
+	$CapLists =@(
+		"Math Recognizer"
+		"Microsoft Paint"
+		"Snipping Tool"
+		"Steps Recorder"
+		"Windows Fax & Scan"
+		"Windows Media Player"
+		"Windows Hello Face"
+		"Windows PowerShell ISE"
+		"Windows XPS Features"
+		"WordPad"
+	)
+	ForEach ($CapList in $CapLists) {
+		Start-Sleep -Milliseconds 70
+		print "    - Installed $CapList"
+	}
 
+	$OptionalFeatures = @(
+		"WorkFolders-Client*"
+		"Printing-XPSServices-Feature*"
+	)
+	ForEach ($OptionalFeature in $OptionalFeatures) {
+		Get-WindowsOptionalFeature -Online | Where-Object {$_.FeatureName -like $OptionalFeature} | Enable-WindowsOptionalFeature -Online -NoRestart | Out-Null
+	}
+	# Print user friendly list of features uninstalled.
+	print "    - Enabled Work Folders Client."
+	
+	print "Added capabilities and features."
+}
 
 # Disable app suggestions and automatic installation.
 Function DisableSuggestions {
@@ -864,6 +941,29 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 }
 
+# Disable Windows Subsystem for Linux.
+Function DisableWSL {
+$ProgressPreference = 'SilentlyContinue'
+$WarningPreference = 'SilentlyContinue'
+	space
+	$wslstate = (Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State
+	$vmpstate = (Get-WindowsOptionalFeature -Online -FeatureName "VirtualMachinePlatform").State
+	if ($wslstate -like "Disabled" -and $vmpstate -like "Disabled") {
+		print "Windows Subsystem for Linux may have already been disabled."
+		return
+	}
+	print "Disabling Windows Subsystem for Linux..."
+	Disable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart | Out-Null
+	Disable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart | Out-Null 
+	if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) {
+		$hypervstate = (Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Hyper-V").State
+		if ($hypervstate -like "Disabled") {
+			Disable-WindowsOptionalFeature -Online -FeatureName "Microsoft-Hyper-V"
+		}
+	}
+	print "Disabled Windows Subsystem for Linux."
+}
+
 # Enable Sandbox.
 Function EnableSandbox {
 $ProgressPreference = 'SilentlyContinue'
@@ -877,16 +977,47 @@ $ProgressPreference = 'SilentlyContinue'
 	print "Enabled Windows Sandbox."
 }
 
+# Disable Sandbox
+Function DisableSandbox {
+$ProgressPreference = 'SilentlyContinue'
+	space
+	if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) {
+		print "Windows Sandbox can't be toggled in $ProductName."
+		return
+	}
+	print "Disabling Windows Sandbox..."
+	Disable-WindowsOptionalFeature -FeatureName "Containers-DisposableClientVM" -All -Online -NoRestart -WarningAction Ignore | Out-Null
+	print "Disabled Windows Sandbox."
+}
+
 # Enable dotNET 3.5.
 Function EnabledotNET3.5 {
 $ProgressPreference = 'SilentlyContinue'
 	if (!(check($netfx3))) { 
 		return 
 	}
+	$netfx3state = (Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State
+	if ($netfx3state -like "Enabled"){
+		Write-Host "dotNET 3.5 is already enabled."
+		return
+	}
 	space
 	print "Enabling dotNET 3.5..."
-	dism.exe /online /Enable-Feature /FeatureName:NetFx3 /NoRestart /Quiet
+	Enable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -NoRestart
 	print "Enabled dotNET 3.5."
+}
+
+Function DisabledotNET3.5 {
+$ProgressPreference = 'SilentlyContinue'
+	space
+	$netfx3state = (Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State
+	if ($netfx3state -like "Disabled"){
+		print "dotNET 3.5 is already disabled."
+		return
+	}
+	print "Disabling dotNET 3.5..."
+	Disable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -NoRestart
+	print "Disabled dotNET 3.5."
 }
 
 # Install runtime packages 
@@ -932,6 +1063,29 @@ Function InstallFrameworks {
 		print "Could not install app frameworks."
 	}
 
+}
+
+Function UninstallFrameworks {
+	space
+	if (!(Get-AppxPackage "Microsoft.VCLibs.140.00.UWPDesktop" -or Get-AppxPackage "Microsoft.VCLibs.x64.14.00.Desktop")) {
+		print "Frameworks are not present on this device."
+		return
+	}
+	print "Uninstalling frameworks..."
+	$Apps = @(
+		"Microsoft.VCLibs.140.00.UWPDesktop"
+		"Microsoft.VCLibs.x64.14.00.Desktop"
+		"Microsoft.VCLibs.x86.14.00.Desktop"
+	)
+	ForEach ($App in $Apps) {
+		print "     Uninstalling $App."
+		Get-AppxPackage $App | Remove-AppxPackage
+	}
+	if (!(Get-AppxPackage "Microsoft.VCLibs.140.00.UWPDesktop")) {
+		print "Could not uninstall one or more frameworks."
+		return
+	}
+	print "Uninstalled frameworks."
 }
 
 # Install WinGet (Windows Package Manager).
@@ -981,7 +1135,7 @@ $ProgressPreference = 'SilentlyContinue'
 Function Install7zip {
 	space
 	if (!(Get-Command winget)) {
-		print "WinGet is not installed. Couldn't install 7zip."
+		print "WinGet is not installed. Couldn't install 7-zip."
 		return 
 	}
 	$7zip = "HKLM:\SOFTWARE\7-Zip"
@@ -992,6 +1146,23 @@ Function Install7zip {
 	else {
 		print "7-zip is already installed on this device."
 	}
+}
+
+# Uninstall 7zip
+Function Uninstall7zip {
+	space
+	$7zip = "HKLM:\SOFTWARE\7-Zip"
+	if (!(Test-Path $7zip)) {
+		print "7-zip is not present on this device."
+		return
+	}
+	print "Uninstalling 7-zip..."
+	winget uninstall 7zip.7zip | Out-Null
+	if (Test-Path $7zip) {
+		print "Could not uninstall 7-zip."
+		return
+	}
+	print "Uninstalled 7-zip."
 }
 
 # Install apps from Winstall file (the Winstall.txt file must be on the same directory as CleanWin).
@@ -1051,7 +1222,7 @@ $ErrorActionPreference = 'Continue'
 }
 
 # Enable all experimental features in WinGet.
-Function EnableExperimentsWinget {
+Function EnableExperimentsWinGet {
 	if (!(check($enableexperimentswinget))) { 
 		return 
 	}
@@ -1060,13 +1231,27 @@ Function EnableExperimentsWinget {
 		return
 	}
 	space
-	print "Turning on all experimental features in WinGet..."
+	print "Turning on experimental features in WinGet..."
 	$currentdir = $(Get-Location).Path
 	Set-Location "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\"
 	Rename-Item settings.json settings.json.backup
 	Start-BitsTransfer "https://raw.githubusercontent.com/CleanWin/Files/main/settings.json"
 	Set-Location $currentdir
-	print "Turned on all experimental features in WinGet."
+	print "Turned on experimental features in WinGet."
+}
+
+Function DisableExperimentsWinGet {
+	if (!(Get-Command winget)) {
+		print "WinGet is not installed, couldn't turn off its experimental features."
+		return
+	}
+	print "Turning off experimental features in WinGet."
+	$currentdir = $(Get-Location).Path
+	Set-Location "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\"
+	Remove-Item settings.json
+	Rename-Item settings.json.backup settings.json
+	Set-Location $currentdir
+	print "Turned off experimental features in WinGet."
 }
 
 
@@ -1123,6 +1308,24 @@ $ProgressPreference = 'SilentlyContinue'
 	else {
 		# Error out.
 		print "Could not install HEVC Video Extensions."
+	}
+}
+
+# Uninstall HEVC 
+Function UninstallHEVC {
+$ProgressPreference = 'SilentlyContinue'
+	space
+	if (!(Get-AppxPackage "Microsoft.HEVCVideoExtension")) {
+		print "HEVC Video Extensions may have already been uninstalled."
+		return
+	}
+	print "Uninstalling HEVC Video Extensions..."
+	Get-AppxPackage "Microsoft.HEVCVideoExtension" | Remove-AppxPackage
+	if (!(Get-AppxPackage "Microsoft.HEVCVideoExtension")) {
+		print "Uninstalled HEVC Video Extensions."
+	}
+	else {
+		print "Could not uninstall HEVC Video Extensions."
 	}
 }
 
@@ -1192,6 +1395,23 @@ $ProgressPreference = 'SilentlyContinue'
 	Remove-Item CascadiaCode.zip
 	Remove-Item CascadiaCode -Recurse -Force
 	print "Installed Cascadia Code."
+}
+
+Function UninstallFonts {
+	space
+	$fontfile = "C:\Windows\Fonts\CascadiaCodePL.ttf"
+	if (!($fontfile)) {
+		print "Fonts may have already been uninstalled."
+		return
+	}
+	print "Uninstalling fonts..."
+	Remove-Item $fontfile
+	if (!($fontfile)) {
+		print "Uninstalled fonts."
+	}
+	else {
+		print "Could not uninstall fonts."
+	}
 }
 
 # Set Windows Photo Viewer association for bmp, gif, jpg, png and tif.
@@ -1909,9 +2129,6 @@ Function Hide3DObjects {
 		print "Turned off 3D Objects."
 		Start-Sleep -Milliseconds 200
 	}
-	else {
-		# Do nothing
-	}
 }
 
 # Restore 3D Objects.
@@ -1928,9 +2145,6 @@ Function Restore3DObjects {
 		Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
 		Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
 		print "Turned on 3D Objects."
-	}
-	else {
-		# Do nothing
 	}
 }
 

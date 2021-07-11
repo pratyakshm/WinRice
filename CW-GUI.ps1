@@ -1030,9 +1030,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 			}
 		Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
 	}
-	else {
-		# Do nothing
-	}
 
     # Hide search box/icon in taskbar.
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
@@ -1044,9 +1041,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	if ($CurrentBuild -lt 22000) {
 		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
 	}
-	else {
-		# Do nothing
-	}
 
     # Hide Meet Now icon in taskbar.
 	if ($CurrentBuild -lt 22000) {
@@ -1055,9 +1049,6 @@ $ErrorActionPreference = 'SilentlyContinue'
         Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1
         Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
 	}
-	else {
-		# Do nothing
-	}
     
     # Turn off News and interests in taskbar.
 	if ($CurrentBuild -lt 22000) {
@@ -1065,9 +1056,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 		$Feed2 = "HKU:\S-1-5-21-*\Software\Microsoft\Windows\CurrentVersion\Feeds"
 		Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
 		Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
-	}
-	else {
-		# Do nothing
 	}
 
     # Restart explorer.exe to reflect changes immeditately and then provide 2 seconds of breathing time.
@@ -1127,9 +1115,6 @@ $ErrorActionPreference = 'SilentlyContinue'
         Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
         Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
 	}
-	else {
-		# Do nothing
-	}
     
     # Show search bar/icon in taskbar.
 	if ($CurrentBuild -lt 22000) {
@@ -1152,9 +1137,6 @@ $ErrorActionPreference = 'SilentlyContinue'
         Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 0
         Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
 	}
-	else {
-		# Do nothing
-	}
     
     # No longer use print screen key to launch Snip overlay.
     Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
@@ -1166,9 +1148,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0 | Out-Null
 		Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 0 | Out-Null
         Remove-PSDrive -Name HKU
-	}
-	else {
-		# Do nothing
 	}
 
     # Print list of changes done.
