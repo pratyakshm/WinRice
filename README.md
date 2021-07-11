@@ -56,3 +56,7 @@ Known issues are being tracked [here](https://github.com/pratyakshm/CleanWin/iss
 - [Windows 10 Release Information](https://docs.microsoft.com/en-us/windows/release-information/)
 - [Windows 10 21H1 "May 2021 Update" - Known Issues tracker](https://docs.microsoft.com/en-us/windows/release-information/status-windows-10-21h1)
 - [Windows Blog](https://blogs.windows.com/)
+
+## Testimonials 
+![based as fuck](https://i.imgur.com/CbI97e3.png)  
+\- KenHV ([@KenHV](https://github.com/KenHV))
