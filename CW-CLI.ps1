@@ -179,7 +179,7 @@ function RunWithProgress {
         [Boolean]
 		$Exit = $false
     )
-    $spinner = '\', '|', '/', '|'
+    $spinner = '\', '|', '/', '-', '\', '|', '/', '-'
 	$endtext = $text
     # Run given scriptblock in bg
     $job = Start-Job -ScriptBlock $Task
@@ -229,15 +229,15 @@ Start-Sleep -Milliseconds 100
 print "https://github.com/pratyakshm/CleanWin"
 space
 Start-Sleep 1
+$ProgressPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
+$WarningPreference = 'SilentlyContinue'
 
 # Did you read the docs? (Funny stuff).
 $hasReadDoc = ask "Have you read the documentation? [y/n]"
 if (check($hasReadDoc)) {
 	$knowWinstall = ask "Cool! You know Winstall?"
-	if (check($knowWinstall)) {
-		log "Aight good job." 
-	}
-	elseif (!(check($knowWinstall))) {
+	if (!(check($knowWinstall))) {
 		log "Read the documentation properly this time?"
 		log "Ctrl + left click https://github.com/pratyakshm/CleanWin/blob/main/README.md"
 		log "You're welcome."
@@ -255,7 +255,7 @@ elseif (!(check($hasReadDoc))) {
 # Store values, create PSDrives and get current window title.
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
-$DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
+$DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion -ErrorAction SilentlyContinue
 $ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
 New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
 $currenttitle = $(Get-Process | Where-Object {$_.MainWindowTitle -like "*PowerShell*" }).MainWindowTitle
@@ -289,8 +289,6 @@ $isadmin = {
 RunWithProgress -Text "Checking if current PowerShell session is elevated..." -Task $isadmin -Exit $true | Out-Null
 
 # Exit CleanWin if PC is not connected.
-$ProgressPreference = 'SilentlyContinue'
-$ErrorActionPreference = 'SilentlyContinue'
 $isonline = {
 	Import-Module BitsTransfer
 	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
@@ -366,7 +364,6 @@ $SCCM_Namespace = $null
 # Check PowerShell version and import required modules.
 $pwshver = {
 	if ((($PSVersionTable).PSVersion).Major -eq "7") { 
-		$WarningPreference = 'SilentlyContinue'
 		Import-Module -Name Appx, Microsoft.PowerShell.Management, PackageManagement -UseWindowsPowerShell | Out-Null
 		return $true
 	} 

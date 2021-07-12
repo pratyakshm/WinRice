@@ -79,6 +79,49 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		[System.Windows.Forms.SendKeys]::SendWait("{BACKSPACE 1}")
 	}
 }
+function RunWithProgress {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]
+        $Text,
+        [Parameter(Mandatory = $true)]
+        [ScriptBlock]
+        $Task,
+		[Parameter(Mandatory = $false)]
+        [Boolean]
+		$Exit = $false
+    )
+    $spinner = '\', '|', '/', '-', '\', '|', '/', '-'
+	$endtext = $text
+    # Run given scriptblock in bg
+    $job = Start-Job -ScriptBlock $Task
+    # Spin while job is running
+    do {
+        foreach ($s in $spinner) {
+            Write-Host -NoNewline "`r  [$s] $text"
+            Start-Sleep -Milliseconds 150
+        }
+    }
+    while($job.State -eq "Running")
+    # Get output
+    $result = Receive-Job -Job $job
+    # Filter result
+    if ($result -eq $false -or $null -eq $result) {
+        # Failure indicator
+        $ind = '-'
+        $color = "DarkRed"
+		$fail = $true
+    }
+    else {
+        # Success indicator
+        $ind = '+'
+        $color = "DarkGreen"
+    }
+    Write-Host -NoNewline -ForegroundColor $color "`r  [$ind] "; Write-Host "$endtext"
+	# Exit on failure
+	if ($Exit -and $fail) { cwexit }
+    return $result
+}
 
 Clear-Host
 print "CleanWin pre-execution environment"
@@ -89,15 +132,15 @@ Start-Sleep -Milliseconds 100
 print "https://github.com/pratyakshm/CleanWin"
 space
 Start-Sleep 1
+$ProgressPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
+$WarningPreference = 'SilentlyContinue'
 
 # Did you read the docs? (Funny stuff).
 $hasReadDoc = ask "Have you read the documentation? [y/n]"
 if (check($hasReadDoc)) {
 	$knowWinstall = ask "Cool! You know Winstall?"
-	if (check($knowWinstall)) {
-		log "Aight good job." 
-	}
-	elseif (!(check($knowWinstall))) {
+	if (!(check($knowWinstall))) {
 		log "Read the documentation properly this time?"
 		log "Ctrl + left click https://github.com/pratyakshm/CleanWin/blob/main/README.md"
 		log "You're welcome."
@@ -124,114 +167,119 @@ $hkeyuser = (Get-CimInstance -ClassName Win32_UserAccount | Where-Object -Filter
 ####### BEGIN CHECKS #########
 
 # Check if supported OS build.
+$oscheck = {
+	$CurrentBuild = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name CurrentBuild
+	if ($CurrentBuild -lt 19042) {
+		return $false
+	}
+	elseif ($CurrentBuild -ge 19042) {
+		return $true
+	}
+}
 space
-Write-Host "Checking if CleanWin supports this version of Windows..." -NoNewline
-if ($CurrentBuild -lt 19042) {
-	Write-Host "  Unsupported." -ForegroundColor DarkRed
-	cwexit
-}
-elseif ($CurrentBuild -ge 19042) {
-	Write-Host "  Supported." -ForegroundColor Green
-}
+RunWithProgress -Text "Checking if CleanWin supports this version of Windows..." -Task $oscheck -Exit $true | Out-Null
+
 
 # Check if session is elevated.
-Write-Host "Checking if current PowerShell session is elevated..." -NoNewline
-Start-Sleep -Milliseconds 250 
-$currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
-$admin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-if ($admin -like "False") {
-	Write-Host " Not elevated." -ForegroundColor DarkRed
-	cwexit
+$isadmin = {
+	$currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+	$admin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+	return $admin
 }
-elseif ($admin -like "True") {
-	Write-Host "  Elevated." -ForegroundColor Green
-}
+
+RunWithProgress -Text "Checking if current PowerShell session is elevated..." -Task $isadmin -Exit $true | Out-Null
 
 # Exit CleanWin if PC is not connected.
 $ProgressPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
-Write-Host "Checking if this device is connected..." -NoNewline
-Import-Module BitsTransfer
-Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
-if (Test-Path File.txt) {
-	Remove-Item File.txt
-	Write-Host "  Connected." -ForegroundColor Green
+$isonline = {
+	Import-Module BitsTransfer
+	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
+	if (Test-Path File.txt) {
+		Remove-Item File.txt
+		return $true
+	}
+	elseif (!(Test-Path File.txt)) {
+		return $false
+	}
 }
-elseif (!(Test-Path File.txt)) {
-	Write-Host "  Not connected." -ForegroundColor DarkRed
-	cwexit
-}
+
+RunWithProgress -Text "Checking if this device is connected..." -Task $isonline -Exit $true | Out-Null
+
 
 # Check for updates and exit if found (part of code used here is picked from https://gist.github.com/Grimthorr/44727ea8cf5d3df11cf7).
-Write-Host "Checking if device is up-to-date..." -NoNewline
-$UpdateSession = New-Object -ComObject Microsoft.Update.Session
-$UpdateSearcher = $UpdateSession.CreateUpdateSearcher()
-$Updates = @($UpdateSearcher.Search("IsHidden=0 and IsInstalled=0 and AutoSelectOnWebSites=1").Updates)
-$Title = $($Updates).Title
-if (!($Title)) {
-	Write-Host "  Passed." -ForegroundColor Green
+$isuptodate = {
+	$UpdateSession = New-Object -ComObject Microsoft.Update.Session
+	$UpdateSearcher = $UpdateSession.CreateUpdateSearcher()
+	$Updates = @($UpdateSearcher.Search("IsHidden=0 and IsInstalled=0 and AutoSelectOnWebSites=1").Updates)
+	$Title = $($Updates).Title
+	if (!($Title)) {
+		return $true
+	}
+	else {
+		return $false
+	}
 }
-else {
-	Write-Host "  Updates found." -ForegroundColor DarkRed
-	Write-Host "Ensure your device is up to date before executing CleanWin."
-	space
-	cwexit
-}
+
+RunWithProgress -Text "Checking if device is up-to-date..." -Task $isuptodate -Exit $true | Out-Null
 
 # Check for pending restart (part of code used here was picked from https://thesysadminchannel.com/remotely-check-pending-reboot-status-powershell).
-Write-Host "Checking for pending restarts..." -NoNewline
-Start-Sleep -Milliseconds 100
-param (
-    [Parameter(
-    Mandatory = $false,
-    ValueFromPipeline=$true,
-    ValueFromPipelineByPropertyName=$true,
-    Position=0
-    )]
-    [string[]]  $ComputerName = $env:COMPUTERNAME
-    )
-ForEach ($Computer in $ComputerName) {
-    $PendingReboot = $false
-    $HKLM = [UInt32] "0x80000002"
-    $WMI_Reg = [WMIClass] "\\$Computer\root\default:StdRegProv"
-    if ($WMI_Reg) {
-        if (($WMI_Reg.EnumKey($HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\")).sNames -contains 'RebootPending') {$PendingReboot = $true}
-        if (($WMI_Reg.EnumKey($HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\")).sNames -contains 'RebootRequired') {$PendingReboot = $true}
-     
-        # Check for SCCM namespace.
-        $SCCM_Namespace = Get-WmiObject -Namespace ROOT\CCM\ClientSDK -List -ComputerName $Computer -ErrorAction Ignore
-        if ($SCCM_Namespace) {
-            if (([WmiClass]"\\$Computer\ROOT\CCM\ClientSDK:CCM_ClientUtilities").DetermineIfRebootPending().RebootPending -eq $true) {$PendingReboot = $true}
-        }
-     
-        if ($PendingReboot -eq $true) {
-            Write-Host "  Pending." -ForegroundColor DarkRed
-			cwexit
-        }
-        else {
-            Write-Host "  None." -ForegroundColor Green
-			Start-Sleep -Milliseconds 100
-        }
-        # Clear variables.
-        $WMI_Reg        = $null
-        $SCCM_Namespace = $null
-    }   
+$isrestartpending = {
+	param (
+		[Parameter(
+		Mandatory = $false,
+		ValueFromPipeline=$true,
+		ValueFromPipelineByPropertyName=$true,
+		Position=0
+		)]
+		[string[]]  $ComputerName = $env:COMPUTERNAME
+		)
+	ForEach ($Computer in $ComputerName) {
+		$PendingReboot = $false
+		$HKLM = [UInt32] "0x80000002"
+		$WMI_Reg = [WMIClass] "\\$Computer\root\default:StdRegProv"
+		if ($WMI_Reg) {
+			if (($WMI_Reg.EnumKey($HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\")).sNames -contains 'RebootPending') {$PendingReboot = $true}
+			if (($WMI_Reg.EnumKey($HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\")).sNames -contains 'RebootRequired') {$PendingReboot = $true}
+		
+			# Check for SCCM namespace.
+			$SCCM_Namespace = Get-WmiObject -Namespace ROOT\CCM\ClientSDK -List -ComputerName $Computer -ErrorAction Ignore
+			if ($SCCM_Namespace) {
+				if (([WmiClass]"\\$Computer\ROOT\CCM\ClientSDK:CCM_ClientUtilities").DetermineIfRebootPending().RebootPending -eq $true) {$PendingReboot = $true}
+			}
+		
+			if ($PendingReboot -eq $true) {
+				return $false
+			}
+			else {
+				return $true
+			}
+		}   
+	}
 }
 
+RunWithProgress -Text "Checking for pending restarts..." -Task $isrestartpending -Exit $true | Out-Null
+
+# Clear variables.
+$WMI_Reg        = $null
+$SCCM_Namespace = $null
+
 # Check PowerShell version and import required modules.
-if ((($PSVersionTable).PSVersion).Major -eq "7") { 
-$WarningPreference = 'SilentlyContinue'
-	Write-Host "PowerShell 7 detected, loading required modules..." -NoNewLine
-	Import-Module -Name Appx, Microsoft.PowerShell.Management, PackageManagement -UseWindowsPowerShell | Out-Null
-	Write-Host "  Loaded." -ForegroundColor Green
-} 
-elseif ((($PSVersionTable).PSVersion).Major -eq "5") { 
-	print "Windows PowerShell 5 detected."
+$pwshver = {
+	if ((($PSVersionTable).PSVersion).Major -eq "7") { 
+		$WarningPreference = 'SilentlyContinue'
+		Import-Module -Name Appx, Microsoft.PowerShell.Management, PackageManagement -UseWindowsPowerShell | Out-Null
+		return $true
+	} 
+	elseif ((($PSVersionTable).PSVersion).Major -eq "5") { 
+		return $true
+	}
+	else {
+		return $false
+	}
 }
-else {
-	print "An error occured."
-	cwexit
-}
+
+RunWithProgress -Text "Checking PowerShell version and importing required modules..." -Task $pwshver -Exit $true | Out-Null
 
 Start-Sleep 2
 
@@ -248,15 +296,13 @@ if ($CurrentBuild -lt 21996) {
     print "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
 }
 elseif ($CurrentBuild -ge 22000) {
-print "This PC is running Windows 11."
-print "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
-print "Note that CleanWin's Windows 11 support is experimental and you might face issues."
+    print "This PC is running Windows 11."
+    print "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
+    print "Note that CleanWin's Windows 11 support is experimental and you might face issues."
 }
 space
 print "Please ensure that no other apps or programs run while CleanWin is working."
 space
-$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 
 $host.UI.RawUI.WindowTitle = "pratyakshm's CleanWin"
 Clear-Host

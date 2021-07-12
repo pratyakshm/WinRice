@@ -21,19 +21,19 @@ Everything from removing junk (your hardware doesn't count, yet), cleaning up th
 ### Can I revert changes? 
 The answer is yes for the most part. Check Irreversible changes section of [this document](https://github.com/pratyakshm/CleanWin/wiki/Reverting-changes) to learn more.
 
+
 ## Running CleanWin
 You can use either of the two following methods:
-### 1. GitHub release
-   It's simple - tap [this link](https://github.com/pratyakshm/CleanWin/releases/latest) to get to the latest release or browse all releases [here](https://github.com/pratyakshm/CleanWin/releases).
-### 2. Main branch
-Open Windows Terminal as Administrator, make you're using Windows PowerShell and NOT [PowerShell](https://github.com/powershell/powershell).  
-**P.S.:** Using Windows 11? Do yourself a favour - run the latest code from main branch instead of using the latest release.  
-
+### 1. Main branch (recommended)
+Open Windows Terminal as Administrator.  
 To run **CLI** (based and redpilled), paste  
 `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JmqTS'))`   
-
 Oh you wanna run **GUI** (cringe and bluepilled)? Paste    
 `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jqcr0'))`   
+
+### 2. GitHub release
+   It's simple - tap [this link](https://github.com/pratyakshm/CleanWin/releases/latest) to get to the latest release or browse all releases [here](https://github.com/pratyakshm/CleanWin/releases).
+
 
 ## Wiki
 [Visit the Wiki](https://github.com/pratyakshm/CleanWin/wiki) to read in detail about testing, compatibility, using Winstall, customization, and more.
@@ -56,6 +56,7 @@ Known issues are being tracked [here](https://github.com/pratyakshm/CleanWin/iss
 - [Windows 10 Release Information](https://docs.microsoft.com/en-us/windows/release-information/)
 - [Windows 10 21H1 "May 2021 Update" - Known Issues tracker](https://docs.microsoft.com/en-us/windows/release-information/status-windows-10-21h1)
 - [Windows Blog](https://blogs.windows.com/)
+
 
 ## Testimonials 
 > ![based AF](https://i.imgur.com/CbI97e3.png)  
