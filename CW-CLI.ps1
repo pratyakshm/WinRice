@@ -72,6 +72,10 @@ $tasks = @(
 	# "EnableMapsUpdates",
 	"DisableSpeechRecognition",		
 	# "EnableSpeechRecognition",
+	"DisableSilentInstallApps",
+	# "EnableSilentInstallApps",
+	"HideSuggestedContentInSettings",
+	# "ShowSuggestedContentInSettings",
 	"HideSuggestedContentInStart",
 	# "ShowSuggestedContentInStart",
 	"DisableTailoredExperiences",	
@@ -1578,11 +1582,11 @@ $ErrorActionPreference = 'SilentlyContinue'
 	$Feedback4 = "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
 	if (!(Test-Path $Feedback1)) {
 		New-Item -Path $Feedback1 -Force | Out-Null
-		}
+	}
 	Set-ItemProperty -Path $Feedback1 -Name "NumberOfSIUFInPeriod" -Type DWord -Value 1
 	if (!(Test-Path $Feedback2)) {
 		New-Item -Path $Feedback2 -Force | Out-Null
-		}
+	}
 	Set-ItemProperty -Path $Feedback2 -Name "DoNotShowFeedbackNotifications" -Type DWord -Value 1
 	Disable-ScheduledTask -TaskName $Feedback3 | Out-Null
 	Disable-ScheduledTask -TaskName $Feedback4 | Out-Null
@@ -1592,11 +1596,17 @@ $ErrorActionPreference = 'SilentlyContinue'
 # Enable Feedback.
 Function EnableFeedback {
 	print "Turning on Feedback notifications..."
-	$Feedback = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
-	if (!(Test-Path $Feedback )) {
-		New-Item $Feedback -Force | Out-Null
-		}
-	Remove-ItemProperty -Path $Feedback -Name "NumberOfSIUFInPeriod"
+	$Feedback1 = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
+	$Feedback2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
+	$Feedback3 = "Microsoft\Windows\Feedback\Siuf\DmClient"
+	$Feedback4 = "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
+	if (!(Test-Path $Feedback1 )) {
+		New-Item $Feedback1 -Force | Out-Null
+	}
+	Remove-ItemProperty -Path $Feedback1 -Name "NumberOfSIUFInPeriod"
+	Remove-ItemProperty -Path $Feedback2 -Name "DoNotShowFeedbackNotifications"
+	Enable-ScheduledTask -TaskName $Feedback3 | Out-Null
+	Enable-ScheduledTask` -TaskName $Feedback4 | Out-Null
 	print "Turned on Feedback notifications."
 }
 
@@ -1690,7 +1700,7 @@ Function DisableMapUpdates {
 Function EnableMapsUpdates {
 	space
 	print "Turning on automatic Maps updates..."
-	Remove-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled"
+	Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 1
 	print "Turned on automatic Maps updates."
 }
 
@@ -1719,18 +1729,56 @@ Function EnableSpeechRecognition {
 	print "Turned on Online Speech recognition"
 }
 
-# Disable "Show me suggested content in Settings app".
+# Disable silent installation of recommended apps.
+Function DisableSilentInstallApps {
+	space
+	print "Turning off silent installation of suggested apps..."
+	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SilentInstalledAppsEnabled -Type DWord -Value 1
+	print "Turned off silent installation of suggested apps."
+}
+
+# Enable silent installation of recommended apps.
+Function EnableSilentInstallApps {
+	space
+	print "Turning on silent installation of suggested apps..."
+	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SilentInstalledAppsEnabled -Type DWord -Value 1
+	print "Turned on silent installation of suggested apps."
+}
+
+# Disable "Show suggested content in Settings app"
+Function HideSuggestedContentInSettings {
+	space
+	print "Turning off suggested content in Settings app..."
+	$CDN = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-353694Enabled -Type DWord -Value 0
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-353696Enabled -Type DWord -Value 0
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-338393Enabled -Type DWord -Value 0
+	print "Turned off suggested content in Settings app."
+}
+
+# Enable "Show suggested content in Settings app"
+Function ShowSuggestedContentInSettings {
+	space
+	print "Turning on suggested content in Settings app..."
+	$CDN = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-353694Enabled -Type DWord -Value 1
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-353696Enabled -Type DWord -Value 1
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-338393Enabled -Type DWord -Value 1
+	print "Turned on suggested content in Settings app."
+}
+
+# Disable "Show me suggested content in Start menu".
 Function HideSuggestedContentInStart {
 	if ($CurrentBuild -ge 22000) {
 		return
 	}
 	space 
-	print "Turning off Suggested content in Start menu..."
+	print "Turning off suggested content in Start menu..."
 	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 0
-	print "Turned off Suggested content in Start menu."
+	print "Turned off suggested content in Start menu."
 }
 
-# Enable "Show me suggested content in Settings app".
+# Enable "Show me suggested content in Start menu".
 Function ShowSuggestedContentInStart {
 	if ($CurrentBuild -ge 22000) {
 		return
@@ -1745,11 +1793,14 @@ Function ShowSuggestedContentInStart {
 Function DisableTailoredExperiences {
 	space
 	print "Turning off Tailored experiences..."
-	$CloudContent = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
+	$TailoredExp1 = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
+	$TailoredExp2 = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting"
 	if (!(Test-Path $CloudContent )) {
 		New-Item $CloudContent -Force | Out-Null
-		}
-	Set-ItemProperty -Path $CloudContent -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
+	}
+	Set-ItemProperty -Path 
+	Set-ItemProperty -Path $TailoredExp1 -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
+	Set-ItemProperty -Path $TailoredExp2 -Name "Disabled" -Type DWord -Value 1
 	print "Turned off Tailored experiences."
 }
 
@@ -1759,10 +1810,8 @@ Function EnableTailoredExperiences {
 	print "Turning on Tailored experiences..."
 	$TailoredExp1 = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
 	$TailoredExp2 = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting"
-	$TailoredExp3 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
 	Remove-ItemProperty -Path $TailoredExp1 -Name "DisableTailoredExperiencesWithDiagnosticData" -ErrorAction SilentlyContinue
 	Remove-ItemProperty -Path $TailoredExp2 -Name "Disabled" -ErrorAction SilentlyContinue
-	Remove-ItemProperty -Path $TailoredExp3 -Name "DoNotShowFeedbackNotifications" -ErrorAction SilentlyContinue
 	print "Turned on Tailed experiences."
 }
 
@@ -1770,12 +1819,12 @@ Function EnableTailoredExperiences {
 Function DisableTelemetry {
 	space
 	print "Turning off telemetry..."
-	$DataCollection1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-	$DataCollection2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-	$DataCollection3 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
-	Set-ItemProperty -Path $DataCollection1 -Name "AllowTelemetry" -Type DWord -Value 0
-	Set-ItemProperty -Path $DataCollection2 -Name "AllowTelemetry" -Type DWord -Value 0
-	Set-ItemProperty -Path $DataCollection3 -Name "AllowTelemetry" -Type DWord -Value 0
+	$Telemetry1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
+	$Telemetry2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
+	$Telemetry3 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
+	Set-ItemProperty -Path $Telemetry1 -Name "AllowTelemetry" -Type DWord -Value 0
+	Set-ItemProperty -Path $Telemetry2 -Name "AllowTelemetry" -Type DWord -Value 0
+	Set-ItemProperty -Path $Telemetry3 -Name "AllowTelemetry" -Type DWord -Value 0
 	print "Turned off telemetry."
 }
 
