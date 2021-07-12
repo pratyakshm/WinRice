@@ -134,7 +134,7 @@ $tasks = @(
 	"Success"
 )
 
-# Core functions 
+# Core functions +++
 Function Log($text) {
 	Start-Sleep -Milliseconds 200
     Write-Host $text
@@ -166,6 +166,46 @@ Function space {
 Function print($text) {
 	Write-Host $text
 }
+
+function RunWithProgress {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]
+        $text,
+        [Parameter(Mandatory = $true)]
+        [ScriptBlock]
+        $Task
+    )
+    $spinner = '\', '|', '/', '|'
+    # Run given scriptblock in bg
+    $job = Start-Job -ScriptBlock $Task
+    # Spin while job is running
+    do {
+        foreach ($s in $spinner) {
+            Write-Host -NoNewline "`r  [$s] $text"
+            Start-Sleep -Milliseconds 150
+        }
+    }
+    while($job.State -eq "Running")
+    # Get output
+    $result = Receive-Job -Job $job
+    # Filter result
+    if ($result -eq $false -or $null -eq $result) {
+        # Failure indicator
+        $ind = '-'
+        $color = "DarkRed"
+    }
+    else {
+        # Success indicator
+        $ind = '+'
+        $color = "DarkGreen"
+    }
+    Write-Host -NoNewline -ForegroundColor $color "`r  [$ind] "; Write-Host "$text"
+    return $result
+}
+
+# Core functions ---
+
 if (!(Test-Path C:\CleanWin)) {
 	New-Item C:\CleanWin -ItemType Directory | Out-Null 
 }
