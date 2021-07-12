@@ -72,6 +72,8 @@ $tasks = @(
 	# "EnableMapsUpdates",
 	"DisableSpeechRecognition",		
 	# "EnableSpeechRecognition",
+	"HideSuggestedContentInStart",
+	# "ShowSuggestedContentInStart",
 	"DisableTailoredExperiences",	
 	# "EnableTailoredExperiences",
 	"DisableTelemetry",				
@@ -941,49 +943,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	print "Added capabilities and features."
 }
 
-# Disable app suggestions and automatic installation.
-Function DisableSuggestions {
-	space
-	print "Turning off app suggestions and automatic app installation..."
-	if (!(Test-Path "C:\CleanWin\Suggestions.reg")) {
-		reg export "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" "C:\CleanWin\Suggestions.reg" | Out-Null
-	}
-	else {
-		reg export "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" "C:\CleanWin\SuggestionsThisMustWork.reg" | Out-Null
-	}
-	$SyncNotification = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-	Set-ItemProperty -Path $SyncNotification -Name "ShowSyncProviderNotifications" -Type DWord -Value 0
-	Remove-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SystemPaneSuggestionsEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SoftLandingEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent"
-	Remove-ItemProperty -Path $Suggestions -Name "ContentDeliveryAllowed"
-	Remove-ItemProperty -Path $Suggestions -Name "OemPreInstalledAppsEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEverEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent*"
-	Remove-Item -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
-	print "Turned off app suggestions and automatic app installation."
-}
-
-# Enable app suggestions and automatic installation.
-Function EnableSuggestions {
-	space
-	print "Turning on app suggestions and automatic app installation..."
-	if (Test-Path "C:\CleanWin\Suggestions.reg") {
-		reg import "C:\CleanWin\Suggestions.reg" | Out-Null
-		print "Turned on app suggestions and automatic app installation."
-	}
-	elseif (Test-Path "C:\CleanWin\SuggestionsThisMustWork.reg") {
-		reg import "C:\CleanWin\SuggestionsThisMustWork.reg" | Out-Null
-		print "Turned on app suggestions and automatic app installation."
-	}
-	else {
-		print "Could not turn on suggestions and automatic app installation because the exported registry key was likely deleted."
-	}
-}
-
 # Enable Windows Subsystem for Linux
 Function EnableWSL {
 $ProgressPreference = 'SilentlyContinue'
@@ -1758,6 +1717,28 @@ Function EnableSpeechRecognition {
 		}
 	Set-ItemProperty -Path $Speech -Name "HasAccepted" -Type DWord -Value 1
 	print "Turned on Online Speech recognition"
+}
+
+# Disable "Show me suggested content in Settings app".
+Function HideSuggestedContentInStart {
+	if ($CurrentBuild -ge 22000) {
+		return
+	}
+	space 
+	print "Turning off Suggested content in Start menu..."
+	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 0
+	print "Turned off Suggested content in Start menu."
+}
+
+# Enable "Show me suggested content in Settings app".
+Function ShowSuggestedContentInStart {
+	if ($CurrentBuild -ge 22000) {
+		return
+	}
+	space 
+	print "Turning on Suggested content in Start menu..."
+	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 1
+	print "Turned on Suggested content in Start menu."
 }
 
 # Disable Tailored experiences.
