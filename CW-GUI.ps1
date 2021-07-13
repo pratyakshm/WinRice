@@ -6,7 +6,6 @@
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
-Clear-Host 
 Function Log($text) {
 	Start-Sleep -Milliseconds 200
     Write-Host $text
@@ -123,26 +122,7 @@ function RunWithProgress {
     return $result
 }
 
-# Core functions
-if (!(Test-Path C:\CleanWin)) {
-	New-Item C:\CleanWin -ItemType Directory | Out-Null 
-}
-Start-Transcript -OutputDirectory "C:\CleanWin" | Out-Null 
-
 ### Pre-execution tasks ###
-
-Clear-Host
-print "CleanWin pre-execution environment"
-Start-Sleep -Milliseconds 100
-space
-print "Copyright (c) Pratyaksh Mehrotra and contributors"
-Start-Sleep -Milliseconds 100
-print "https://github.com/pratyakshm/CleanWin"
-space
-Start-Sleep 1
-$ProgressPreference = 'SilentlyContinue'
-$ErrorActionPreference = 'SilentlyContinue'
-$WarningPreference = 'SilentlyContinue'
 
 # Did you read the docs? (Funny stuff).
 $hasReadDoc = ask "Have you read the documentation? [y/n]"
@@ -163,7 +143,11 @@ elseif (!(check($hasReadDoc))) {
 	exit
 }
 
-# Store values, create PSDrives and get current window title.
+# Core functions
+if (!(Test-Path C:\CleanWin)) {
+	New-Item C:\CleanWin -ItemType Directory | Out-Null 
+}
+Start-Transcript -OutputDirectory "C:\CleanWin" | Out-Null 
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 $DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion -ErrorAction SilentlyContinue
@@ -172,6 +156,19 @@ $BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
 New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
 # Source: https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%207/Module/Sophia.psm1#L825.
 $hkeyuser = (Get-CimInstance -ClassName Win32_UserAccount | Where-Object -FilterScript {$_.Name -eq $env:USERNAME}).SID
+
+Clear-Host
+print "CleanWin pre-execution environment"
+Start-Sleep -Milliseconds 20
+space
+print "Copyright (c) Pratyaksh Mehrotra and contributors"
+Start-Sleep -Milliseconds 20
+print "https://github.com/pratyakshm/CleanWin"
+space
+Start-Sleep -Milliseconds 200
+$ProgressPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
+$WarningPreference = 'SilentlyContinue'
 
 
 ####### BEGIN CHECKS #########
@@ -186,8 +183,7 @@ $oscheck = {
 		return $true
 	}
 }
-space
-RunWithProgress -Text "Windows version is supported" -Task $oscheck -Exit $true | Out-Null
+RunWithProgress -Text "Supported Windows version" -Task $oscheck -Exit $true | Out-Null
 
 
 # Check if session is elevated.
@@ -197,7 +193,7 @@ $isadmin = {
 	return $admin
 }
 
-RunWithProgress -Text "PowerShell session is elevated" -Task $isadmin -Exit $true | Out-Null
+RunWithProgress -Text "Elevated PowerShell session" -Task $isadmin -Exit $true | Out-Null
 
 # Exit CleanWin if PC is not connected.
 $isonline = {
@@ -212,7 +208,7 @@ $isonline = {
 	}
 }
 
-RunWithProgress -Text "Device is connected" -Task $isonline -Exit $true | Out-Null
+RunWithProgress -Text "Connected" -Task $isonline -Exit $true | Out-Null
 
 # Check if laptop (https://devblogs.microsoft.com/scripting/hey-scripting-guy-weekend-scripter-how-can-i-use-wmi-to-detect-laptops/).
 Param(
@@ -241,7 +237,7 @@ $isuptodate = {
 	}
 }
 
-RunWithProgress -Text "Device is updated" -Task $isuptodate -Exit $true | Out-Null
+RunWithProgress -Text "Device is up-to-date" -Task $isuptodate -Exit $true | Out-Null
 
 # Check for pending restart (part of code used here was picked from https://thesysadminchannel.com/remotely-check-pending-reboot-status-powershell).
 $isrestartpending = {
@@ -278,7 +274,7 @@ $isrestartpending = {
 	}
 }
 
-RunWithProgress -Text "No restarts pending" -Task $isrestartpending -Exit $true | Out-Null
+RunWithProgress -Text "No restarts needed" -Task $isrestartpending -Exit $true | Out-Null
 
 # Clear variables.
 $WMI_Reg        = $null
@@ -301,23 +297,21 @@ $pwshver = {
 
 RunWithProgress -Text "Importing required modules" -Task $pwshver -Exit $true | Out-Null
 
-Start-Sleep 2
+Start-Sleep -Milliseconds 600
 Clear-Host
-
 
 $host.UI.RawUI.WindowTitle = "pratyakshm's CleanWin"
 Clear-Host
 space
 print "pratyakshm's CleanWin"
-Start-Sleep -Milliseconds 100
+Start-Sleep -Milliseconds 20
 space
 print "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
-Start-Sleep -Milliseconds 100
+Start-Sleep -Milliseconds 20
 print "https://github.com/pratyakshm/CleanWin"
 space
 print "$ProductName $DisplayVersion "
 print "Build $CurrentBuild, $BuildBranch branch"
-Start-Sleep -Milliseconds 500
 space
 space
 

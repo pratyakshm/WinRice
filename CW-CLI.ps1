@@ -113,6 +113,12 @@ $tasks = @(
 	"PrintExplorerChanges",
 	"EnablePrtScrToSnip",		   
 	# "DisablePrtScrSnip",
+	"ShowExtensions",
+	# "HideExtensions",
+	"HideRecentFilesInQuickAccess",
+	# "ShowRecentFilesInQuickAccess",
+	"EnableExtensions",
+	# "DisableExtensions",
 	"DisableStickyKeys",           
 	# "EnableStickyKeys",
 	"SetExplorerThisPC",           
@@ -215,27 +221,6 @@ function RunWithProgress {
     return $result
 }
 
-# Core functions ---
-
-if (!(Test-Path C:\CleanWin)) {
-	New-Item C:\CleanWin -ItemType Directory | Out-Null 
-}
-Start-Transcript -OutputDirectory "C:\CleanWin" | Out-Null 
-
-### Pre-execution tasks ###
-
-Clear-Host
-print "CleanWin pre-execution environment"
-Start-Sleep -Milliseconds 100
-space
-print "Copyright (c) Pratyaksh Mehrotra and contributors"
-Start-Sleep -Milliseconds 100
-print "https://github.com/pratyakshm/CleanWin"
-space
-Start-Sleep 1
-$ProgressPreference = 'SilentlyContinue'
-$ErrorActionPreference = 'SilentlyContinue'
-$WarningPreference = 'SilentlyContinue'
 
 # Did you read the docs? (Funny stuff).
 $hasReadDoc = ask "Have you read the documentation? [y/n]"
@@ -256,7 +241,11 @@ elseif (!(check($hasReadDoc))) {
 	exit
 }
 
-# Store values, create PSDrives and get current window title.
+# Core functions ---
+if (!(Test-Path C:\CleanWin)) {
+	New-Item C:\CleanWin -ItemType Directory | Out-Null 
+}
+Start-Transcript -OutputDirectory "C:\CleanWin" | Out-Null 
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 $DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion -ErrorAction SilentlyContinue
@@ -265,6 +254,22 @@ $BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
 New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
 # Source: https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%207/Module/Sophia.psm1#L825.
 $hkeyuser = (Get-CimInstance -ClassName Win32_UserAccount | Where-Object -FilterScript {$_.Name -eq $env:USERNAME}).SID
+
+### Pre-execution tasks ###
+
+Clear-Host
+print "CleanWin pre-execution environment"
+Start-Sleep -Milliseconds 20
+space
+print "Copyright (c) Pratyaksh Mehrotra and contributors"
+Start-Sleep -Milliseconds 20
+print "https://github.com/pratyakshm/CleanWin"
+space
+Start-Sleep -Milliseconds 100
+$ProgressPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
+$WarningPreference = 'SilentlyContinue'
+
 
 ####### BEGIN CHECKS #########
 
@@ -278,8 +283,7 @@ $oscheck = {
 		return $true
 	}
 }
-space
-RunWithProgress -Text "Windows version is supported" -Task $oscheck -Exit $true | Out-Null
+RunWithProgress -Text "Supported Windows version" -Task $oscheck -Exit $true | Out-Null
 
 
 # Check if session is elevated.
@@ -289,7 +293,7 @@ $isadmin = {
 	return $admin
 }
 
-RunWithProgress -Text "PowerShell session is elevated" -Task $isadmin -Exit $true | Out-Null
+RunWithProgress -Text "Elevated PowerShell session" -Task $isadmin -Exit $true | Out-Null
 
 # Exit CleanWin if PC is not connected.
 $isonline = {
@@ -304,7 +308,7 @@ $isonline = {
 	}
 }
 
-RunWithProgress -Text "Device is connected" -Task $isonline -Exit $true | Out-Null
+RunWithProgress -Text "Connected" -Task $isonline -Exit $true | Out-Null
 
 # Check if laptop (https://devblogs.microsoft.com/scripting/hey-scripting-guy-weekend-scripter-how-can-i-use-wmi-to-detect-laptops/).
 Param(
@@ -333,7 +337,7 @@ $isuptodate = {
 	}
 }
 
-RunWithProgress -Text "Device is updated" -Task $isuptodate -Exit $true | Out-Null
+RunWithProgress -Text "Device is up-to-date" -Task $isuptodate -Exit $true | Out-Null
 
 # Check for pending restart (part of code used here was picked from https://thesysadminchannel.com/remotely-check-pending-reboot-status-powershell).
 $isrestartpending = {
@@ -370,7 +374,7 @@ $isrestartpending = {
 	}
 }
 
-RunWithProgress -Text "No restarts pending" -Task $isrestartpending -Exit $true | Out-Null
+RunWithProgress -Text "No restarts needed" -Task $isrestartpending -Exit $true | Out-Null
 
 # Clear variables.
 $WMI_Reg        = $null
@@ -390,16 +394,15 @@ $pwshver = {
 	}
 }
 
-RunWithProgress -Text "Importing required modules" -Task $pwshver -Exit $true | Out-Null
+RunWithProgress -Text "Setting up PowerShell" -Task $pwshver -Exit $true | Out-Null
 
-Start-Sleep 2
-
-Clear-Host
+Start-Sleep -Milliseconds 800
 
 # Take user configs.
-print "Please take your time to answer the questions below in order to save user config."
 space
+print "Please take your time to answer the questions below in order to save user config."
 print "Press Enter to proceed after answering a question."
+space
 $systemrestore = ask "Create a system restore point? [y/N]"
 $uninstallapps = ask "Uninstall Windows apps?"
 if ($uninstallapps -like "y") {
@@ -411,16 +414,16 @@ if ($CurrentBuild -ge 22000) {
 $onedrive = ask "Uninstall Microsoft OneDrive?"
 $uninstallfeatures = ask "Uninstall unnecessary optional features?"
 $enableexperimentswinget = ask "Enable experimental features in WinGet?"
-$winstall = ask "Use Winstall? (bit.ly/Winstall)"
 $wingetimport = ask "Use winget import?"
-$wsl = ask "Enable Windows Subsystem for Linux?"
+$winstall = ask "Use Winstall?"
 $netfx3 = ask "Enable dotNET 3.5?"
+$wsl = ask "Enable Windows Subsystem for Linux?"
 $sandbox = ask "Enable Windows Sandbox?"
 space 
 
-Start-Sleep -Milliseconds 200
+Start-Sleep -Milliseconds 100
 print "Choices saved, starting CleanWin..."
-Start-Sleep -Milliseconds 1500
+Start-Sleep -Milliseconds 600
 
 # Intro.
 Function CleanWin {
@@ -2386,6 +2389,38 @@ Function DisablePrtScrSnip {
 	print "Unbinding Snip overlay launch from Print screen key...."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
 	print "Unbound Snip overlay launch from Print screen key."
+}
+
+# Show extensions.
+Function ShowExtensions {
+	space
+	print "Showing extensions in file names..."
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 0
+	print "Showed extensions in file names."
+}
+
+# Hide extensions.
+function HideExtensions {
+	space
+	print "Hiding extensions from file names..."
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 1
+	print "Hidden extensions in file names."
+}
+
+# Hide Recent files in Quick Access.
+function HideRecentFilesInQuickAccess {
+	space
+	print "Hiding recent files from Quick Access..."
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name ShowRecent -Type DWord -Value 0
+	print "Hidden recent files from Quick Access."
+}
+
+# Show Recent files in Quick Access.
+function ShowRecentFilesInQuickAccess {
+	space 
+	print "Showing Recent files in Quick Access..."
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name ShowRecent -Type DWord -Value 1
+	print "Shown Recent files in Quick Access."
 }
 
 # Disable Sticky keys.
