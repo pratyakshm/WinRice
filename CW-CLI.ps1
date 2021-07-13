@@ -13,6 +13,8 @@ $tasks = @(
 ### Apps & Features ###
 	"AppsFeatures",
 	"UninstallApps", "Activity", 
+	"WebApps",
+	"UninstallConnect",
 	"UnpinStartTiles", "Activity", 
 	"UnpinAppsFromTaskbar", "Activity", 
 	"InstallFrameworks",
@@ -20,14 +22,8 @@ $tasks = @(
 	"InstallWinGet", 
 	"UninstallOneDrive", "Activity",
 	# "InstallOneDrive",
-	# "DisableBrowserRestoreAd",
-	# "EnableBrowserRestoreAd",
-	# "DisableM365OnValueBanner", 
-	# "RevertM365OnValueBanner",
 	"UninstallFeatures", "Activity", 
 	# "InstallFeatures", "Activity", 
-	"DisableSuggestions",		    
-	# "EnableSuggestions",
 	"EnableWSL", "Activity", 
 	# "DisableWSL",
 	"EnabledotNET3.5", "Activity", 
@@ -406,6 +402,9 @@ space
 print "Press Enter to proceed after answering a question."
 $systemrestore = Read-Host "Create a system restore point? [y/N]"
 $uninstallapps = Read-Host "Uninstall Windows apps?"
+if ($uninstallapps -like "y") {
+	$uninstallappsgui = Read-Host "Use GUI to uninstall apps?"
+}
 if ($CurrentBuild -ge 22000) {
 	$widgets = Read-Host "Remove Widgets?"
 }
@@ -413,9 +412,9 @@ $onedrive = ask "Uninstall Microsoft OneDrive?"
 $uninstallfeatures = ask "Uninstall unnecessary optional features?"
 $wsl = ask "Enable Windows Subsystem for Linux?"
 $netfx3 = ask "Enable dotNET 3.5?"
+$enableexperimentswinget = ask "Enable experimental features in WinGet?"
 $winstall = ask "Use Winstall? (bit.ly/Winstall)"
 $wingetimport = ask "Use winget import?"
-$enableexperimentswinget = ask "Enable experimental features in WinGet?"
 space 
 
 Start-Sleep -Milliseconds 200
@@ -442,7 +441,6 @@ Function OSBuildInfo {
 	print "$ProductName $DisplayVersion "
 	print "Build $CurrentBuild, $BuildBranch branch"
 	Start-Sleep -Milliseconds 500
-	space
 	space
 	space
 }
@@ -529,15 +527,256 @@ Function AppsFeatures {
 	space
 }
 
-# Debloat apps.
-Function UninstallApps {
-$ErrorActionPreference = 'SilentlyContinue'
-$ProgressPreference = 'SilentlyContinue'
-	if (!(check($uninstallapps))) { 
-		return 
-	}
-	# Remove Windows inbox apps.
-	print "Uninstalling Windows apps..."
+# Uninstaller GUI.
+Function UninstallerGUI {
+	
+    Add-Type -AssemblyName PresentationCore, PresentationFramework
+
+    #region Variables.
+    # ArrayList containing the UWP apps to remove.
+    $AppxPackages = New-Object -TypeName System.Collections.ArrayList($null)
+
+    # List of UWP apps that won't be checked for removal.
+    $UncheckedAppxPackages = @(
+
+        # Calculator.
+        "Microsoft.WindowsCalculator",
+    
+        # Microsoft Office.
+        "Microsoft.Office.Desktop.OneNote",
+        "Microsoft.Office.Desktop.Word",
+        "Microsoft.Office.Desktop",
+        "Microsoft.Office.Desktop.Outlook",
+        "Microsoft.Office.Desktop.Excel",
+        "Microsoft.Office.Desktop.Access",
+        "Microsoft.Office.Desktop.PowerPoint",
+    
+        # Microsoft Store.
+        "Microsoft.WindowsStore",
+    
+        # Photos (and Video Editor).
+        "Microsoft.Windows.Photos",
+        "Microsoft.Photos.MediaEngineDLC",
+
+        # Snip & Sketch.
+        "Microsoft.ScreenSketch"
+
+    )
+
+    # UWP apps that won't be shown in the form
+    $ExcludedAppxPackages = @(
+		# HEVC Video Extensions from Device Manufacturer.
+		"Microsoft.HEVCVideoExtension",
+
+		# Microsoft Store and appx dependencies.
+		"Microsoft.StorePurchaseApp",
+        "Microsoft.DesktopAppInstaller",
+    
+        # Web Media Extensions.
+        "Microsoft.WebMediaExtensions"
+
+        # Media Engine DLC
+        "Microsoft.Photos.MediaEngineDLC"
+
+        # Windows Terminal.
+        "Microsoft.WindowsTerminal"
+
+        # Web Experience (used for Widgets).
+        "MicrosoftWindows.Client.WebExperience"
+            
+        # Xbox apps.
+		"Microsoft.GamingServices",
+        "Microsoft.XboxIdentityProvider",
+        "Microsoft.Xbox.TCUI",
+        "Microsoft.XboxSpeechToTextOverlay",
+        "Microsoft.XboxGamingOverlay",
+        "Microsoft.XboxGameOverlay"
+    )
+    #endregion Variables.
+
+    #region XAML Markup.
+    [xml]$XAML = '
+    <Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Name="Window"
+    MinHeight="450" MinWidth="400"
+    SizeToContent="Width" WindowStartupLocation="CenterScreen"
+    TextOptions.TextFormattingMode="Display" SnapsToDevicePixels="True"
+    FontFamily="Segoe UI" FontSize="12" ShowInTaskbar="False">
+    <Window.Resources>
+    <Style TargetType="StackPanel">
+                <Setter Property="Orientation" Value="Horizontal"/>
+            </Style>
+            <Style TargetType="CheckBox">
+                <Setter Property="Margin" Value="10, 10, 5, 10"/>
+                <Setter Property="IsChecked" Value="True"/>
+            </Style>
+            <Style TargetType="TextBlock">
+                <Setter Property="Margin" Value="5, 10, 10, 10"/>
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="Margin" Value="20"/>
+                <Setter Property="Padding" Value="10"/>
+            </Style>
+        </Window.Resources>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <CheckBox Name="CheckboxRemoveAll" IsChecked="False"/>
+                    <TextBlock Name="TextblockRemoveAll"/>
+                </StackPanel>
+            </Grid>
+            <ScrollViewer Name="Scroll" Grid.Row="1"
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Auto">
+                <StackPanel Name="PanelContainer" Orientation="Vertical"/>
+            </ScrollViewer>
+            <Button Name="Button" Grid.Row="2"/>
+        </Grid>
+</Window>
+    '
+    #endregion XAML Markup.
+
+    $Reader = (New-Object -TypeName System.Xml.XmlNodeReader -ArgumentList $XAML)
+    $Form = [Windows.Markup.XamlReader]::Load($Reader)
+    $XAML.SelectNodes("//*[@*[contains(translate(name(.),'n','N'),'Name')]]") | ForEach-Object -Process {
+        Set-Variable -Name ($_.Name) -Value $Form.FindName($_.Name) -Scope Global
+    }
+
+
+    #region Functions.
+    function Get-CheckboxClicked
+    {
+        [CmdletBinding()]
+        param
+        (
+            [Parameter(
+                Mandatory = $true,
+                ValueFromPipeline = $true
+            )]
+            [ValidateNotNull()]
+            $CheckBox
+        )
+
+        $AppxName = $CheckBox.Parent.Children[1].Text
+        if ($CheckBox.IsChecked)
+        {
+            [void]$AppxPackages.Add($AppxName)
+        }
+        else
+        {
+            [void]$AppxPackages.Remove($AppxName)
+        }
+        if ($AppxPackages.Count -gt 0)
+        {
+            $Button.IsEnabled = $true
+        }
+        else
+        {
+            $Button.IsEnabled = $false
+        }
+    }
+
+    function DeleteButton
+    {
+        [void]$Window.Close()
+        $OFS = "|"
+        if ($CheckboxRemoveAll.IsChecked) {   
+            print "Uninstalling $AppxPackages..."
+            Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage -AllUsers
+            print "Done."
+        }
+        else {  
+            print "Uninstalling $AppxPackages..."
+            Get-AppxPackage -PackageTypeFilter Bundle | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage
+            print "Done."
+        }
+        $OFS = " "
+    }
+
+    function Add-AppxControl
+    {
+        [CmdletBinding()]
+        param
+        (
+            [Parameter(
+                Mandatory = $true,
+                ValueFromPipeline = $true
+            )]
+            [ValidateNotNull()]
+            [string]
+            $AppxName
+        )
+
+        $CheckBox = New-Object -TypeName System.Windows.Controls.CheckBox
+        $CheckBox.Add_Click({Get-CheckboxClicked -CheckBox $_.Source})
+
+        $TextBlock = New-Object -TypeName System.Windows.Controls.TextBlock
+        $TextBlock.Text = $AppxName
+
+        $StackPanel = New-Object -TypeName System.Windows.Controls.StackPanel
+        [void]$StackPanel.Children.Add($CheckBox)
+        [void]$StackPanel.Children.Add($TextBlock)
+
+        [void]$PanelContainer.Children.Add($StackPanel)
+
+        if ($UncheckedAppxPackages.Contains($AppxName))
+        {
+            $CheckBox.IsChecked = $false
+            # Exit function, item is not checked.
+            return
+        }
+
+        # If package checked, add to the array list to uninstall.
+        [void]$AppxPackages.Add($AppxName)
+    }
+    #endregion Functions.
+
+    #region Events Handlers.
+
+    # Window Loaded Event.
+    $Window.Add_Loaded({
+        $OFS = "|"
+        (Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cnotmatch $ExcludedAppxPackages}).Name | ForEach-Object -Process {
+            Add-AppxControl -AppxName $_
+        }
+        $OFS = " "
+
+        $TextblockRemoveAll.Text = "All users"
+        $Window.Title = "App selection menu"
+        $Button.Content = "Uninstall"
+    })
+
+    preventfreeze
+
+    # Button Click Event.
+    $Button.Add_Click({DeleteButton})
+    #endregion Events Handlers.
+
+    if (Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cnotmatch ($ExcludedAppxPackages -join "|")})
+    {
+        # Display the dialog box.
+        $Form.ShowDialog() | Out-Null
+    }
+    else
+    {
+        print "Nothing to display."
+    }
+}
+
+# Uninstaller CLI.
+Function UninstallerCLI {
+	print "Uninstalling inbox apps..." # Remove inbox apps.
 	$InboxApps = @(
 		"Microsoft.549981C3F5F10"
 		"Microsoft.BingNews"
@@ -586,8 +825,7 @@ $ProgressPreference = 'SilentlyContinue'
 		Get-AppxProvisionedPackage -Online "Microsoft.WindowsCamera" | Remove-AppxProvisionedPackage 
 	}
 
-	# Remove Sponsored apps.
-	$SponsoredApps = @(
+	$SponsoredApps = @(					# Remove Sponsored apps.
 		"*AdobePhotoshopExpress*"
 		"*CandyCrush*"
 		"*BubbleWitch3Saga*"
@@ -604,102 +842,119 @@ $ProgressPreference = 'SilentlyContinue'
 			Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $SponsoredApp | Remove-AppxProvisionedPackage -Online | Out-Null
 		}
 	}
-
-	# Remove Office webapps shortcuts.
-	if (Test-Path "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk") {
-		print "     Uninstalling Office web-apps..."
-		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
-		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
-		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
-		Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Word.lnk"
-		print "     Uninstalled Office web-apps."
-	}
-
-	# Uninstall Connect app.
-	if (Get-AppxPackage Microsoft-PPIProjection-Package) {
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
-		Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
-		./connect.cmd | Out-Null
-		Remove-Item install_wim_tweak.exe
-		Remove-Item connect.cmd
-		Remove-Item Packages.txt
-	}
-	print "Uninstalled Windows apps."
+	print "Uninstalled inbox apps."
 }
 
+# Main Uninstall function.
+Function UninstallApps {
+$ErrorActionPreference = 'SilentlyContinue'
+$ProgressPreference = 'SilentlyContinue'
+	if (!(check($uninstallapps))) { 
+		return 
+	}
+	if ($uninstallappsgui -like "n") {
+		UninstallerCLI
+	}
+	elseif ($uninstallappsgui -like "y") {
+		UninstallerGUI
+	}
+}
+
+# Remove Office webapps.
+function WebApps {
+	if (!(Test-Path "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk")) {
+		return
+	}
+	print "Removing Office web-apps..."
+	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
+	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
+	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
+	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Word.lnk"
+	print "Removed Office web-apps."
+}
+	
+# Uninstall Connect app.
+Function UninstallConnect {
+	if (!(Get-AppxPackage Microsoft-PPIProjection-Package))  {
+		return
+	}
+	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
+	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
+	./connect.cmd | Out-Null
+	Remove-Item install_wim_tweak.exe
+	Remove-Item connect.cmd
+	Remove-Item Packages.txt
+}
 
 # Unpin all start menu tiles.
 Function UnpinStartTiles {
 	space
-	if ($CurrentBuild -lt 22000) {
-		print "Unpinning all tiles from Start Menu..."
-		Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
-		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
-		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <DefaultLayoutOverride>'
-		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    <StartLayoutCollection>'
-		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      <defaultlayout:StartLayout GroupCellWidth="6" />'
-		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    </StartLayoutCollection>'
-		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  </DefaultLayoutOverride>'
-		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    <CustomTaskbarLayoutCollection>'
-		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      <defaultlayout:TaskbarLayout>'
-		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '        <taskbar:TaskbarPinList>'
-		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '          <taskbar:UWA AppUserModelID="Microsoft.MicrosoftEdge_8wekyb3d8bbwe!MicrosoftEdge" />'
-		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '          <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\System Tools\File Explorer.lnk" />'
-		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '        </taskbar:TaskbarPinList>'
-		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      </defaultlayout:TaskbarLayout>'
-		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    </CustomTaskbarLayoutCollection>'
-		Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '</LayoutModificationTemplate>'
-		$START_MENU_LAYOUT = @"
-		<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">
-			<LayoutOptions StartTileGroupCellWidth="6" />
-			<DefaultLayoutOverride>
-				<StartLayoutCollection>
-					<defaultlayout:StartLayout GroupCellWidth="6" />
-				</StartLayoutCollection>
-			</DefaultLayoutOverride>
-		</LayoutModificationTemplate>
+	if ($CurrentBuild -ge 22000) {
+		return
+	}
+	print "Unpinning all tiles from Start Menu..."
+	Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <DefaultLayoutOverride>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    <StartLayoutCollection>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      <defaultlayout:StartLayout GroupCellWidth="6" />'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    </StartLayoutCollection>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  </DefaultLayoutOverride>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    <CustomTaskbarLayoutCollection>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      <defaultlayout:TaskbarLayout>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '        <taskbar:TaskbarPinList>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '          <taskbar:UWA AppUserModelID="Microsoft.MicrosoftEdge_8wekyb3d8bbwe!MicrosoftEdge" />'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '          <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\System Tools\File Explorer.lnk" />'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '        </taskbar:TaskbarPinList>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '      </defaultlayout:TaskbarLayout>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '    </CustomTaskbarLayoutCollection>'
+	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '</LayoutModificationTemplate>'
+	$START_MENU_LAYOUT = @"
+	<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">
+		<LayoutOptions StartTileGroupCellWidth="6" />
+		<DefaultLayoutOverride>
+			<StartLayoutCollection>
+				<defaultlayout:StartLayout GroupCellWidth="6" />
+			</StartLayoutCollection>
+		</DefaultLayoutOverride>
+	</LayoutModificationTemplate>
 "@
-		$layoutFile="C:\Windows\StartMenuLayout.xml"
-		# Delete layout file if it already exists.
-		if(Test-Path $layoutFile)
-		{
-			Remove-Item $layoutFile
-		}
-		# Creates a blank layout file.
-		$START_MENU_LAYOUT | Out-File $layoutFile -Encoding ASCII
-		$regAliases = @("HKLM", "HKCU")
-		# Assign the start layout and force it to apply with "LockedStartLayout" at both the machine and user level.
-		foreach ($regAlias in $regAliases){
-			$basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
-			$keyPath = $basePath + "\Explorer" 
-			IF(!(Test-Path -Path $keyPath)) { 
-				New-Item -Path $basePath -Name "Explorer" | Out-Null
-			}
-			Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 1
-			Set-ItemProperty -Path $keyPath -Name "StartLayoutFile" -Value $layoutFile
-		}
-		# Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process.
-		Stop-Process -name explorer -Force
-		Start-Sleep -s 5
-		$wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
-		Start-Sleep -s 5
-		# Enable the ability to pin items again by disabling "LockedStartLayout".
-		foreach ($regAlias in $regAliases){
-			$basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
-			$keyPath = $basePath + "\Explorer" 
-			Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 0
-		}
-		# Restart Explorer and delete the layout file.
-		Stop-Process -name explorer -Force
-		# Uncomment the next line to make clean start menu default for all new users.
-		Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
+	$layoutFile="C:\Windows\StartMenuLayout.xml"
+	# Delete layout file if it already exists.
+	if(Test-Path $layoutFile)
+	{
 		Remove-Item $layoutFile
-		print "Unpinned all tiles from Start Menu."
 	}
-	elseif ($CurrentBuild -ge 22000) {
-		print "This device is currently on Windows 11"
-		print "CleanWin does not support unpinning apps from Start menu in Windows 11 yet."
+	# Creates a blank layout file.
+	$START_MENU_LAYOUT | Out-File $layoutFile -Encoding ASCII
+	$regAliases = @("HKLM", "HKCU")
+	# Assign the start layout and force it to apply with "LockedStartLayout" at both the machine and user level.
+	foreach ($regAlias in $regAliases){
+		$basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
+		$keyPath = $basePath + "\Explorer" 
+		if(!(Test-Path -Path $keyPath)) { 
+			New-Item -Path $basePath -Name "Explorer" | Out-Null
+		}
+		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 1
+		Set-ItemProperty -Path $keyPath -Name "StartLayoutFile" -Value $layoutFile
+		}
+	# Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process.
+	Stop-Process -name explorer -Force
+	Start-Sleep -s 5
+	$wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
+	Start-Sleep -s 5
+	# Enable the ability to pin items again by disabling "LockedStartLayout".
+	foreach ($regAlias in $regAliases){
+		$basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
+		$keyPath = $basePath + "\Explorer" 
+		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 0
 	}
+	# Restart Explorer and delete the layout file.
+	Stop-Process -name explorer -Force
+	# Uncomment the next line to make clean start menu default for all new users.
+	Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
+	Remove-Item $layoutFile
+	print "Unpinned all tiles from Start Menu."
 }
 
 # Unpin Apps from taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
@@ -720,7 +975,7 @@ Function UnpinAppsFromTaskbar {
 		}	
 	}
 	print "Unpinned apps from taskbar."
-	Start-Sleep 1
+	Start-Sleep -Milliseconds 100
 }
 
 # Uninstall Microsoft OneDrive (supports 64-bit versions).
@@ -762,77 +1017,6 @@ Function InstallOneDrive {
 		return
 	}
 	print "Installed Microsoft OneDrive."
-}
-
-# Enable Startup boost in Microsoft Edge.
-Function EnableEdgeStartupBoost {
-	space
-	print "Enabling Startup boost for Microsoft Edge..."
-	$EdgeStartupBoost = "HKLM:\SOFTWARE\Policies\Microsoft\Edge"
-	if (!(Test-Path $EdgeStartupBoost )) {
-		New-Item -Path $EdgeStartupBoost -Force | Out-Null
-		}
-	New-ItemProperty -Path $EdgeStartupBoost -Name "StartupBoostEnabled" -Type DWord -Value 1 | Out-Null
-	print "Turned on Startup Boost in Microsoft Edge."
-}	
-
-# Disable Startup boost in Microsoft Edge.
-Function DisableEdgeStartupBoost {
-	Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Edge" -Recurse
-}
-
-# Disable "Web Browsing - Restore recommended promo in Settings".
-Function DisableBrowserRestoreAd {
-$ProgressPreference = 'SilentlyContinue'
-	space
-	print "Turning off 'Web browsing: Restore recommended' suggestion in Settings..."
-    Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Albacore.ViVe.dll
-	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/ViVeTool.exe
-	./ViVeTool.exe delconfig 23531064 1 | Out-Null
-	Remove-Item ViVeTool.exe
-	Remove-Item Albacore.ViVe.dll
-    print "Turned off 'Web browsing: Restore recommended' suggestion in Settings."
-}
-
-# Enable "Web Browsing - Restore recommended promo in Settings".
-Function EnableBrowserRestoreAd {
-$ProgressPreference = 'SilentlyContinue'
-	space
-	print "Turning on 'Web browsing: Restore recommended' suggestion in Settings..."
-    Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Albacore.ViVe.dll
-	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/ViVeTool.exe
-	./ViVeTool.exe addconfig 23531064 0 | Out-Null
-	Remove-Item ViVeTool.exe
-	Remove-Item Albacore.ViVe.dll
-    print "Turned on 'Web browsing: Restore recommended' suggestion in Settings."
-}
-
-# Disable the Microsoft 365 banner in Settings app header (Windows 11 only as of now).
-Function DisableM365OnValueBanner {
-$ProgressPreference = 'SilentlyContinue'
-	if ($CurrentBuild -ge 22000) {
-		space
-		print "Turning off Microsoft 365 suggestion banner in Settings..."
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/mach2.exe
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/msdia140.dll
-		./mach2.exe disable 29174495 | Out-Null
-		Remove-Item mach2.exe -Force; Remove-Item msdia140.dll -Force
-		print "Turned off Microsoft 365 suggestion banner in Settings."
-	}
-}
-
-# Revert Microsoft 365 banner in Settings app header to the default configuration (Windows 11 only as of now).
-Function RevertM365OnValueBanner {
-$ProgressPreference = 'SilentlyContinue'
-	if ($CurrentBuild -ge 22000) {
-		space
-		print "Turning on Microsoft 365 suggestion banner in Settings..."
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/mach2.exe
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/msdia140.dll
-		./mach2.exe revert 29174495 | Out-Null
-		Remove-Item mach2.exe -Force; Remove-Item msdia140.dll -Force
-		print "Turned on Microsoft 365 suggestion banner in Settings."
-	}
 }
 
 # Uninstall Windows Optional Features and Windows Capabilities.
@@ -949,7 +1133,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	print "Added capabilities and features."
 }
 
-# Enable Windows Subsystem for Linux
+# Enable Windows Subsystem for Linux.
 Function EnableWSL {
 $ProgressPreference = 'SilentlyContinue'
 	if (!(check($wsl))) { 

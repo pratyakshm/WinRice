@@ -314,14 +314,13 @@ space
 print "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
 Start-Sleep -Milliseconds 100
 print "https://github.com/pratyakshm/CleanWin"
-
 space
 print "$ProductName $DisplayVersion "
 print "Build $CurrentBuild, $BuildBranch branch"
 Start-Sleep -Milliseconds 500
 space
 space
-space
+
 
 ### BEGIN GUI ###
 
@@ -798,7 +797,7 @@ $ProgressPreference = 'SilentlyContinue'
     space
     
     # Remove Windows inbox apps.
-    print "Uninstalling Windows apps..."
+    print "Uninstalling inbox apps..."
     $InboxApps = @(
         "Microsoft.549981C3F5F10"
         "Microsoft.BingNews"
@@ -934,7 +933,7 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 	print "    Unpinned apps from taskbar."
     space
-    print "Uninstalled apps."
+    print "Uninstalled inbox apps."
 })
 
 $InstallWinGet.Add_Click( {
@@ -1428,59 +1427,19 @@ $DisableDataCollection.Add_Click( {
 $ErrorActionPreference = 'SilentlyContinue'
     space
     print "Turning off data collection..."
-    
-	# Disable suggestions and silent installation of sponsored apps.
-	if (!(Test-Path "C:\CleanWin\Suggestions.reg")) {
-		reg export "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" "C:\CleanWin\Suggestions.reg" | Out-Null
-	}
-	else {
-		reg export "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" "C:\CleanWin\SuggestionsThisMustWork.reg" | Out-Null
-	}
-	$SyncNotification = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-	Set-ItemProperty -Path $SyncNotification -Name "ShowSyncProviderNotifications" -Type DWord -Value 0
-	Remove-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SystemPaneSuggestionsEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SoftLandingEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent"
-	Remove-ItemProperty -Path $Suggestions -Name "ContentDeliveryAllowed"
-	Remove-ItemProperty -Path $Suggestions -Name "OemPreInstalledAppsEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "PreInstalledAppsEverEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SilentInstalledAppsEnabled"
-	Remove-ItemProperty -Path $Suggestions -Name "SubscribedContent*"
-	Remove-Item -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps"
-    
-    # Disable Tailored experiences.
-	$CloudContent = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
-	if (!(Test-Path $CloudContent )) {
-		New-Item $CloudContent -Force | Out-Null
-		}
-	Set-ItemProperty -Path $CloudContent -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
 
-	# Disable Telemetry.
-	$DataCollection1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-	$DataCollection2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-	$DataCollection3 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
-	Set-ItemProperty -Path $DataCollection1 -Name "AllowTelemetry" -Type DWord -Value 0
-	Set-ItemProperty -Path $DataCollection2 -Name "AllowTelemetry" -Type DWord -Value 0
-	Set-ItemProperty -Path $DataCollection3 -Name "AllowTelemetry" -Type DWord -Value 0
-
-	# Stop and disable Telemetry services.
-	Stop-Service DiagTrack | Set-Service -StartupType Disabled
-	Stop-Service dmwappushservice | Set-Service -StartupType Disabled
-
-    # Turn off Activity History.
-    $ActivityFeed = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
-    Set-ItemProperty -Path $ActivityFeed -Name "EnableActivityFeed" -Type DWord -Value 0
-    Set-ItemProperty -Path $ActivityFeed -Name "PublishUserActivities" -Type DWord -Value 0
-    Set-ItemProperty -Path $ActivityFeed -Name "UploadUserActivities" -Type DWord -Value 0	
-    
     # Turn off Advertising ID.
     $AdvertisingID = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
     if (!(Test-Path $AdvertisingID)) {
         New-Item -Path $AdvertisingID | Out-Null
     }
     Set-ItemProperty -Path $AdvertisingID -Name "DisabledByGroupPolicy" -Type DWord -Value 1
+
+    # Turn off Activity History.
+    $ActivityFeed = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
+    Set-ItemProperty -Path $ActivityFeed -Name "EnableActivityFeed" -Type DWord -Value 0
+    Set-ItemProperty -Path $ActivityFeed -Name "PublishUserActivities" -Type DWord -Value 0
+    Set-ItemProperty -Path $ActivityFeed -Name "UploadUserActivities" -Type DWord -Value 0	
     
     # Turn off Feedback notifications.
     $Feedback1 = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
@@ -1562,17 +1521,48 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Disable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
 		print "Disabled scheduled task: $Task."
 	}
+    	
+    # Turn off suggestions and silent installation of sponsored apps.
+    $CDN = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
+    # Silent install apps.
+    Set-ItemProperty -Path $CDN -Name SilentInstalledAppsEnabled -Type DWord -Value 1
+    # Suggested content in Settings.
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-353694Enabled -Type DWord -Value 0
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-353696Enabled -Type DWord -Value 0
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-338393Enabled -Type DWord -Value 0
+    # Suggested content in Start menu.
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-338388Enabled -Type DWord -Value 0
+
+    # Turn off Tailored experiences.
+	$CloudContent = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
+	if (!(Test-Path $CloudContent )) {
+		New-Item $CloudContent -Force | Out-Null
+		}
+	Set-ItemProperty -Path $CloudContent -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
+
+	# Turn off Telemetry.
+	$DataCollection1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
+	$DataCollection2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
+	$DataCollection3 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
+	Set-ItemProperty -Path $DataCollection1 -Name "AllowTelemetry" -Type DWord -Value 0
+	Set-ItemProperty -Path $DataCollection2 -Name "AllowTelemetry" -Type DWord -Value 0
+	Set-ItemProperty -Path $DataCollection3 -Name "AllowTelemetry" -Type DWord -Value 0
+    
+    # Turn off telemetry services.
+	Stop-Service DiagTrack | Set-Service -StartupType Disabled
+	Stop-Service dmwappushservice | Set-Service -StartupType Disabled
 
     # Print user friendly messages to list every change.
     $PrivacySettings =@(
         "Activity History"
         "Advertising ID"
-        "App suggestions"
         "Feedback"
         "Inking personalization"
         "Location tracking"
         "Maps updates"
         "Online speech recognition"
+        "Silent installation of apps"
+        "Suggestions in Settings and Start menu"
         "Tailored Experiences"
         "Tasks related to data collection"
         "Telemetry"
@@ -1642,15 +1632,17 @@ $EnableDataCollection.Add_Click( {
 	# Turn on Maps updates.
     Remove-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled"
 
-	# Turn on suggestions and silent installation of sponsored apps.
-    $Suggestions1 = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
-    $Suggestions2 = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-    Remove-ItemProperty -Path $Suggestions1 -Name "SilentInstalledAppsEnabled"
-    Remove-ItemProperty -Path $Suggestions1 -Name "SystemPaneSuggestionsEnabled"
-    Remove-ItemProperty -Path $Suggestions2 -Name "ShowSyncProviderNotifications"
-    Remove-ItemProperty -Path $Suggestions1 -Name "SoftLandingEnabled"
-    Remove-ItemProperty -Path $Suggestions1 -Name "SubscribedContent"
-	
+	# Enable suggestions and silent installation of sponsored apps.
+    $CDN = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
+    # Silent install apps.
+    Set-ItemProperty -Path $CDN -Name SilentInstalledAppsEnabled -Type DWord -Value 1
+    # Suggested content in Settings.
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-353694Enabled -Type DWord -Value 1
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-353696Enabled -Type DWord -Value 1
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-338393Enabled -Type DWord -Value 1
+    # Suggested content in Start menu.
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-338388Enabled -Type DWord -Value 1
+
 	# Turn on Tailored Experiences.
     $TailoredExp1 = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
     $TailoredExp2 = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting"
