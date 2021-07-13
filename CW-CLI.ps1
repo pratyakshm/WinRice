@@ -400,21 +400,22 @@ Clear-Host
 print "Please take your time to answer the questions below in order to save user config."
 space
 print "Press Enter to proceed after answering a question."
-$systemrestore = Read-Host "Create a system restore point? [y/N]"
-$uninstallapps = Read-Host "Uninstall Windows apps?"
+$systemrestore = ask "Create a system restore point? [y/N]"
+$uninstallapps = ask "Uninstall Windows apps?"
 if ($uninstallapps -like "y") {
-	$uninstallappsgui = Read-Host "Use GUI to uninstall apps?"
+	$uninstallappsgui = ask "Use GUI to uninstall apps?"
 }
 if ($CurrentBuild -ge 22000) {
-	$widgets = Read-Host "Remove Widgets?"
+	$widgets = ask "Remove Widgets?"
 }
 $onedrive = ask "Uninstall Microsoft OneDrive?"
 $uninstallfeatures = ask "Uninstall unnecessary optional features?"
-$wsl = ask "Enable Windows Subsystem for Linux?"
-$netfx3 = ask "Enable dotNET 3.5?"
 $enableexperimentswinget = ask "Enable experimental features in WinGet?"
 $winstall = ask "Use Winstall? (bit.ly/Winstall)"
 $wingetimport = ask "Use winget import?"
+$wsl = ask "Enable Windows Subsystem for Linux?"
+$netfx3 = ask "Enable dotNET 3.5?"
+$sandbox = ask "Enable Windows Sandbox?"
 space 
 
 Start-Sleep -Milliseconds 200
@@ -1185,6 +1186,9 @@ $WarningPreference = 'SilentlyContinue'
 # Enable Sandbox.
 Function EnableSandbox {
 $ProgressPreference = 'SilentlyContinue'
+	if ($sandbox -like "n") {
+		return
+	}
 	space
 	if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) {
 		print "Could not enable Windows Sandbox since $ProductName does not support it."
@@ -1225,6 +1229,7 @@ $ProgressPreference = 'SilentlyContinue'
 	print "Enabled dotNET 3.5."
 }
 
+# Disable dotNET 3.5
 Function DisabledotNET3.5 {
 $ProgressPreference = 'SilentlyContinue'
 	space
@@ -1238,7 +1243,7 @@ $ProgressPreference = 'SilentlyContinue'
 	print "Disabled dotNET 3.5."
 }
 
-# Install runtime packages 
+# Install runtime packages .
 Function InstallFrameworks {
 	if (Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop") {
 		return
