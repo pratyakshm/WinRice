@@ -1742,6 +1742,7 @@ $ErrorActionPreference = 'SilentlyContinue'
     # Declare registry keys locations.
     $Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
     $Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
+    $DeliveryOptimization = "HKU:\S-1-5-20\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"
     if (!(Test-Path $Update1)) {
         New-Item -Path $Update1 | Out-Null
         New-Item -Path $Update2 | Out-Null
@@ -1754,10 +1755,12 @@ $ErrorActionPreference = 'SilentlyContinue'
     Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
     Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
     Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
+	Set-ItemProperty -Path $DeliveryOptimization -Name "DownloadMode" -Type DWord -Value 0
 
     # Print user message; policies applied.
     $WinUpdatePolicies =@(
         "Turned off automatic updates"
+        "Turn off Delivery optimization"
         "Device will no longer auto restart if users are signed in"
         "Turned off re-installation of apps after Windows Updates"
         "Delayed quality updates by 4 days"
