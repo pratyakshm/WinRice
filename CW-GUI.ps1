@@ -123,6 +123,14 @@ function RunWithProgress {
     return $result
 }
 
+# Core functions
+if (!(Test-Path C:\CleanWin)) {
+	New-Item C:\CleanWin -ItemType Directory | Out-Null 
+}
+Start-Transcript -OutputDirectory "C:\CleanWin" | Out-Null 
+
+### Pre-execution tasks ###
+
 Clear-Host
 print "CleanWin pre-execution environment"
 Start-Sleep -Milliseconds 100
@@ -158,11 +166,13 @@ elseif (!(check($hasReadDoc))) {
 # Store values, create PSDrives and get current window title.
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
-$DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
+$DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion -ErrorAction SilentlyContinue
 $ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
+$BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
 New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
 # Source: https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%207/Module/Sophia.psm1#L825.
 $hkeyuser = (Get-CimInstance -ClassName Win32_UserAccount | Where-Object -FilterScript {$_.Name -eq $env:USERNAME}).SID
+
 
 ####### BEGIN CHECKS #########
 
@@ -177,7 +187,7 @@ $oscheck = {
 	}
 }
 space
-RunWithProgress -Text "Checking if CleanWin supports this version of Windows..." -Task $oscheck -Exit $true | Out-Null
+RunWithProgress -Text "Windows version is supported" -Task $oscheck -Exit $true | Out-Null
 
 
 # Check if session is elevated.
@@ -187,11 +197,9 @@ $isadmin = {
 	return $admin
 }
 
-RunWithProgress -Text "Checking if current PowerShell session is elevated..." -Task $isadmin -Exit $true | Out-Null
+RunWithProgress -Text "PowerShell session is elevated" -Task $isadmin -Exit $true | Out-Null
 
 # Exit CleanWin if PC is not connected.
-$ProgressPreference = 'SilentlyContinue'
-$ErrorActionPreference = 'SilentlyContinue'
 $isonline = {
 	Import-Module BitsTransfer
 	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
@@ -204,8 +212,20 @@ $isonline = {
 	}
 }
 
-RunWithProgress -Text "Checking if this device is connected..." -Task $isonline -Exit $true | Out-Null
+RunWithProgress -Text "Device is connected" -Task $isonline -Exit $true | Out-Null
 
+# Check if laptop (https://devblogs.microsoft.com/scripting/hey-scripting-guy-weekend-scripter-how-can-i-use-wmi-to-detect-laptops/).
+Param(
+[string]$computer = “localhost”
+)
+$isLaptop = $false | Out-Null
+if(Get-WmiObject -Class Win32_SystemEnclosure -ComputerName $computer | Where-Object {$_.ChassisTypes -eq 9 -or $_.ChassisTypes -eq 10 -or $_.ChassisTypes -eq 14}) { 
+	$isLaptop = $true
+	}
+if(Get-WmiObject -Class Win32_Battery -ComputerName $computer) { 
+	$isLaptop = $true
+	}
+$isLaptop
 
 # Check for updates and exit if found (part of code used here is picked from https://gist.github.com/Grimthorr/44727ea8cf5d3df11cf7).
 $isuptodate = {
@@ -221,7 +241,7 @@ $isuptodate = {
 	}
 }
 
-RunWithProgress -Text "Checking if device is up-to-date..." -Task $isuptodate -Exit $true | Out-Null
+RunWithProgress -Text "Device is updated" -Task $isuptodate -Exit $true | Out-Null
 
 # Check for pending restart (part of code used here was picked from https://thesysadminchannel.com/remotely-check-pending-reboot-status-powershell).
 $isrestartpending = {
@@ -258,7 +278,7 @@ $isrestartpending = {
 	}
 }
 
-RunWithProgress -Text "Checking for pending restarts..." -Task $isrestartpending -Exit $true | Out-Null
+RunWithProgress -Text "No restarts pending" -Task $isrestartpending -Exit $true | Out-Null
 
 # Clear variables.
 $WMI_Reg        = $null
@@ -279,30 +299,11 @@ $pwshver = {
 	}
 }
 
-RunWithProgress -Text "Checking PowerShell version and importing required modules..." -Task $pwshver -Exit $true | Out-Null
+RunWithProgress -Text "Importing required modules" -Task $pwshver -Exit $true | Out-Null
 
 Start-Sleep 2
-
 Clear-Host
 
-space
-$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
-$BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
-$OSBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
-$DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
-if ($CurrentBuild -lt 21996) {
-    print "This PC is running Windows 10."
-    print "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
-}
-elseif ($CurrentBuild -ge 22000) {
-    print "This PC is running Windows 11."
-    print "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
-    print "Note that CleanWin's Windows 11 support is experimental and you might face issues."
-}
-space
-print "Please ensure that no other apps or programs run while CleanWin is working."
-space
 
 $host.UI.RawUI.WindowTitle = "pratyakshm's CleanWin"
 Clear-Host
@@ -313,7 +314,14 @@ space
 print "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
 Start-Sleep -Milliseconds 100
 print "https://github.com/pratyakshm/CleanWin"
-Start-Sleep 1
+
+space
+print "$ProductName $DisplayVersion "
+print "Build $CurrentBuild, $BuildBranch branch"
+Start-Sleep -Milliseconds 500
+space
+space
+space
 
 ### BEGIN GUI ###
 
@@ -534,15 +542,6 @@ $UninstallSelectively, $InstallWinGet ,$Winstall, $EnableWSL, $UninstallFeatures
 $EnableDataCollection, $EnableTelemetry, $FullBandwidth, $ReserveBandwidth, $CleanExplorer, $RevertExplorer, $UnpinStartTiles, $UnpinTaskbarApps, $NewsAndInterests, $ShowSeconds, 
 $SetupWindowsUpdate, $ResetWindowsUpdate, $DisableTasksServices, $EnableTasksServices))
 
-$CWFolder = "C:\CleanWin"
-if (Test-Path $CWFolder) {
-}
-Else {
-    New-Item -Path "${CWFolder}" -ItemType Directory | Out-Null 
-}
-
-Start-Transcript -OutputDirectory "${CWFolder}" | Out-Null 
-
 preventfreeze
 
 
@@ -710,17 +709,13 @@ $UninstallSelectively.Add_Click( {
     {
         [void]$Window.Close()
         $OFS = "|"
-        if ($CheckboxRemoveAll.IsChecked)
-        {   
-            print "Uninstalling selected apps..."
-            print "    Uninstalling $Name..."
+        if ($CheckboxRemoveAll.IsChecked) {   
+            print "Uninstalling $AppxPackages..."
             Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage -AllUsers
             print "Done."
         }
-        else
-        {  
-            print "Uninstalling selected apps..."
-            print "    Uninstalling $Name..."
+        else {  
+            print "Uninstalling $AppxPackages..."
             Get-AppxPackage -PackageTypeFilter Bundle | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage
             print "Done."
         }

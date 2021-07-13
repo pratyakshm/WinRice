@@ -97,6 +97,8 @@ $tasks = @(
 	# "EnableAutoplay",
 	"DisableAutorun",              
 	# "EnableAutorun",
+	"DisableHibernation",
+	# "EnableHibernation",
 	"SetBIOSTimeUTC",              
 	# "SetBIOSTimeLocal",
 	"EnableNumLock",			   
@@ -263,11 +265,10 @@ $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 $DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion -ErrorAction SilentlyContinue
 $ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
+$BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
 New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
-$currenttitle = $(Get-Process | Where-Object {$_.MainWindowTitle -like "*PowerShell*" }).MainWindowTitle
 # Source: https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%207/Module/Sophia.psm1#L825.
 $hkeyuser = (Get-CimInstance -ClassName Win32_UserAccount | Where-Object -FilterScript {$_.Name -eq $env:USERNAME}).SID
-
 
 ####### BEGIN CHECKS #########
 
@@ -282,7 +283,7 @@ $oscheck = {
 	}
 }
 space
-RunWithProgress -Text "Checking if CleanWin supports this version of Windows..." -Task $oscheck -Exit $true | Out-Null
+RunWithProgress -Text "Windows version is supported" -Task $oscheck -Exit $true | Out-Null
 
 
 # Check if session is elevated.
@@ -292,7 +293,7 @@ $isadmin = {
 	return $admin
 }
 
-RunWithProgress -Text "Checking if current PowerShell session is elevated..." -Task $isadmin -Exit $true | Out-Null
+RunWithProgress -Text "PowerShell session is elevated" -Task $isadmin -Exit $true | Out-Null
 
 # Exit CleanWin if PC is not connected.
 $isonline = {
@@ -303,12 +304,24 @@ $isonline = {
 		return $true
 	}
 	elseif (!(Test-Path File.txt)) {
-		return $false
+		return $false | Out-Null
 	}
 }
 
-RunWithProgress -Text "Checking if this device is connected..." -Task $isonline -Exit $true | Out-Null
+RunWithProgress -Text "Device is connected" -Task $isonline -Exit $true | Out-Null
 
+# Check if laptop (https://devblogs.microsoft.com/scripting/hey-scripting-guy-weekend-scripter-how-can-i-use-wmi-to-detect-laptops/).
+Param(
+[string]$computer = “localhost”
+)
+$isLaptop = $false | Out-Null
+if(Get-WmiObject -Class Win32_SystemEnclosure -ComputerName $computer | Where-Object {$_.ChassisTypes -eq 9 -or $_.ChassisTypes -eq 10 -or $_.ChassisTypes -eq 14}) { 
+	$isLaptop = $true
+	}
+if(Get-WmiObject -Class Win32_Battery -ComputerName $computer) { 
+	$isLaptop = $true
+	}
+$isLaptop
 
 # Check for updates and exit if found (part of code used here is picked from https://gist.github.com/Grimthorr/44727ea8cf5d3df11cf7).
 $isuptodate = {
@@ -324,7 +337,7 @@ $isuptodate = {
 	}
 }
 
-RunWithProgress -Text "Checking if device is up-to-date..." -Task $isuptodate -Exit $true | Out-Null
+RunWithProgress -Text "Device is updated" -Task $isuptodate -Exit $true | Out-Null
 
 # Check for pending restart (part of code used here was picked from https://thesysadminchannel.com/remotely-check-pending-reboot-status-powershell).
 $isrestartpending = {
@@ -352,7 +365,7 @@ $isrestartpending = {
 			}
 		
 			if ($PendingReboot -eq $true) {
-				return $false
+				return $false 
 			}
 			else {
 				return $true
@@ -361,7 +374,7 @@ $isrestartpending = {
 	}
 }
 
-RunWithProgress -Text "Checking for pending restarts..." -Task $isrestartpending -Exit $true | Out-Null
+RunWithProgress -Text "No restarts pending" -Task $isrestartpending -Exit $true | Out-Null
 
 # Clear variables.
 $WMI_Reg        = $null
@@ -370,18 +383,18 @@ $SCCM_Namespace = $null
 # Check PowerShell version and import required modules.
 $pwshver = {
 	if ((($PSVersionTable).PSVersion).Major -eq "7") { 
-		Import-Module -Name Appx, Microsoft.PowerShell.Management, PackageManagement -UseWindowsPowerShell | Out-Null
-		return $true
+		Import-Module -Name Appx, Microsoft.PowerShell.Management, PackageManagement -UseWindowsPowerShell -WarningAction "SilentlyContinue"| Out-Null
+		return $true 
 	} 
 	elseif ((($PSVersionTable).PSVersion).Major -eq "5") { 
-		return $true
+		return $true 
 	}
 	else {
-		return $false
+		return $false 
 	}
 }
 
-RunWithProgress -Text "Checking PowerShell version and importing required modules..." -Task $pwshver -Exit $true | Out-Null
+RunWithProgress -Text "Importing required modules" -Task $pwshver -Exit $true | Out-Null
 
 Start-Sleep 2
 
@@ -426,21 +439,10 @@ Function CleanWin {
 # OS Build.
 Function OSBuildInfo {
 	space
-	$CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-	$CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
-	$BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
-	$OSBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
-	$DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
-	if ($CurrentBuild -lt 22000) {
-		print "This PC is running Windows 10."
-		print "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
-	}
-	elseif ($CurrentBuild -ge 22000) {
-		print "This PC is running Windows 11."
-		print "Version $DisplayVersion, OS Build $OSBuild in $BuildBranch branch."
-		print "Note that CleanWin's Windows 11 support is experimental and you might face issues."
-	}
+	print "$ProductName $DisplayVersion "
+	print "Build $CurrentBuild, $BuildBranch branch"
 	Start-Sleep -Milliseconds 500
+	space
 	space
 	space
 }
@@ -1030,7 +1032,7 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 	$netfx3state = (Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State
 	if ($netfx3state -like "Enabled"){
-		Write-Host "dotNET 3.5 is already enabled."
+		print "dotNET 3.5 is already enabled."
 		return
 	}
 	space
@@ -1449,7 +1451,7 @@ Function UninstallFonts {
 # Set Windows Photo Viewer association for bmp, gif, jpg, png and tif.
 Function SetPhotoViewerAssociation {
 	space
-	Write-Output "Adding Windows Photo Viewer (classic) to the 'Open with' menu..."
+	print "Adding Windows Photo Viewer (classic) to the 'Open with' menu..."
 	if (!(Test-Path "HKCR:")) {
 		New-PSDrive -Name "HKCR" -PSProvider "Registry" -Root "HKEY_CLASSES_ROOT" | Out-Null
 	}
@@ -1459,13 +1461,13 @@ Function SetPhotoViewerAssociation {
 		Set-ItemProperty -Path $("HKCR:\$type\shell\open") -Name "MuiVerb" -Type ExpandString -Value "@%ProgramFiles%\Windows Photo Viewer\photoviewer.dll,-3043"
 		Set-ItemProperty -Path $("HKCR:\$type\shell\open\command") -Name "(Default)" -Type ExpandString -Value "%SystemRoot%\System32\rundll32.exe `"%ProgramFiles%\Windows Photo Viewer\PhotoViewer.dll`", ImageView_Fullscreen %1"
 	}
-	Write-Output "Added Windows Photo Viewer (classic) to the 'Open with' menu."
+	print "Added Windows Photo Viewer (classic) to the 'Open with' menu."
 
 }
 
 # Unset Windows Photo Viewer association for bmp, gif, jpg, png and tif.
 Function UnsetPhotoViewerAssociation {
-	Write-Output "Removing Windows Photo Viewer (classic) from the 'Open with' menu..."
+	print "Removing Windows Photo Viewer (classic) from the 'Open with' menu..."
 	if (!(Test-Path "HKCR:")) {
 		New-PSDrive -Name "HKCR" -PSProvider "Registry" -Root "HKEY_CLASSES_ROOT" | Out-Null
 	}
@@ -1539,7 +1541,7 @@ Function EnableAdvertisingID {
 # Disable Background apps (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Sophia.psm1#L8988-L9033).
 Function DisableBackgroundApps {
 	space
-	Write-Output "Turning off Background apps..."
+	print "Turning off Background apps..."
 	Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process {
 		Remove-ItemProperty -Path $_.PsPath -Name * -Force
 	}
@@ -1927,6 +1929,28 @@ Function EnableAutorun {
 	print "Turning on Autorun for all drives..."
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoDriveTypeAutoRun" -ErrorAction SilentlyContinue
 	print "Turned on Autorun for all drives."
+}
+
+# Disable Hiberfile.sys
+Function DisableHibernation {
+	if ($isLaptop) {
+		return
+	}
+	space 
+	print "Turning off hibernation..."
+	powercfg.exe -h off
+	print "Turned off hibernation."
+}
+
+# Enable Hiberfile.sys
+Function EnableHibernation {
+	if ($isLaptop) {
+		return
+	}
+	space 
+	print "Turning on hibernation..."
+	powercfg.exe -h on
+	print "Turned on hibernation."
 }
 
 # Set BIOS time to UTC.
@@ -2385,7 +2409,6 @@ Function EnableTaskbarFeed {
 # Remove created PSDrives
 Remove-PSDrive -Name HKCR
 Remove-PSDrive -Name HKU
-$host.UI.RawUI.WindowTitle = $currenttitle
 
 ######### Tasks after successful run #########
 
