@@ -1,0 +1,96 @@
+name: 🐛 Bug report
+description: File a bug report
+title: "Bug: "
+labels: Bug
+assignees:
+  - pratyakshm
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking your time to file this report.
+  - type: dropdown
+    id: version
+    attributes:
+      label: CleanWin version
+      description: Check all that apply.
+      multiple: true
+      options:
+        - main branch
+        - v0.3.9 release
+        - vNext pre-release
+    validations:
+      required: true
+  - type: dropdown
+    id: Windows-version
+    attributes:
+      label: Windows version
+      multiple: true
+      description: Check all that apply.
+      multiple: true
+      options: 
+        - Windows 10 21H1 in RTM
+        - Windows 11 21H2 in Dev channel
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Which category is the issue related to?
+      description: Check all that apply.
+      multiple: true
+      options:
+        - Apps and Features
+        - Privacy and Security
+        - Tasks and Services
+        - Windows UI
+        - Other
+    validations: 
+      required: true   
+  - type: dropdown
+    id: areaofconcern
+    attributes: 
+      label: Does something on the OS break or does CleanWin functionality not work?
+      description: Does something break on the Operating System after running CleanWin, or does a particular CleanWin functionality not work?
+      multiple: false
+      options:
+        - CleanWin not working as expected
+        - Something wrong with OS after running CleanWin
+    validations: 
+      required: true
+  - type: textarea
+    id: expectedbehavior
+    attributes:
+      label: ✔️ Expected Behavior
+      placeholder: Tell us what was expected to happen.
+    validations:
+      required: false
+  - type: textarea
+    id: actualbehavior
+    attributes:
+      label: ❌ Actual Behavior
+      placeholder: What actually happened?
+    validations: 
+      required: true
+  - type: textarea
+    id: stepstorepro
+    attributes:
+      label: Steps to reproduce
+      description: Tell us the steps required to trigger your bug.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: PowerShell transcript output
+      description: Please copy and paste the PowerShell transcript output. You may get it from "C:\CleanWin" folder.
+      placeholder: PowerShell transcript comes here.
+      render: powershell
+  - type: textarea
+    id: othersoftware
+    attributes: 
+      label: Other software run
+      description: Tell us about other similar software you ran on your device (if any).
+      placeholder: "Paste repository link. Do know that support might be limited if you run other software of similar kind."
+    validations:
+      required: false
