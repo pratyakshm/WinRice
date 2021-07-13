@@ -4,7 +4,6 @@
 
 # Default preset
 $tasks = @(
-
 ### Maintenance Tasks ###
 	"CleanWin",
 	"OSBuildInfo",
@@ -87,7 +86,6 @@ $tasks = @(
 	"AutoLoginPostUpdate", 		    
 	# "StayOnLockscreenPostUpdate",
 	"ChangesDone",
-	# To revert all privacy changes, use CleanWin GUI -> "Enable data collection".
 
 ### Tasks & Services ###
 	"TasksServices",
@@ -139,6 +137,8 @@ $tasks = @(
 	"Activity",
 	"Success"
 )
+
+# Reverting changes: https://github.com/pratyakshm/CleanWin/wiki/Reverting-changes.
 
 # Core functions +++
 Function Log($text) {
