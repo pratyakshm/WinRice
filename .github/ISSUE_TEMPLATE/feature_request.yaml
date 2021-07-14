@@ -1,0 +1,35 @@
+name: 🚀 Feature request
+description: Request a feature
+title: "Feature Request: "
+labels: "Feature Request"
+assignees:
+  - pratyakshm
+body:
+  - type: dropdown
+    id: question
+    attributes:
+      label: Does your feature request involve usage of third party software?
+      multiple: false
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: dropdown
+    id: question1
+    attributes:
+      label: Have you written the code for it?
+      multiple: false
+      options:
+         - "Yes"
+         - "No"
+    validations:
+      required: true
+  - type: textarea
+    id: explain
+    attributes:
+      label: Explain the feature
+      description: Describe it in as much detail as possible.
+      placeholder: Provide screenshots or code snippet if you can.
+    validations:
+      required: true
