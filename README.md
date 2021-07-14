@@ -1,10 +1,12 @@
 # CleanWin
 
-![No. of Downloads](https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=darkgreen&style=flat-square)
-![Stars](https://img.shields.io/github/stars/pratyakshm/CleanWin?style=flat-square)
-[![Release](https://img.shields.io/github/v/release/pratyakshm/cleanwin?style=flat-square)](https://github.com/pratyakshm/CleanWin/releases/latest)
-[![Pre-Release](https://img.shields.io/github/v/release/pratyakshm/CleanWin?include_prereleases&label=pre-release&logo=vNext&style=flat-square)](https://github.com/pratyakshm/CleanWin/releases/tag/vNext)
-&nbsp;  
+<p align="center">
+<a href="https://github.com/pratyakshm/CleanWin"><img src="https://img.shields.io/static/v1?label=pratyakshm&message=CleanWin&color=blue&logo=github" alt="pratyakshm - CleanWin"></a>
+<a href="https://github.com/pratyakshm/CleanWin"><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=blue"></a>
+<a href="https://github.com/pratyakshm/CleanWin"><img src="https://img.shields.io/github/stars/pratyakshm/CleanWin?style=social" alt="stars - CleanWin"></a>
+<a href="https://github.com/pratyakshm/CleanWin"><img src="https://img.shields.io/github/forks/pratyakshm/CleanWin?style=social" alt="forks - CleanWin"></a>
+<a href="#license"><img src="https://img.shields.io/badge/License-GPL_v3-blue" alt="License"></a>
+</p>
 
 ### 💡 Read documentation properly before running CleanWin
 
@@ -61,3 +63,5 @@ Known issues are being tracked [here](https://github.com/pratyakshm/CleanWin/iss
 ## Testimonials 
 > ![based AF](https://i.imgur.com/CbI97e3.png)  
 > \- KenHV ([@KenHV](https://github.com/KenHV)) (July 11th, 2021)
+
+### Thank you for starring CleanWin!
