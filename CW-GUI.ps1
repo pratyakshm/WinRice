@@ -151,7 +151,9 @@ Start-Transcript -OutputDirectory "C:\CleanWin" | Out-Null
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 $DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion -ErrorAction SilentlyContinue
-$ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
+$ProductNameCore = (Get-WmiObject -class Win32_OperatingSystem).Caption
+$ProductName = $ProductNameCore.TrimStart("Microsoft ")
+$ProductNameCore = $null
 $BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
 New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
 # Source: https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%207/Module/Sophia.psm1#L825.
