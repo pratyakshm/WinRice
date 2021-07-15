@@ -1,5 +1,7 @@
 # CleanWin
 
+<img src="./files/cli.png" align="center" alt="CleanWin">
+
 <p align="center">
 <a href="https://github.com/pratyakshm/CleanWin"><img src="https://img.shields.io/static/v1?label=pratyakshm&message=CleanWin&color=blue&logo=github" alt="pratyakshm - CleanWin"></a>
 <a href="https://github.com/pratyakshm/CleanWin"><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=blue"></a>

@@ -449,6 +449,7 @@ Function OSBuildInfo {
 	Start-Sleep -Milliseconds 500
 	space
 	space
+	Start-Sleep 20
 }
 
 # Changes performed.
