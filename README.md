@@ -51,19 +51,22 @@ Or to run **GUI**, paste
 **Warning:** Its strongly recommended that users run CLI, since GUI is in maintenance mode.
 ### 2. GitHub release
    It's simple - tap [this link](https://github.com/pratyakshm/CleanWin/releases/latest) to get to the latest release or browse all releases [here](https://github.com/pratyakshm/CleanWin/releases).
-
 ***
-
 ## Known issues
 Known issues are being tracked [here](https://github.com/pratyakshm/CleanWin/issues/16).  
 
+## Contributing 
+CleanWin accepts all kinds of contributions such as finding bugs, fixing bugs, adding features, removal of deprecated features and/or values, etc. I'm excited to work with the users and fellow PowerShell enthusiasts to further improve this project.
+
+I ask that **before you start your work on a feature that you would like to request or contribute**, please read CleanWin [Principles](https://github.com/pratyakshm/CleanWin/wiki/Principles). I will be happy to work with you to figure out good approaches and provide guidance throughout feature development, and help avoid any wasted or duplicated effort.
+***
 ## Microsoft Docs
 - [Introducing Windows 11](https://blogs.windows.com/windowsexperience/2021/06/24/introducing-windows-11/)
 - [Windows 10 Release Information](https://docs.microsoft.com/en-us/windows/release-information/)
 - [Windows 10 21H1 "May 2021 Update" - Known Issues tracker](https://docs.microsoft.com/en-us/windows/release-information/status-windows-10-21h1)
 - [Windows Blog](https://blogs.windows.com/)
 
-
+***
 ## Testimonials 
 > ![based AF](https://i.imgur.com/CbI97e3.png)  
 > \- KenHV ([@KenHV](https://github.com/KenHV)) (July 11th, 2021)

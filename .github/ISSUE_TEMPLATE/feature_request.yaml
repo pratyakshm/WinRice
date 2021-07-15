@@ -1,7 +1,7 @@
 name: 🚀 Feature request
 description: Request a feature
 title: "Feature Request: "
-labels: "Feature Request"
+labels: Issue-Feature
 assignees:
   - pratyakshm
 body:
@@ -16,7 +16,7 @@ body:
     validations:
       required: true
   - type: dropdown
-    id: question1
+    id: question2
     attributes:
       label: Have you written the code for it?
       multiple: false
@@ -33,3 +33,12 @@ body:
       placeholder: Provide screenshots or code snippet if you can.
     validations:
       required: true
+  - type: checkboxes
+    id: principles
+    attributes:
+      label: Does this Feature Request follow CleanWin principles?
+      description: https://github.com/pratyakshm/CleanWin/wiki/Principles
+      options:
+        - label: "Yes"
+          required: true
+  
