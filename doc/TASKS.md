@@ -163,3 +163,8 @@
 - Set This PC as default view
 - Turn off sticky keys prompt
 - Use Print Screen key to open Snip & Sketch overlay
+
+*** 
+
+## Feedback
+If you have observed an issue with docs or if there are accessibility issues, please consider [filing an issue](https://github.com/pratyakshm/CleanWin/issues/new?assignees=pratyakshm&labels=Issue-Docs&template=doc_issue.yaml&title=Docs+issue%3A+).

@@ -9,21 +9,24 @@ body:
     attributes:
       value: |
         Thanks for taking your time to file this report.
-  - type: dropdown
-    id: category
+  - type: textarea
+    id: location
     attributes:
-      label: Does the issue concern CleanWin wiki or README?
-      description: Check all that apply.
-      multiple: true
-      options:
-        - Wiki
-        - README
+      label: Concerned doc
+      description: Provide link to the concerned doc.
     validations: 
       required: true   
   - type: textarea
     id: explaintheissue
     attributes:
       label: Explain the issue
-      description: Explain the issue with proper details
+      description: Explain the issue with proper details.
     validations:
       required: true
+  - type: textarea
+    id: proposedchanges
+    attributes:
+      label: Proposed changes (optional)
+      description: Provide proposed / suggested changes to the doc.
+    validations:
+      required: false

@@ -23,3 +23,8 @@ Windows Terminal
 7zip
 ```
 Just like this, you can install any app you want by just writing its name in Winstall.txt
+
+***
+
+## Feedback
+If you have observed an issue with docs or if there are accessibility issues, please consider [filing an issue](https://github.com/pratyakshm/CleanWin/issues/new?assignees=pratyakshm&labels=Issue-Docs&template=doc_issue.yaml&title=Docs+issue%3A+).

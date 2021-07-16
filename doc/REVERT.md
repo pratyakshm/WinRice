@@ -175,3 +175,8 @@ However, there are cases where an app is not listed on Microsoft Store, for inst
 At the time of writing this, there's no known way to re-install that app. Even though the app might be important for some people (justified), most people don't use it.  
 However, currently in the main branch and starting the next CleanWin release, uninstalling apps (and many more things) from CLI will be an optional task.
 I highly recommend users to use CleanWin GUI to selectively uninstall apps they don't need.
+
+***
+
+## Feedback
+If you have observed an issue with docs or if there are accessibility issues, please consider [filing an issue](https://github.com/pratyakshm/CleanWin/issues/new?assignees=pratyakshm&labels=Issue-Docs&template=doc_issue.yaml&title=Docs+issue%3A+).
