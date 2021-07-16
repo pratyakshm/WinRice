@@ -63,16 +63,16 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		Add-Type @SetForegroundWindow
 	}
 
-	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "pratyakshm's CleanWin*"} | ForEach-Object -Process {
+	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "*PowerShell*" -or $_.MainWindowTitle -like "*Windows PowerShell*" -or $_.MainWindowTitle -like "*pwsh*"} | ForEach-Object -Process {
 		# Show window if minimized.
 		[WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10) | Out-Null
 
-		Start-Sleep -Milliseconds 100
+		Start-Sleep -Milliseconds 10
 
 		# Move the console window to the foreground.
 		[WinAPI.ForegroundWindow]::SetForegroundWindow($_.MainWindowHandle) | Out-Null
 
-		Start-Sleep -Milliseconds 100
+		Start-Sleep -Milliseconds 10
 
 		# Emulate Backspace key.
 		[System.Windows.Forms.SendKeys]::SendWait("{BACKSPACE 1}")
@@ -305,7 +305,6 @@ RunWithProgress -Text "Importing required modules" -Task $pwshver -Exit $true | 
 Start-Sleep -Milliseconds 600
 Clear-Host
 
-$host.UI.RawUI.WindowTitle = "pratyakshm's CleanWin"
 Clear-Host
 space
 print "pratyakshm's CleanWin"
@@ -769,7 +768,7 @@ $UninstallSelectively.Add_Click( {
         $OFS = " "
 
         $TextblockRemoveAll.Text = "All users"
-        $Window.Title = "App selection menu"
+        $Window.Title = "Select apps"
         $Button.Content = "Uninstall"
     })
 
