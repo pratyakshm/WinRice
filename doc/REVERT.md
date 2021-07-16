@@ -7,13 +7,13 @@ Restoring to the restore point will all settings changes performed by CleanWin
 ***
 
 ### How to use
-1. Download the latest code from main branch. ([Tap here](https://github.com/pratyakshm/CleanWin/archive/refs/heads/main.zip))
-2. Extract the ZIP file and locate CW-CLI.ps1.
+1. [Tap here](https://github.com/pratyakshm/CleanWin/archive/refs/heads/main.zip) to download the latest code from main branch. 
+2. Extract the ZIP file and locate `CW-CLI.ps1`.
 3. Open the file on your desired text editor of choice.
-4. Replace the default preset section with the revert preset section written below.
+4. Replace the default preset section with the revert preset section given below.
 5. Save the file.
-6. Open Windows Terminal (Admin), make sure you are using Windows PowerShell as your shell and NOT PowerShell (OSS).
-7. Set Location to the CleanWin folder (typically under `~/CleanWin-main`)
+6. Open Windows Terminal (Admin).
+7. Set Location to the CleanWin folder (typically under `~\Downloads\CleanWin-main`)
 8. Use command ``Set-ExecutionPolicy Unrestricted -Force -Scope Process`` to force set your ExecutionPolicy for current PSSession to Unrestricted.
 9. Use ``./CW-CLI.ps1`` to execute the script.
 <details><summary>Revert preset (tap to open/close)</summary>

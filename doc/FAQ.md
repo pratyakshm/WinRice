@@ -4,7 +4,7 @@
 **A:** It is safe to run CleanWin once you have read the documentation.
 
 **Q:** **Where can I read the detailed documentation for CleanWin?**  
-**A:** If you are a user, chances are that the [`\doc`](https://github.com/pratyakshm/CleanWin/tree/main/doc) folder has what you need.   
+**A:** If you are a user, chances are that the [`doc`](https://github.com/pratyakshm/CleanWin/tree/main/doc) folder has what you need.   
 Otherwise, you may want to check out the [Wiki](https://github.com/pratyakshm/CleanWin/wiki).
 
 **Q:** **How do I revert a change?**  
