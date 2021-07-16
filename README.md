@@ -1,5 +1,5 @@
 # CleanWin
-<h3 align ="center">Cool code that makes your Windows installation cool.</h3>
+<h3 align ="center">CleanWin automates setting up Windows devices</h3>
 <p align="center">
 <a href="https://github.com/pratyakshm/CleanWin"><img src="https://img.shields.io/static/v1?label=pratyakshm&message=CleanWin&color=blue&logo=github" alt="pratyakshm - CleanWin"></a>
 <a href="https://github.com/pratyakshm/CleanWin"><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=blue"></a>
@@ -9,7 +9,7 @@
 </p>
 
 ## Brief
-CleanWin does everything from removing junk (your hardware doesn't count, yet), cleaning up the Windows UI, setting up privacy policies, Windows Update policies, installing your own apps, disabling unnecessary features and enabling useful ones meanwhile retaining maximum app functionality. Sounds pretty cool, eh?
+CleanWin does everything from removing junk (your hardware doesn't count, yet), cleaning up the Windows UI, setting up privacy policies, Windows Update policies, disabling unnecessary features and enabling useful ones meanwhile retaining maximum app functionality. It also uses [`Winstall`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINSTALL.md) and [`winget import`](https://docs.microsoft.com/en-us/windows/package-manager/winget/import) to batch install apps you want. Sounds pretty cool, eh?
 
 ## Documentation
 ### 💡 Read the docs before using CleanWin
