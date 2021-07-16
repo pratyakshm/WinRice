@@ -1,7 +1,5 @@
 # Tasks
-## This document shows the list of tasks that CleanWin does.
 
-***
 
 # Apps & Features
 ## Apps

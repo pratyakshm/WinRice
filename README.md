@@ -9,17 +9,18 @@
 </p>
 
 ## Brief
-Everything from removing junk (your hardware doesn't count, yet), cleaning up the Windows UI, setting up privacy policies, Windows Update policies, installing your own apps, disabling unnecessary features and enabling useful ones meanwhile retaining maximum app functionality. Sounds pretty cool, eh?
+CleanWin does everything from removing junk (your hardware doesn't count, yet), cleaning up the Windows UI, setting up privacy policies, Windows Update policies, installing your own apps, disabling unnecessary features and enabling useful ones meanwhile retaining maximum app functionality. Sounds pretty cool, eh?
 
 ## Documentation
 ### 💡 Read the docs before using CleanWin
-| Category | Doc | 
+| Type | Doc | 
 |--------------|--------|
-| Stuff CleanWin does | [`TASKS.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/TASKS.md) |
+| Tasks CleanWin does | [`TASKS.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/TASKS.md) |
 | Winstall | [`WINSTALL.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINSTALL.md) |
 | Frequently asked questions | [`FAQ.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/FAQ.md) |
 | Reverting changes | [`REVERT.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/REVERT.md) |
 | LICENSE | [`LICENSE`](https://github.com/pratyakshm/CleanWin/blob/main/LICENSE) |
+| Doc     | [`\doc`](https://github.com/pratyakshm/CleanWin/tree/main/doc) |
 | Wiki | [Wiki](https://github.com/pratyakshm/CleanWin/wiki) | 
 
 ***

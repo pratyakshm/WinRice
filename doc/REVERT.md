@@ -1,5 +1,4 @@
 # Reverting changes
-## This document explains how to revert changes performed to your device by CleanWin.
 
 ## You can simply restore the System restore point if CleanWin created one.
 Restoring to the restore point will all settings changes performed by CleanWin
