@@ -154,6 +154,9 @@ $DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion
 $ProductNameCore = (Get-WmiObject -class Win32_OperatingSystem).Caption
 $ProductName = $ProductNameCore.TrimStart("Microsoft ")
 $ProductNameCore = $null
+$OSBuildCore = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Update\TargetingInfo\Installed\Client.OS.rs2.amd64" -Name Version 
+$OSBuild = $OSBuildCore.TrimStart("10.0.")
+$OSBuildCore = $null
 $BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
 New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
 # Source: https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%207/Module/Sophia.psm1#L825.
@@ -210,7 +213,7 @@ $isonline = {
 	}
 }
 
-RunWithProgress -Text "Connected" -Task $isonline -Exit $true | Out-Null
+RunWithProgress -Text "Internet connection" -Task $isonline -Exit $true | Out-Null
 
 # Check if laptop (https://devblogs.microsoft.com/scripting/hey-scripting-guy-weekend-scripter-how-can-i-use-wmi-to-detect-laptops/).
 Param(
@@ -313,7 +316,7 @@ Start-Sleep -Milliseconds 20
 print "https://github.com/pratyakshm/CleanWin"
 space
 print "$ProductName $DisplayVersion "
-print "Build $CurrentBuild, $BuildBranch branch"
+print "Build $OSBuild, $BuildBranch branch"
 space
 space
 

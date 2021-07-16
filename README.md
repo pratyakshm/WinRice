@@ -1,4 +1,4 @@
-# CleanWin
+# pratyakshm's CleanWin
 
 <img src="./files/cli.png" align="center" alt="CleanWin">
 
