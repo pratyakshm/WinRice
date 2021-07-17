@@ -1,17 +1,18 @@
 # Winstall
 ## CleanWin lets you install your own set of apps that you use, using a text file.
 
-### Dependency: [`winget`](https://github.com/microsoft/winget-cli)
-### Installing WinGet
-If you have run CleanWin CLI, chances are you already have `winget` installed. You can confirm it by running `winget` from any shell instance.
-In case you don't have winget installed, you may use the following methods:
-- **Install WinGet** in CleanWin GUI.
-- Get the latest release from [GitHub Releases](https://github.com/microsoft/winget-cli/releases/latest).
+### Dependency: [`winget`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINGET.md) 
 
 ### Creating your Winstall config
-Create a new text file using any text editor, and add app names separated by a new line.  
+Create a new text file using any text editor, and add app names separated by a new line.   
+Like this:
+```
+app 1
+app 2
+```
 Remember, Winstall text file must be saved in the same location as CleanWin executable/script.
 You may use ``pwd`` to find your current location in terminal.
+
 &nbsp;
 
 ### Examples
@@ -23,6 +24,10 @@ Windows Terminal
 7zip
 ```
 Just like this, you can install any app you want by just writing its name in Winstall.txt
+
+## Related docs
+[winget docs](https://docs.microsoft.com/en-us/windows/package-manager/winget/)    
+[winget install](https://docs.microsoft.com/en-us/windows/package-manager/winget/install)  
 
 ***
 

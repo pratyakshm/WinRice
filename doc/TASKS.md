@@ -1,8 +1,10 @@
 # Tasks
 
 ## CleanWin GUI
-Since CleanWin GUI is now deprecated and done. In lieu of this change, App Uninstaller GUI has been merged into CleanWin (CLI).  
-As a result of this, both of the uninstallers (GUI and CLI) will co-exist and will be a user choice. 
+Since CleanWin GUI is now deprecated and done. In lieu of this change, both app uninstallers (CLI and GUI) co-exist together in CleanWin.  
+Check the snip below: 👇  
+![image](https://i.imgur.com/jN6m9zs.png)
+
 
 
 # Apps & Features

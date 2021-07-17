@@ -1,6 +1,8 @@
 # WinGet import command
 Together with [`winget export`](https://docs.microsoft.com/en-us/windows/package-manager/winget/export), `winget import` can batch install apps from an exported JSON file.
 
+### Dependency: [`winget`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINGET.md) 
+
 ## Exporting app list to JSON using `winget export` command  
 To use `winget import`, you must use the `winget export` command first to export a JSON file of apps currently installed on your device.  
 Use the following command to export list of apps to a JSON with file name `apps.json` in `D:`:  
@@ -16,9 +18,9 @@ If an **invalid** JSON file is selected, `winget` will throw error and CleanWin 
 If **no** JSON file is selected, CleanWin will skip to the next jobs.
 
 ## Related docs
-[`winget overview`](https://docs.microsoft.com/en-us/windows/package-manager/)  
-[`winget export`](https://docs.microsoft.com/en-us/windows/package-manager/winget/export)  
-[`winget import`](https://docs.microsoft.com/en-us/windows/package-manager/winget/import)  
+[winget docs](https://docs.microsoft.com/en-us/windows/package-manager/winget/)    
+[winget export](https://docs.microsoft.com/en-us/windows/package-manager/winget/export)  
+[winget import](https://docs.microsoft.com/en-us/windows/package-manager/winget/import)  
 
 ***
 
