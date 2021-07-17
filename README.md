@@ -48,11 +48,10 @@ CleanWin needs an active internet connection for all features to work as documen
 ### You can use either of the two following methods
 ### 1. Main branch (recommended)
 Open Windows Terminal as Administrator.  
-To run **CLI**, paste  
-`Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JmqTS'))`   
-Or to run **GUI**, paste  
-`Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jqcr0'))`   
-**Warning:** Its strongly recommended that users run CLI, since GUI is in maintenance mode.
+To execute CleanWin, paste  
+`Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JmqTS'))`     
+**Warning:** GUI is done and dusted, its deprecated tech.
+For user convenience, GUI app uninstaller is [merged as a choice into](https://github.com/pratyakshm/CleanWin/blob/main/doc/TASKS.md#cleanwin-gui) CLI now.
 ### 2. GitHub release
   Get the [latest release](https://github.com/pratyakshm/CleanWin/releases/latest) or [browse all releases](https://github.com/pratyakshm/CleanWin/releases).
    
