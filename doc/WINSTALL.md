@@ -1,21 +1,19 @@
 # Winstall
-## CleanWin lets you install your own set of apps that you use, using a text file.
+Winstall lets you batch install your own set of apps by defining them in a text file.
 
 ### Dependency: [`winget`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINGET.md) 
 
-### Creating your Winstall config
+## Creating your Winstall config
 Create a new text file using any text editor, and add app names separated by a new line.   
 Like this:
 ```
 app 1
 app 2
 ```
-Remember, Winstall text file must be saved in the same location as CleanWin executable/script.
+If Winstall text file is not located in the same directory as CleanWin, it will launch file picker UI for the user to select the text file.  
 You may use ``pwd`` to find your current location in terminal.
 
-&nbsp;
-
-### Examples
+## Examples
 - This syntax installs Firefox, Visual Studio Code, Windows Terminal and 7zip:
 ```
 Firefox
