@@ -8,14 +8,14 @@ Restoring to the restore point will all settings changes performed by CleanWin
 
 ### How to use
 1. [Tap here](https://github.com/pratyakshm/CleanWin/archive/refs/heads/main.zip) to download the latest code from main branch. 
-2. Extract the ZIP file and locate `CW-CLI.ps1`.
+2. Extract the ZIP file and locate `CleanWin.ps1`.
 3. Open the file on your desired text editor of choice.
 4. Replace the default preset with the [revert preset](https://github.com/pratyakshm/CleanWin/blob/main/doc/REVERT.md#revert-preset) given below.
 5. Save the file.
 6. Open Windows Terminal (Admin).
 7. Set Location to the CleanWin folder (typically under `~\Downloads\CleanWin-main`)
 8. Use command ``Set-ExecutionPolicy Unrestricted -Force -Scope Process`` to force set your ExecutionPolicy for current PSSession to Unrestricted.
-9. Use ``./CW-CLI.ps1`` to execute the script.
+9. Use ``./CleanWin.ps1`` to execute the script.
 
 ### Revert preset
 <details><summary>Tap here to show/hide revert preset</summary>
@@ -174,7 +174,7 @@ $tasks = @(
 [Microsoft Store](ms-windows-store:) is the recommended place to re-install apps uninstalled by CleanWin.  
 However, there are cases where an app is not listed on Microsoft Store, for instance the Get help app.  
 At the time of writing this, there's no known way to re-install that app. Even though the app might be important for some people (justified), most people don't use it.  
-However, currently in the main branch and starting the next CleanWin release, uninstalling apps (and many more things) from CLI will be an optional task.
+However, currently in the main branch and starting the next CleanWin release, uninstalling apps will be optional.
 I highly recommend users to use CleanWin GUI to selectively uninstall apps they don't need.
 
 ***

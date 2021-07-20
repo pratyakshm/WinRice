@@ -1,7 +1,7 @@
 # CleanWin
 <h3 align ="center">CleanWin automates setting up Windows devices</h3>
 <p align="center">
-<a href="https://github.com/pratyakshm/CleanWin"><img src="https://img.shields.io/static/v1?label=pratyakshm&message=CleanWin&color=blue&logo=github" alt="pratyakshm - CleanWin"></a>
+<a href="https://github.com/pratyakshm/CleanWin#running-cleanwin"><img src="https://img.shields.io/static/v1?label=pratyakshm&message=CleanWin&color=blue&logo=github" alt="pratyakshm - CleanWin"></a>
 <a href="https://github.com/pratyakshm/CleanWin"><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/pratyakshm/CleanWin/total?color=blue"></a>
 <a href="https://github.com/pratyakshm/CleanWin"><img src="https://img.shields.io/github/stars/pratyakshm/CleanWin?style=social" alt="stars - CleanWin"></a>
 <a href="https://github.com/pratyakshm/CleanWin"><img src="https://img.shields.io/github/forks/pratyakshm/CleanWin?style=social" alt="forks - CleanWin"></a>
@@ -16,6 +16,7 @@ CleanWin does everything from removing junk (your hardware doesn't count, yet), 
 | Type | Doc | 
 |--------------|--------|
 | Tasks CleanWin does | [`TASKS.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/TASKS.md) |
+| winget | [`WINGET.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINGET.md) |
 | Winstall | [`WINSTALL.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINSTALL.md) |
 | winget import | [`WINGETIMPORT.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINGETIMPORT.md) |
 | Frequently asked questions | [`FAQ.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/FAQ.md) |
@@ -24,6 +25,8 @@ CleanWin does everything from removing junk (your hardware doesn't count, yet), 
 | Docs folder | [`doc`](https://github.com/pratyakshm/CleanWin/tree/main/doc) |
 | Wiki | [Wiki](https://github.com/pratyakshm/CleanWin/wiki) | 
 
+### ⚠️ Warning:
+- Do not use GitHub release. Its way too old to use at the time of writing this. Rather, run latest code from main branch.
 ***
 
 ## Prerequisites
@@ -45,16 +48,21 @@ CleanWin needs an active internet connection for all features to work as documen
 ***
 
 ## Running CleanWin
-### You can use either of the two following methods
+### Use either of the following methods
 ### 1. Main branch (recommended)
 Open Windows Terminal as Administrator.  
 To execute CleanWin, paste  
-`Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JmqTS'))`     
-**Warning:** GUI is done and dusted, its deprecated tech.
-For user convenience, GUI app uninstaller is [merged as a choice into](https://github.com/pratyakshm/CleanWin/blob/main/doc/TASKS.md#cleanwin-gui) CLI now.
-### 2. GitHub release
-  Get the [latest release](https://github.com/pratyakshm/CleanWin/releases/latest) or [browse all releases](https://github.com/pratyakshm/CleanWin/releases).
-   
+```
+Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JWj26'))
+```
+
+### 2. Manually download and run latest code
+- Download the latest code from main branch: [tap here](https://github.com/pratyakshm/CleanWin/archive/refs/heads/main.zip).
+- Unzip the file.
+- Open Windows Terminal (Admin), set location to your Downloads folder.
+- Use `Set-ExecutionPolicy -Unrestricted -Scope Process` to set ExecutionPolicy to unrestricted for current process.
+- Use `.\CleanWin.ps1` to run CleanWin.  
+
 ***
 
 ## Known issues

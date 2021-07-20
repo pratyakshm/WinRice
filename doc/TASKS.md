@@ -1,10 +1,9 @@
 # Tasks
 
 ## CleanWin GUI
-Since CleanWin GUI is now deprecated and done. In lieu of this change, both app uninstallers (CLI and GUI) co-exist together in CleanWin.  
+Since CleanWin GUI is now deprecated and done. In lieu of this change, users can use both methods to uninstall apps: CLI and GUI app uninstaller.
 Check the snip below: 👇  
 ![image](https://i.imgur.com/jN6m9zs.png)
-
 
 
 # Apps & Features
@@ -16,7 +15,7 @@ Check the snip below: 👇
 - Use [Winstall](https://github.com/pratyakshm/CleanWin/wiki/Winstall:-Installing-your-own-set-of-apps-using-a-simple-list) to install your own apps
 - WinGet import (upcoming)
 ### Apps uninstalled
-[CLI app uninstaller]
+#### This list counts for App Uninstaller CLI only. 
 - 3D Viewer   
 - Alarms & Clock
 - Cortana  

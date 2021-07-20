@@ -10,7 +10,7 @@ Use the following command to export list of apps to a JSON with file name `apps.
 The partition letter, file location and file name can be changed according to user preference.
 
 ## Using `winget import` in CleanWin
-If configured during pre-execution environment, CleanWin CLI will ask user to select the exported JSON file using File Explorer picker UI.  
+If configured during pre-execution environment, CleanWin will ask user to select the exported JSON file using File Explorer picker UI.  
 
 
 If a **valid** JSON file is selected, CleanWin will use `winget import` to batch install the apps.  
