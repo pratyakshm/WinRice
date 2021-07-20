@@ -1,21 +1,15 @@
 # Tasks
 
-## CleanWin GUI
-Since CleanWin GUI is now deprecated and done. In lieu of this change, users can use both methods to uninstall apps: CLI and GUI app uninstaller.
-Check the snip below: 👇  
-![image](https://i.imgur.com/jN6m9zs.png)
-
-
 # Apps & Features
 ## Apps
 ### Apps installed
 - [7-zip](https://www.7-zip.org/)
 - HEVC Video Extensions
 - Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/))
-- Use [Winstall](https://github.com/pratyakshm/CleanWin/wiki/Winstall:-Installing-your-own-set-of-apps-using-a-simple-list) to install your own apps
+- Use [Winstall](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINSTALL.md) to install your own apps
 - WinGet import (upcoming)
-### Apps uninstalled
-#### This list counts for App Uninstaller CLI only. 
+### Apps uninstalled 
+#### This list counts for App Uninstaller CLI only. [Read more](https://github.com/pratyakshm/CleanWin/blob/main/doc/GUIDEPRECATION.md).
 - 3D Viewer   
 - Alarms & Clock
 - Cortana  

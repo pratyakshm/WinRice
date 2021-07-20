@@ -13,15 +13,17 @@ CleanWin does everything from removing junk (your hardware doesn't count, yet), 
 
 ## Documentation
 ### 💡 Read the docs before using CleanWin
+
 | Type | Doc | 
 |--------------|--------|
+| LICENSE | [`LICENSE`](https://github.com/pratyakshm/CleanWin/blob/main/LICENSE) |
+| GUI deprecation notice | [`GUIDEPRECATION.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/GUIDEPRECATION.md) |
 | Tasks CleanWin does | [`TASKS.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/TASKS.md) |
+| Frequently asked questions | [`FAQ.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/FAQ.md) |
 | winget | [`WINGET.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINGET.md) |
 | Winstall | [`WINSTALL.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINSTALL.md) |
 | winget import | [`WINGETIMPORT.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINGETIMPORT.md) |
-| Frequently asked questions | [`FAQ.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/FAQ.md) |
 | Reverting changes | [`REVERT.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/REVERT.md) |
-| LICENSE | [`LICENSE`](https://github.com/pratyakshm/CleanWin/blob/main/LICENSE) |
 | Docs folder | [`doc`](https://github.com/pratyakshm/CleanWin/tree/main/doc) |
 | Wiki | [Wiki](https://github.com/pratyakshm/CleanWin/wiki) | 
 
