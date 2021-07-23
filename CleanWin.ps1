@@ -41,6 +41,7 @@ $tasks = @(
 	"InstallHEVC", 
 	# "UninstallHEVC",
 	"Widgets",
+	"MicrosoftStore",
 	"InstallFonts", 
 	# "UninstallFonts",
 	"SetPhotoViewerAssociation",
@@ -1605,6 +1606,36 @@ $ProgressPreference = 'SilentlyContinue'
 		}
 	}
 }
+
+# Update Microsoft Store if older version
+function MicrosoftStore {
+	if ($CurrentBuild -lt 22000) 
+	{
+		return
+	}
+	if (!(Get-AppxPackage "Microsoft.WindowsStore")) 
+	{
+		return
+	}
+	if ((Get-AppxPackage "Microsoft.WindowsStore").Version -ge "22107.1401.4.0")
+	{
+		return
+	}
+	print " "
+	print "Updating Microsoft Store..."
+	Start-BitsTransfer "https://github.com/CleanWin/Files/raw/main/Microsoft.WindowsStore_22107.1401.4.0_neutral_%7E_8wekyb3d8bbwe.Msixbundle"
+	Add-AppPackage "Microsoft.WindowsStore_22107.1401.4.0_neutral_%7E_8wekyb3d8bbwe.Msixbundle"
+	Remove-Item "Microsoft.WindowsStore_22107.1401.4.0_neutral_%7E_8wekyb3d8bbwe.Msixbundle"
+	if ((Get-AppxPackage "Microsoft.WindowsStore").Version -ge "22107.1401.4.0")
+	{
+		print "Updated Microsoft Store."
+	}
+	elseif ((Get-AppxPackage "Microsoft.WindowsStore").Version -lt "22107.1401.4.0") 
+	{
+		print "Could not update Microsoft Store."
+	}
+}
+
 
 # Install fonts (part of code here was picked from https://github.com/code-rgb/CleanWin).
 Function InstallFonts {
