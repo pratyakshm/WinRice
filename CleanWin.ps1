@@ -826,8 +826,11 @@ Function UninstallerCLI {
 
 	if (!(Get-CimInstance -ClassName Win32_PnPEntity | Where-Object -FilterScript {($_.PNPClass -eq "Camera") -or ($_.PNPClass -eq "Image")})) {
 		print "     Uninstalling Microsoft.WindowsCamera"
-		Get-AppxPackage "Microsoft.WindowsCamera" | Remove-AppxPackage
-		Get-AppxProvisionedPackage -Online "Microsoft.WindowsCamera" | Remove-AppxProvisionedPackage 
+		if (Get-AppxPackage "Microsoft.WindowsCamera")
+		{
+			Get-AppxPackage "Microsoft.WindowsCamera" | Remove-AppxPackage
+			Get-AppxProvisionedPackage -Online "Microsoft.WindowsCamera" | Remove-AppxProvisionedPackage 
+		}
 	}
 
 	$SponsoredApps = @(					# Remove Sponsored apps.
@@ -1251,6 +1254,7 @@ $ProgressPreference = 'SilentlyContinue'
 
 # Install runtime packages .
 Function InstallFrameworks {
+$ProgressPreference = 'SilentlyContinue'
 	if (Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop") {
 		return
 	}
@@ -1452,6 +1456,7 @@ $ErrorActionPreference = 'Continue'
 
 # Enable all experimental features in WinGet.
 Function EnableExperimentsWinGet {
+$ProgressPreference = 'SilentlyContinue'
 	if (!(check($enableexperimentswinget))) { 
 		return 
 	}
@@ -1486,13 +1491,14 @@ Function DisableExperimentsWinGet {
 
 # Use winget import (optional) (part of code used here was picked from https://devblogs.microsoft.com/scripting/hey-scripting-guy-can-i-open-a-file-dialog-box-with-windows-powershell/)
 Function WinGetImport {
-	if (!($wingetimport)) {
+	if ($wingetimport -like "n" ) {
 		return
 	}
 	if (!(Get-Command winget)) {
 		print "WinGet is not installed. Please install WinGet first before using winget import."
 		return
 	}
+	space
 	[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
 	print "Select the exported JSON from File Picker UI"
 	$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
@@ -1561,8 +1567,8 @@ $ProgressPreference = 'SilentlyContinue'
 # Unfinished function.
 Function Widgets {
 $ProgressPreference = 'SilentlyContinue'
-	space
 	if ($widgets -like "n") {
+		space
 		if ($CurrentBuild -lt 22000) {
 			print "This device is not running Windows 11. Widgets can't be updated on older versions of Windows."
 			return
@@ -1587,6 +1593,7 @@ $ProgressPreference = 'SilentlyContinue'
 		}
 	}
 	elseif ($widgets -like "y") {
+		space
 		if (!(Get-AppxPackage "MicrosoftWindows.Client.WebExperience")) {
 			print "Widgets may have already been removed."
 			return
@@ -1604,44 +1611,40 @@ $ProgressPreference = 'SilentlyContinue'
 
 # Update Microsoft Store if older version
 function MicrosoftStore {
+$ProgressPreference = 'SilentlyContinue'
 	if ($CurrentBuild -lt 22000) 
 	{
 		return
 	}
-	if (!(Get-AppxPackage "Microsoft.WindowsStore")) 
+	if ((Get-AppxPackage "Microsoft.WindowsStore").Version -eq "22107.1401.4.0")
 	{
 		return
 	}
-	if ((Get-AppxPackage "Microsoft.WindowsStore").Version -ge "22107.1401.4.0")
-	{
-		return
-	}
-	print " "
+	space
 	print "Updating Microsoft Store..."
-	Start-BitsTransfer "https://github.com/CleanWin/Files/raw/main/Microsoft.WindowsStore_22107.1401.4.0_neutral_%7E_8wekyb3d8bbwe.Msixbundle"
-	Add-AppPackage "Microsoft.WindowsStore_22107.1401.4.0_neutral_%7E_8wekyb3d8bbwe.Msixbundle"
-	Remove-Item "Microsoft.WindowsStore_22107.1401.4.0_neutral_%7E_8wekyb3d8bbwe.Msixbundle"
-	if ((Get-AppxPackage "Microsoft.WindowsStore").Version -ge "22107.1401.4.0")
+	Get-AppxPackage "Microsoft.WindowsStore" | Remove-AppxPackage 
+	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.WindowsStore_22107.1401.4.0_neutral.Msixbundle
+	Add-AppPackage "Microsoft.WindowsStore_22107.1401.4.0_neutral.Msixbundle"
+	Remove-Item "Microsoft.WindowsStore_22107.1401.4.0_neutral.Msixbundle"
+	if ((Get-AppxPackage "Microsoft.WindowsStore").Version -eq "22107.1401.4.0")
 	{
 		print "Updated Microsoft Store."
+		return
 	}
-	elseif ((Get-AppxPackage "Microsoft.WindowsStore").Version -lt "22107.1401.4.0") 
-	{
-		print "Could not update Microsoft Store."
-	}
+	print "Could not update Microsoft Store."
 }
 
 
 # Install fonts (part of code here was picked from https://github.com/code-rgb/CleanWin).
 Function InstallFonts {
 $ProgressPreference = 'SilentlyContinue'
-	space
 	# Check if Cascadia Code is installed and inform user.
 	$installed = "C:\Windows\Fonts\CascadiaCodePL.ttf"
 	if (Test-Path -Path $installed) {
 		print "Cascadia Code is already installed on this device."
 		return
 	}
+	space
 	# Install Cascadia Code if not already installed.
 	print "Downloading the latest release of Cascadia Code..."
 	$response = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/cascadia-code/releases/latest"
@@ -1657,12 +1660,12 @@ $ProgressPreference = 'SilentlyContinue'
 }
 
 Function UninstallFonts {
-	space
 	$fontfile = "C:\Windows\Fonts\CascadiaCodePL.ttf"
 	if (!($fontfile)) {
 		print "Fonts may have already been uninstalled."
 		return
 	}
+	space
 	print "Uninstalling fonts..."
 	Remove-Item $fontfile
 	if (!($fontfile)) {
