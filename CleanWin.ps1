@@ -314,7 +314,7 @@ $isonline = {
 	}
 }
 
-RunWithProgress -Text "Internet connection" -Task $isonline -Exit $true | Out-Null
+RunWithProgress -Text "Device connection" -Task $isonline -Exit $true | Out-Null
 
 # Check if laptop (https://devblogs.microsoft.com/scripting/hey-scripting-guy-weekend-scripter-how-can-i-use-wmi-to-detect-laptops/).
 Param(
@@ -893,10 +893,10 @@ Function UninstallConnect {
 
 # Unpin all start menu tiles.
 Function UnpinStartTiles {
-	space
 	if ($CurrentBuild -ge 22000) {
 		return
 	}
+	space
 	print "Unpinning all tiles from Start Menu..."
 	Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
