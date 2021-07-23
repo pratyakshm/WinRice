@@ -2,7 +2,15 @@
 # Copyright (c) 2021 PratyakshM <pratyakshm@protonmail.com>
 # All rights reserved.
 
-Write-Host "Unpinning all tiles from start menu..."
+Function space {
+	Write-Host " "
+}
+
+Function print($text) {
+	Write-Host $text
+}
+
+print "Unpinning all tiles from start menu..."
 
 Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
 Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
@@ -74,4 +82,4 @@ Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
 
 Remove-Item $layoutFile
 
-Write-Host "Done."
+print "Unpinned tiles from Start menu."

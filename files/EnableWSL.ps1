@@ -2,8 +2,16 @@
 # Copyright (c) 2021 PratyakshM <pratyakshm@protonmail.com>
 # All rights reserved.
 
+Function space {
+	Write-Host " "
+}
+
+Function print($text) {
+	Write-Host $text
+}
+
 if ($CurrentBuild -lt 22000) {
-    Write-Host "Enabling Windows Subsystem for Linux..."
+    print "Enabling Windows Subsystem for Linux..."
     Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
     Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
     if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) {
@@ -11,12 +19,12 @@ if ($CurrentBuild -lt 22000) {
     }
     else {
         $ProductName = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ProductName
-        Write-Host "Could not enable Hyper-V since $ProductName does not support it."
+        print "Could not enable Hyper-V since $ProductName does not support it."
     }
-    Write-Host "Enabled Windows Subsystem for Linux."
+    print "Enabled Windows Subsystem for Linux."
 }
 elseif ($CurrentBuild -ge 22000) {
-    Write-Host "Enabling Windows Subsystem for Linux version 2 along with GUI App support..."
+    print "Enabling Windows Subsystem for Linux version 2 along with GUI App support..."
     wsl --install | Out-Null
-    Write-Host "Enabled Windows Subsystem for Linux."
+    print "Enabled Windows Subsystem for Linux."
 }

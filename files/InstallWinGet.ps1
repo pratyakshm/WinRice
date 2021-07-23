@@ -1,11 +1,20 @@
 $ErrorActionPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
 
+Function space {
+	Write-Host " "
+}
+
+Function print($text) {
+	Write-Host $text
+}
+
 space
 if (Get-Command winget) {
 	print "WinGet is already installed on this device."
 	exit 
 }
+
 print "Preparing download..."
 # Create new folder and set location.
 if (!(Test-Path CleanWin)) {

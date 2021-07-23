@@ -825,7 +825,7 @@ Function UninstallerCLI {
 	}
 
 	if (!(Get-CimInstance -ClassName Win32_PnPEntity | Where-Object -FilterScript {($_.PNPClass -eq "Camera") -or ($_.PNPClass -eq "Image")})) {
-		print "     Uninstalling Microsoft.WindowsCamera"
+		print "     Uninstalling Microsoft.WindowsCamera..."
 		if (Get-AppxPackage "Microsoft.WindowsCamera")
 		{
 			Get-AppxPackage "Microsoft.WindowsCamera" | Remove-AppxPackage
@@ -1259,7 +1259,6 @@ $ProgressPreference = 'SilentlyContinue'
 		return
 	}
 	space
-	print "Preparing download..."
 	# Create new folder and set location.
 	if (!(Test-Path CleanWin)) {
 		New-Item CleanWin -ItemType Directory | out-Null
@@ -1269,7 +1268,7 @@ $ProgressPreference = 'SilentlyContinue'
 		Set-Location CleanWin
 	}
 	# Download frameworks.
-	print "Downloading app frameworks..."
+	print "Installing app frameworks..."
 	$VCLibs1 = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx"
 	$VCLibs2 = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x86__8wekyb3d8bbwe.Appx"
 	$VCLibs3 = "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx"
@@ -1277,7 +1276,6 @@ $ProgressPreference = 'SilentlyContinue'
 	Start-BitsTransfer $VCLibs1; Start-BitsTransfer $VCLibs2; Start-BitsTransfer $VCLibs3; Start-BitsTransfer $VCLibs4
 
 	# Install frameworks.
-	print "Installing app frameworks..."
 	$VCLibs1 = "Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx"
 	$VCLibs2 = "Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x86__8wekyb3d8bbwe.Appx"
 	$VCLibs3 = "Microsoft.VCLibs.x64.14.00.Desktop.appx"
@@ -1330,7 +1328,6 @@ $ProgressPreference = 'SilentlyContinue'
 		print "WinGet is already installed on this device."
 		return 
 	}
-	print "Preparing download..."
 	# Create new folder and set location.
 	if (!(Test-Path CleanWin)) {
 		New-Item CleanWin -ItemType Directory | Out-Null
@@ -1344,11 +1341,10 @@ $ProgressPreference = 'SilentlyContinue'
 
 	# Download the packages.
 	$WinGetURL = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
-	print "Downloading WinGet installation packages..."
+	print "Installing WinGet..."
 	Start-BitsTransfer $WinGetURL.assets.browser_download_url
 
 	# Install WinGet.
-	print "Installing WinGet..."
 	Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
 		
 	# Cleanup installers.
@@ -1525,17 +1521,15 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 	$OSArchitecture = (Get-WmiObject Win32_OperatingSystem).OSArchitecture
 	if ($OSArchitecture -like "64-bit") {
-		print "Downloading HEVC Video Extensions..."
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.41483.0_x64__8wekyb3d8bbwe.Appx
 		print "Installing HEVC Video Extensions..."
+		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.41483.0_x64__8wekyb3d8bbwe.Appx
 		Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.41483.0_x64__8wekyb3d8bbwe.Appx
 		Remove-Item Microsoft.HEVCVideoExtension_1.0.41483.0_x64__8wekyb3d8bbwe.Appx
 		print "Installed HEVC Video Extensions."
 	}
 	elseif ($OSArchitecture -like "32-bit") {
-		print "Downloading HEVC Video Extensions..."
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.41483.0_x86__8wekyb3d8bbwe.Appx
 		print "Installing HEVC Video Extensions..."
+		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.41483.0_x86__8wekyb3d8bbwe.Appx
 		Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.41483.0_x86__8wekyb3d8bbwe.Appx
 		Remove-Item Microsoft.HEVCVideoExtension_1.0.41483.0_x86__8wekyb3d8bbwe.Appx
 		print "Installed HEVC Video Extensions."
@@ -1646,10 +1640,9 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 	space
 	# Install Cascadia Code if not already installed.
-	print "Downloading the latest release of Cascadia Code..."
+	print "Installing Cascadia Code..."
 	$response = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/cascadia-code/releases/latest"
 	Start-BitsTransfer -Source $response.assets.browser_download_url -Destination "CascadiaCode.zip"
-	print "Installing Cascadia Code..."
 	Expand-Archive CascadiaCode.zip
 	$font = $(Get-ChildItem "CascadiaCode\ttf\CascadiaCodePL.ttf").FullName
 	$installed = "C:\Windows\Fonts\CascadiaCodePL.ttf"

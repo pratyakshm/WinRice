@@ -59,7 +59,7 @@ Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git
 - Download the latest code from main branch: [tap here](https://github.com/pratyakshm/CleanWin/archive/refs/heads/main.zip).
 - Unzip the file.
 - Open Windows Terminal (Admin), set location to your Downloads folder.
-- Use `Set-ExecutionPolicy -Unrestricted -Scope Process` to set ExecutionPolicy to unrestricted for current process.
+- Use `Set-ExecutionPolicy Unrestricted -Scope Process -Force` to set ExecutionPolicy to unrestricted for current process.
 - Use `.\CleanWin.ps1` to run CleanWin.  
 
 ***
