@@ -2640,25 +2640,29 @@ Function EnableTaskbarFeed {
 	Start-Sleep 2
 }
 
-# Remove created PSDrives
-Remove-PSDrive -Name HKCR
-Remove-PSDrive -Name HKU
+
 
 ######### Tasks after successful run #########
+
+# Tasks after run
+Remove-PSDrive -Name HKCR
+Remove-PSDrive -Name HKU
+$ProgressPreference = 'Continue'
 
 # Update status: CleanWin execution successful.
 Function Success {
 	Stop-Process -Name explorer -Force
 	Start-Sleep 3
-	print "CleanWin has finished working."
 	print "Thank you for using CleanWin."
-	Write-Warning "This device must restart for all changes to take effect."
-	$restart = ask "Restart this PC now? [y/n]"
-	if ($restart -like "y") {
-		Stop-Transcript
-		Restart-Computer
-	}
 	Stop-Transcript
+	Write-Host "Restarting this device in 10 seconds."
+	for ($time = 10; $time -ge 0 ; $time--)
+	{   
+		Start-Sleep 1
+		Write-Progress -Activity "Device restart" -Status "Restarting in $time seconds."
+	}
+	Restart-Computer
+
 }
 
 # Call the desired functions.
