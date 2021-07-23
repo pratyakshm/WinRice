@@ -282,10 +282,10 @@ $WarningPreference = 'SilentlyContinue'
 $oscheck = {
 	$CurrentBuild = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name CurrentBuild
 	if ($CurrentBuild -lt 19042) {
-		return $false | Out-Null
+		return $false
 	}
 	elseif ($CurrentBuild -ge 19042) {
-		return $true | Out-Null
+		return $true
 	}
 }
 RunWithProgress -Text "Supported Windows version" -Task $oscheck -Exit $true | Out-Null
@@ -335,10 +335,10 @@ $isuptodate = {
 	$Updates = @($UpdateSearcher.Search("IsHidden=0 and IsInstalled=0 and AutoSelectOnWebSites=1").Updates)
 	$Title = $($Updates).Title
 	if (!($Title)) {
-		return $true | Out-Null
+		return $true
 	}
 	else {
-		return $false | Out-Null
+		return $false
 	}
 }
 
@@ -370,10 +370,10 @@ $isrestartpending = {
 			}
 		
 			if ($PendingReboot -eq $true) {
-				return $false | Out-Null
+				return $false
 			}
 			else {
-				return $true | Out-Null
+				return $true
 			}
 		}   
 	}

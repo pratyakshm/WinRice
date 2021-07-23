@@ -27,8 +27,6 @@ CleanWin does everything from removing junk (your hardware doesn't count, yet), 
 | Docs folder | [`doc`](https://github.com/pratyakshm/CleanWin/tree/main/doc) |
 | Wiki | [Wiki](https://github.com/pratyakshm/CleanWin/wiki) | 
 
-### ⚠️ Warning:
-- Do not use GitHub release. Its way too old to use at the time of writing this. Rather, run latest code from main branch.
 ***
 
 ## Prerequisites
