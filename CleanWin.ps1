@@ -162,7 +162,7 @@ Function check($test) {
 
 Function cwexit {
 	Write-Host "CleanWin will now exit."
-	Start-Sleep -Milliseconds 200
+	Start-Sleep -Seconds 2
 	exit
 }
 
