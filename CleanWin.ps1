@@ -388,16 +388,11 @@ $SCCM_Namespace = $null
 
 # Check PowerShell version and import required modules.
 $pwshver = {
-	if ((($PSVersionTable).PSVersion).Major -eq "7") { 
-		Import-Module -Name Appx, Microsoft.PowerShell.Management, PackageManagement -UseWindowsPowerShell -WarningAction "SilentlyContinue"| Out-Null
+	if ((($PSVersionTable).PSVersion).Major -eq "5") { 
 		return $true 
-	} 
-	elseif ((($PSVersionTable).PSVersion).Major -eq "5") { 
-		return $true
 	}
-	else {
-		return $false | Out-Null 
-	}
+	Import-Module -Name Appx, Microsoft.PowerShell.Management, PackageManagement -UseWindowsPowerShell -WarningAction "SilentlyContinue" | Out-Null
+	return $true
 }
 
 RunWithProgress -Text "Setting up PowerShell" -Task $pwshver -Exit $true | Out-Null
