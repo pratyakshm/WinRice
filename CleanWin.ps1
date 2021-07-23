@@ -282,10 +282,10 @@ $WarningPreference = 'SilentlyContinue'
 $oscheck = {
 	$CurrentBuild = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name CurrentBuild
 	if ($CurrentBuild -lt 19042) {
-		return $false
+		return $false | Out-Null
 	}
 	elseif ($CurrentBuild -ge 19042) {
-		return $true
+		return $true | Out-Null
 	}
 }
 RunWithProgress -Text "Supported Windows version" -Task $oscheck -Exit $true | Out-Null
@@ -321,10 +321,10 @@ Param(
 )
 $isLaptop = $false | Out-Null
 if(Get-WmiObject -Class Win32_SystemEnclosure -ComputerName $computer | Where-Object {$_.ChassisTypes -eq 9 -or $_.ChassisTypes -eq 10 -or $_.ChassisTypes -eq 14}) { 
-	$isLaptop = $true
+	$isLaptop = $true | Out-Null
 	}
 if(Get-WmiObject -Class Win32_Battery -ComputerName $computer) { 
-	$isLaptop = $true
+	$isLaptop = $true | Out-Null
 	}
 $isLaptop
 
@@ -335,10 +335,10 @@ $isuptodate = {
 	$Updates = @($UpdateSearcher.Search("IsHidden=0 and IsInstalled=0 and AutoSelectOnWebSites=1").Updates)
 	$Title = $($Updates).Title
 	if (!($Title)) {
-		return $true
+		return $true | Out-Null
 	}
 	else {
-		return $false
+		return $false | Out-Null
 	}
 }
 
@@ -370,10 +370,10 @@ $isrestartpending = {
 			}
 		
 			if ($PendingReboot -eq $true) {
-				return $false 
+				return $false | Out-Null
 			}
 			else {
-				return $true
+				return $true | Out-Null
 			}
 		}   
 	}
@@ -392,10 +392,10 @@ $pwshver = {
 		return $true 
 	} 
 	elseif ((($PSVersionTable).PSVersion).Major -eq "5") { 
-		return $true 
+		return $true | Out-Null 
 	}
 	else {
-		return $false 
+		return $false | Out-Null 
 	}
 }
 
