@@ -393,7 +393,7 @@ $pwshver = {
 		return $true 
 	} 
 	elseif ((($PSVersionTable).PSVersion).Major -eq "5") { 
-		return $true | Out-Null 
+		return $true
 	}
 	else {
 		return $false | Out-Null 
