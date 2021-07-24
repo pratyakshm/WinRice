@@ -2,6 +2,16 @@
 ## What is Windows Package Manager (a.k.a winget)?
 Windows Package Manager, or simply `winget`, is an official package manager client for Windows. Package managers allow you to deploy and manage apps using the command line. 
 
+## CleanWin x WinGet
+A lot of features in CleanWin are powered by WinGet.   
+### Features powered by WinGet
+| Feature | Link | 
+|-------|--------|
+| Winstall | [`WINSTALL.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINSTALL.md) |
+| winget import | [`WINGETIMPORT.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINGETIMPORT.md) |
+| Deploy Microsoft OneDrive | [`TASKS.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/TASKS.md) |
+
+
 # Installing winget
 If you have used CleanWin, chances are you have winget installed.   
 > Verify it by using ``winget.exe`` in Windows Terminal.  
@@ -52,18 +62,8 @@ If you still don't have winget installed, install it.
 # Advanced usage
 ## More commands
 Use `winget` in Windows Terminal to list all commands and their usage.
-## Documentation
 
-## CleanWin x WinGet
-A lot of features in CleanWin are powered by WinGet.   
-### Features powered by WinGet
-| Feature | Link | 
-|-------|--------|
-| Winstall | [`WINSTALL.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINSTALL.md) |
-| winget import | [`WINGETIMPORT.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINGETIMPORT.md) |
-| Deploy Microsoft OneDrive | [`TASKS.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/TASKS.md) |
-
-# Related links
+## Related links
 [source repo](https://github.com/microsoft/winget-cli/)     
 [packages repo](https://github.com/microsoft/winget-pkgs/)    
 [documentation](https://docs.microsoft.com/en-us/windows/package-manager/winget/)    

@@ -283,10 +283,10 @@ $WarningPreference = 'SilentlyContinue'
 # Check if supported OS build.
 $oscheck = {
 	$CurrentBuild = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name CurrentBuild
-	if ($CurrentBuild -lt 19042) {
+	if ($CurrentBuild -lt 19043) {
 		return $false
 	}
-	elseif ($CurrentBuild -ge 19042) {
+	elseif ($CurrentBuild -ge 19043) {
 		return $true
 	}
 }
@@ -329,22 +329,6 @@ if(Get-WmiObject -Class Win32_Battery -ComputerName $computer) {
 	$isLaptop = $true | Out-Null
 	}
 $isLaptop
-
-# Check for updates and exit if found (part of code used here is picked from https://gist.github.com/Grimthorr/44727ea8cf5d3df11cf7).
-$isuptodate = {
-	$UpdateSession = New-Object -ComObject Microsoft.Update.Session
-	$UpdateSearcher = $UpdateSession.CreateUpdateSearcher()
-	$Updates = @($UpdateSearcher.Search("IsHidden=0 and IsInstalled=0 and AutoSelectOnWebSites=1").Updates)
-	$Title = $($Updates).Title
-	if (!($Title)) {
-		return $true
-	}
-	else {
-		return $false
-	}
-}
-
-RunWithProgress -Text "Device is up-to-date" -Task $isuptodate -Exit $true | Out-Null
 
 # Check for pending restart (part of code used here was picked from https://thesysadminchannel.com/remotely-check-pending-reboot-status-powershell).
 $isrestartpending = {
