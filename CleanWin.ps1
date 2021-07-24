@@ -259,7 +259,6 @@ $OSBuildCore = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\
 $OSBuild = $OSBuildCore.TrimStart("10.0.")
 $OSBuildCore = $null
 $BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
-New-PSDrive -Name "HKU" -PSProvider "Registry" -Root "HKEY_Users" | Out-Null
 # Source: https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%207/Module/Sophia.psm1#L825.
 $hkeyuser = (Get-CimInstance -ClassName Win32_UserAccount | Where-Object -FilterScript {$_.Name -eq $env:USERNAME}).SID
 
@@ -920,13 +919,13 @@ $ProgressPreference = 'SilentlyContinue'
 # Install fonts (part of code here was picked from https://github.com/code-rgb/CleanWin).
 Function InstallFonts {
 $ProgressPreference = 'SilentlyContinue'
+	space
 	# Check if Cascadia Code is installed and inform user.
 	$installed = "C:\Windows\Fonts\CascadiaCodePL.ttf"
 	if (Test-Path -Path $installed) {
 		print "Cascadia Code is already installed on this device."
 		return
 	}
-	space
 	# Install Cascadia Code if not already installed.
 	print "Installing Cascadia Code..."
 	$response = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/cascadia-code/releases/latest"
@@ -2079,7 +2078,7 @@ Function EnableTelemetry {
 Function EnableClipboard {
 	space
 	print "Turning on Clipboard History..."
-	$Clipboard = "HKU:\$hkeyuser\Software\Microsoft\Clipboard"
+	$Clipboard = "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Clipboard"
 	Set-ItemProperty -Path $Clipboard -Name "EnableClipboardHistory" -Value 1 -ErrorAction SilentlyContinue
 	print "Turned on Clipboard History."
     Start-Sleep 1
@@ -2092,7 +2091,7 @@ Function EnableClipboard {
 Function DisableClipboard {
 	space
 	print "Turning off Clipboard History..."
-	$Clipboard = "HKU:\$hkeyuser\Software\Microsoft\Clipboard"
+	$Clipboard = "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Clipboard"
 	Set-ItemProperty -Path $Clipboard -Name "EnableClipboardHistory" -Value 0 -ErrorAction SilentlyContinue
 	print "Turned off Clipboard History."
 }
@@ -2119,7 +2118,6 @@ Function StayOnLockscreenPostUpdate {
 
 # Update status.
 Function TasksServices {
-	space
 	space
 	print "---------------------------"
 	print "      TASKS & SERVICES     "   
@@ -2342,7 +2340,7 @@ Function SetupWindowsUpdate {
     # Declare registry keys locations.
 	$Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
 	$Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
-	$DeliveryOptimization = "HKU:\$hkeyuser\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"
+	$DeliveryOptimization = "Registry::HKEY_USERS\$hkeyuser\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"
 	
 	if (!(Test-Path $Update1)) 
     {
@@ -2412,7 +2410,6 @@ Function DisablePowerdownAfterShutdown {
 
 # Update status: Explorer Changes.
 Function PrintExplorerChanges {	
-	space
 	space
 	print "----------------------------------"
 	print "          WINDOWS EXPLORER        "
@@ -2659,7 +2656,7 @@ Function DisableTaskbarFeed {
 	space
 	print "Turning off News and interests..."
 	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
-	$Feed2 = "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Feeds"
+	$Feed2 = "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Feeds"
 	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
 	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
 	print "Turned off News and interests."
@@ -2673,7 +2670,7 @@ Function EnableTaskbarFeed {
 	}
 	print "Turning on News and interests..."
 	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
-	$Feed2 = "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Feeds"
+	$Feed2 = "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Feeds"
 	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0 | Out-Null
 	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 0 | Out-Null
 	print "Turned on News and interests."
@@ -2688,7 +2685,7 @@ function DisableWidgetsItem {
 	}
 	space
 	print "Turning off Widgets Item..."
-	Set-ItemProperty -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 0
+	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 0
 	print "Turned off Widgets Item."
 	Start-Sleep -Milliseconds 200
 }
@@ -2702,7 +2699,7 @@ function EnableWidgetsItem {
 	}
 	space
 	print "Turning on Widgets Item..."
-	Set-ItemProperty -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 1
+	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 1
 	print "Turned on Widgets Item."
 	Start-Sleep -Milliseconds 200
 }
@@ -2715,7 +2712,7 @@ function DisableChatItem {
 	}
 	space
 	print "Turning off Chat Item..."
-	Set-ItemProperty -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 0
+	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 0
 	print "Turned off Chat Item."
 	Start-Sleep -Milliseconds 200
 }
@@ -2728,7 +2725,7 @@ function EnableChatItem {
 	}
 	space
 	print "Turning on Chat Item..."
-	Set-ItemProperty -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 1
+	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 1
 	print "Turned on Chat Item."
 	Start-Sleep -Milliseconds 200
 }
@@ -2740,7 +2737,6 @@ Start-Sleep -Seconds 2
 
 # Tasks after run
 Remove-PSDrive -Name HKCR
-Remove-PSDrive -Name HKU
 $ProgressPreference = 'Continue'
 
 # Update status: CleanWin execution successful.
