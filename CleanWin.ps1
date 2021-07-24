@@ -12,14 +12,26 @@ $tasks = @(
 
 ### Apps & Features ###
 	"AppsFeatures",
+	"InstallFrameworks",
+	# "UninstallFrameworks",
+	"InstallWinGet",
+	"EnableExperimentsWinGet",
+	# "DisableExperimentsWinGet",
+	"MicrosoftStore",
+	"Install7zip", 
+	# "Uninstall7zip",
+	"WinGetImport",
+	"Winstall", 
+	"InstallHEVC", 
+	# "UninstallHEVC",
+	"Widgets",
+	"InstallFonts", 
+	# "UninstallFonts",
 	"UninstallApps", "Activity", 
 	"WebApps",
 	"UninstallConnect",
 	"UnpinStartTiles", "Activity", 
-	"UnpinAppsFromTaskbar", "Activity", 
-	"InstallFrameworks",
-	# "UninstallFrameworks",
-	"InstallWinGet", 
+	"UnpinAppsFromTaskbar", 
 	"UninstallOneDrive", "Activity",
 	# "InstallOneDrive",
 	"UninstallFeatures", "Activity", 
@@ -30,20 +42,6 @@ $tasks = @(
 	# "DisabledotNET3.5",
 	"EnableSandbox",
 	# "DisableSandbox",
-	"Install7zip", 
-	# "Uninstall7zip",
-	"Winstall", 
-	"Activity",
-	"EnableExperimentsWinGet",
-	# "DisableExperimentsWinGet",
-	"WinGetImport",
-	"Activity",
-	"InstallHEVC", 
-	# "UninstallHEVC",
-	"Widgets",
-	"MicrosoftStore",
-	"InstallFonts", 
-	# "UninstallFonts",
 	"SetPhotoViewerAssociation",
 	# "UnsetPhotoViewerAssociation",
 	"ChangesDone",
@@ -405,25 +403,26 @@ print "Please take your time to answer the questions below in order to save user
 print "Press Enter to proceed after answering a question."
 space
 $systemrestore = ask "Create a system restore point? [y/N]"
-$uninstallapps = ask "Uninstall Windows apps?"
+$uninstallapps = ask "Uninstall inbox apps?"
 if ($uninstallapps -like "y") {
-	$uninstallappsgui = ask "Use GUI to uninstall apps?"
+	$uninstallappsgui = ask "Use App Uninstaller GUI?"
 }
 if ($CurrentBuild -ge 22000) {
 	$widgets = ask "Remove Widgets?"
 }
 $onedrive = ask "Uninstall Microsoft OneDrive?"
-$uninstallfeatures = ask "Uninstall unnecessary optional features?"
-$enableexperimentswinget = ask "Enable experimental features in WinGet?"
-$wingetimport = ask "Use winget import?"
-$winstall = ask "Use Winstall?"
+$uninstallfeatures = ask "Uninstall unnecessary features?"
 $netfx3 = ask "Enable dotNET 3.5?"
 $wsl = ask "Enable Windows Subsystem for Linux?"
 $sandbox = ask "Enable Windows Sandbox?"
+$enableexperimentswinget = ask "winget: enable experimental features?"
+$wingetimport = ask "winget: use winget import?"
+$winstall = ask "winget: use Winstall?"
+
 space 
 
 Start-Sleep -Milliseconds 100
-print "Choices saved, starting CleanWin..."
+print "Starting CleanWin..."
 Start-Sleep -Milliseconds 600
 
 # Intro.
@@ -444,7 +443,7 @@ Function OSBuildInfo {
 	space
 	print "$ProductName $DisplayVersion "
 	print "Build $OSBuild, $BuildBranch branch"
-	Start-Sleep -Milliseconds 500
+	Start-Sleep -Milliseconds 200
 	space
 	space
 	Start-Sleep 1
@@ -518,7 +517,6 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 
 
 
-
 ###################################
 ######### APPS & FEATURES #########
 ###################################
@@ -531,6 +529,430 @@ Function AppsFeatures {
 	print "-------------------------"
 	space
 }
+
+# Install runtime packages .
+Function InstallFrameworks {
+$ProgressPreference = 'SilentlyContinue'
+	if (Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop") {
+		return
+	}
+	space
+	# Create new folder and set location.
+	if (!(Test-Path CleanWin)) {
+		New-Item CleanWin -ItemType Directory | out-Null
+		$currentdir = $(Get-Location).Path; $dir = "$currentdir/CleanWin"; Set-Location $dir
+	}
+	else {
+		Set-Location CleanWin
+	}
+	# Download frameworks.
+	print "Installing app frameworks..."
+	$VCLibs1 = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx"
+	$VCLibs2 = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x86__8wekyb3d8bbwe.Appx"
+	$VCLibs3 = "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx"
+	$VCLibs4 = "https://aka.ms/Microsoft.VCLibs.x86.14.00.Desktop.appx"
+	Start-BitsTransfer $VCLibs1; Start-BitsTransfer $VCLibs2; Start-BitsTransfer $VCLibs3; Start-BitsTransfer $VCLibs4
+
+	# Install frameworks.
+	$VCLibs1 = "Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx"
+	$VCLibs2 = "Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x86__8wekyb3d8bbwe.Appx"
+	$VCLibs3 = "Microsoft.VCLibs.x64.14.00.Desktop.appx"
+	$VCLibs4 = "Microsoft.VCLibs.x86.14.00.Desktop.appx"
+	Add-AppxPackage $VCLibs1; Add-AppxPackage $VCLibs2; Add-AppxPackage $VCLibs3; Add-AppxPackage $VCLibs4
+
+	# Cleanup installers.
+	Set-Location ..
+	Remove-Item CleanWin -Recurse -Force
+		
+	# Get-Command VCLibs, if it works then print success message.
+	if ((Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop") -and (Get-AppxPackage "Microsoft.VCLibs.*.Desktop")) {
+		print "Installed app frameworks."
+	}
+	elseif (!(Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop")) {
+		print "Could not install app frameworks."
+	}
+}
+
+Function UninstallFrameworks {
+	space
+	if (!(Get-AppxPackage "Microsoft.VCLibs.140.00.UWPDesktop" -or Get-AppxPackage "Microsoft.VCLibs.x64.14.00.Desktop")) {
+		print "Frameworks are not present on this device."
+		return
+	}
+	print "Uninstalling frameworks..."
+	$Apps = @(
+		"Microsoft.VCLibs.*.UWPDesktop"
+		"Microsoft.VCLibs.*.Desktop"
+	)
+	ForEach ($App in $Apps) {
+		print "     Uninstalling $App."
+		Get-AppxPackage $App | Remove-AppxPackage
+	}
+	if ((Get-AppxPackage "Microsoft.VCLibs.140.00.UWPDesktop") -or (Get-AppxPackage "Microsoft.VCLibs.*.Desktop")) {
+		print "Could not uninstall one or more frameworks."
+		return
+	}
+	print "Uninstalled frameworks."
+}
+
+# Install WinGet (Windows Package Manager).
+Function InstallWinGet {
+$ErrorActionPreference = 'SilentlyContinue'
+$ProgressPreference = 'SilentlyContinue'
+	space
+	if (Get-Command winget) {
+		print "WinGet is already installed on this device."
+		return 
+	}
+	# Create new folder and set location.
+	if (!(Test-Path CleanWin)) {
+		New-Item CleanWin -ItemType Directory | Out-Null
+		$currentdir = $(Get-Location).Path; $dir = "$currentdir/CleanWin"; Set-Location $dir
+	}
+	else {
+		Set-Location CleanWin
+	}
+
+	# Download the packages.
+	print "Installing WinGet..."
+	$WinGetURL = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
+	Start-BitsTransfer $WinGetURL.assets.browser_download_url
+
+	# Install WinGet.
+	Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+		
+	# Cleanup installers.
+	Set-Location ..
+	Remove-Item CleanWin -Recurse -Force
+
+	# Get-Command winget, if it works then print success message.
+	if (Get-Command winget) {
+		print "Installed WinGet."
+	}
+	else {
+		print "WinGet could not be installed."
+	}
+}
+
+# Enable all experimental features in WinGet.
+Function EnableExperimentsWinGet {
+$ProgressPreference = 'SilentlyContinue'
+	if (!(check($enableexperimentswinget))) { 
+		return 
+	}
+	elseif (!(Get-Command winget)) {
+		print "WinGet is not installed."
+		return
+	}
+	space
+	print "Turning on experimental features in WinGet..."
+	$currentdir = $(Get-Location).Path
+	Set-Location "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\"
+	Rename-Item settings.json settings.json.backup
+	Start-BitsTransfer "https://raw.githubusercontent.com/CleanWin/Files/main/settings.json"
+	Set-Location $currentdir
+	print "Turned on experimental features in WinGet."
+}
+
+# Disable all experimental features in winget
+Function DisableExperimentsWinGet {
+	if (!(Get-Command winget)) {
+		print "WinGet is not installed, couldn't turn off its experimental features."
+		return
+	}
+	print "Turning off experimental features in WinGet."
+	$currentdir = $(Get-Location).Path
+	Set-Location "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\"
+	Remove-Item settings.json
+	if (!(Test-Path settings.json))
+	{
+		print "Could not find winget settings backup. Could not turn off experimental features."
+		return
+	}
+	Rename-Item settings.json.backup settings.json
+	Set-Location $currentdir
+	print "Turned off experimental features in WinGet."
+}
+
+# Update Microsoft Store if older version - helpful for users clean installing Windows 11 from ISOs.
+function MicrosoftStore {
+$ProgressPreference = 'SilentlyContinue'
+		if ($CurrentBuild -lt 22000) 
+		{
+			return
+		}
+		if ((Get-AppxPackage "Microsoft.WindowsStore").Version -ge "22107.1401.4.0")
+		{
+			return
+		}
+		space
+		print "Updating Microsoft Store..."
+		Get-AppxPackage "Microsoft.WindowsStore" | Remove-AppxPackage 
+		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.WindowsStore_22107.1401.4.0_neutral.Msixbundle
+		Add-AppPackage "Microsoft.WindowsStore_22107.1401.4.0_neutral.Msixbundle"
+		Remove-Item "Microsoft.WindowsStore_22107.1401.4.0_neutral.Msixbundle"
+		if ((Get-AppxPackage "Microsoft.WindowsStore").Version -eq "22107.1401.4.0")
+		{
+			print "Updated Microsoft Store."
+			return
+		}
+		print "Could not update Microsoft Store."
+	}
+	
+# Install 7zip.
+Function Install7zip {
+	space
+	if (!(Get-Command winget)) {
+		print "WinGet is not installed. Couldn't install 7-zip."
+		return 
+	}
+	$7zip = "HKLM:\SOFTWARE\7-Zip"
+	if (!(Test-Path $7zip)) {
+		print "Installing 7-zip..."
+		winget install 7zip --silent | Out-Null
+		print "Installed 7-zip."
+	}
+	else {
+		print "7-zip is already installed on this device."
+	}
+}
+
+# Uninstall 7zip
+Function Uninstall7zip {
+	space
+	$7zip = "HKLM:\SOFTWARE\7-Zip"
+	if (!(Test-Path $7zip)) {
+		print "7-zip is not present on this device."
+		return
+	}
+	print "Uninstalling 7-zip..."
+	winget uninstall 7zip.7zip | Out-Null
+	if (Test-Path $7zip) {
+		print "Could not uninstall 7-zip."
+		return
+	}
+	print "Uninstalled 7-zip."
+}
+
+# Use winget import (optional) (part of code used here was picked from https://devblogs.microsoft.com/scripting/hey-scripting-guy-can-i-open-a-file-dialog-box-with-windows-powershell/)
+Function WinGetImport {
+	if ($wingetimport -like "n" ) {
+		return
+	}
+	if (!(Get-Command winget)) {
+		print "WinGet is not installed. Please install WinGet first before using winget import."
+		return
+	}
+	space
+	[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
+	print "Select the exported JSON from File Picker UI"
+	$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
+	$OpenFileDialog.InitialDirectory = $initialDirectory
+	$OpenFileDialog.Filter = "JSON (*.json)| *.json"
+	$OpenFileDialog.ShowDialog() | Out-Null
+	if ($OpenFileDialog.FileName) {
+		print "Initializing JSON file..."
+		Start-Sleep -Milliseconds 200
+		winget import $OpenFileDialog.FileName
+	}
+	elseif (!($OpenFileDialog.FileName)) {
+		print "No JSON selected."
+	}
+}
+
+# Install apps from Winstall file (the Winstall.txt file must be on the same directory as CleanWin).
+Function Winstall {
+$ErrorActionPreference = 'Continue'
+	# Check if WinGet installed - otherwise return.
+	if (!(check($winstall))) { 
+		return 
+	}
+	space
+	if (!(Get-Command winget)) { 
+		print "WinGet is not installed. Please install WinGet first before using Winstall."
+		Start-Process "https://bit.ly/Winstall" 
+		return
+	}
+	# Try Winstall.txt
+	if (Test-Path Winstall.txt) {
+		print "Starting Winstall..."
+		# Get each line from the text file and use winget install command on it.
+		Get-Content 'Winstall.txt' | ForEach-Object {
+			$App = $_.Split('=')
+			print "    Installing $App..."
+			winget install "$App" --silent | Out-Null
+		}
+		print "Winstall has successfully installed the app(s)."
+	}
+	# Try winstall.txt
+	elseif (Test-Path winstall.txt) {
+		print "Starting Winstall..."
+		# Get each line from the text file and use winget install command on it.
+		Get-Content 'winstall.txt' | ForEach-Object {
+			$App = $_.Split('=')
+			print "    Installing $App..."
+			winget install "$App" --silent | Out-Null
+		}
+		print "Winstall has successfully installed the app(s)."
+	}
+	else {
+		[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
+		print "Select Winstall text file from File Picker UI"
+		$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
+		$OpenFileDialog.InitialDirectory = $initialDirectory
+		$OpenFileDialog.Filter = "Text file (*.txt)| *.txt"
+		$OpenFileDialog.ShowDialog() | Out-Null
+		if ($OpenFileDialog.FileName) {
+			print "Starting Winstall..."
+			Get-Content $OpenFileDialog.FileName | ForEach-Object {					$App = $_.Split('=')
+				print "    Installing $App..."
+				winget install "$App" --silent | Out-Null
+			}
+			print "Winstall has successfully installed the app(s)."
+		}
+		else {
+			print "No text file was picked."
+		}
+	}
+}
+
+# Install HEVC.
+Function InstallHEVC {
+$ProgressPreference = 'SilentlyContinue'
+	space
+	if (Get-AppxPackage -Name Microsoft.HEVCVideoExtension) {
+		print "HEVC Video Extensions are already installed on this device."
+		return
+	}
+	print "Installing HEVC Video Extensions..."
+	$OSArchitecture = (Get-WmiObject Win32_OperatingSystem).OSArchitecture
+	if ($OSArchitecture -like "64-bit") {
+		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.42042.0_x64__8wekyb3d8bbwe.Appx
+		Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.42042.0_x64__8wekyb3d8bbwe.Appx
+		Remove-Item Microsoft.HEVCVideoExtension_1.0.42042.0_x64__8wekyb3d8bbwe.Appx
+	}
+	elseif ($OSArchitecture -like "32-bit") {
+		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.42042.0_x86__8wekyb3d8bbwe.Appx
+		Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.42042.0_x86__8wekyb3d8bbwe.Appx
+		Remove-Item Microsoft.HEVCVideoExtension_1.0.42042.0_x86__8wekyb3d8bbwe.Appx
+	}
+	if (!(Get-AppxPackage "Microsoft.HEVCVideoExtension"))
+	{
+		print "Could not install HEVC Video Extensions."
+		return 
+	}
+	print "Installed HEVC Video Extensions."
+}
+
+# Uninstall HEVC 
+Function UninstallHEVC {
+$ProgressPreference = 'SilentlyContinue'
+	space
+	if (!(Get-AppxPackage "Microsoft.HEVCVideoExtension")) {
+		print "HEVC Video Extensions may have already been uninstalled."
+		return
+	}
+	print "Uninstalling HEVC Video Extensions..."
+	Get-AppxPackage "Microsoft.HEVCVideoExtension" | Remove-AppxPackage
+	if (!(Get-AppxPackage "Microsoft.HEVCVideoExtension")) {
+		print "Uninstalled HEVC Video Extensions."
+	}
+	else {
+		print "Could not uninstall HEVC Video Extensions."
+	}
+}
+
+# Update Widgets
+function UpdateWidgets {
+	space
+	print "Checking if Widgets are updated..."
+	$version = (Get-AppxPackage "MicrosoftWindows.Client.WebExperience").Version
+	if ($version -ge 421.17400.0.0)
+	{	
+		print "Widgets are up to date."
+		return
+	}
+	print "Updating Widgets..."
+	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/MicrosoftWindows.Client.WebExperience_421.19701.0.0_neutral_cw5n1h2txyewy.AppxBundle
+	Add-AppxPackage MicrosoftWindows.Client.WebExperience_421.19701.0.0_neutral_cw5n1h2txyewy.AppxBundle
+	$version = (Get-AppxPackage "MicrosoftWindows.Client.WebExperience").Version
+	Remove-Item MicrosoftWindows.Client.WebExperience_421.19701.0.0_neutral_cw5n1h2txyewy.AppxBundle
+	if ($version -ge 421.19701.0.0) {
+		print "Updated Widgets."
+	}
+	else {
+		print "Could not update Widgets."
+	}
+}
+
+# Remove Widgets
+function RemoveWidgets {
+	space
+	if (!(Get-AppxPackage "MicrosoftWindows.Client.WebExperience")) {
+		print "Widgets may have already been removed."
+		return
+	}
+	print "Removing Widgets..."
+	Get-AppxPackage "MicrosoftWindows.Client.WebExperience" | Remove-AppxPackage
+	if (Get-AppxPackage "MicrosoftWindows.Client.WebExperience"){
+		print "Could not remove Widgets."
+	}
+	else {
+		print "Removed Widgets."
+	}
+}
+
+# Unfinished function.
+Function Widgets {
+$ProgressPreference = 'SilentlyContinue'
+	if ($widgets -like "n") {
+		UpdateWidgets
+	}
+	elseif ($widgets -like "y") {
+		RemoveWidgets
+	}
+}
+
+# Install fonts (part of code here was picked from https://github.com/code-rgb/CleanWin).
+Function InstallFonts {
+$ProgressPreference = 'SilentlyContinue'
+	# Check if Cascadia Code is installed and inform user.
+	$installed = "C:\Windows\Fonts\CascadiaCodePL.ttf"
+	if (Test-Path -Path $installed) {
+		print "Cascadia Code is already installed on this device."
+		return
+	}
+	space
+	# Install Cascadia Code if not already installed.
+	print "Installing Cascadia Code..."
+	$response = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/cascadia-code/releases/latest"
+	Start-BitsTransfer -Source $response.assets.browser_download_url -Destination "CascadiaCode.zip"
+	Expand-Archive CascadiaCode.zip
+	$font = $(Get-ChildItem "CascadiaCode\ttf\CascadiaCodePL.ttf").FullName
+	$installed = "C:\Windows\Fonts\CascadiaCodePL.ttf"
+	Move-Item $font $installed
+	Remove-Item CascadiaCode.zip
+	Remove-Item CascadiaCode -Recurse -Force
+	print "Installed Cascadia Code."
+}
+
+Function UninstallFonts {
+	$fontfile = "C:\Windows\Fonts\CascadiaCodePL.ttf"
+	if (!($fontfile)) {
+		print "Fonts may have already been uninstalled."
+		return
+	}
+	space
+	print "Uninstalling fonts..."
+	Remove-Item $fontfile
+	if (!($fontfile)) {
+		print "Uninstalled fonts."
+	}
+	else {
+		print "Could not uninstall fonts."
+	}
+}
+
 
 # Uninstaller GUI.
 Function UninstallerGUI {
@@ -1252,422 +1674,6 @@ $ProgressPreference = 'SilentlyContinue'
 	print "Disabled dotNET 3.5."
 }
 
-# Install runtime packages .
-Function InstallFrameworks {
-$ProgressPreference = 'SilentlyContinue'
-	if (Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop") {
-		return
-	}
-	space
-	# Create new folder and set location.
-	if (!(Test-Path CleanWin)) {
-		New-Item CleanWin -ItemType Directory | out-Null
-		$currentdir = $(Get-Location).Path; $dir = "$currentdir/CleanWin"; Set-Location $dir
-	}
-	else {
-		Set-Location CleanWin
-	}
-	# Download frameworks.
-	print "Installing app frameworks..."
-	$VCLibs1 = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx"
-	$VCLibs2 = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x86__8wekyb3d8bbwe.Appx"
-	$VCLibs3 = "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx"
-	$VCLibs4 = "https://aka.ms/Microsoft.VCLibs.x86.14.00.Desktop.appx"
-	Start-BitsTransfer $VCLibs1; Start-BitsTransfer $VCLibs2; Start-BitsTransfer $VCLibs3; Start-BitsTransfer $VCLibs4
-
-	# Install frameworks.
-	$VCLibs1 = "Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx"
-	$VCLibs2 = "Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x86__8wekyb3d8bbwe.Appx"
-	$VCLibs3 = "Microsoft.VCLibs.x64.14.00.Desktop.appx"
-	$VCLibs4 = "Microsoft.VCLibs.x86.14.00.Desktop.appx"
-	Add-AppxPackage $VCLibs1; Add-AppxPackage $VCLibs2; Add-AppxPackage $VCLibs3; Add-AppxPackage $VCLibs4
-
-	# Cleanup installers.
-	Set-Location ..
-	Remove-Item CleanWin -Recurse -Force
-		
-	# Get-Command VCLibs, if it works then print success message.
-	if (Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop") {
-		print "Installed app frameworks."
-	}
-	elseif (!(Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop")) {
-		print "Could not install app frameworks."
-	}
-
-}
-
-Function UninstallFrameworks {
-	space
-	if (!(Get-AppxPackage "Microsoft.VCLibs.140.00.UWPDesktop" -or Get-AppxPackage "Microsoft.VCLibs.x64.14.00.Desktop")) {
-		print "Frameworks are not present on this device."
-		return
-	}
-	print "Uninstalling frameworks..."
-	$Apps = @(
-		"Microsoft.VCLibs.140.00.UWPDesktop"
-		"Microsoft.VCLibs.x64.14.00.Desktop"
-		"Microsoft.VCLibs.x86.14.00.Desktop"
-	)
-	ForEach ($App in $Apps) {
-		print "     Uninstalling $App."
-		Get-AppxPackage $App | Remove-AppxPackage
-	}
-	if (!(Get-AppxPackage "Microsoft.VCLibs.140.00.UWPDesktop")) {
-		print "Could not uninstall one or more frameworks."
-		return
-	}
-	print "Uninstalled frameworks."
-}
-
-# Install WinGet (Windows Package Manager).
-Function InstallWinGet {
-$ErrorActionPreference = 'SilentlyContinue'
-$ProgressPreference = 'SilentlyContinue'
-	space
-	if (Get-Command winget) {
-		print "WinGet is already installed on this device."
-		return 
-	}
-	# Create new folder and set location.
-	if (!(Test-Path CleanWin)) {
-		New-Item CleanWin -ItemType Directory | Out-Null
-		$currentdir = $(Get-Location).Path
-		$dir = "$currentdir/CleanWin"
-		Set-Location $dir
-	}
-	else {
-		Set-Location CleanWin
-	}
-
-	# Download the packages.
-	$WinGetURL = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
-	print "Installing WinGet..."
-	Start-BitsTransfer $WinGetURL.assets.browser_download_url
-
-	# Install WinGet.
-	Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-		
-	# Cleanup installers.
-	Set-Location ..
-	Remove-Item CleanWin -Recurse -Force
-
-	# Get-Command winget, if it works then print success message.
-	if (Get-Command winget) {
-		print "Installed WinGet."
-	}
-	else {
-		print "WinGet could not be installed."
-	}
-}
-
-# Install 7zip.
-Function Install7zip {
-	space
-	if (!(Get-Command winget)) {
-		print "WinGet is not installed. Couldn't install 7-zip."
-		return 
-	}
-	$7zip = "HKLM:\SOFTWARE\7-Zip"
-	if (!(Test-Path $7zip)) {
-		print "Installing 7-zip..."
-		winget install 7zip --silent
-	}
-	else {
-		print "7-zip is already installed on this device."
-	}
-}
-
-# Uninstall 7zip
-Function Uninstall7zip {
-	space
-	$7zip = "HKLM:\SOFTWARE\7-Zip"
-	if (!(Test-Path $7zip)) {
-		print "7-zip is not present on this device."
-		return
-	}
-	print "Uninstalling 7-zip..."
-	winget uninstall 7zip.7zip | Out-Null
-	if (Test-Path $7zip) {
-		print "Could not uninstall 7-zip."
-		return
-	}
-	print "Uninstalled 7-zip."
-}
-
-# Install apps from Winstall file (the Winstall.txt file must be on the same directory as CleanWin).
-Function Winstall {
-$ErrorActionPreference = 'Continue'
-	# Check if WinGet installed - otherwise return.
-	if (!(check($winstall))) { 
-		return 
-	}
-	space
-	if (!(Get-Command winget)) { 
-		print "WinGet is not installed. Please install WinGet first before using Winstall."
-		Start-Process "https://bit.ly/Winstall" 
-		return
-	}
-	# Try Winstall.txt
-	if (Test-Path Winstall.txt) {
-		print "Starting Winstall..."
-		# Get each line from the text file and use winget install command on it.
-		Get-Content 'Winstall.txt' | ForEach-Object {
-			$App = $_.Split('=')
-			print "    Installing $App..."
-			winget install "$App" --silent | Out-Null
-		}
-		print "Winstall has successfully installed the app(s)."
-	}
-	# Try winstall.txt
-	elseif (Test-Path winstall.txt) {
-		print "Starting Winstall..."
-		# Get each line from the text file and use winget install command on it.
-		Get-Content 'winstall.txt' | ForEach-Object {
-			$App = $_.Split('=')
-			print "    Installing $App..."
-			winget install "$App" --silent | Out-Null
-		}
-		print "Winstall has successfully installed the app(s)."
-	}
-	else {
-		[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
-		print "Select Winstall text file from File Picker UI"
-		$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
-		$OpenFileDialog.InitialDirectory = $initialDirectory
-		$OpenFileDialog.Filter = "Text file (*.txt)| *.txt"
-		$OpenFileDialog.ShowDialog() | Out-Null
-		if ($OpenFileDialog.FileName) {
-			print "Starting Winstall..."
-			Get-Content $OpenFileDialog.FileName | ForEach-Object {					$App = $_.Split('=')
-				print "    Installing $App..."
-				winget install "$App" --silent | Out-Null
-			}
-			print "Winstall has successfully installed the app(s)."
-		}
-		else {
-			print "No text file was picked."
-		}
-	}
-}
-
-# Enable all experimental features in WinGet.
-Function EnableExperimentsWinGet {
-$ProgressPreference = 'SilentlyContinue'
-	if (!(check($enableexperimentswinget))) { 
-		return 
-	}
-	elseif (!(Get-Command winget)) {
-		print "WinGet is not installed."
-		return
-	}
-	space
-	print "Turning on experimental features in WinGet..."
-	$currentdir = $(Get-Location).Path
-	Set-Location "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\"
-	Rename-Item settings.json settings.json.backup
-	Start-BitsTransfer "https://raw.githubusercontent.com/CleanWin/Files/main/settings.json"
-	Set-Location $currentdir
-	print "Turned on experimental features in WinGet."
-}
-
-Function DisableExperimentsWinGet {
-	if (!(Get-Command winget)) {
-		print "WinGet is not installed, couldn't turn off its experimental features."
-		return
-	}
-	print "Turning off experimental features in WinGet."
-	$currentdir = $(Get-Location).Path
-	Set-Location "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\"
-	Remove-Item settings.json
-	Rename-Item settings.json.backup settings.json
-	Set-Location $currentdir
-	print "Turned off experimental features in WinGet."
-}
-
-
-# Use winget import (optional) (part of code used here was picked from https://devblogs.microsoft.com/scripting/hey-scripting-guy-can-i-open-a-file-dialog-box-with-windows-powershell/)
-Function WinGetImport {
-	if ($wingetimport -like "n" ) {
-		return
-	}
-	if (!(Get-Command winget)) {
-		print "WinGet is not installed. Please install WinGet first before using winget import."
-		return
-	}
-	space
-	[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
-	print "Select the exported JSON from File Picker UI"
-	$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
-	$OpenFileDialog.InitialDirectory = $initialDirectory
-	$OpenFileDialog.Filter = "JSON (*.json)| *.json"
-	$OpenFileDialog.ShowDialog() | Out-Null
-	if ($OpenFileDialog.FileName) {
-		print "Initializing JSON file..."
-		Start-Sleep -Milliseconds 200
-		winget import $OpenFileDialog.FileName
-	}
-	elseif (!($OpenFileDialog.FileName)) {
-		print "No JSON selected."
-	}
-}
-
-# Install HEVC.
-Function InstallHEVC {
-$ProgressPreference = 'SilentlyContinue'
-	space
-	if (Get-AppxPackage -Name Microsoft.HEVCVideoExtension) {
-		print "HEVC Video Extensions are already installed on this device."
-		return
-	}
-	$OSArchitecture = (Get-WmiObject Win32_OperatingSystem).OSArchitecture
-	if ($OSArchitecture -like "64-bit") {
-		print "Installing HEVC Video Extensions..."
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.41483.0_x64__8wekyb3d8bbwe.Appx
-		Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.41483.0_x64__8wekyb3d8bbwe.Appx
-		Remove-Item Microsoft.HEVCVideoExtension_1.0.41483.0_x64__8wekyb3d8bbwe.Appx
-		print "Installed HEVC Video Extensions."
-	}
-	elseif ($OSArchitecture -like "32-bit") {
-		print "Installing HEVC Video Extensions..."
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.41483.0_x86__8wekyb3d8bbwe.Appx
-		Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.41483.0_x86__8wekyb3d8bbwe.Appx
-		Remove-Item Microsoft.HEVCVideoExtension_1.0.41483.0_x86__8wekyb3d8bbwe.Appx
-		print "Installed HEVC Video Extensions."
-	}
-	else {
-		# Error out.
-		print "Could not install HEVC Video Extensions."
-	}
-}
-
-# Uninstall HEVC 
-Function UninstallHEVC {
-$ProgressPreference = 'SilentlyContinue'
-	space
-	if (!(Get-AppxPackage "Microsoft.HEVCVideoExtension")) {
-		print "HEVC Video Extensions may have already been uninstalled."
-		return
-	}
-	print "Uninstalling HEVC Video Extensions..."
-	Get-AppxPackage "Microsoft.HEVCVideoExtension" | Remove-AppxPackage
-	if (!(Get-AppxPackage "Microsoft.HEVCVideoExtension")) {
-		print "Uninstalled HEVC Video Extensions."
-	}
-	else {
-		print "Could not uninstall HEVC Video Extensions."
-	}
-}
-
-# Unfinished function.
-Function Widgets {
-$ProgressPreference = 'SilentlyContinue'
-	if ($widgets -like "n") {
-		space
-		if ($CurrentBuild -lt 22000) {
-			print "This device is not running Windows 11. Widgets can't be updated on older versions of Windows."
-			return
-		}
-		print "Checking if Widgets are updated..."
-		$version = (Get-AppxPackage "MicrosoftWindows.Client.WebExperience").Version
-			if ($version -lt 421.17400.0.0) {
-			print "Updating Widgets..."
-			Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/MicrosoftWindows.Client.WebExperience_421.17400.0.0_neutral___cw5n1h2txyewy.AppxBundle
-			Add-AppxPackage MicrosoftWindows.Client.WebExperience_421.17400.0.0_neutral___cw5n1h2txyewy.AppxBundle
-			$version = (Get-AppxPackage "MicrosoftWindows.Client.WebExperience").Version
-			Remove-Item MicrosoftWindows.Client.WebExperience_421.17400.0.0_neutral___cw5n1h2txyewy.AppxBundle
-			if ($version -ge 421.17400.0.0) {
-				print "Updated Widgets."
-			}
-			else {
-				print "Could not update Widgets."
-			}
-		}
-		elseif ($version -ge 421.17400.0.0) {
-			print "Widgets are already updated."
-		}
-	}
-	elseif ($widgets -like "y") {
-		space
-		if (!(Get-AppxPackage "MicrosoftWindows.Client.WebExperience")) {
-			print "Widgets may have already been removed."
-			return
-		}
-		print "Removing Widgets..."
-		Get-AppxPackage "MicrosoftWindows.Client.WebExperience" | Remove-AppxPackage
-		if (Get-AppxPackage "MicrosoftWindows.Client.WebExperience"){
-			print "Could not remove Widgets."
-		}
-		else {
-			print "Removed Widgets."
-		}
-	}
-}
-
-# Update Microsoft Store if older version
-function MicrosoftStore {
-$ProgressPreference = 'SilentlyContinue'
-	if ($CurrentBuild -lt 22000) 
-	{
-		return
-	}
-	if ((Get-AppxPackage "Microsoft.WindowsStore").Version -eq "22107.1401.4.0")
-	{
-		return
-	}
-	space
-	print "Updating Microsoft Store..."
-	Get-AppxPackage "Microsoft.WindowsStore" | Remove-AppxPackage 
-	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.WindowsStore_22107.1401.4.0_neutral.Msixbundle
-	Add-AppPackage "Microsoft.WindowsStore_22107.1401.4.0_neutral.Msixbundle"
-	Remove-Item "Microsoft.WindowsStore_22107.1401.4.0_neutral.Msixbundle"
-	if ((Get-AppxPackage "Microsoft.WindowsStore").Version -eq "22107.1401.4.0")
-	{
-		print "Updated Microsoft Store."
-		return
-	}
-	print "Could not update Microsoft Store."
-}
-
-
-# Install fonts (part of code here was picked from https://github.com/code-rgb/CleanWin).
-Function InstallFonts {
-$ProgressPreference = 'SilentlyContinue'
-	# Check if Cascadia Code is installed and inform user.
-	$installed = "C:\Windows\Fonts\CascadiaCodePL.ttf"
-	if (Test-Path -Path $installed) {
-		print "Cascadia Code is already installed on this device."
-		return
-	}
-	space
-	# Install Cascadia Code if not already installed.
-	print "Installing Cascadia Code..."
-	$response = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/cascadia-code/releases/latest"
-	Start-BitsTransfer -Source $response.assets.browser_download_url -Destination "CascadiaCode.zip"
-	Expand-Archive CascadiaCode.zip
-	$font = $(Get-ChildItem "CascadiaCode\ttf\CascadiaCodePL.ttf").FullName
-	$installed = "C:\Windows\Fonts\CascadiaCodePL.ttf"
-	Move-Item $font $installed
-	Remove-Item CascadiaCode.zip
-	Remove-Item CascadiaCode -Recurse -Force
-	print "Installed Cascadia Code."
-}
-
-Function UninstallFonts {
-	$fontfile = "C:\Windows\Fonts\CascadiaCodePL.ttf"
-	if (!($fontfile)) {
-		print "Fonts may have already been uninstalled."
-		return
-	}
-	space
-	print "Uninstalling fonts..."
-	Remove-Item $fontfile
-	if (!($fontfile)) {
-		print "Uninstalled fonts."
-	}
-	else {
-		print "Could not uninstall fonts."
-	}
-}
 
 # Set Windows Photo Viewer association for bmp, gif, jpg, png and tif.
 Function SetPhotoViewerAssociation {
@@ -2321,10 +2327,6 @@ Function EnableTasks {
 # Intelligently setup Windows Update policies.
 Function SetupWindowsUpdate {
 	space
-	if ($CurrentBuild -ge 22000) {
-		print "CleanWin currently cannot set up Windows Update policies on Windows 11."
-		return 
-	}
 	# Get Windows Edition, if its Professional, Education, or Enterprise.
     if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) {
 		print "$ProductName does not support setting up Windows Update policies."
@@ -2332,14 +2334,21 @@ Function SetupWindowsUpdate {
 	}
 	print "Setting up Windows Update policies..."
 
-	# Declare registry keys locations.
+    # Declare registry keys locations.
 	$Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
 	$Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
-	$DeliveryOptimization = "HKU:\S-1-5-20\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"
-	if (!(Test-Path $Update1)) {
+	$DeliveryOptimization = "HKU:\$hkeyuser\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"
+	
+	if (!(Test-Path $Update1)) 
+    {
 		New-Item -Path $Update1 | Out-Null
 		New-Item -Path $Update2 | Out-Null
 	}
+	
+	if (!(Test-Path $DeliveryOptimization))
+    {
+        New-Item -Path $DeliveryOptimization | Out-Null
+    }
 
 	# Write registry values.
 	Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
@@ -2348,7 +2357,7 @@ Function SetupWindowsUpdate {
 	Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
 	Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
 	Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
-	Set-ItemProperty -Path $DeliveryOptimization -Name "DownloadMode" -Type DWord -Value 0
+    New-ItemProperty -Path $DeliveryOptimization -Name DownloadMode -Type DWord -Value 0 -Force
 
 	# Print user message; policies applied.
 	$WinUpdatePolicies =@(
