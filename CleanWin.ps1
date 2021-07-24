@@ -1286,6 +1286,7 @@ $ProgressPreference = 'SilentlyContinue'
 	if (!(check($uninstallapps))) { 
 		return 
 	}
+	space
 	if ($uninstallappsgui -like "n") {
 		UninstallerCLI
 	}
@@ -2685,6 +2686,7 @@ function DisableWidgetsItem {
 	{
 		return
 	}
+	space
 	print "Turning off Widgets Item..."
 	Set-ItemProperty -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 0
 	print "Turned off Widgets Item."
@@ -2698,6 +2700,7 @@ function EnableWidgetsItem {
 	{
 		return
 	}
+	space
 	print "Turning on Widgets Item..."
 	Set-ItemProperty -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 1
 	print "Turned on Widgets Item."
@@ -2710,6 +2713,7 @@ function DisableChatItem {
 	{
 		return
 	}
+	space
 	print "Turning off Chat Item..."
 	Set-ItemProperty -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 0
 	print "Turned off Chat Item."
@@ -2722,6 +2726,7 @@ function EnableChatItem {
 	{
 		return
 	}
+	space
 	print "Turning on Chat Item..."
 	Set-ItemProperty -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 1
 	print "Turned on Chat Item."
