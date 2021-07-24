@@ -31,18 +31,20 @@ CleanWin does everything from removing junk (your hardware doesn't count, yet), 
 
 ## Prerequisites
 ### Windows Terminal  
-Get it from [Microsoft Store](https://www.microsoft.com/store/productId/9N0DX20HK701) (recommended method for automatic updates).  
-Other installation methods include: 
+<a href="https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701"> <img src="https://camo.githubusercontent.com/3710844608ef5f15f9a7b5b33989ab74369d49b2f39a457632b092d12e48a8c2/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f662f66372f4765745f69745f66726f6d5f4d6963726f736f66745f42616467652e737667" width="200px" height="100px" alt="License"></a>
+
+More installation methods include: 
    - Getting the latest release from [GitHub](https://github.com/microsoft/terminal/releases)
    - Windows Package Manager CLI (winget): ``winget install --id=Microsoft.WindowsTerminal --source winget``   
 ### Windows version
-CleanWin runs on the most recent Windows versions:
-- Windows 10 21H1 
+The most recent Windows versions are supported.  
+Currently supported versions:
 - Windows 11 21H2  
+- Windows 10 21H1 
 
 The OS must be up-to-date.  
-Windows Pro or up is recommended for all features to work.   
-Older Windows versions are not supported.  
+Pro edition or up is strongly recommended.   
+Older Windows versions are not supported.    
 ### Internet connection
 An active internet connection is needed.
 ***
