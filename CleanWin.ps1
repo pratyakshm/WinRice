@@ -2500,40 +2500,44 @@ Function SetExplorerQuickAccess {
 
 # Hide 3D Objects.
 Function Hide3DObjects {
-	if ($CurrentBuild -lt 22000) {
-		space
-		print "Turning off 3D Objects..."
-		Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Recurse -ErrorAction SilentlyContinue
-		$Hide3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-		$Hide3DObjects2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-		if (!(Test-Path $Hide3DObjects1)) {
-			New-Item -Path $Hide3DObjects1 -Force | Out-Null
-			}
-		Set-ItemProperty -Path $Hide3DObjects1 -Name "ThisPCPolicy" -Type String -Value "Hide"
-		if (!(Test-Path $Hide3DObjects2)) {
-			New-Item -Path $Hide3DObjects2 -Force | Out-Null
-			}
-		Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
-		print "Turned off 3D Objects."
-		Start-Sleep -Milliseconds 200
+	if ($CurrentBuild -ge 22000) 
+	{
+		return
 	}
+	space
+	print "Turning off 3D Objects..."
+	Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Recurse -ErrorAction SilentlyContinue
+	$Hide3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+	$Hide3DObjects2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+	if (!(Test-Path $Hide3DObjects1)) {
+		New-Item -Path $Hide3DObjects1 -Force | Out-Null
+		}
+	Set-ItemProperty -Path $Hide3DObjects1 -Name "ThisPCPolicy" -Type String -Value "Hide"
+	if (!(Test-Path $Hide3DObjects2)) {
+		New-Item -Path $Hide3DObjects2 -Force | Out-Null
+		}
+	Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
+	print "Turned off 3D Objects."
+	Start-Sleep -Milliseconds 200
 }
 
 # Restore 3D Objects.
 Function Restore3DObjects {
-	if ($CurrentBuild -lt 22000) {
-		space
-		print "Turning on 3D Objects..."
-		$Restore3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
-		$Restore3DObjects2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-		$Restore3DObjects3 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-		if (!(Test-Path $Restore3DObjects1)) {
-			New-Item -Path $Restore3DObjects1 | Out-Null
-		}
-		Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
-		Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
-		print "Turned on 3D Objects."
+	if ($CurrentBuild -ge 22000) 
+	{
+		return
 	}
+	space
+	print "Turning on 3D Objects..."
+	$Restore3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
+	$Restore3DObjects2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+	$Restore3DObjects3 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+	if (!(Test-Path $Restore3DObjects1)) {
+		New-Item -Path $Restore3DObjects1 | Out-Null
+	}
+	Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
+	Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
+	print "Turned on 3D Objects."
 }
 
 # Hide Search bar from taskbar.
@@ -2543,15 +2547,15 @@ Function HideSearchBar {
 		print "Turning off Search bar..."
 		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
 		print "Turned off Search bar."
-		Start-Sleep -Milliseconds 200
 	}
 	elseif ($CurrentBuild -ge 22000) {
 		space
 		print "Turning off Search icon..."
 		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
 		print "Turned off Search icon."
-		Start-Sleep -Milliseconds 200
 	}
+	Start-Sleep -Milliseconds 200
+
 }
 
 # Restore Search bar to taskbar.
@@ -2561,15 +2565,14 @@ Function RestoreSearchBar {
 		print "Turning on Search bar..."
 		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
 		print "Turned on Search bar."
-		Start-Sleep -Milliseconds 200
 	}
 	elseif ($CurrentBuild -ge 22000) {
 		space
 		print "Turning off Search icon..."
 		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 1
 		print "Turned off Search icon."
-		Start-Sleep -Milliseconds 200
 	}
+	Start-Sleep -Milliseconds 200
 }
 
 # Hide Task View.
@@ -2587,6 +2590,7 @@ Function RestoreTaskView {
 	print "Turning on Task view icon..."
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -ErrorAction SilentlyContinue
 	print "Turned on Task view icon."
+	Start-Sleep -Milliseconds 200
 }
 
 # Hide Cortana icon from taskbar.
