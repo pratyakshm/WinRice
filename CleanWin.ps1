@@ -134,6 +134,10 @@ $tasks = @(
 	# "RestoreMeetNow",
 	"DisableTaskbarFeed",		   
 	# "EnableTaskbarFeed",  (News and Interests)
+	"DisableWidgetsItem",
+	# "EnableWidgetsItem",
+	"DisableChatItem",
+	# "EnableChatItem",
 	"ChangesDone",
 
 ###  Tasks after successful run ###
@@ -2658,7 +2662,7 @@ Function DisableTaskbarFeed {
 	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
 	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
 	print "Turned off News and interests."
-	Start-Sleep 2
+	Start-Sleep -Milliseconds 200
 }
 
 # Turn on News and interests feed.
@@ -2672,10 +2676,60 @@ Function EnableTaskbarFeed {
 	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0 | Out-Null
 	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 0 | Out-Null
 	print "Turned on News and interests."
-	Start-Sleep 2
+	Start-Sleep -Milliseconds 200
+}
+
+# Disable widgets item - Windows 11 only.
+function DisableWidgetsItem {
+	if ($CurrentBuild -lt 22000)
+	{
+		return
+	}
+	print "Turning off Widgets Item..."
+	Set-ItemProperty -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 0
+	print "Turned off Widgets Item."
+	Start-Sleep -Milliseconds 200
+}
+
+# Enable Widgets item - Windows 11 only
+
+function EnableWidgetsItem {
+	if ($CurrentBuild -lt 22000)
+	{
+		return
+	}
+	print "Turning on Widgets Item..."
+	Set-ItemProperty -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 1
+	print "Turned on Widgets Item."
+	Start-Sleep -Milliseconds 200
+}
+
+# Disable chat item - Windows 11 only
+function DisableChatItem {
+	if ($CurrentBuild -lt 22000)
+	{
+		return
+	}
+	print "Turning off Chat Item..."
+	Set-ItemProperty -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 0
+	print "Turned off Chat Item."
+	Start-Sleep -Milliseconds 200
+}
+
+# Enable Chat item - Windows 11 only
+function EnableChatItem {
+	if ($CurrentBuild -lt 22000)
+	{
+		return
+	}
+	print "Turning on Chat Item..."
+	Set-ItemProperty -Path "HKU:\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 1
+	print "Turned on Chat Item."
+	Start-Sleep -Milliseconds 200
 }
 
 
+Start-Sleep -Seconds 2
 
 ######### Tasks after successful run #########
 

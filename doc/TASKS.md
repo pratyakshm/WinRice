@@ -151,12 +151,16 @@
 # Windows Explorer
 ## Core changes
 ### Hide/cleanup the following:
+-  Widgets item
+-  Chat item
 -  3D Objects
 -  Cortana button
 -  Meet now button
 -  News and interests
 -  Search bar
--  Task View button</details>
+-  Task View button
+</details>
+
 ## More changes
 - Set This PC as default view
 - Turn off sticky keys prompt

@@ -39,9 +39,10 @@ Other installation methods include:
 CleanWin runs on the most recent Windows versions:
 - Windows 10 21H1 
 - Windows 11 21H2  
-- The OS must be up-to-date.  
-- Windows Pro or up is recommended for all features to work.   
-- Older Windows versions are not supported.  
+
+The OS must be up-to-date.  
+Windows Pro or up is recommended for all features to work.   
+Older Windows versions are not supported.  
 ### Internet connection
 An active internet connection is needed.
 ***
