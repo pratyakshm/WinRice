@@ -1201,7 +1201,7 @@ Function UninstallerCLI {
 		"Microsoft.Messaging"
 		"Microsoft.Microsoft3DViewer" 
 		"Microsoft.MicrosoftStickyNotes"  
-		"Microsoft.MSPaint"
+		"Microsoft.Paint"
 		"Microsoft.MicrosoftOfficeHub"
 		"Microsoft.Office.OneNote"
 		"Microsoft.MixedReality.Portal"
@@ -1449,52 +1449,115 @@ $ErrorActionPreference = 'SilentlyContinue'
 	}
 	space
 	print "Removing capabilites and features..."
-	# Uninstall capabilities.
-	$Capabilities = @(
-		"App.StepsRecorder*"
-		"MathRecognizer*"
-		"Media.WindowsMediaPlayer*"
-		"Microsoft-Windows-SnippingTool*"
-		"Microsoft.Windows.MSPaint*" 
-		"Microsoft.Windows.PowerShell.ISE*"
-		"Microsoft.Windows.WordPad*"
-		"Print.Fax.Scan*"
-		"XPS.Viewer*"
-	)
+
+	# Capablities 
+	if ($CurrentBuild -lt 22000) 
+	{
+		$Capabilities = @(
+			"App.StepsRecorder*"
+			"MathRecognizer*"
+			"Media.WindowsMediaPlayer*"
+			"Microsoft-Windows-SnippingTool*"
+			"Microsoft.Windows.MSPaint*" 
+			"Microsoft.Windows.PowerShell.ISE*"
+			"Microsoft.Windows.WordPad*"
+			"Print.Fax.Scan*"
+			"Print.Management.Console*"
+			"XPS.Viewer*"
+		)
+	}
+	elseif ($CurrentBuild -ge 22000)
+	{
+		$Capabilities = @(
+			"App.StepsRecorder*"
+			"MathRecognizer*"
+			"Media.WindowsMediaPlayer*"
+			"Microsoft.Windows.PowerShell.ISE*"
+			"Microsoft.Windows.WordPad*"
+			"Print.Fax.Scan*"
+			"Print.Management.Console*"
+			"XPS.Viewer*"
+		)
+	}
+
 	ForEach ($Capability in $Capabilities) {
 		Get-WindowsCapability -Online | Where-Object {$_.Name -like $Capability} | Remove-WindowsCapability -Online | Out-Null
 	}
-	if (!(Get-CimInstance -ClassName Win32_PnPEntity | Where-Object -FilterScript {($_.PNPClass -eq "Camera") -or ($_.PNPClass -eq "Image")})) {
+	
+	if (!(Get-CimInstance -ClassName Win32_PnPEntity | Where-Object -FilterScript {($_.PNPClass -eq "Camera") -or ($_.PNPClass -eq "Image")})) 
+	{
+		Get-WindowsCapability -Online "*Hello.Face*" | Remove-WindowsCapability -Online | Out-Null
 		print "    - Uninstalled Windows Hello Face"
-		Get-WindowsCapability -Online "Hello.Face*" | Remove-WindowsCapability -Online | Out-Null
 	}
-	# Print user friendly list of capabilities uninstalled.
-	$CapLists =@(
-		"Math Recognizer"
-		"Microsoft Paint"
-		"Snipping Tool"
-		"Steps Recorder"
-		"Windows Fax & Scan"
-		"Windows Media Player"
-		"Windows Hello Face"
-		"Windows PowerShell ISE"
-		"Windows XPS Features"
-		"WordPad"
-	)
-	ForEach ($CapList in $CapLists) {
-		Start-Sleep -Milliseconds 70
-		print "    - Uninstalled $CapList"
+
+	# Print list of capabilities
+	if ($CurrentBuild -lt 22000)
+	{
+		$CapLists =@(
+			"Math Recognizer"
+			"Microsoft Paint"
+			"Steps Recorder"
+			"Snipping Tool" 
+			"Windows Fax & Scan"
+			"Windows Media Player"
+			"Windows Hello Face"
+			"Windows PowerShell ISE"
+			"Windows XPS Features"
+			"WordPad"
+		)
+		ForEach ($CapList in $CapLists) {
+			Start-Sleep -Milliseconds 20
+			print "    - Uninstalled $CapList"
+		}
+	}
+
+	elseif ($CurrentBuild -ge 22000)
+	{
+		$CapLists =@(
+			"Math Recognizer"
+			"Steps Recorder"
+			"Windows Fax & Scan"
+			"Windows Media Player"
+			"Windows Hello Face"
+			"Windows PowerShell ISE"
+			"Windows XPS Features"
+			"WordPad"
+		)
+		ForEach ($CapList in $CapLists) {
+			Start-Sleep -Milliseconds 20
+			print "    - Uninstalled $CapList"
+		}
 	}
 
 	$OptionalFeatures = @(
-		"WorkFolders-Client*"
+		"LegacyComponents"
 		"Printing-XPSServices-Feature*"
+		"SmbDirect"
+		"SMB1Protocol"
+		"SMB1Protocol-Deprecation"
+		"SMB1Protocol-Client"
+		"SMB1Protocol-Server"
+		"MicrosoftWindowsPowerShellV2"
+		"MicrosoftWindowsPowerShellV2Root"
+		"WorkFolders-Client*"
 	)
 	ForEach ($OptionalFeature in $OptionalFeatures) {
 		Get-WindowsOptionalFeature -Online | Where-Object {$_.FeatureName -like $OptionalFeature} | Disable-WindowsOptionalFeature -Online -NoRestart | Out-Null
 	}
+
 	# Print user friendly list of features uninstalled.
-	print "    - Disabled Work Folders Client."
+	$Features =@(
+		"DirectPlay"
+		"PowerShell v2 (root)"
+		"SMB1 protocol"
+		"SMB Direct"
+		"Work Folders Client"
+		"XPS Document Writer"
+	)
+	ForEach ($Feature in $Features) {
+		Start-Sleep -Milliseconds 20
+		print "    - Disabled $Feature"
+	}
 	
 	print "Removed capabilities and features."
 }

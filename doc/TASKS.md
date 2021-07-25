@@ -8,6 +8,10 @@
 - Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/))
 - Use [Winstall](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINSTALL.md) to install your own apps
 - WinGet import (upcoming)
+- Update Microsoft Store on Windows 11
+  - Clean installation of Windows 11 from ISO does not have updated Microsoft Store. This updates it.
+- Update Widgets on Windows 11
+  - Clean installation of Windows 11 from ISO often has Widgets with reduced functionality. This updates it.
 ### Apps uninstalled 
 #### This list counts for App Uninstaller CLI only. [Read more](https://github.com/pratyakshm/CleanWin/blob/main/doc/GUIDEPRECATION.md).
 - 3D Viewer   
