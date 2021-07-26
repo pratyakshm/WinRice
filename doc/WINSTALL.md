@@ -1,10 +1,10 @@
 # Winstall
-Winstall lets you batch install your own set of apps by defining them in a text file.
+Winstall lets you batch install apps.
 
 ### Dependency: [`winget`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINGET.md) 
 
 ## Creating your Winstall config
-Create a new text file using any text editor, and add app names separated by a new line.   
+Create a new text file using any text editor, and add one app name per line.
 Like this:
 ```
 app 1

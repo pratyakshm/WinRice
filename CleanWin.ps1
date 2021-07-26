@@ -1201,7 +1201,8 @@ Function UninstallerCLI {
 		"Microsoft.Messaging"
 		"Microsoft.Microsoft3DViewer" 
 		"Microsoft.MicrosoftStickyNotes"  
-		"Microsoft.Paint"
+		"Microsoft.MSPaint" # Paint 3D app
+		"Microsoft.Paint"  # Paint app (MSIX)
 		"Microsoft.MicrosoftOfficeHub"
 		"Microsoft.Office.OneNote"
 		"Microsoft.MixedReality.Portal"
