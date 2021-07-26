@@ -1708,7 +1708,7 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 	space
 	print "Enabling dotNET 3.5..."
-	Enable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -NoRestart
+	Enable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -NoRestart | Out-Null
 	print "Enabled dotNET 3.5."
 }
 
@@ -1722,7 +1722,7 @@ $ProgressPreference = 'SilentlyContinue'
 		return
 	}
 	print "Disabling dotNET 3.5..."
-	Disable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -NoRestart
+	Disable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -NoRestart | Out-Null
 	print "Disabled dotNET 3.5."
 }
 
