@@ -104,7 +104,7 @@ $tasks = @(
 	# "EnableTasks",
 	"SetupWindowsUpdate",		   
 	# "ResetWindowsUpdate",
-	"EnablePowerdownAfterShutdown",
+	# "EnablePowerdownAfterShutdown",
 	# "DisablePowerdownAfterShutdown",
 	"ChangesDone",
 
