@@ -1617,30 +1617,66 @@ $ErrorActionPreference = 'SilentlyContinue'
 	print "Added capabilities and features."
 }
 
+# Install WSL on Windows 11
+function installwslwin11 {
+	print "Installing Windows Subsystem for Linux..."
+	wsl --install | Out-Null
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Disabled") {
+		print "Could not install Windows Subsystem for Linux."
+		return
+	}
+	print "Installed Windows Subsystem for Linux."
+}
+
+# Install WSL on Windows 10
+function installwslwin10 {
+	# Check if KB5004296 is installed.
+	# https://support.microsoft.com/en-us/topic/july-29-2021-kb5004296-os-builds-19041-1151-19042-1151-and-19043-1151-preview-6aba536a-6ed2-41cb-bc3d-3980e8693cc4
+	# If yes, then use wsl --install, or else fallback to legacy deployment method.
+
+	$updated = Get-HotFix -ID KB5004296
+
+	print "Installing Windows Subsystem for Linux..."
+
+	if ($updated) {
+		wsl --install | Out-Null
+	}
+
+	elseif (!($updated)) {
+		print "Hotfix KB5004296 is not applied to this device, falling back to classic WSL deployment method..."
+		print "Please manually install Linux kernel updates and switch to WSL2 after device restart."
+		Enable-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux" -All -NoRestart | Out-Null
+	}
+	
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Disabled") {
+		print "Could not install Windows Subsystem for Linux."
+		return
+	}
+	print "Installed Windows Subsystem for Linux"
+}
+
 # Enable Windows Subsystem for Linux.
 Function EnableWSL {
 $ProgressPreference = 'SilentlyContinue'
 	if (!(check($wsl))) { 
 		return 
 	}
-	space
-	if ($CurrentBuild -lt 22000) {
-		print "Enabling Windows Subsystem for Linux..."
-		Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-		Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-		if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) {
-			Enable-WindowsOptionalFeature -FeatureName "Microsoft-Hyper-V" -Online -All -NoRestart -WarningAction Ignore | Out-Null
-		}
-		else {
-			print "Could not enable Hyper-V since $ProductName does not support it."
-		}
-		print "Enabled Windows Subsystem for Linux."
+
+	space 
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Enabled") {
+		print "Windows Subsystem for Linux is already enabled."
+		return
 	}
-	elseif ($CurrentBuild -ge 22000) {
-		print "Enabling Windows Subsystem for Linux version 2 along with GUI App support..."
-		wsl --install | Out-Null
-		print "Enabled Windows Subsystem for Linux."
+
+	if ($CurrentBuild -ge 22000) {
+		# Call installwslwin11 function
+		installwslwin11
 	}
+	elseif ($CurrentBuild -lt 22000) {
+		# Call installwslwin10 function
+		installwslwin10
+	}
+
 }
 
 # Disable Windows Subsystem for Linux.
@@ -1648,20 +1684,17 @@ Function DisableWSL {
 $ProgressPreference = 'SilentlyContinue'
 $WarningPreference = 'SilentlyContinue'
 	space
-	$wslstate = (Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State
-	$vmpstate = (Get-WindowsOptionalFeature -Online -FeatureName "VirtualMachinePlatform").State
-	if ($wslstate -like "Disabled" -and $vmpstate -like "Disabled") {
-		print "Windows Subsystem for Linux may have already been disabled."
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Disabled") {
+		print "Windows Subsystem for Linux is already disabled."
 		return
 	}
+
 	print "Disabling Windows Subsystem for Linux..."
 	Disable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart | Out-Null
-	Disable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -Online -All -NoRestart | Out-Null 
-	if (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) {
-		$hypervstate = (Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Hyper-V").State
-		if ($hypervstate -like "Disabled") {
-			Disable-WindowsOptionalFeature -Online -FeatureName "Microsoft-Hyper-V"
-		}
+
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Enabled") {
+		print "Could not disable Windows Subsystem for Linux."
+		return
 	}
 	print "Disabled Windows Subsystem for Linux."
 }

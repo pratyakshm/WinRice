@@ -7,7 +7,7 @@
 - HEVC Video Extensions
 - Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/))
 - Use [Winstall](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINSTALL.md) to install your own apps
-- WinGet import (upcoming)
+- WinGet import
 - Update Microsoft Store on Windows 11
   - Clean installation of Windows 11 from ISO does not have updated Microsoft Store. This updates it.
 - Update Widgets on Windows 11
@@ -62,16 +62,20 @@
 ### Features installed
  - Windows Subsystem for Linux
  - dotNET 3.5 
- - Windows Sandbox (optional)
+ - Windows Sandbox
 ### Features uninstalled
 - Hello Face
+- Legacy Components (DirectPlay)
 - Math Recognizer
 - Microsoft Paint (Desktop app)
 - OpenSSH Client
 - PowerShell ISE
+- PowerShell 2.0
 - Quick Assist
 - Steps Recorder
 - Snipping Tool
+- SMB 1.0/CIFS File Sharing Support
+- SMB Direct
 - Work Folders
 - Windows Media Player
 - WordPad
