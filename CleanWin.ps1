@@ -392,12 +392,11 @@ space
 $systemrestore = ask "Create a system restore point? [y/N]"
 $uninstallapps = ask "Uninstall inbox apps?"
 if ($uninstallapps -like "y") {
-	$uninstallappsgui = ask "Use App Uninstaller GUI?"
+	$uninstallmethod = ask "Use App Uninstaller CLI, GUI or List? [CLI/GUI/List]"
 }
 if ($CurrentBuild -ge 22000) {
 	$widgets = ask "Remove Widgets?"
 }
-$onedrive = ask "Uninstall Microsoft OneDrive?"
 $uninstallfeatures = ask "Uninstall unnecessary features?"
 $netfx3 = ask "Enable dotNET 3.5?"
 $wsl = ask "Enable Windows Subsystem for Linux?"
@@ -1263,6 +1262,55 @@ Function UninstallerCLI {
 	print "Uninstalled inbox apps."
 }
 
+# Get apps and uninstall from text file
+function UninstallerList {
+	space
+	if (Test-Path uninstallapps.txt) {
+		print "Uninstalling listed inbox apps..."
+		# Get each line from the text file and use winget install command on it.
+		Get-Content 'Winstall.txt' | ForEach-Object {
+			if (Get-AppxPackage $App) 
+			{
+				print "     Uninstalling $App"
+				Get-AppxPackage "$App" | Remove-AppxPackage
+			}
+			elseif (!(Get-AppxPackage $App))
+			{
+				print "     Couldn't find: $App"
+			}
+		}
+		print "Uninstalled listed inbox apps."
+	}
+	else
+	{
+		[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
+		print "Select an app list text file."
+		$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
+		$OpenFileDialog.InitialDirectory = $initialDirectory
+		$OpenFileDialog.Filter = "Text file (*.txt)| *.txt"
+		$OpenFileDialog.ShowDialog() | Out-Null
+		if ($OpenFileDialog.FileName) {
+			print "Uninstalling listed inbox apps..."
+			Get-Content $OpenFileDialog.FileName | ForEach-Object {					$App = $_.Split('=')
+				if (Get-AppxPackage $App) 
+				{
+					print "     Uninstalling $App"
+					Get-AppxPackage "$App" | Remove-AppxPackage
+				}
+				elseif (!(Get-AppxPackage $App))
+				{
+					print "     Couldn't find: $App"
+				}
+	
+			}
+			print "Uninstalled listed inbox apps."
+		}
+		else {
+			print "No text file was picked."
+		}
+	}
+}
+
 # Main Uninstall function.
 Function UninstallApps {
 $ErrorActionPreference = 'SilentlyContinue'
@@ -1271,11 +1319,17 @@ $ProgressPreference = 'SilentlyContinue'
 		return 
 	}
 	space
-	if ($uninstallappsgui -like "n") {
+	if ($uninstallmethod -like "CLI") 
+	{
 		UninstallerCLI
 	}
-	elseif ($uninstallappsgui -like "y") {
+	elseif ($uninstallmethod -like "GUI") 
+	{
 		UninstallerGUI
+	}
+	elseif ($uninstallmethod -like "List" -or $uninstallmethod -like "Lists")
+	{
+		UninstallerList
 	}
 }
 
@@ -1400,7 +1454,7 @@ Function UnpinAppsFromTaskbar {
 # Uninstall Microsoft OneDrive (supports 64-bit versions).
 Function UninstallOneDrive {
 $ErrorActionPreference = 'SilentlyContinue'
-	if (!(check($onedrive))) { 
+	if (!(check($uninstallapps))) { 
 		return 
 	}
 	space

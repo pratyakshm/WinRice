@@ -2,7 +2,7 @@
 
 # Apps & Features
 ## Apps
-### Apps installed
+### App installation
 - [7-zip](https://www.7-zip.org/)
 - HEVC Video Extensions
 - Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/))
@@ -12,49 +12,16 @@
   - Clean installation of Windows 11 from ISO does not have updated Microsoft Store. This updates it.
 - Update Widgets on Windows 11
   - Clean installation of Windows 11 from ISO often has Widgets with reduced functionality. This updates it.
-### Apps uninstalled 
-#### This list counts for App Uninstaller CLI only. [Read more](https://github.com/pratyakshm/CleanWin/blob/main/doc/GUIDEPRECATION.md).
-- 3D Viewer   
-- Alarms & Clock
-- Cortana  
-- Camera  
-- Connect
-- Feedback Hub 
-- Films & TV  
-- Get Help      
-- Get started  
-- Groove Music 
-- HEVC Video Extensions
-- Mail and Calendar  
-- Messaging  
-- Maps  
-- Microsoft OneDrive (64-bit variants can also be uninstalled)
-- Microsoft News  
-- Microsoft Solitaire Collection  
-- Mixed Reality Portal
-- Network Speed Test
-- OneConnect  
-- OneNote  
-- Office
-- Office Lens
-- Paint 3D  
-- Power Automate Desktop
-- Print 3D
-- People  
-- Sway
-- Sticky Notes  
-- Skype
-- Voice Recorder
-- Whiteboard
-- Weather
-- Xbox
-- Xbox Game bar
-- Your Phone
+
+### App uninstallation
+- Check this doc -> [Tap here](https://github.com/pratyakshm/CleanWin/blob/main/doc/APPUNINSTALLATION.md)
+
 ### Unpin the following apps from taskbar
 - Mail
 - Microsoft Store
 - Office
 - Xbox
+
 ### More changes include
 - Add the classic Windows Photo Viewer desktop app into the "Open with" menu for the following extensions: JPG, JPEG, GIF and PNG. 
 
