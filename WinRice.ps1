@@ -227,16 +227,7 @@ function RunWithProgress {
 
 # Did you read the docs? (Funny stuff).
 $hasReadDoc = ask "Have you read the documentation? [y/n]"
-if (check($hasReadDoc)) {
-	$knowWinstall = ask "Cool! You know Winstall?"
-	if (!(check($knowWinstall))) {
-		log "Read the documentation properly this time?"
-		log "Ctrl + left click https://github.com/pratyakshm/WinRice/blob/main/README.md"
-		log "You're welcome."
-		exit 
-	}
-}
-elseif (!(check($hasReadDoc))) {
+if (!(check($hasReadDoc))) {
 	log "I didn't write the documentation for nothing."
 	log "Go ahead, read it."
 	log "Ctrl + left click https://github.com/pratyakshm/WinRice/blob/main/README.md"
@@ -256,8 +247,7 @@ $ProductNameCore = (Get-WmiObject -class Win32_OperatingSystem).Caption
 $ProductName = $ProductNameCore.TrimStart("Microsoft ")
 $ProductNameCore = $null
 $OSBuildCore = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Update\TargetingInfo\Installed\Client.OS.rs2.amd64" -Name Version 
-$OSBuild = $OSBuildCore.TrimStart("10.0.")
-$OSBuildCore = $null
+$OSBuild = $OSBuildCore.TrimStart("10.0")
 $BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
 # Source: https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%207/Module/Sophia.psm1#L825.
 $hkeyuser = (Get-CimInstance -ClassName Win32_UserAccount | Where-Object -FilterScript {$_.Name -eq $env:USERNAME}).SID
@@ -428,7 +418,15 @@ Function WinRice {
 Function OSBuildInfo {
 	space
 	print "$ProductName $DisplayVersion "
-	print "Build $OSBuild, $BuildBranch branch"
+	if ($CurrentBuild -ge 22000)
+	{
+		print "Build $OSBuild, $BuildBranch branch"
+	}
+	elseif ($CurrentBuild -lt 22000)
+	{
+		print "Build $OSBuildCore, $BuildBranch branch"
+	}
+	
 	Start-Sleep -Milliseconds 200
 	space
 	space
@@ -519,10 +517,6 @@ Function AppsFeatures {
 # Install runtime packages .
 Function InstallFrameworks {
 $ProgressPreference = 'SilentlyContinue'
-	if (Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop") {
-		return
-	}
-	space
 	# Create new folder and set location.
 	if (!(Test-Path WinRice)) {
 		New-Item WinRice -ItemType Directory | out-Null
@@ -551,10 +545,12 @@ $ProgressPreference = 'SilentlyContinue'
 	Remove-Item WinRice -Recurse -Force
 		
 	# Get-Command VCLibs, if it works then print success message.
-	if ((Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop") -and (Get-AppxPackage "Microsoft.VCLibs.*.Desktop")) {
+	if (Get-AppxPackage *VCLibs*) 
+	{
 		print "Installed app frameworks."
 	}
-	elseif (!(Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop")) {
+	else
+	{
 		print "Could not install app frameworks."
 	}
 }
@@ -811,22 +807,15 @@ $ProgressPreference = 'SilentlyContinue'
 		return
 	}
 	print "Installing HEVC Video Extensions..."
-	$OSArchitecture = (Get-WmiObject Win32_OperatingSystem).OSArchitecture
-	if ($OSArchitecture -like "64-bit") {
-		Start-BitsTransfer https://github.com/WinRice/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.42042.0_x64__8wekyb3d8bbwe.Appx
-		Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.42042.0_x64__8wekyb3d8bbwe.Appx
-		Remove-Item Microsoft.HEVCVideoExtension_1.0.42042.0_x64__8wekyb3d8bbwe.Appx
-	}
-	elseif ($OSArchitecture -like "32-bit") {
-		Start-BitsTransfer https://github.com/WinRice/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.42042.0_x86__8wekyb3d8bbwe.Appx
-		Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.42042.0_x86__8wekyb3d8bbwe.Appx
-		Remove-Item Microsoft.HEVCVideoExtension_1.0.42042.0_x86__8wekyb3d8bbwe.Appx
-	}
+	Start-BitsTransfer https://github.com/WinRice/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.42042.0_x64__8wekyb3d8bbwe.Appx
+	Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.42042.0_x64__8wekyb3d8bbwe.Appx
+	Remove-Item Microsoft.HEVCVideoExtension_1.0.42042.0_x64__8wekyb3d8bbwe.Appx
 	if (!(Get-AppxPackage "Microsoft.HEVCVideoExtension"))
 	{
 		print "Could not install HEVC Video Extensions."
 		return 
 	}
+
 	print "Installed HEVC Video Extensions."
 }
 
@@ -1264,7 +1253,6 @@ Function UninstallerCLI {
 
 # Get apps and uninstall from text file
 function UninstallerList {
-	space
 	if (Test-Path uninstallapps.txt) {
 		print "Uninstalling listed inbox apps..."
 		# Get each line from the text file and use winget install command on it.
@@ -1284,24 +1272,18 @@ function UninstallerList {
 	else
 	{
 		[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
-		print "Select an app list text file."
+		print "App Uninstaller Lists"
+		print "Select a text file"
 		$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
 		$OpenFileDialog.InitialDirectory = $initialDirectory
 		$OpenFileDialog.Filter = "Text file (*.txt)| *.txt"
 		$OpenFileDialog.ShowDialog() | Out-Null
 		if ($OpenFileDialog.FileName) {
 			print "Uninstalling listed inbox apps..."
-			Get-Content $OpenFileDialog.FileName | ForEach-Object {					$App = $_.Split('=')
-				if (Get-AppxPackage $App) 
-				{
-					print "     Uninstalling $App"
-					Get-AppxPackage "$App" | Remove-AppxPackage
-				}
-				elseif (!(Get-AppxPackage $App))
-				{
-					print "     Couldn't find: $App"
-				}
-	
+			Get-Content $OpenFileDialog.FileName | ForEach-Object {	
+				$App = $_.Split('=')
+				print "     Uninstalling $App"
+				Get-AppxPackage "$App" | Remove-AppxPackage
 			}
 			print "Uninstalled listed inbox apps."
 		}
@@ -1706,7 +1688,7 @@ function installwslwin10 {
 		print "Could not install Windows Subsystem for Linux."
 		return
 	}
-	print "Installed Windows Subsystem for Linux"
+	print "Installed Windows Subsystem for Linux."
 }
 
 # Enable Windows Subsystem for Linux.
