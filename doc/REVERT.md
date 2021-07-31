@@ -1,21 +1,21 @@
 # Reverting changes
 
-## You can simply restore the System restore point if CleanWin created one.
-Restoring to the restore point will all settings changes performed by CleanWin
-### However, if CleanWin didn't create a System restore point, you can still revert changes using the revert preset. Read more about it below.
-###### Creating System restore point is optional in CleanWin.
+## You can simply restore the System restore point if WinRice created one.
+Restoring to the restore point will all settings changes performed by WinRice
+### However, if WinRice didn't create a System restore point, you can still revert changes using the revert preset. Read more about it below.
+###### Creating System restore point is optional in WinRice.
 ***
 
 ### How to use
-1. [Tap here](https://github.com/pratyakshm/CleanWin/archive/refs/heads/main.zip) to download the latest code from main branch. 
-2. Extract the ZIP file and locate `CleanWin.ps1`.
+1. [Tap here](https://github.com/pratyakshm/WinRice/archive/refs/heads/main.zip) to download the latest code from main branch. 
+2. Extract the ZIP file and locate `WinRice.ps1`.
 3. Open the file on your desired text editor of choice.
-4. Replace the default preset with the [revert preset](https://github.com/pratyakshm/CleanWin/blob/main/doc/REVERT.md#revert-preset) given below.
+4. Replace the default preset with the [revert preset](https://github.com/pratyakshm/WinRice/blob/main/doc/REVERT.md#revert-preset) given below.
 5. Save the file.
 6. Open Windows Terminal (Admin).
-7. Set Location to the CleanWin folder (typically under `~\Downloads\CleanWin-main`)
+7. Set Location to the WinRice folder (typically under `~\Downloads\WinRice-main`)
 8. Use command ``Set-ExecutionPolicy Unrestricted -Force -Scope Process`` to force set your ExecutionPolicy for current PSSession to Unrestricted.
-9. Use ``./CleanWin.ps1`` to execute the script.
+9. Use ``./WinRice.ps1`` to execute the script.
 
 ### Revert preset
 <details><summary>Tap here to show/hide revert preset</summary>
@@ -25,7 +25,7 @@ Restoring to the restore point will all settings changes performed by CleanWin
 $tasks = @(
 
 ### Maintenance Tasks ###
-	"CleanWin",
+	"WinRice",
 	"OSBuildInfo",
 	# "CreateSystemRestore",
 	"Activity",
@@ -169,13 +169,13 @@ $tasks = @(
 - WinGet (a.k.a Windows Package Manager) cannot be uninstalled.
 
 ### Re-installation of uninstalled apps
-[Microsoft Store](ms-windows-store:) is the recommended place to re-install apps uninstalled by CleanWin.  
+[Microsoft Store](ms-windows-store:) is the recommended place to re-install apps uninstalled by WinRice.  
 However, there are cases where an app is not listed on Microsoft Store, for instance the Get help app.  
 At the time of writing this, there's no known way to re-install that app. Even though the app might be important for some people (justified), most people don't use it.  
-However, currently in the main branch and starting the next CleanWin release, uninstalling apps will be optional.
-I highly recommend users to use CleanWin GUI to selectively uninstall apps they don't need.
+However, currently in the main branch and starting the next WinRice release, uninstalling apps will be optional.
+I highly recommend users to use WinRice GUI to selectively uninstall apps they don't need.
 
 ***
 
 ## Feedback
-If you have observed an issue with docs or if there are accessibility issues, please consider [filing an issue](https://github.com/pratyakshm/CleanWin/issues/new?assignees=pratyakshm&labels=Issue-Docs&template=doc_issue.yaml&title=Docs+issue%3A+).
+If you have observed an issue with docs or if there are accessibility issues, please consider [filing an issue](https://github.com/pratyakshm/WinRice/issues/new?assignees=pratyakshm&labels=Issue-Docs&template=doc_issue.yaml&title=Docs+issue%3A+).

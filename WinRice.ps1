@@ -1,11 +1,11 @@
-# This file is a part of the CleanWin software
+# This file is a part of the WinRice software
 # Copyright (c) 2021 Pratyaksh Mehrotra <pratyakshm@protonmail.com>
 # All rights reserved.
 
 # Default preset
 $tasks = @(
 ### Maintenance Tasks ###
-	"CleanWin",
+	"WinRice",
 	"OSBuildInfo",
 	"CreateSystemRestore",
 	"Activity",
@@ -145,7 +145,7 @@ $tasks = @(
 	"Success"
 )
 
-# Reverting changes: https://github.com/pratyakshm/CleanWin/wiki/Reverting-changes.
+# Reverting changes: https://github.com/pratyakshm/WinRice/wiki/Reverting-changes.
 
 # Core functions +++
 Function Log($text) {
@@ -163,7 +163,7 @@ Function check($test) {
 }
 
 Function cwexit {
-	Write-Host "CleanWin will now exit."
+	Write-Host "WinRice will now exit."
 	Start-Sleep -Seconds 2
 	exit
 }
@@ -231,7 +231,7 @@ if (check($hasReadDoc)) {
 	$knowWinstall = ask "Cool! You know Winstall?"
 	if (!(check($knowWinstall))) {
 		log "Read the documentation properly this time?"
-		log "Ctrl + left click https://github.com/pratyakshm/CleanWin/blob/main/README.md"
+		log "Ctrl + left click https://github.com/pratyakshm/WinRice/blob/main/README.md"
 		log "You're welcome."
 		exit 
 	}
@@ -239,16 +239,16 @@ if (check($hasReadDoc)) {
 elseif (!(check($hasReadDoc))) {
 	log "I didn't write the documentation for nothing."
 	log "Go ahead, read it."
-	log "Ctrl + left click https://github.com/pratyakshm/CleanWin/blob/main/README.md"
+	log "Ctrl + left click https://github.com/pratyakshm/WinRice/blob/main/README.md"
 	log "You're welcome."
 	exit
 }
 
 # Core functions ---
-if (!(Test-Path C:\CleanWin)) {
-	New-Item C:\CleanWin -ItemType Directory | Out-Null 
+if (!(Test-Path C:\WinRice)) {
+	New-Item C:\WinRice -ItemType Directory | Out-Null 
 }
-Start-Transcript -OutputDirectory "C:\CleanWin" | Out-Null 
+Start-Transcript -OutputDirectory "C:\WinRice" | Out-Null 
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 $DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion -ErrorAction SilentlyContinue
@@ -265,12 +265,12 @@ $hkeyuser = (Get-CimInstance -ClassName Win32_UserAccount | Where-Object -Filter
 ### Pre-execution tasks ###
 
 Clear-Host
-print "CleanWin pre-execution environment"
+print "WinRice pre-execution environment"
 Start-Sleep -Milliseconds 20
 space
 print "Copyright (c) Pratyaksh Mehrotra and contributors"
 Start-Sleep -Milliseconds 20
-print "https://github.com/pratyakshm/CleanWin"
+print "https://github.com/pratyakshm/WinRice"
 space
 Start-Sleep -Milliseconds 100
 $ProgressPreference = 'SilentlyContinue'
@@ -302,10 +302,10 @@ $isadmin = {
 
 RunWithProgress -Text "Elevated PowerShell session" -Task $isadmin -Exit $true | Out-Null
 
-# Exit CleanWin if PC is not connected.
+# Exit WinRice if PC is not connected.
 $isonline = {
 	Import-Module BitsTransfer
-	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/File.txt
+	Start-BitsTransfer https://raw.githubusercontent.com/WinRice/Files/main/File.txt
 	if (Test-Path File.txt) {
 		Remove-Item File.txt
 		return $true
@@ -408,19 +408,19 @@ $winstall = ask "winget: use Winstall?"
 space 
 
 Start-Sleep -Milliseconds 100
-print "Starting CleanWin..."
+print "Starting WinRice..."
 Start-Sleep -Milliseconds 600
 
 # Intro.
-Function CleanWin {
+Function WinRice {
 	Clear-Host
 	space
-	print "pratyakshm's CleanWin"
+	print "pratyakshm's WinRice"
 	Start-Sleep -Milliseconds 100
 	space
 	print "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
 	Start-Sleep -Milliseconds 100
-	print "https://github.com/pratyakshm/CleanWin"
+	print "https://github.com/pratyakshm/WinRice"
 	Start-Sleep 1
 }
 
@@ -453,7 +453,7 @@ $ProgressPreference = 'SilentlyContinue'
 		print "Creating a system restore point with type MODIFY_SETTINGS..."
 		Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name SystemRestorePointCreationFrequency -Type DWord -Value 0 -Force
 		Enable-ComputerRestore -Drive $env:SystemDrive
-		Checkpoint-Computer -Description "CleanWin" -RestorePointType "MODIFY_SETTINGS" -WarningAction SilentlyContinue
+		Checkpoint-Computer -Description "WinRice" -RestorePointType "MODIFY_SETTINGS" -WarningAction SilentlyContinue
 		Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name SystemRestorePointCreationFrequency -Type DWord -Value 1440 -Force
 		Disable-ComputerRestore -Drive $env:SystemDrive
 		print "Created system restore point."
@@ -524,17 +524,17 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 	space
 	# Create new folder and set location.
-	if (!(Test-Path CleanWin)) {
-		New-Item CleanWin -ItemType Directory | out-Null
-		$currentdir = $(Get-Location).Path; $dir = "$currentdir/CleanWin"; Set-Location $dir
+	if (!(Test-Path WinRice)) {
+		New-Item WinRice -ItemType Directory | out-Null
+		$currentdir = $(Get-Location).Path; $dir = "$currentdir/WinRice"; Set-Location $dir
 	}
 	else {
-		Set-Location CleanWin
+		Set-Location WinRice
 	}
 	# Download frameworks.
 	print "Installing app frameworks..."
-	$VCLibs1 = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx"
-	$VCLibs2 = "https://github.com/CleanWin/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x86__8wekyb3d8bbwe.Appx"
+	$VCLibs1 = "https://github.com/WinRice/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx"
+	$VCLibs2 = "https://github.com/WinRice/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x86__8wekyb3d8bbwe.Appx"
 	$VCLibs3 = "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx"
 	$VCLibs4 = "https://aka.ms/Microsoft.VCLibs.x86.14.00.Desktop.appx"
 	Start-BitsTransfer $VCLibs1; Start-BitsTransfer $VCLibs2; Start-BitsTransfer $VCLibs3; Start-BitsTransfer $VCLibs4
@@ -548,7 +548,7 @@ $ProgressPreference = 'SilentlyContinue'
 
 	# Cleanup installers.
 	Set-Location ..
-	Remove-Item CleanWin -Recurse -Force
+	Remove-Item WinRice -Recurse -Force
 		
 	# Get-Command VCLibs, if it works then print success message.
 	if ((Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop") -and (Get-AppxPackage "Microsoft.VCLibs.*.Desktop")) {
@@ -591,12 +591,12 @@ $ProgressPreference = 'SilentlyContinue'
 		return 
 	}
 	# Create new folder and set location.
-	if (!(Test-Path CleanWin)) {
-		New-Item CleanWin -ItemType Directory | Out-Null
-		$currentdir = $(Get-Location).Path; $dir = "$currentdir/CleanWin"; Set-Location $dir
+	if (!(Test-Path WinRice)) {
+		New-Item WinRice -ItemType Directory | Out-Null
+		$currentdir = $(Get-Location).Path; $dir = "$currentdir/WinRice"; Set-Location $dir
 	}
 	else {
-		Set-Location CleanWin
+		Set-Location WinRice
 	}
 
 	# Download the packages.
@@ -609,7 +609,7 @@ $ProgressPreference = 'SilentlyContinue'
 		
 	# Cleanup installers.
 	Set-Location ..
-	Remove-Item CleanWin -Recurse -Force
+	Remove-Item WinRice -Recurse -Force
 
 	# Get-Command winget, if it works then print success message.
 	if (Get-Command winget) {
@@ -635,7 +635,7 @@ $ProgressPreference = 'SilentlyContinue'
 	$currentdir = $(Get-Location).Path
 	Set-Location "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\"
 	Rename-Item settings.json settings.json.backup
-	Start-BitsTransfer "https://raw.githubusercontent.com/CleanWin/Files/main/settings.json"
+	Start-BitsTransfer "https://raw.githubusercontent.com/WinRice/Files/main/settings.json"
 	Set-Location $currentdir
 	print "Turned on experimental features in WinGet."
 }
@@ -674,7 +674,7 @@ $ProgressPreference = 'SilentlyContinue'
 		space
 		print "Updating Microsoft Store..."
 		Get-AppxPackage "Microsoft.WindowsStore" | Remove-AppxPackage 
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.WindowsStore_22107.1401.4.0_neutral.Msixbundle
+		Start-BitsTransfer https://github.com/WinRice/Files/raw/main/Microsoft.WindowsStore_22107.1401.4.0_neutral.Msixbundle
 		Add-AppPackage "Microsoft.WindowsStore_22107.1401.4.0_neutral.Msixbundle"
 		Remove-Item "Microsoft.WindowsStore_22107.1401.4.0_neutral.Msixbundle"
 		if ((Get-AppxPackage "Microsoft.WindowsStore").Version -eq "22107.1401.4.0")
@@ -746,7 +746,7 @@ Function WinGetImport {
 	}
 }
 
-# Install apps from Winstall file (the Winstall.txt file must be on the same directory as CleanWin).
+# Install apps from Winstall file (the Winstall.txt file must be on the same directory as WinRice).
 Function Winstall {
 $ErrorActionPreference = 'Continue'
 	# Check if WinGet installed - otherwise return.
@@ -813,12 +813,12 @@ $ProgressPreference = 'SilentlyContinue'
 	print "Installing HEVC Video Extensions..."
 	$OSArchitecture = (Get-WmiObject Win32_OperatingSystem).OSArchitecture
 	if ($OSArchitecture -like "64-bit") {
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.42042.0_x64__8wekyb3d8bbwe.Appx
+		Start-BitsTransfer https://github.com/WinRice/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.42042.0_x64__8wekyb3d8bbwe.Appx
 		Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.42042.0_x64__8wekyb3d8bbwe.Appx
 		Remove-Item Microsoft.HEVCVideoExtension_1.0.42042.0_x64__8wekyb3d8bbwe.Appx
 	}
 	elseif ($OSArchitecture -like "32-bit") {
-		Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.42042.0_x86__8wekyb3d8bbwe.Appx
+		Start-BitsTransfer https://github.com/WinRice/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.42042.0_x86__8wekyb3d8bbwe.Appx
 		Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.42042.0_x86__8wekyb3d8bbwe.Appx
 		Remove-Item Microsoft.HEVCVideoExtension_1.0.42042.0_x86__8wekyb3d8bbwe.Appx
 	}
@@ -859,7 +859,7 @@ function UpdateWidgets {
 		return
 	}
 	print "Updating Widgets..."
-	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/MicrosoftWindows.Client.WebExperience_421.19701.0.0_neutral_cw5n1h2txyewy.AppxBundle
+	Start-BitsTransfer https://github.com/WinRice/Files/raw/main/MicrosoftWindows.Client.WebExperience_421.19701.0.0_neutral_cw5n1h2txyewy.AppxBundle
 	Add-AppxPackage MicrosoftWindows.Client.WebExperience_421.19701.0.0_neutral_cw5n1h2txyewy.AppxBundle
 	$version = (Get-AppxPackage "MicrosoftWindows.Client.WebExperience").Version
 	Remove-Item MicrosoftWindows.Client.WebExperience_421.19701.0.0_neutral_cw5n1h2txyewy.AppxBundle
@@ -899,7 +899,7 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 }
 
-# Install fonts (part of code here was picked from https://github.com/code-rgb/CleanWin).
+# Install fonts (part of code here was picked from https://github.com/code-rgb/WinRice).
 Function InstallFonts {
 $ProgressPreference = 'SilentlyContinue'
 	space
@@ -1351,8 +1351,8 @@ Function UninstallConnect {
 	if (!(Get-AppxPackage Microsoft-PPIProjection-Package))  {
 		return
 	}
-	Start-BitsTransfer https://github.com/CleanWin/Files/raw/main/install_wim_tweak.exe
-	Start-BitsTransfer https://raw.githubusercontent.com/CleanWin/Files/main/connect.cmd
+	Start-BitsTransfer https://github.com/WinRice/Files/raw/main/install_wim_tweak.exe
+	Start-BitsTransfer https://raw.githubusercontent.com/WinRice/Files/main/connect.cmd
 	./connect.cmd | Out-Null
 	Remove-Item install_wim_tweak.exe
 	Remove-Item connect.cmd
@@ -2217,7 +2217,7 @@ Function EnableClipboard {
 	Set-ItemProperty -Path $Clipboard -Name "EnableClipboardHistory" -Value 1 -ErrorAction SilentlyContinue
 	print "Turned on Clipboard History."
     Start-Sleep 1
-    Set-Clipboard "Demo text by CleanWin."
+    Set-Clipboard "Demo text by WinRice."
 	print "You can now copy multiple items to your clipboard."
     print "Access your clipboard now using Windows key + V."
 }
@@ -2874,11 +2874,11 @@ Start-Sleep -Seconds 2
 Remove-PSDrive -Name HKCR
 $ProgressPreference = 'Continue'
 
-# Update status: CleanWin execution successful.
+# Update status: WinRice execution successful.
 Function Success {
 	Stop-Process -Name explorer -Force
 	Start-Sleep 3
-	print "Thank you for using CleanWin."
+	print "Thank you for using WinRice."
 	Stop-Transcript
 	Write-Host "Restarting this device in 10 seconds."
 	for ($time = 10; $time -ge 0 ; $time--)

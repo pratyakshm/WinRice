@@ -1,4 +1,4 @@
-# This file is a part of the CleanWin software
+# This file is a part of the WinRice software
 # Copyright (c) 2021 PratyakshM <pratyakshm@protonmail.com>
 # All rights reserved.
 

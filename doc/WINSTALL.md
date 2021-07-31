@@ -1,7 +1,7 @@
 # Winstall
 Winstall lets you batch install apps.
 
-### Dependency: [`winget`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINGET.md) 
+### Dependency: [`winget`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINGET.md) 
 
 ## Creating your Winstall config
 Create a new text file using any text editor, and add one app name per line.
@@ -10,7 +10,7 @@ Like this:
 app 1
 app 2
 ```
-If Winstall text file is not located in the same directory as CleanWin, it will launch file picker UI for the user to select the text file.  
+If Winstall text file is not located in the same directory as WinRice, it will launch file picker UI for the user to select the text file.  
 You may use ``pwd`` to find your current location in terminal.
 
 ## Examples
@@ -30,4 +30,4 @@ Just like this, you can install any app you want by just writing its name in Win
 ***
 
 ## Feedback
-If you have observed an issue with docs or if there are accessibility issues, please consider [filing an issue](https://github.com/pratyakshm/CleanWin/issues/new?assignees=pratyakshm&labels=Issue-Docs&template=doc_issue.yaml&title=Docs+issue%3A+).
+If you have observed an issue with docs or if there are accessibility issues, please consider [filing an issue](https://github.com/pratyakshm/WinRice/issues/new?assignees=pratyakshm&labels=Issue-Docs&template=doc_issue.yaml&title=Docs+issue%3A+).

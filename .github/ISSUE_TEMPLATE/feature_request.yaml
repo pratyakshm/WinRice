@@ -36,8 +36,8 @@ body:
   - type: checkboxes
     id: principles
     attributes:
-      label: Does this Feature Request follow CleanWin principles?
-      description: https://github.com/pratyakshm/CleanWin/wiki/Principles
+      label: Does this Feature Request follow WinRice principles?
+      description: https://github.com/pratyakshm/WinRice/wiki/Principles
       options:
         - label: "Yes"
           required: true

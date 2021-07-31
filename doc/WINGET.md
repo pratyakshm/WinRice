@@ -2,25 +2,25 @@
 ## What is Windows Package Manager (a.k.a winget)?
 Windows Package Manager, or simply `winget`, is an official package manager client for Windows. Package managers allow you to deploy and manage apps using the command line. 
 
-## CleanWin x WinGet
-A lot of features in CleanWin are powered by WinGet.   
+## WinRice x WinGet
+A lot of features in WinRice are powered by WinGet.   
 ### Features powered by WinGet
 | Feature | Link | 
 |-------|--------|
-| Winstall | [`WINSTALL.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINSTALL.md) |
-| winget import | [`WINGETIMPORT.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINGETIMPORT.md) |
-| Deploy Microsoft OneDrive | [`TASKS.md`](https://github.com/pratyakshm/CleanWin/blob/main/doc/TASKS.md) |
+| Winstall | [`WINSTALL.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINSTALL.md) |
+| winget import | [`WINGETIMPORT.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINGETIMPORT.md) |
+| Deploy Microsoft OneDrive | [`TASKS.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/TASKS.md) |
 
 
 # Installing winget
-If you have used CleanWin, chances are you have winget installed.   
+If you have used WinRice, chances are you have winget installed.   
 > Verify it by using ``winget.exe`` in Windows Terminal.  
 
 If you still don't have winget installed, install it.
 
 ## Methods
 - Get the latest release from [GitHub Releases](https://github.com/microsoft/winget-cli/releases/latest).
-- Use CleanWin's own winget install script [paste in Windows Terminal (Admin)]: ``Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JWMKj'))``
+- Use WinRice's own winget install script [paste in Windows Terminal (Admin)]: ``Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JWMKj'))``
 - Join [WinGet Insider Program](http://aka.ms/winget-InsiderProgram).
 - Join [Windows Insider Program](https://insider.windows.com/).
 
@@ -71,4 +71,4 @@ Use `winget` in Windows Terminal to list all commands and their usage.
 ***
 
 ## Feedback
-If you have observed an issue with docs or if there are accessibility issues, please consider [filing an issue](https://github.com/pratyakshm/CleanWin/issues/new?assignees=pratyakshm&labels=Issue-Docs&template=doc_issue.yaml&title=Docs+issue%3A+).
+If you have observed an issue with docs or if there are accessibility issues, please consider [filing an issue](https://github.com/pratyakshm/WinRice/issues/new?assignees=pratyakshm&labels=Issue-Docs&template=doc_issue.yaml&title=Docs+issue%3A+).

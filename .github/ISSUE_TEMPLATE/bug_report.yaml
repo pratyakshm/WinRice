@@ -12,7 +12,7 @@ body:
   - type: dropdown
     id: version
     attributes:
-      label: CleanWin version
+      label: WinRice version
       description: Check all that apply.
       multiple: true
       options:
@@ -50,12 +50,12 @@ body:
   - type: dropdown
     id: areaofconcern
     attributes: 
-      label: Does something on the OS break or does CleanWin functionality not work?
-      description: Does something break on the Operating System after running CleanWin, or does a particular CleanWin functionality not work?
+      label: Does something on the OS break or does WinRice functionality not work?
+      description: Does something break on the Operating System after running WinRice, or does a particular WinRice functionality not work?
       multiple: false
       options:
-        - CleanWin not working as expected
-        - Something wrong with OS after running CleanWin
+        - WinRice not working as expected
+        - Something wrong with OS after running WinRice
     validations: 
       required: true
   - type: textarea
@@ -83,7 +83,7 @@ body:
     id: logs
     attributes:
       label: PowerShell transcript output
-      description: Please copy and paste the PowerShell transcript output. You may get it from "C:\CleanWin" folder.
+      description: Please copy and paste the PowerShell transcript output. You may get it from "C:\WinRice" folder.
       placeholder: PowerShell transcript comes here.
       render: powershell
   - type: textarea

@@ -1,5 +1,5 @@
 # App uninstallation 
-CleanWin supports the following methods to uninstall apps:
+WinRice supports the following methods to uninstall apps:
 1.  App Uninstaller CLI
 2.  App Uninstaller GUI
 3.  App Uninstaller List
@@ -56,7 +56,7 @@ The list is a text file, and it must fulfil these conditions:
 - There is one app name per line
 - Write absolute app names, like `Microsoft.WindowsAlarms` instead of `Alarms & Clock`.
 - To get absolute name of an app, use `Get-AppxPackage *app*`.
-- Save the text file as `uninstallapps.txt`, or locate the text file when asked by CleanWin.
+- Save the text file as `uninstallapps.txt`, or locate the text file when asked by WinRice.
 **Example**  
 This syntax uninstalls Microsoft News and Weather app:
 ```
@@ -67,4 +67,4 @@ Microsoft.BingWeather
 ***
 
 ## Feedback
-If you have observed an issue with docs or if there are accessibility issues, please consider [filing an issue](https://github.com/pratyakshm/CleanWin/issues/new?assignees=pratyakshm&labels=Issue-Docs&template=doc_issue.yaml&title=Docs+issue%3A+).
+If you have observed an issue with docs or if there are accessibility issues, please consider [filing an issue](https://github.com/pratyakshm/WinRice/issues/new?assignees=pratyakshm&labels=Issue-Docs&template=doc_issue.yaml&title=Docs+issue%3A+).

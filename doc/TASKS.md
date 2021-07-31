@@ -6,7 +6,7 @@
 - [7-zip](https://www.7-zip.org/)
 - HEVC Video Extensions
 - Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/))
-- Use [Winstall](https://github.com/pratyakshm/CleanWin/blob/main/doc/WINSTALL.md) to install your own apps
+- Use [Winstall](https://github.com/pratyakshm/WinRice/blob/main/doc/WINSTALL.md) to install your own apps
 - WinGet import
 - Update Microsoft Store on Windows 11
   - Clean installation of Windows 11 from ISO does not have updated Microsoft Store. This updates it.
@@ -14,7 +14,7 @@
   - Clean installation of Windows 11 from ISO often has Widgets with reduced functionality. This updates it.
 
 ### App uninstallation
-- Check this doc -> [Tap here](https://github.com/pratyakshm/CleanWin/blob/main/doc/APPUNINSTALLATION.md)
+- Check this doc -> [Tap here](https://github.com/pratyakshm/WinRice/blob/main/doc/APPUNINSTALLATION.md)
 
 ### Unpin the following apps from taskbar
 - Mail
@@ -144,4 +144,4 @@
 *** 
 
 ## Feedback
-If you have observed an issue with docs or if there are accessibility issues, please consider [filing an issue](https://github.com/pratyakshm/CleanWin/issues/new?assignees=pratyakshm&labels=Issue-Docs&template=doc_issue.yaml&title=Docs+issue%3A+).
+If you have observed an issue with docs or if there are accessibility issues, please consider [filing an issue](https://github.com/pratyakshm/WinRice/issues/new?assignees=pratyakshm&labels=Issue-Docs&template=doc_issue.yaml&title=Docs+issue%3A+).

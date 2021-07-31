@@ -1,4 +1,4 @@
-# This file is a part of the CleanWin software
+# This file is a part of the WinRice software
 # Copyright (c) 2021 PratyakshM <pratyakshm@protonmail.com>
 # All rights reserved.
 Function space {
@@ -14,7 +14,7 @@ $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 $ProductName = Get-ItemPropertyValue $CurrentVersionPath -Name ProductName
 
 if ($CurrentBuild -ge 22000) {
-	print "CleanWin currently cannot set up Windows Update policies on Windows 11."
+	print "WinRice currently cannot set up Windows Update policies on Windows 11."
 	exit 
 }
 

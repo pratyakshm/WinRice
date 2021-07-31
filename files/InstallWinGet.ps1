@@ -17,14 +17,14 @@ if (Get-Command winget) {
 
 print "Preparing download..."
 # Create new folder and set location.
-if (!(Test-Path CleanWin)) {
-	New-Item CleanWin -ItemType Directory | out-Null
+if (!(Test-Path WinRice)) {
+	New-Item WinRice -ItemType Directory | out-Null
 	$currentdir = $(Get-Location).Path
-	$dir = "$currentdir/CleanWin"
+	$dir = "$currentdir/WinRice"
 	Set-Location $dir
 }
 else {
-	Set-Location CleanWin
+	Set-Location WinRice
 }
 
 # Download the packages.
@@ -44,7 +44,7 @@ Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
 	
 # Cleanup installers.
 Set-Location ..
-Remove-Item CleanWin -Recurse -Force
+Remove-Item WinRice -Recurse -Force
 
 # Get-Command winget, if it works then print success message.
 if (Get-Command winget) {
