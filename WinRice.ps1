@@ -405,7 +405,7 @@ Start-Sleep -Milliseconds 600
 Function WinRice {
 	Clear-Host
 	space
-	print "pratyakshm's WinRice"
+	print "pratyakshm's WinRice - version 0.4"
 	Start-Sleep -Milliseconds 100
 	space
 	print "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
