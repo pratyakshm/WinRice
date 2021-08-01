@@ -45,19 +45,15 @@ An active internet connection is needed.
 
 ## Running WinRice
 ### Use either of the following methods
-### 1. Main branch (recommended)
-Open Windows Terminal as Administrator.  
-To execute WinRice, paste  
+### 1. Run the latest release
+- Get the [latest release](https://github.com/pratyakshm/WinRice/releases/latest).
+- Run the EXE (as adminitrator).
+
+### 2. Main branch
+- Open Windows Terminal (Admin) and paste:
 ```
 Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JWj26'))
 ```
-
-### 2. Manually download and run latest code
-- Download the latest code from main branch: [tap here](https://github.com/pratyakshm/WinRice/archive/refs/heads/main.zip).
-- Unzip the file.
-- Open Windows Terminal (Admin), set location to your Downloads folder.
-- Use `Set-ExecutionPolicy Unrestricted -Scope Process -Force` to set ExecutionPolicy to unrestricted for current process.
-- Use `.\WinRice.ps1` to run WinRice.  
 
 ***
 

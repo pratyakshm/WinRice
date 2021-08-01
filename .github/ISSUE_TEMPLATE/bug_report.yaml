@@ -17,8 +17,7 @@ body:
       multiple: true
       options:
         - main branch
-        - v0.3.9 release
-        - vNext pre-release
+        - v0.4 August release
     validations:
       required: true
   - type: dropdown
@@ -29,10 +28,16 @@ body:
       description: Check all that apply.
       multiple: true
       options: 
-        - Windows 10 21H1 in RTM
-        - Windows 11 21H2 in Dev channel
+        - Windows 10 21H1
+        - Windows 11 21H2
     validations:
       required: true
+  - type: textarea
+    id: osbuild
+    attributes:
+      label: Write absolute OS build version
+      description: Run this command in PowerShell - `Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Update\TargetingInfo\Installed\Client.OS.rs2.amd64" -Name Version` 
+      placeholder: Raw output of the command.
   - type: dropdown
     id: category
     attributes:
