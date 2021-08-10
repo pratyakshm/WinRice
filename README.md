@@ -52,7 +52,7 @@ An active internet connection is needed.
 ### 2. Main branch
 - Open Windows Terminal (Admin) and paste:
 ```
-Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JWj26'))
+Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JBpYc'))
 ```
 
 ***
