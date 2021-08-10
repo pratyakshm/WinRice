@@ -806,16 +806,42 @@ $ProgressPreference = 'SilentlyContinue'
 		print "HEVC Video Extensions are already installed on this device."
 		return
 	}
-	print "Installing HEVC Video Extensions..."
-	Start-BitsTransfer https://github.com/WinRice/Files/raw/main/Microsoft.HEVCVideoExtension_1.0.42042.0_x64__8wekyb3d8bbwe.Appx
-	Add-AppxPackage Microsoft.HEVCVideoExtension_1.0.42042.0_x64__8wekyb3d8bbwe.Appx
-	Remove-Item Microsoft.HEVCVideoExtension_1.0.42042.0_x64__8wekyb3d8bbwe.Appx
-	if (!(Get-AppxPackage "Microsoft.HEVCVideoExtension"))
+	# Credit: https://dev.to/kaiwalter/download-windows-store-apps-with-powershell-from-https-store-rg-adguard-net-155m.
+	Write-Host "Installing HEVC Video Extensions..."
+	$apiUrl = "https://store.rg-adguard.net/api/GetFiles"
+	$productUrl = "https://www.microsoft.com/en-us/p/9n4wgh0z6vhq"
+	$downloadFolder = Join-Path (Get-Location).Path "WinRice"
+	if(!(Test-Path $downloadFolder -PathType Container)) {
+		New-Item $downloadFolder -ItemType Directory -Force | Out-Null
+	}
+	$body = @{
+		type = 'url'
+		url  = $productUrl
+		ring = 'Retail'
+		lang = 'en-US'
+	}
+	
+	$raw = Invoke-RestMethod -Method Post -Uri $apiUrl -ContentType 'application/x-www-form-urlencoded' -Body $body
+	
+	$raw | Select-String '<tr style.*<a href=\"(?<url>.*)"\s.*>(?<text>.*)<\/a>' -AllMatches | ForEach-Object { $_.Matches } | ForEach-Object { 
+		$url = $_.Groups[1].Value
+		$text = $_.Groups[2].Value
+	
+		if($text -match "_(x64|neutral).*appx(|bundle)$") {
+			$downloadFile = Join-Path $downloadFolder $text
+			Invoke-WebRequest -Uri $url -OutFile $downloadFile
+		}
+	}
+	Set-Location WinRice
+	Add-AppxPackage Microsoft.HEVC*
+	Set-Location ../
+	Remove-Item WinRice -Recurse -Force
+	if (!(Get-AppxPackage *HEVC*))
 	{
 		print "Could not install HEVC Video Extensions."
-		return 
+		return
 	}
-
+	
 	print "Installed HEVC Video Extensions."
 }
 
