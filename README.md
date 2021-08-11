@@ -47,7 +47,7 @@ An active internet connection is needed.
 ### Use either of the following methods
 ### 1. Run the latest release
 - Get the [latest release](https://github.com/pratyakshm/WinRice/releases/latest).
-- Run the EXE (as adminitrator).
+- Run the EXE (as admin).
 
 ### 2. Main branch
 - Open Windows Terminal (Admin) and paste:
