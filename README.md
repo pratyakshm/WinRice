@@ -58,7 +58,7 @@ Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git
 ***
 
 ## Known issues
-Known issues are being tracked [here](https://github.com/pratyakshm/WinRice/issues/16).  
+Known issues are tracked [here](https://github.com/pratyakshm/WinRice/issues/16).  
 
 ## Contributing 
 WinRice accepts all kinds of contributions such as finding bugs, fixing bugs, adding features, removal of deprecated features and/or values, etc. I'm excited to work with the users and fellow PowerShell enthusiasts to further improve this project.

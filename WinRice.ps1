@@ -12,8 +12,8 @@ $tasks = @(
 
 ### Apps & Features ###
 	"AppsFeatures",
-	"InstallFrameworks",
-	# "UninstallFrameworks",
+	"InstallRuntimes",
+	# "UninstallRuntimes",
 	"InstallWinGet",
 	"EnableExperimentsWinGet",
 	# "DisableExperimentsWinGet",
@@ -515,7 +515,7 @@ Function AppsFeatures {
 }
 
 # Install runtime packages .
-Function InstallFrameworks {
+Function InstallRuntimes {
 $ProgressPreference = 'SilentlyContinue'
 	# Create new folder and set location.
 	if (!(Test-Path WinRice)) {
@@ -525,20 +525,13 @@ $ProgressPreference = 'SilentlyContinue'
 	else {
 		Set-Location WinRice
 	}
-	# Download frameworks.
+	# Download runtime.
 	print "Installing app frameworks..."
-	$VCLibs1 = "https://github.com/WinRice/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx"
-	$VCLibs2 = "https://github.com/WinRice/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x86__8wekyb3d8bbwe.Appx"
-	$VCLibs3 = "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx"
-	$VCLibs4 = "https://aka.ms/Microsoft.VCLibs.x86.14.00.Desktop.appx"
-	Start-BitsTransfer $VCLibs1; Start-BitsTransfer $VCLibs2; Start-BitsTransfer $VCLibs3; Start-BitsTransfer $VCLibs4
+	$VCLibs1 = "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx"
+	Start-BitsTransfer $VCLibs1
 
-	# Install frameworks.
-	$VCLibs1 = "Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx"
-	$VCLibs2 = "Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x86__8wekyb3d8bbwe.Appx"
-	$VCLibs3 = "Microsoft.VCLibs.x64.14.00.Desktop.appx"
-	$VCLibs4 = "Microsoft.VCLibs.x86.14.00.Desktop.appx"
-	Add-AppxPackage $VCLibs1; Add-AppxPackage $VCLibs2; Add-AppxPackage $VCLibs3; Add-AppxPackage $VCLibs4
+	# Install Installing.
+	Add-AppxPackage "Microsoft.VCLibs.x64.14.00.Desktop.appx"
 
 	# Cleanup installers.
 	Set-Location ..
@@ -547,34 +540,27 @@ $ProgressPreference = 'SilentlyContinue'
 	# Get-Command VCLibs, if it works then print success message.
 	if (Get-AppxPackage *VCLibs*) 
 	{
-		print "Installed app frameworks."
+		print "Installed app runtime."
 	}
 	else
 	{
-		print "Could not install app frameworks."
+		print "Could not install app runtime."
 	}
 }
 
-Function UninstallFrameworks {
+Function UninstallRuntimes {
 	space
 	if (!(Get-AppxPackage "Microsoft.VCLibs.140.00.UWPDesktop" -or Get-AppxPackage "Microsoft.VCLibs.x64.14.00.Desktop")) {
-		print "Frameworks are not present on this device."
+		print "Runtimes are not present on this device."
 		return
 	}
-	print "Uninstalling frameworks..."
-	$Apps = @(
-		"Microsoft.VCLibs.*.UWPDesktop"
-		"Microsoft.VCLibs.*.Desktop"
-	)
-	ForEach ($App in $Apps) {
-		print "     Uninstalling $App."
-		Get-AppxPackage $App | Remove-AppxPackage
-	}
-	if ((Get-AppxPackage "Microsoft.VCLibs.140.00.UWPDesktop") -or (Get-AppxPackage "Microsoft.VCLibs.*.Desktop")) {
-		print "Could not uninstall one or more frameworks."
+	print "Uninstalling runtimes..."
+	Get-AppxPackage *VCLibs* | Remove-AppxPackage
+	if (Get-AppxPackage *VCLibs*) {
+		print "Could not uninstall one or more runtimes."
 		return
 	}
-	print "Uninstalled frameworks."
+	print "Uninstalled runtimes."
 }
 
 # Install WinGet (Windows Package Manager).
@@ -2228,6 +2214,7 @@ Function EnableClipboard {
     Set-Clipboard "Demo text by WinRice."
 	print "You can now copy multiple items to your clipboard."
     print "Access your clipboard now using Windows key + V."
+	Write-Warning "If the Clipboard History feature does not work, retry it after a device restart."
 }
 
 # Disable Clipboard History.
