@@ -1,6 +1,6 @@
 # Windows Package Manager CLI client
 ## What is Windows Package Manager (a.k.a winget)?
-Windows Package Manager, or simply `winget`, is an official package manager client for Windows. Package managers allow you to deploy and manage apps using the command line. 
+Windows Package Manager, or simply `winget`, is the official package manager client for Windows. Package managers allow you to deploy and manage apps using the command line. 
 
 ## WinRice x WinGet
 A lot of features in WinRice are powered by WinGet.   

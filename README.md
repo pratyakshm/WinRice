@@ -8,11 +8,12 @@
 <a href="#license"><img src="https://img.shields.io/badge/License-GPL_v3-blue" alt="License"></a>
 </p>
 
-## Brief
-WinRice does everything from removing junk (your hardware doesn't count, yet), cleaning up the Windows UI, setting up privacy policies, Windows Update policies, disabling unnecessary features and enabling useful ones meanwhile retaining maximum app functionality. It also uses [`Winstall`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINSTALL.md) and [`winget import`](https://docs.microsoft.com/en-us/windows/package-manager/winget/import) to batch install apps you want. Sounds pretty cool, eh?
+## 😃 Brief
+WinRice performs a bunch of tasks including (but not limited to) removing unused apps, installing useful apps (read [`WINGET.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINGET.md#winrice-x-winget)), cleaning up the Windows UI, maximizing privacy, setting up Windows Update policies, configuring optional features, etc. - while retaining maximum OS stability and functionality.   
 
-## Documentation
-### 💡 Read the docs before using WinRice
+
+## 📃 Documentation
+### 💡 Read docs before using WinRice
 
 | Type | Doc | 
 |--------------|--------|
@@ -24,7 +25,7 @@ WinRice does everything from removing junk (your hardware doesn't count, yet), c
 
 ***
 
-## Prerequisites
+## ✔️ Prerequisites
 ### Windows Terminal  
 <a href="https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701"> <img src="https://camo.githubusercontent.com/3710844608ef5f15f9a7b5b33989ab74369d49b2f39a457632b092d12e48a8c2/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f662f66372f4765745f69745f66726f6d5f4d6963726f736f66745f42616467652e737667" width="200px" height="100px" alt="License"></a>
 
@@ -32,18 +33,19 @@ More installation methods include:
    - Getting the latest release from [GitHub](https://github.com/microsoft/terminal/releases)
    - Windows Package Manager CLI (winget): ``winget install --id=Microsoft.WindowsTerminal --source winget``   
 ### Windows version
-The most recent Windows versions are supported.  
 Currently supported versions:
 - Windows 11 21H2  
+- Windows 10 21H2
 - Windows 10 21H1 
 
+The most recent Windows versions are supported.  
 Pro edition or up is strongly recommended.   
 Older Windows versions are not supported.    
 ### Internet connection
 An active internet connection is needed.
 ***
 
-## Running WinRice
+## 🚀 Running WinRice
 ### Use either of the following methods
 ### 1. Run the latest release
 - Get the [latest release](https://github.com/pratyakshm/WinRice/releases/latest).
@@ -57,15 +59,15 @@ Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git
 
 ***
 
-## Known issues
+## 🤕 Known issues
 Known issues are tracked [here](https://github.com/pratyakshm/WinRice/issues/16).  
 
-## Contributing 
+## 💁‍♂️ Contributing 
 WinRice accepts all kinds of contributions such as finding bugs, fixing bugs, adding features, removal of deprecated features and/or values, etc. I'm excited to work with the users and fellow PowerShell enthusiasts to further improve this project.
 
 I ask that **before you start your work on a feature that you would like to request or contribute**, please read WinRice [Principles](https://github.com/pratyakshm/WinRice/wiki/Principles). I will be happy to work with you to figure out good approaches and provide guidance throughout feature development, and help avoid any wasted or duplicated effort.
 
 ***
 
-## License
-[GPL version 3](https://github.com/pratyakshm/WinRice/blob/main/LICENSE) ©️ Pratyaksh Mehrotra ([@pratyakshm](https://github.com/pratyakshm)).
+## ⚖️ License
+WinRice is licensed under the [GPL-3.0 License](https://github.com/pratyakshm/WinRice/blob/main/LICENSE).
