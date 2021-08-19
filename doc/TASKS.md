@@ -2,21 +2,22 @@
 
 # Apps & Features
 ## Apps
-### App installation
-- [7-zip](https://www.7-zip.org/)
+### Apps installed
 - HEVC Video Extensions
 - Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/))
-- Use [Winstall](https://github.com/pratyakshm/WinRice/blob/main/doc/WINSTALL.md) to install your own apps
-- WinGet import
-- Update Microsoft Store on Windows 11
-  - Clean installation of Windows 11 from ISO does not have updated Microsoft Store. This updates it.
-- Update Widgets on Windows 11
-  - Clean installation of Windows 11 from ISO often has Widgets with reduced functionality. This updates it.
+- 7-zip ([Website](https://www.7-zip.org/))
+#### Leveraging winget to install apps
+   - [`winget import`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINGETIMPORT.md)
+   - [`Winstall`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINSTALL.md)
+   - [`winget doc`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINGET.md)
+   
+### Apps updated
+ - Check for app updates for Microsoft Store and Widgets, and update them if necessary.
 
-### App uninstallation
-- Check this doc -> [Tap here](https://github.com/pratyakshm/WinRice/blob/main/doc/APPUNINSTALLATION.md)
+### Apps uninstalled
+Read [`APPUNINSTALLATION.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/APPUNINSTALLATION.md)
 
-### Unpin the following apps from taskbar
+### Apps unpinned from taskbar
 - Mail
 - Microsoft Store
 - Office

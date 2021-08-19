@@ -46,7 +46,7 @@ An active internet connection is needed.
 ***
 
 ## 🚀 Running WinRice
-### Use either of the following methods
+#### There are two methods to run WinRice
 ### 1. Run the latest release
 - Get the [latest release](https://github.com/pratyakshm/WinRice/releases/latest).
 - Run the EXE (as admin).
@@ -65,7 +65,7 @@ Known issues are tracked [here](https://github.com/pratyakshm/WinRice/issues/16)
 ## 💁‍♂️ Contributing 
 WinRice accepts all kinds of contributions such as finding bugs, fixing bugs, adding features, removal of deprecated features and/or values, etc. I'm excited to work with the users and fellow PowerShell enthusiasts to further improve this project.
 
-I ask that **before you start your work on a feature that you would like to request or contribute**, please read WinRice [Principles](https://github.com/pratyakshm/WinRice/wiki/Principles). I will be happy to work with you to figure out good approaches and provide guidance throughout feature development, and help avoid any wasted or duplicated effort.
+I ask that **before you start your work on a feature that you would like to request or contribute**, please read WinRice [principles](https://github.com/pratyakshm/WinRice/wiki/Principles). I will be happy to work with you to figure out good approaches and provide guidance throughout feature development, and help avoid any wasted or duplicated effort.
 
 ***
 
