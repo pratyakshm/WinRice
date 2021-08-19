@@ -54,6 +54,8 @@ $tasks = @(
 	# "EnableAdvertisingID",
 	"DisableBackgroundApps",        
 	# "EnableBackgroundApps",
+	"DisableErrorReporting",
+	"EnableErrorReporting",
 	"DisableFeedback",		       
 	# "EnableFeedback",
 	"DisableInkHarvesting",			
@@ -1931,6 +1933,32 @@ Function EnableBackgroundApps {
 		Remove-ItemProperty -Path $_.PsPath -Name * -Force
 	}
 	print "Turned on Background apps."
+}
+
+# Disable Windows Error Reporting 
+function DisableErrorReporting {
+	print "Turning off Windows Error Reporting..."
+	$result = Disable-WindowsErrorReporting
+	if ($result -like "True")
+	{
+		print "Turned off Windows Error Reporting."
+		return
+	}
+	print "Couldn't turn off Windows Error Reporting."
+
+}
+
+# Enable Windows Error Reporting 
+function EnableErrorReporting {
+	print "Turning on Windows Error Reporting..."
+	$result = Enable-WindowsErrorReporting
+	if ($result -like "True")
+	{
+		print "Turned on Windows Error Reporting."
+		return
+	}
+	print "Couldn't turn on Windows Error Reporting."
+
 }
 
 # Disable Feedback.
