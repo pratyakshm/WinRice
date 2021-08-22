@@ -26,8 +26,9 @@ WinRice performs a bunch of tasks including (but not limited to) removing unused
 ***
 
 ## ✔️ Prerequisites
+
 ### Windows Terminal  
-<a href="https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701"> <img src="https://camo.githubusercontent.com/3710844608ef5f15f9a7b5b33989ab74369d49b2f39a457632b092d12e48a8c2/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f662f66372f4765745f69745f66726f6d5f4d6963726f736f66745f42616467652e737667" width="200px" height="100px" alt="License"></a>
+<a href="https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701"> <img src="https://user-images.githubusercontent.com/54220235/130347354-d4e7af6e-a153-4954-a7f4-3d7ad27da7c9.png" alt="Windows Terminal product page on Microsoft Store"></a>    
 
 More installation methods include: 
    - Getting the latest release from [GitHub](https://github.com/microsoft/terminal/releases)
