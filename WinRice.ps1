@@ -1194,6 +1194,7 @@ Function UninstallerGUI {
 Function UninstallerCLI {
 	print "Uninstalling inbox apps..." # Remove inbox apps.
 	$InboxApps = @(
+		"MicrosoftTeams"
 		"Microsoft.549981C3F5F10"
 		"Microsoft.BingNews"
 		"Microsoft.BingWeather"
