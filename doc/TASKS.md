@@ -2,7 +2,7 @@
 
 # Apps & Features
 ## Apps
-### Apps installed
+### Apps installed:
 - HEVC Video Extensions
 - Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/))
 - 7-zip ([Website](https://www.7-zip.org/))
@@ -11,27 +11,27 @@
    - [`Winstall`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINSTALL.md)
    - [`winget doc`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINGET.md)
    
-### Apps updated
- - Check for app updates for Microsoft Store and Widgets, and update them if necessary.
+### Apps updated:
+ - Windows 11: Update Microsoft Store and Widgets to newer versions if older versions are detected.
 
-### Apps uninstalled
+### Apps uninstalled:
 Read [`APPUNINSTALLATION.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/APPUNINSTALLATION.md)
 
-### Apps unpinned from taskbar
+### Apps unpinned from taskbar:
 - Mail
 - Microsoft Store
 - Office
 - Xbox
 
-### More changes include
+### More changes include:
 - Add the classic Windows Photo Viewer desktop app into the "Open with" menu for the following extensions: JPG, JPEG, GIF and PNG. 
 
 ## Features
-### Features installed
+### Features installed:
  - Windows Subsystem for Linux
  - dotNET 3.5 
  - Windows Sandbox
-### Features uninstalled
+### Features uninstalled:
 - Hello Face
 - Legacy Components (DirectPlay)
 - Math Recognizer
@@ -53,7 +53,7 @@ Read [`APPUNINSTALLATION.md`](https://github.com/pratyakshm/WinRice/blob/main/do
 
 # Privacy & Security
 
-## Turn off the following
+## Turn off the following:
 - Activity History
 - Advertising ID 
 - App suggestions
@@ -67,7 +67,7 @@ Read [`APPUNINSTALLATION.md`](https://github.com/pratyakshm/WinRice/blob/main/do
 - Telemetry
 - Websites' access to language list to provide loaclly relevant content
    
-## Turn on the following
+## Turn on the following:
 - Clipboard history 
 </details>
 
@@ -76,7 +76,7 @@ Read [`APPUNINSTALLATION.md`](https://github.com/pratyakshm/WinRice/blob/main/do
 # Tasks & Services
 ## Tasks
 
-### Turn off the following tasks
+### Turn off the following tasks:
 - Consolidator
 - DmClient
 - DmClientOnScenarioDownload
@@ -91,56 +91,52 @@ Read [`APPUNINSTALLATION.md`](https://github.com/pratyakshm/WinRice/blob/main/do
 
 ## Services
 
-### Turn off the following services
+### Turn off the following services:
 - DiagTrack
-- DMWAppPushService
 - SysMain
-- RetailDemo
-- diagnosticshub.standardcollector.service
-- MapsBroker
-- NetTcpPortSharing
-- RemoteRegistry
-- SharedAccess
-- TrkWks
 
 ## Windows Update
-### Setup Windows Update with the following settings
+### Setup Windows Update
+Setup the following policies to Windows Update:
 - Turn off automatic updates
 - Do not auto restart PC if users are signed in
 - Delay feature updates by 20 days
 - Delay quality updates by 4 days
-- Turn off re-installation of bloatware after feature update
-- Set Windows Update to download updates only from Microsoft's servers by turning off Delivery through P2P and LAN
-- Auto login to PC post update
-### Reset Windows Update is also available for users who want to switch back to stock Windows Update settings.
+- Turn off re-installation of bloatware after feature updates
+- Turn off Delivery Optimization
+### Reset Windows Update
+- Reset Windows Update is available for users who want to switch back to stock Windows Update settings.
 
-## More changes
+## More changes:
 - Turn off AutoPlay
 - Turn off Autorun
 - Turn off Reserved Storage
-- This setting will only take place after an update is installed.
+  - This setting will only take effect after an update is installed.
 - Set BIOS time to UTC
 - Turn on Storage Sense
 - Turn on Num lock on startup
 
 
 # Windows Explorer
-## Core changes
-### Hide/cleanup the following:
--  Widgets item
--  Chat item
--  3D Objects
--  Cortana button
--  Meet now button
--  News and interests
--  Search bar
--  Task View button
+## Turn off the following:
+
+| Item |  Place  | OS  | 
+|------|--------|-------|
+| Widgets icon | Next to Start | Windows 11 |
+| Chat icon | Next to Start | Windows 11 |
+| Search icon | Next to Start | Windows 11 and Windows 10 |
+| Task view | Next to Start | Windows 11 and Windows 10 |
+| Cortana | Next to Start | Windows 10 |
+| 3D Objects | File Explorer sidebar | Windows 10 |
+| Meet now | System tray | Windows 10 |
+| News and interests | System tray | Windows 10 |
+
 </details>
 
-## More changes
-- Set This PC as default view
-- Turn off sticky keys prompt
-- Use Print Screen key to open Snip & Sketch overlay
+## More changes:
+- Set File Explorer to open This PC by default
+- Turn off Keyboard shortcut for Sticky keys
+- Use the Print screen button to open Screen snipping
 
 *** 
 
