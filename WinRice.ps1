@@ -797,7 +797,7 @@ $ProgressPreference = 'SilentlyContinue'
 	# Credit: https://dev.to/kaiwalter/download-windows-store-apps-with-powershell-from-https-store-rg-adguard-net-155m.
 	Write-Host "Installing HEVC Video Extensions..."
 	$apiUrl = "https://store.rg-adguard.net/api/GetFiles"
-	$productUrl = "https://www.microsoft.com/en-us/p/9n4wgh0z6vhq"
+	$productUrl = "https://www.microsoft.com/en-us/p/9nmzlz57r3t7"
 	$downloadFolder = Join-Path (Get-Location).Path "WinRice"
 	if(!(Test-Path $downloadFolder -PathType Container)) {
 		New-Item $downloadFolder -ItemType Directory -Force | Out-Null
