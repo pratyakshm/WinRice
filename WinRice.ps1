@@ -42,7 +42,7 @@ $tasks = @(
 	# "DisabledotNET3.5",
 	"EnableSandbox",
 	# "DisableSandbox",
-	"SetPhotoViewerAssociation",
+	# "SetPhotoViewerAssociation",
 	# "UnsetPhotoViewerAssociation",
 	"ChangesDone",
 
