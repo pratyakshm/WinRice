@@ -1,7 +1,7 @@
 # Notes
 
 This folder mostly has documentation for users.   
-For **all** docs, check out the [Wiki](https://github.com/pratyakshm/WinRice/wiki).
+For more docs, check out the [Wiki](https://github.com/pratyakshm/WinRice/wiki).
 
 ## Found an issue with docs?
 Report them. Report any issues you face while reading the documentation. Be it spelling mistakes, grammatical errors, or just unclear language.   

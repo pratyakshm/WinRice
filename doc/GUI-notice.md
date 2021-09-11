@@ -8,7 +8,7 @@ In lieu of this change, WinRice now only has one variant (i.e. CLI), hence its j
 ## Features affected  
 ### **App Uninstaller [PORTED to CLI]**  
 This feature has been ported to regular WinRice. When run, users will have a choice to uninstall apps using CLI or GUI.    
-While the CLI app uninstaller will remove apps as documented in [`TASKS.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/TASKS.md), GUI app uninstaller will give users the choice over which apps they want to uninstall. 
+While the CLI app uninstaller will remove apps as documented in [`List-of-changes.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/List-of-changes.md), GUI app uninstaller will give users the choice over which apps they want to uninstall. 
 
 ***
 

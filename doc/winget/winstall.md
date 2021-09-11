@@ -1,7 +1,7 @@
 # Winstall
 Winstall lets you batch install apps.
 
-### Dependency: [`winget`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINGET.md) 
+### Dependency: [`winget`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winget.md) 
 
 ## Creating your Winstall config
 Create a new text file using any text editor, and add one app name per line.

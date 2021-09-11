@@ -18,9 +18,9 @@ WinRice performs a bunch of tasks including (but not limited to) removing unused
 | Type | Doc | 
 |--------------|--------|
 | LICENSE | [`LICENSE`](https://github.com/pratyakshm/WinRice/blob/main/LICENSE) |
-| Tasks WinRice does | [`TASKS.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/TASKS.md) |
-| Frequently asked questions | [`FAQ.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/FAQ.md) |
-| winget | [`WINGET.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINGET.md) |
+| List of changes | [`List-of-changes.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/List-of-changes.md) |
+| Frequently Answered Questions | [`Frequently-answered-questions.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Frequently-answered-questions.md) |
+| winget | [`winget.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winget.md) |
 | Docs folder | [`doc`](https://github.com/pratyakshm/WinRice/tree/main/doc) |
 
 ***

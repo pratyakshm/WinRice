@@ -7,9 +7,9 @@ A lot of features in WinRice are powered by WinGet.
 ### Features powered by WinGet
 | Feature | Link | 
 |-------|--------|
-| Winstall | [`WINSTALL.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINSTALL.md) |
-| winget import | [`WINGETIMPORT.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINGETIMPORT.md) |
-| Deploy Microsoft OneDrive | [`TASKS.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/TASKS.md) |
+| Winstall | [`winstall.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winstall.md) |
+| winget import | [`import.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/import.md) |
+| Deploy Microsoft OneDrive | [`List-of-changes.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/List-of-changes.md) |
 
 
 # Installing winget
@@ -19,7 +19,7 @@ If you have used WinRice, chances are you have winget installed.
 If you still don't have winget installed, install it.
 
 ## Methods
-- Get the latest release from [GitHub Releases](https://github.com/microsoft/winget-cli/releases/latest).
+- Get the latest release from [WinGet's GitHub repository](https://github.com/microsoft/winget-cli/releases/latest).
 - Use WinRice's own winget install script [paste in Windows Terminal (Admin)]: ``Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JWMKj'))``
 - Join [WinGet Insider Program](http://aka.ms/winget-InsiderProgram).
 - Join [Windows Insider Program](https://insider.windows.com/).

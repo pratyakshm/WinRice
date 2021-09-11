@@ -7,15 +7,15 @@
 - Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/))
 - 7-zip ([Website](https://www.7-zip.org/))
 #### Leveraging winget to install apps
-   - [`winget import`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINGETIMPORT.md)
-   - [`Winstall`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINSTALL.md)
-   - [`winget doc`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINGET.md)
+   - [`winget.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winget.md)
+   - [`import.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/import.md)
+   - [`winstall.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winstall.md)
    
 ### Apps updated:
  - Windows 11: Update Microsoft Store and Widgets to newer versions if older versions are detected.
 
 ### Apps uninstalled:
-Read [`APPUNINSTALLATION.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/APPUNINSTALLATION.md)
+Read [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/App-uninstallation.md)
 
 ### Apps unpinned from taskbar:
 - Mail

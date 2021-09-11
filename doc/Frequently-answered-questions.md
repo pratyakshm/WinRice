@@ -8,7 +8,7 @@
 Otherwise, you may want to check out the [Wiki](https://github.com/pratyakshm/WinRice/wiki).
 
 **Q:** **How do I revert a change?**  
-**A:** Read [`REVERT.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/REVERT.md).
+**A:** Read [`Reverting-changes.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Reverting-changes.md).
 
 **Q:** **I've run WinRice and it broke my computer / killed someone / caused an apocalypse.**   
 **A:** This program comes with absolutely no warranty, hence I am not responsible. Tap the photo below to learn more.  
@@ -18,12 +18,11 @@ Otherwise, you may want to check out the [Wiki](https://github.com/pratyakshm/Wi
 **A:** Submit a [Pull request](https://github.com/pratyakshm/WinRice/pulls) with your code or create an [Issue](https://github.com/pratyakshm/WinRice/issues). As long as it follows WinRice [principles](https://github.com/pratyakshm/WinRice/wiki/Principles) and adds value, I will most likely make it happen.
 
 **Q:** **How is WinRice tested?**  
-**A:** Read [`Windows version`](https://github.com/pratyakshm/WinRice#windows-version) section in [`README.md`](https://github.com/pratyakshm/WinRice/blob/main/README.md). Only the listed OS builds are tested, either on my host machine or on virtual machines. Keep in mind that WinRice is a community project and as such it heavily relies on community feedback and input.
+**A:** WinRice is only tested in the OS builds listed in [`Windows version`](https://github.com/pratyakshm/WinRice#windows-version) section of README placed in this project's root directory. 
 
 **Q:** **I opted to turn off automatic Windows updates, but they're not turned off. Why?**   
-**A:** Windows Editions based on Windows Core such as Windows 10 Home, Home Single Language, etc. do not support setting up group policies for Windows Update. WinRice informs the user about this.   
-However, if you have Pro edition or up and the group policies are still not set up, file a [bug report](https://github.com/pratyakshm/WinRice/issues/new?assignees=pratyakshm&labels=Issue-Bug&template=bug_report.yaml&title=Bug%3A+).  
-**Note:** WinRice currently cannot set up update policies on Windows 11. 
+**A:** Editions based on Windows Core, for instance Windwos 10 Home, do not support setting up group policies, hence WinRice can't setup Windows Update policies in these editions.   
+If WinRice has not set up group policies despite your edition of Windows supporting it, please consider filing a [bug report](https://github.com/pratyakshm/WinRice/issues/new?assignees=pratyakshm&labels=Issue-Bug&template=bug_report.yaml&title=Bug%3A+).  
 
 ***
 

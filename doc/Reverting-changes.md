@@ -10,7 +10,7 @@ Restoring to the restore point will all settings changes performed by WinRice
 1. [Tap here](https://github.com/pratyakshm/WinRice/archive/refs/heads/main.zip) to download the latest code from main branch. 
 2. Extract the ZIP file and locate `WinRice.ps1`.
 3. Open the file on your desired text editor of choice.
-4. Replace the default preset with the [revert preset](https://github.com/pratyakshm/WinRice/blob/main/doc/REVERT.md#revert-preset) given below.
+4. Replace the default preset with the [revert preset](https://github.com/pratyakshm/WinRice/blob/main/doc/Reverting-changes.md#revert-preset) given below.
 5. Save the file.
 6. Open Windows Terminal (Admin).
 7. Set Location to the WinRice folder (typically under `~\Downloads\WinRice-main`)
