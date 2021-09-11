@@ -9,7 +9,7 @@ A lot of features in WinRice are powered by WinGet.
 |-------|--------|
 | Winstall | [`winstall.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winstall.md) |
 | winget import | [`import.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/import.md) |
-| Deploy Microsoft OneDrive | [`List-of-changes.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/List-of-changes.md) |
+| Deploy Microsoft OneDrive | [`Features.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Features.md) |
 
 
 # Installing winget

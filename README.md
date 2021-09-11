@@ -1,5 +1,6 @@
-# WinRice
-<h3 align ="center">WinRice automates setting up Windows devices</h3>
+<p align="center"><a href="https://github.com/pratyakshm/WinRice"><img src="assets/icon.png" width="150"></a></p> 
+<h2 align="center">WinRice</h2>
+<h2 align ="center">Automates setting up Windows devices</h2>
 <p align="center">
 <a href="https://github.com/pratyakshm/WinRice#running-WinRice"><img src="https://img.shields.io/static/v1?label=pratyakshm&message=WinRice&color=blue&logo=github" alt="pratyakshm - WinRice"></a>
 <a href="https://github.com/pratyakshm/WinRice"><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/pratyakshm/WinRice/total?color=blue"></a>
@@ -8,20 +9,17 @@
 <a href="#license"><img src="https://img.shields.io/badge/License-GPL_v3-blue" alt="License"></a>
 </p>
 
-## 😃 Brief
-WinRice performs a bunch of tasks including (but not limited to) removing unused apps, installing useful apps (read [`WINGET.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINGET.md#winrice-x-winget)), cleaning up the Windows UI, maximizing privacy, setting up Windows Update policies, configuring optional features, etc. - while retaining maximum OS stability and functionality.   
+<p align="center"><a href="#-description">Description</a> &bull; <a href="https://github.com/pratyakshm/WinRice/blob/main/doc/Features.md">Features</a> &bull; <a href="https://github.com/pratyakshm/WinRice/tree/main/doc">Documentation</a> &bull; <a href="#-running-winrice">Usage</a>
+
+<p align="center"><a href="https://github.com/pratyakshm/WinRice/blob/main/doc/Frequently-answered-questions.md">FAQ</a>   &bull; <a href="#%EF%B8%8F-license">License</a> &bull; <a href="#%EF%B8%8F-contributing">Contribution</a> 
+
+***
 
 
-## 📃 Documentation
-### 💡 Read docs before using WinRice
 
-| Type | Doc | 
-|--------------|--------|
-| LICENSE | [`LICENSE`](https://github.com/pratyakshm/WinRice/blob/main/LICENSE) |
-| List of changes | [`List-of-changes.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/List-of-changes.md) |
-| Frequently Answered Questions | [`Frequently-answered-questions.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Frequently-answered-questions.md) |
-| winget | [`winget.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winget.md) |
-| Docs folder | [`doc`](https://github.com/pratyakshm/WinRice/tree/main/doc) |
+## 😃 Description
+WinRice performs a bunch of tasks including (but not limited to) removing unused apps, installing useful apps (read [`winget.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINGET.md#winrice-x-winget)), cleaning up the Windows UI, maximizing privacy, setting up Windows Update policies, configuring optional features, etc. - while retaining maximum OS stability and functionality.   
+
 
 ***
 
@@ -33,6 +31,7 @@ WinRice performs a bunch of tasks including (but not limited to) removing unused
 More installation methods include: 
    - Getting the latest release from [GitHub](https://github.com/microsoft/terminal/releases)
    - Windows Package Manager CLI (winget): ``winget install --id=Microsoft.WindowsTerminal --source winget``   
+
 ### Windows version
 Currently supported versions:
 - Windows 11 21H2  
@@ -41,7 +40,11 @@ Currently supported versions:
 
 The most recent Windows versions are supported.  
 Pro edition or up is strongly recommended.   
-Older Windows versions are not supported.    
+Older Windows versions are not supported. 
+
+### Documentation
+Make sure you (the user) have read documentation regarding this project before its usage.
+
 ### Internet connection
 An active internet connection is needed.
 ***
