@@ -9,6 +9,21 @@ In lieu of this change, WinRice now only has one variant (i.e. CLI), hence its j
 ### **App Uninstaller [PORTED to CLI]**  
 This feature has been ported to regular WinRice. When run, users will have a choice to uninstall apps using CLI or GUI.    
 While the CLI app uninstaller will remove apps as documented in [`List-of-changes.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/List-of-changes.md), GUI app uninstaller will give users the choice over which apps they want to uninstall. 
+### More features
+One of the principal reasons GUI variant was used is because of its modular nature, where users can change only the things **they want**.   
+While GUI variant currently has no plans of making a comeback, I have created this collection of most useful / relevant features for users to run individually without running the full code of WinRice.  
+More features coming soon.
+
+| Feature | Code to run (paste in Windows Terminal (Admin)|
+|---------|-------------|
+| Setup Windows Update | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JurYt'`)) |
+| Reset Windows Update | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JurY4'`)) |
+| Enable Windows Subsystem for Linux | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JurYa'`)) |
+| Install winget | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JurY1'))` |
+| winstall | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jur3G'`)) |
+| winget import | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jur3F'`)) |
+
+
 
 ***
 

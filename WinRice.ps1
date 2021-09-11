@@ -1271,7 +1271,7 @@ function UninstallerList {
 	if (Test-Path uninstallapps.txt) {
 		print "Uninstalling listed inbox apps..."
 		# Get each line from the text file and use winget install command on it.
-		Get-Content 'Winstall.txt' | ForEach-Object {
+		Get-Content 'uninstallapps.txt' | ForEach-Object {
 			if (Get-AppxPackage $App) 
 			{
 				print "     Uninstalling $App"
