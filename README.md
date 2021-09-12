@@ -32,15 +32,18 @@ More installation methods include:
    - Getting the latest release from [GitHub](https://github.com/microsoft/terminal/releases)
    - Windows Package Manager CLI (winget): ``winget install --id=Microsoft.WindowsTerminal --source winget``   
 
-### Windows version
-Currently supported versions:
-- Windows 11 21H2  
-- Windows 10 21H2
-- Windows 10 21H1 
-
-The most recent Windows versions are supported.  
-Pro edition or up is strongly recommended.   
-Older Windows versions are not supported. 
+### Supported OS versions
+WinRice supports the latest retail and preview versions of Windows.  
+To check if your device is compatible, go to **Settings > System > About** and scroll down to the **Windows specifications** section. Make sure that the **Version** or **OS Build** you are currently running is listed in the table below.  
+| OS version | Version | OS Build | Servicing option |
+| ----------- | --------- | -----------| ------------------ | 
+| Windows 11 | Dev | 22000+ | Dev Channel |
+| Windows 11 | 21H2 | 22000 | Beta and Release Preview Channels |
+| Windows 10 | 21H1 | 19043 | Semi-Annual Channel |
+| Windows 10 | 21H2 | 19044 | Release Preview Channel (SAC incoming) |
+#### Note
+   - Windows Pro edition or upwards (Enterprise, etc.) is strongly recommended.
+   - If you are not running a supported OS version, you need to update your device. A fresh installation is even more recommended, and its easy: [Read the document](https://github.com/pratyakshm/WinRice/wiki/Fresh-installation-of-Windows)!
 
 ### Documentation
 Make sure you (the user) have read documentation regarding this project before its usage.
@@ -75,3 +78,5 @@ I ask that **before you start your work on a feature that you would like to requ
 
 ## ⚖️ License
 WinRice is licensed under the [GPL-3.0 License](https://github.com/pratyakshm/WinRice/blob/main/LICENSE).
+
+
