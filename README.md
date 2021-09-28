@@ -18,7 +18,7 @@
 
 
 ## 😃 Description
-WinRice performs a bunch of tasks including (but not limited to) removing unused apps, installing useful apps (read [`winget.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/WINGET.md#winrice-x-winget)), cleaning up the Windows UI, maximizing privacy, setting up Windows Update policies, configuring optional features, etc. - while retaining maximum OS stability and functionality.   
+WinRice performs a bunch of tasks including (but not limited to) removing unused apps, installing useful apps (read [`winget.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winget.md#winrice-x-winget)), cleaning up the Windows UI, maximizing privacy, setting up Windows Update policies, configuring optional features, etc. - while retaining maximum OS stability and functionality.   
 
 
 ***
