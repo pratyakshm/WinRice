@@ -75,7 +75,7 @@ WinRice accepts all kinds of contributions such as finding bugs, fixing bugs, ad
 I ask that **before you start your work on a feature that you would like to request or contribute**, please read WinRice [principles](https://github.com/pratyakshm/WinRice/wiki/Principles). I will be happy to work with you to figure out good approaches and provide guidance throughout feature development, and help avoid any wasted or duplicated effort.
 
 ## 🗣️ Discussion
-   <a href="https://matrix.to/#/!AqvbabwRfobPxchvcl:matrix.org?via=matrix.org"><img src="https://img.shields.io/badge/Chat-Matrix-brightgreen" alt="Chat on Matrix"></a>
+   <a href="https://matrix.to/#/!UQlisJCpjpplqFPKLc:matrix.org?via=matrix.org&via=t2bot.io"><img src="https://img.shields.io/badge/Chat-Matrix-brightgreen" alt="Chat on Matrix"></a>
    
 ***
 
