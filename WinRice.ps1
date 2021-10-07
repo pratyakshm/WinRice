@@ -18,8 +18,8 @@ $tasks = @(
 	"EnableExperimentsWinGet",
 	# "DisableExperimentsWinGet",
 	"MicrosoftStore",
-	"Install7zip", 
-	# "Uninstall7zip",
+	"InstallNanaZip", 
+	# "UninstallNanaZip",
 	"WinGetImport",
 	"Winstall", 
 	"InstallHEVC", 
@@ -725,39 +725,24 @@ $ProgressPreference = 'SilentlyContinue'
 		print "Could not update Microsoft Store."
 	}
 	
-# Install 7zip.
-Function Install7zip {
+# Install NanaZip.
+Function InstallNanaZip {
 	space
 	if (!(Get-Command winget)) {
 		print "WinGet is not installed. Couldn't install 7-zip."
 		return 
 	}
-	$7zip = "HKLM:\SOFTWARE\7-Zip"
-	if (!(Test-Path $7zip)) {
-		print "Installing 7-zip..."
-		winget install 7zip --silent | Out-Null
-		print "Installed 7-zip."
-	}
-	else {
-		print "7-zip is already installed on this device."
-	}
+	print "Installing NanaZip... (Ctrl + Click: https://github.com/M2Team/NanaZip"
+	winget install NanaZip -s msstore --accept-package-agreements --accept-source-agreements | Out-Null
+	print "Installed NanaZip."
 }
 
-# Uninstall 7zip
-Function Uninstall7zip {
+# Uninstall NanaZip.
+Function UninstallNanaZip {
 	space
-	$7zip = "HKLM:\SOFTWARE\7-Zip"
-	if (!(Test-Path $7zip)) {
-		print "7-zip is not present on this device."
-		return
-	}
-	print "Uninstalling 7-zip..."
-	winget uninstall 7zip.7zip | Out-Null
-	if (Test-Path $7zip) {
-		print "Could not uninstall 7-zip."
-		return
-	}
-	print "Uninstalled 7-zip."
+	print "Uninstalling NanaZip..."
+	winget uninstall 40174MouriNaruto.NanaZip_gnj4mf6z9tkrc | Out-Null
+	print "Uninstalled NanaZip."
 }
 
 # Use winget import (optional) (part of code used here was picked from https://devblogs.microsoft.com/scripting/hey-scripting-guy-can-i-open-a-file-dialog-box-with-windows-powershell/)
