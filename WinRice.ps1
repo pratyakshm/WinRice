@@ -791,7 +791,7 @@ $ErrorActionPreference = 'Continue'
 		Get-Content 'Winstall.txt' | ForEach-Object {
 			$App = $_.Split('=')
 			print "    Installing $App..."
-			winget install "$App" --silent | Out-Null
+			winget install "$App" --accept-package-agreements --accept-source-agreements --silent | Out-Null
 		}
 		print "Winstall has successfully installed the app(s)."
 	}
@@ -802,7 +802,7 @@ $ErrorActionPreference = 'Continue'
 		Get-Content 'winstall.txt' | ForEach-Object {
 			$App = $_.Split('=')
 			print "    Installing $App..."
-			winget install "$App" --silent | Out-Null
+			winget install "$App" --accept-package-agreements --accept-source-agreements --silent | Out-Null
 		}
 		print "Winstall has successfully installed the app(s)."
 	}
@@ -817,7 +817,7 @@ $ErrorActionPreference = 'Continue'
 			print "Starting Winstall..."
 			Get-Content $OpenFileDialog.FileName | ForEach-Object {					$App = $_.Split('=')
 				print "    Installing $App..."
-				winget install "$App" --silent | Out-Null
+				winget install "$App" --accept-package-agreements --accept-source-agreements --silent | Out-Null
 			}
 			print "Winstall has successfully installed the app(s)."
 		}
@@ -1522,7 +1522,7 @@ Function InstallOneDrive {
 		return
 	}
 	print "Installing Microsoft OneDrive."
-	winget install Microsoft.OneDrive --silent | Out-Null
+	winget install Microsoft.OneDrive --accept-package-agreements --accept-source-agreements --silent | Out-Null
 	$check = winget list Microsoft.OneDrive
 	if ($check -like "No installed package found matching input criteria.") {
 		print "Could not install Microsoft OneDrive."
