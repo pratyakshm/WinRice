@@ -385,6 +385,7 @@ $systemrestore = ask "Create a system restore point? [y/N]"
 $uninstallapps = ask "Uninstall inbox apps?"
 if ($uninstallapps -like "y") {
 	$uninstallmethod = ask "Use App Uninstaller CLI, GUI or List? [CLI/GUI/List]"
+	$uninstallod = ask "Uninstall Microsoft OneDrive?"
 }
 if ($CurrentBuild -ge 22000) {
 	$widgets = ask "Remove Widgets?"
@@ -1492,7 +1493,7 @@ Function UnpinAppsFromTaskbar {
 # Uninstall Microsoft OneDrive (supports 64-bit versions).
 Function UninstallOneDrive {
 $ErrorActionPreference = 'SilentlyContinue'
-	if (!(check($uninstallapps))) { 
+	if (!(check($uninstallod))) { 
 		return 
 	}
 	space
