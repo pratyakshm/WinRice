@@ -12,10 +12,10 @@ $tasks = @(
 
 ### Apps & Features ###
 	"AppsFeatures",
-	"InstallRuntimes",
-	# "UninstallRuntimes",
+	"InstallVCLibs",
+	# "UninstallVCLibs",
 	"InstallWinGet",
-	"EnableExperimentsWinGet",
+	# "EnableExperimentsWinGet",
 	# "DisableExperimentsWinGet",
 	"MicrosoftStore",
 	"InstallNanaZip", 
@@ -394,7 +394,7 @@ $uninstallfeatures = ask "Uninstall unnecessary features?"
 $netfx3 = ask "Enable dotNET 3.5?"
 $wsl = ask "Enable Windows Subsystem for Linux?"
 $sandbox = ask "Enable Windows Sandbox?"
-$enableexperimentswinget = ask "winget: enable experimental features?"
+# $enableexperimentswinget = ask "winget: enable experimental features?"
 $wingetimport = ask "winget: use winget import?"
 $winstall = ask "winget: use Winstall?"
 
@@ -517,8 +517,8 @@ Function AppsFeatures {
 	space
 }
 
-# Install runtime packages .
-Function InstallRuntimes {
+# Install VCLibs packages .
+Function InstallVCLibs {
 $ProgressPreference = 'SilentlyContinue'
 	# Create new folder and set location.
 	if (!(Test-Path WinRice)) {
@@ -528,45 +528,76 @@ $ProgressPreference = 'SilentlyContinue'
 	else {
 		Set-Location WinRice
 	}
-	# Download runtime.
-	print "Installing app frameworks..."
-	$VCLibs1 = "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx"
-	Start-BitsTransfer $VCLibs1
+	
+	# Download VCLibs.
+	print "Installing Visual C++ libraries..."
+	$VCLibs = "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx"
+	Start-BitsTransfer $VCLibs
 
-	# Install Installing.
+	# Install Visual C++ libraries.
 	Add-AppxPackage "Microsoft.VCLibs.x64.14.00.Desktop.appx"
-
-	# Cleanup installers.
 	Set-Location ..
 	Remove-Item WinRice -Recurse -Force
 		
 	# Get-Command VCLibs, if it works then print success message.
-	if (Get-AppxPackage *VCLibs*) 
+	if (!(Get-AppxPackage *VCLibs*))
 	{
-		print "Installed app runtime."
+		print "Could not install Visual C++ Libraries."
+		return
 	}
-	else
-	{
-		print "Could not install app runtime."
-	}
+	print "Installed Visual C++ Libraries."
+
 }
 
-Function UninstallRuntimes {
+Function UninstallVCLibs {
 	space
-	if (!(Get-AppxPackage "Microsoft.VCLibs.140.00.UWPDesktop" -or Get-AppxPackage "Microsoft.VCLibs.x64.14.00.Desktop")) {
-		print "Runtimes are not present on this device."
+	if (!(Get-AppxPackage *VCLibs*)) {
+		print "Visual C++ Libraries are not present on this device."
 		return
 	}
 	print "Uninstalling runtimes..."
 	Get-AppxPackage *VCLibs* | Remove-AppxPackage
 	if (Get-AppxPackage *VCLibs*) {
-		print "Could not uninstall one or more runtimes."
+		print "Could not uninstall Visual C++ Libraries."
 		return
 	}
-	print "Uninstalled runtimes."
+	print "Uninstalled Visual C++ Libraries."
 }
 
-# Install WinGet (Windows Package Manager).
+# Legacy winget
+Function LegacyWinget {
+	# Create new folder and set location.
+	if (!(Test-Path WinRice)) {
+		New-Item WinRice -ItemType Directory | out-Null
+		$currentdir = $(Get-Location).Path
+		$dir = "$currentdir/WinRice"
+		Set-Location $dir
+	}
+	else {
+		Set-Location WinRice
+	}
+
+	# Download and deploy winget.
+	$WinGetURL = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
+	print "Downloading WinGet installation packages..."
+	Start-BitsTransfer $WinGetURL.assets.browser_download_url;
+	print "Installing WinGet..."
+	Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+		
+	# Cleanup installers.
+	Set-Location ..
+	Remove-Item WinRice -Recurse -Force
+
+	# Get-Command winget, if it works then print success message.
+	if (!(Get-Command winget)) {
+		print "WinGet could not be installed."
+		return
+	}
+	print "Installed WinGet."
+	print "You might also want to update App Installer from Microsoft Store."
+}
+
+# Install WinGet (Windows Package Manager) [UPDATED METHOD]
 Function InstallWinGet {
 $ErrorActionPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
@@ -575,6 +606,7 @@ $ProgressPreference = 'SilentlyContinue'
 		print "WinGet is already installed on this device."
 		return 
 	}
+	
 	# Create new folder and set location.
 	if (!(Test-Path WinRice)) {
 		New-Item WinRice -ItemType Directory | Out-Null
@@ -585,7 +617,7 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 
 	# Credit: https://dev.to/kaiwalter/download-windows-store-apps-with-powershell-from-https-store-rg-adguard-net-155m.
-	Write-Host "Installing HEVC Video Extensions..."
+	Write-Host "Installing winget..."
 	$apiUrl = "https://store.rg-adguard.net/api/GetFiles"
 	$productUrl = "https://www.microsoft.com/en-us/p/9nblggh4nns1"
 	$downloadFolder = Join-Path (Get-Location).Path "WinRice"
@@ -599,67 +631,31 @@ $ProgressPreference = 'SilentlyContinue'
 		lang = 'en-US'
 	}
 	
+	# Deploy winget.
 	$raw = Invoke-RestMethod -Method Post -Uri $apiUrl -ContentType 'application/x-www-form-urlencoded' -Body $body
 	
 	$raw | Select-String '<tr style.*<a href=\"(?<url>.*)"\s.*>(?<text>.*)<\/a>' -AllMatches | ForEach-Object { $_.Matches } | ForEach-Object { 
-		$url = $_.Groups[1].Value
-		$text = $_.Groups[2].Value
-			if($text -match "_(x64|neutral).*appx(|bundle)$") {
-				$downloadFile = Join-Path $downloadFolder $text
-				Invoke-WebRequest -Uri $url -OutFile $downloadFile
-			}
+	$url = $_.Groups[1].Value
+	$text = $_.Groups[2].Value
+		if($text -match "_(x64|neutral).*msix(|bundle)$") {
+			$downloadFile = Join-Path $downloadFolder $text
+			Invoke-WebRequest -Uri $url -OutFile $downloadFile
 		}
-		Set-Location WinRice
-		Add-AppxPackage Microsoft.Desktop*
-		Set-Location ../
-		Remove-Item WinRice -Recurse -Force
-		if (!(Get-Command winget))
-		{
-			print "Could not install WinGet. Falling back to legacy method."
-			print "Warning: Legacy method will install an older version of winget, please update 'App Installer' from Microsoft later on."
-			print "Preparing download..."
-			# Create new folder and set location.
-			if (!(Test-Path WinRice)) {
-				New-Item WinRice -ItemType Directory | out-Null
-				$currentdir = $(Get-Location).Path
-				$dir = "$currentdir/WinRice"
-				Set-Location $dir
-			}
-			else {
-				Set-Location WinRice
-			}
-
-			# Download the packages.
-			$WinGetURL = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
-			print "Downloading WinGet installation packages..."
-			Start-BitsTransfer $WinGetURL.assets.browser_download_url;
-
-			if (!(Get-AppxPackage "Microsoft.VCLibs.*.UWPDesktop")) {
-				$VCLibs = "Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx"
-				Start-BitsTransfer $VCLibs
-				Add-AppxPackage Microsoft.VCLibs.140.00.UWPDesktop_14.0.30035.0_x64__8wekyb3d8bbwe.Appx
-			}
-
-			# Install WinGet.
-			print "Installing WinGet..."
-			Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-				
-			# Cleanup installers.
-			Set-Location ..
-			Remove-Item WinRice -Recurse -Force
-
-			# Get-Command winget, if it works then print success message.
-			if (Get-Command winget) {
-				print "Installed WinGet."
-			}
-			else {
-				print "WinGet could not be installed."
-				return
-			}
-		}
-	
+	}
+	Set-Location WinRice
+	Add-AppxPackage Microsoft.Desktop*
+	Set-Location ../
+	Remove-Item WinRice -Recurse -Force
+	if (!(Get-Command winget))
+	{
+		print "WinGet could not be installed. Falling back to legacy method."
+		print "Warning: Legacy method will install an older version of winget, please update 'App Installer' from Microsoft Store later on."
+		legacywinget
+		return
+	}
 	print "Installed WinGet."
 }
+
 
 # Enable all experimental features in WinGet.
 Function EnableExperimentsWinGet {
@@ -701,30 +697,58 @@ Function DisableExperimentsWinGet {
 	print "Turned off experimental features in WinGet."
 }
 
-# Update Microsoft Store if older version - helpful for users clean installing Windows 11 from ISOs.
+# Update to new Microsoft Store.
 function MicrosoftStore {
 $ProgressPreference = 'SilentlyContinue'
-		if ($CurrentBuild -lt 22000) 
-		{
-			return
-		}
-		if ((Get-AppxPackage "Microsoft.WindowsStore").Version -ge "22107.1401.4.0")
-		{
-			return
-		}
-		space
-		print "Updating Microsoft Store..."
-		Get-AppxPackage "Microsoft.WindowsStore" | Remove-AppxPackage 
-		Start-BitsTransfer https://github.com/WinRice/Files/raw/main/Microsoft.WindowsStore_22107.1401.4.0_neutral.Msixbundle
-		Add-AppPackage "Microsoft.WindowsStore_22107.1401.4.0_neutral.Msixbundle"
-		Remove-Item "Microsoft.WindowsStore_22107.1401.4.0_neutral.Msixbundle"
-		if ((Get-AppxPackage "Microsoft.WindowsStore").Version -eq "22107.1401.4.0")
-		{
-			print "Updated Microsoft Store."
-			return
-		}
-		print "Could not update Microsoft Store."
+	if ($CurrentBuild -lt 22000) 
+	{
+		return
 	}
+	if ((Get-AppxPackage "Microsoft.WindowsStore").Version -ge "22110.1401.3.0")
+	{
+		return
+	}
+	space
+
+	# Credit: https://dev.to/kaiwalter/download-windows-store-apps-with-powershell-from-https-store-rg-adguard-net-155m.
+	print "Updating Microsoft Store..."
+	$apiUrl = "https://store.rg-adguard.net/api/GetFiles"
+	$productUrl = "https://www.microsoft.com/store/productId/9WZDNCRFJBMP"
+	$downloadFolder = Join-Path (Get-Location).Path "WinRice"
+	if(!(Test-Path $downloadFolder -PathType Container)) {
+		New-Item $downloadFolder -ItemType Directory -Force | Out-Null
+	}
+	$body = @{
+		type = 'url'
+		url  = $productUrl
+		ring = 'Retail'
+		lang = 'en-US'
+	}
+	
+	# Deploy winget.
+	$raw = Invoke-RestMethod -Method Post -Uri $apiUrl -ContentType 'application/x-www-form-urlencoded' -Body $body
+	
+	$raw | Select-String '<tr style.*<a href=\"(?<url>.*)"\s.*>(?<text>.*)<\/a>' -AllMatches | ForEach-Object { $_.Matches } | ForEach-Object { 
+	$url = $_.Groups[1].Value
+	$text = $_.Groups[2].Value
+		if($text -match "_(x64|neutral).*msix(|bundle)$") {
+			$downloadFile = Join-Path $downloadFolder $text
+			Invoke-WebRequest -Uri $url -OutFile $downloadFile
+		}
+	}
+	Set-Location WinRice
+	Add-AppxPackage Microsoft.Desktop*
+	Set-Location ../
+	Remove-Item WinRice -Recurse -Force
+	if (!(Get-Command winget))
+	{
+		print "WinGet could not be installed. Falling back to legacy method."
+		print "Warning: Legacy method will install an older version of winget, please update 'App Installer' from Microsoft Store later on."
+		legacywinget
+		return
+	}
+	print "Installed WinGet."
+}
 	
 # Install NanaZip.
 Function InstallNanaZip {
@@ -733,7 +757,7 @@ Function InstallNanaZip {
 		print "WinGet is not installed. Couldn't install 7-zip."
 		return 
 	}
-	print "Installing NanaZip... (Ctrl + Click: https://github.com/M2Team/NanaZip"
+	print "Installing NanaZip... (Ctrl + Click: https://github.com/M2Team/NanaZip)"
 	winget install NanaZip -s msstore --accept-package-agreements --accept-source-agreements | Out-Null
 	print "Installed NanaZip."
 }
@@ -765,7 +789,7 @@ Function WinGetImport {
 	if ($OpenFileDialog.FileName) {
 		print "Initializing JSON file..."
 		Start-Sleep -Milliseconds 200
-		winget import $OpenFileDialog.FileName
+		winget import $OpenFileDialog.FileName --accept-package-agreements --accept-source-agreements
 	}
 	elseif (!($OpenFileDialog.FileName)) {
 		print "No JSON selected."
@@ -792,7 +816,7 @@ $ErrorActionPreference = 'Continue'
 		Get-Content 'Winstall.txt' | ForEach-Object {
 			$App = $_.Split('=')
 			print "    Installing $App..."
-			winget install "$App" --accept-package-agreements --accept-source-agreements --silent | Out-Null
+			winget install "$App" --source winget --accept-package-agreements --accept-source-agreements --silent | Out-Null
 		}
 		print "Winstall has successfully installed the app(s)."
 	}
@@ -803,7 +827,7 @@ $ErrorActionPreference = 'Continue'
 		Get-Content 'winstall.txt' | ForEach-Object {
 			$App = $_.Split('=')
 			print "    Installing $App..."
-			winget install "$App" --accept-package-agreements --accept-source-agreements --silent | Out-Null
+			winget install "$App" --source winget --accept-package-agreements --accept-source-agreements --silent | Out-Null
 		}
 		print "Winstall has successfully installed the app(s)."
 	}
@@ -818,7 +842,7 @@ $ErrorActionPreference = 'Continue'
 			print "Starting Winstall..."
 			Get-Content $OpenFileDialog.FileName | ForEach-Object {					$App = $_.Split('=')
 				print "    Installing $App..."
-				winget install "$App" --accept-package-agreements --accept-source-agreements --silent | Out-Null
+				winget install "$App" --source winget --accept-package-agreements --accept-source-agreements --silent | Out-Null
 			}
 			print "Winstall has successfully installed the app(s)."
 		}
@@ -898,22 +922,49 @@ function UpdateWidgets {
 	space
 	print "Checking if Widgets are updated..."
 	$version = (Get-AppxPackage "MicrosoftWindows.Client.WebExperience").Version
-	if ($version -ge 421.17400.0.0)
+	if ($version -ge 421.20031.315.0)
 	{	
 		print "Widgets are up to date."
 		return
 	}
-	print "Updating Widgets..."
-	Start-BitsTransfer https://github.com/WinRice/Files/raw/main/MicrosoftWindows.Client.WebExperience_421.19701.0.0_neutral_cw5n1h2txyewy.AppxBundle
-	Add-AppxPackage MicrosoftWindows.Client.WebExperience_421.19701.0.0_neutral_cw5n1h2txyewy.AppxBundle
-	$version = (Get-AppxPackage "MicrosoftWindows.Client.WebExperience").Version
-	Remove-Item MicrosoftWindows.Client.WebExperience_421.19701.0.0_neutral_cw5n1h2txyewy.AppxBundle
-	if ($version -ge 421.19701.0.0) {
-		print "Updated Widgets."
+	
+	# Credit: https://dev.to/kaiwalter/download-windows-store-apps-with-powershell-from-https-store-rg-adguard-net-155m.
+	Write-Host "Updating Widgets..."
+	$apiUrl = "https://store.rg-adguard.net/api/GetFiles"
+	$productUrl = "https://www.microsoft.com/store/productId/9MSSGKG348SP"
+	$downloadFolder = Join-Path (Get-Location).Path "WinRice"
+	if(!(Test-Path $downloadFolder -PathType Container)) {
+		New-Item $downloadFolder -ItemType Directory -Force | Out-Null
 	}
-	else {
+	$body = @{
+		type = 'url'
+		url  = $productUrl
+		ring = 'Retail'
+		lang = 'en-US'
+	}
+		
+	# Deploy Widgets.
+	$raw = Invoke-RestMethod -Method Post -Uri $apiUrl -ContentType 'application/x-www-form-urlencoded' -Body $body
+	
+	$raw | Select-String '<tr style.*<a href=\"(?<url>.*)"\s.*>(?<text>.*)<\/a>' -AllMatches | ForEach-Object { $_.Matches } | ForEach-Object { 
+		$url = $_.Groups[1].Value
+		$text = $_.Groups[2].Value
+		if($text -match "_(x64|neutral).*appx(|bundle)$") {
+			$downloadFile = Join-Path $downloadFolder $text
+			Invoke-WebRequest -Uri $url -OutFile $downloadFile
+		}
+	}
+	Set-Location WinRice	
+	Add-AppxPackage MicrosoftWindows.Client.WebExperience
+	Set-Location ../
+	Remove-Item WinRice -Recurse -Force
+	if (!(Get-AppxPackage *MicrosoftWindows.Client.WebExperience*))
+	{
 		print "Could not update Widgets."
+		return
 	}
+	
+	print "Updated Widgets."
 }
 
 # Remove Widgets
@@ -1522,8 +1573,8 @@ Function InstallOneDrive {
 		print "WinGet is not installed. Could not install Microsoft OneDrive."
 		return
 	}
-	print "Installing Microsoft OneDrive."
-	winget install Microsoft.OneDrive --accept-package-agreements --accept-source-agreements --silent | Out-Null
+	print "Installing Microsoft OneDrive..."
+	winget install Microsoft.OneDrive --source winget --accept-package-agreements --accept-source-agreements --silent | Out-Null
 	$check = winget list Microsoft.OneDrive
 	if ($check -like "No installed package found matching input criteria.") {
 		print "Could not install Microsoft OneDrive."
@@ -1769,7 +1820,6 @@ $ProgressPreference = 'SilentlyContinue'
 		# Call installwslwin10 function
 		installwslwin10
 	}
-
 }
 
 # Disable Windows Subsystem for Linux.
@@ -2878,7 +2928,7 @@ Function EnableTaskbarFeed {
 	Start-Sleep -Milliseconds 200
 }
 
-# Disable widgets item - Windows 11 only.
+# Disable Widgets item - Windows 11 only.
 function DisableWidgetsItem {
 	if ($CurrentBuild -lt 22000)
 	{
