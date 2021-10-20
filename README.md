@@ -33,18 +33,19 @@ More installation methods include:
    - Windows Package Manager CLI (winget): ``winget install --id=Microsoft.WindowsTerminal --source winget``   
 
 ### Supported OS versions
-WinRice supports the latest retail and preview versions of Windows.  
-To check if your device is compatible, go to **Settings > System > About** and scroll down to the **Windows specifications** section. Make sure that the **Version** or **OS Build** you are currently running is listed in the table below.  
+WinRice supports the latest Windows retail and pre-release builds.
+   
+⚠️ This table features builds from Windows retail channel (GA/RTM). Windows Insider channels are still supported but no longer featured in the list.
 | OS version | Marketing version | OS Build | Servicing option | Servicing type
 | ----------- | --------- | -----------| ------------------ | ----------- |
 | Windows 11 | 21H2 | 22000 | Annual Channel | Production / General availability / Release to manufacturing
-| Windows 11 | Insider | 22400+ | All Insider Channels | Pre-release
 | Windows 10 | 21H1 | 19043 | Semi-Annual Channel | Production / General availability / Release to manufacturing
-| Windows 10 | 21H2 | 19044 | Release Preview Channel  | Pre-release
+
    
-#### Note
-   - Windows Pro edition or upwards (Enterprise, etc.) is strongly recommended.
-   - If you are not running a supported OS version, you need to update your device. A fresh installation is even more recommended, and its easy: [Read the document](https://github.com/pratyakshm/WinRice/wiki/Fresh-installation-of-Windows)!
+   #### Notes
+   - To check if your device is compatible, go to **Settings > System > About** and scroll down to the **Windows specifications** section. Make sure that the **Version** or **OS Build** you are currently running is listed in the table above.  
+     - If you are not running a supported OS version, you need to update your device. A fresh installation is even more recommended, and its easy: [Read the document](https://github.com/pratyakshm/WinRice/wiki/Fresh-installation-of-Windows)!
+   - In case of Retail channel (GA/RTM), WinRice supports **only** the latest retail channel build. I could include support for older Retail (GA/RTM) builds but honestly I do not have the time to test each change in more than two different OS builds.
 
 ### Documentation
 Make sure you (the user) have read documentation regarding this project before its usage.

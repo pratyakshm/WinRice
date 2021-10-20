@@ -26,6 +26,13 @@ $tasks = @(
 	# "UninstallHEVC",
 	"Widgets",
 	"InstallFonts", 
+	# "InstallFeatures", "Activity", 
+	"EnableWSL", "Activity", 
+	# "DisableWSL",
+	"EnabledotNET3.5", "Activity", 
+	# "DisabledotNET3.5",
+	"EnableSandbox",
+	# "DisableSandbox",
 	# "UninstallFonts",
 	"UninstallApps", "Activity", 
 	"WebApps",
@@ -35,13 +42,6 @@ $tasks = @(
 	"UninstallOneDrive", "Activity",
 	# "InstallOneDrive",
 	"UninstallFeatures", "Activity", 
-	# "InstallFeatures", "Activity", 
-	"EnableWSL", "Activity", 
-	# "DisableWSL",
-	"EnabledotNET3.5", "Activity", 
-	# "DisabledotNET3.5",
-	"EnableSandbox",
-	# "DisableSandbox",
 	# "SetPhotoViewerAssociation",
 	# "UnsetPhotoViewerAssociation",
 	"ChangesDone",
@@ -55,7 +55,7 @@ $tasks = @(
 	"DisableBackgroundApps",        
 	# "EnableBackgroundApps",
 	"DisableErrorReporting",
-	"EnableErrorReporting",
+	# "EnableErrorReporting",
 	"DisableFeedback",		       
 	# "EnableFeedback",
 	"DisableInkHarvesting",			
@@ -86,8 +86,8 @@ $tasks = @(
 
 ### Tasks & Services ###
 	"TasksServices",
-	"DisableStorageSense",		   
-	# "EnableStorageSense",
+	# "DisableStorageSense",		   
+	"EnableStorageSense",
 	"DisableReservedStorage",	   
 	# "EnableReservedStorage",
 	"DisableAutoplay",             
@@ -228,12 +228,9 @@ function RunWithProgress {
 
 
 # Did you read the docs? (Funny stuff).
-$hasReadDoc = ask "Have you read the documentation? [y/n]"
+$hasReadDoc = ask "By proceeding ahead, you acknowledge that you have read and understood the program documentation. [y/n]"
 if (!(check($hasReadDoc))) {
-	log "I didn't write the documentation for nothing."
-	log "Go ahead, read it."
-	log "Ctrl + left click https://github.com/pratyakshm/WinRice/blob/main/README.md"
-	log "You're welcome."
+	log "Denied, exiting WinRice in 2 seconds."
 	exit
 }
 
@@ -408,7 +405,7 @@ Start-Sleep -Milliseconds 600
 Function WinRice {
 	Clear-Host
 	space
-	print "pratyakshm's WinRice - version 0.4"
+	print "pratyakshm's WinRice - version 1.0"
 	Start-Sleep -Milliseconds 100
 	space
 	print "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
@@ -529,32 +526,36 @@ $ProgressPreference = 'SilentlyContinue'
 		Set-Location WinRice
 	}
 	
+	# Cleanup currently installed packages.
+	Get-AppxPackage *VCLibs.140.00* | Remove-AppxPackage
+
 	# Download VCLibs.
-	print "Installing Visual C++ libraries..."
+	print "Updating Visual C++ libraries..."
 	$VCLibs = "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx"
 	Start-BitsTransfer $VCLibs
+	$VCLibsUWP = "https://github.com/WinRice/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.Appx"
+	Start-BitsTransfer $VCLibsUWP
 
-	# Install Visual C++ libraries.
+	# Install VCLibs.
 	Add-AppxPackage "Microsoft.VCLibs.x64.14.00.Desktop.appx"
+	Add-AppxPackage "Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.Appx"
 	Set-Location ..
 	Remove-Item WinRice -Recurse -Force
 		
 	# Get-Command VCLibs, if it works then print success message.
-	if (!(Get-AppxPackage *VCLibs*))
+	if ((Get-AppxPackage *UWPDesktop*).Version -ge 14.0.30035.0) 
 	{
-		print "Could not install Visual C++ Libraries."
+		print "Updated Visual C++ libraries."
 		return
 	}
-	print "Installed Visual C++ Libraries."
-
 }
 
 Function UninstallVCLibs {
-	space
 	if (!(Get-AppxPackage *VCLibs*)) {
 		print "Visual C++ Libraries are not present on this device."
 		return
 	}
+	space
 	print "Uninstalling runtimes..."
 	Get-AppxPackage *VCLibs* | Remove-AppxPackage
 	if (Get-AppxPackage *VCLibs*) {
@@ -564,93 +565,21 @@ Function UninstallVCLibs {
 	print "Uninstalled Visual C++ Libraries."
 }
 
-# Legacy winget
-Function LegacyWinget {
-	# Create new folder and set location.
-	if (!(Test-Path WinRice)) {
-		New-Item WinRice -ItemType Directory | out-Null
-		$currentdir = $(Get-Location).Path
-		$dir = "$currentdir/WinRice"
-		Set-Location $dir
-	}
-	else {
-		Set-Location WinRice
-	}
-
-	# Download and deploy winget.
-	$WinGetURL = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
-	print "Downloading WinGet installation packages..."
-	Start-BitsTransfer $WinGetURL.assets.browser_download_url;
-	print "Installing WinGet..."
-	Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-		
-	# Cleanup installers.
-	Set-Location ..
-	Remove-Item WinRice -Recurse -Force
-
-	# Get-Command winget, if it works then print success message.
-	if (!(Get-Command winget)) {
-		print "WinGet could not be installed."
-		return
-	}
-	print "Installed WinGet."
-	print "You might also want to update App Installer from Microsoft Store."
-}
-
 # Install WinGet (Windows Package Manager) [UPDATED METHOD]
 Function InstallWinGet {
 $ErrorActionPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
-	space
 	if (Get-Command winget) {
-		print "WinGet is already installed on this device."
 		return 
 	}
-	
-	# Create new folder and set location.
-	if (!(Test-Path WinRice)) {
-		New-Item WinRice -ItemType Directory | Out-Null
-		$currentdir = $(Get-Location).Path; $dir = "$currentdir/WinRice"; Set-Location $dir
-	}
-	else {
-		Set-Location WinRice
-	}
-
-	# Credit: https://dev.to/kaiwalter/download-windows-store-apps-with-powershell-from-https-store-rg-adguard-net-155m.
-	Write-Host "Installing winget..."
-	$apiUrl = "https://store.rg-adguard.net/api/GetFiles"
-	$productUrl = "https://www.microsoft.com/en-us/p/9nblggh4nns1"
-	$downloadFolder = Join-Path (Get-Location).Path "WinRice"
-	if(!(Test-Path $downloadFolder -PathType Container)) {
-		New-Item $downloadFolder -ItemType Directory -Force | Out-Null
-	}
-	$body = @{
-		type = 'url'
-		url  = $productUrl
-		ring = 'Retail'
-		lang = 'en-US'
-	}
-	
-	# Deploy winget.
-	$raw = Invoke-RestMethod -Method Post -Uri $apiUrl -ContentType 'application/x-www-form-urlencoded' -Body $body
-	
-	$raw | Select-String '<tr style.*<a href=\"(?<url>.*)"\s.*>(?<text>.*)<\/a>' -AllMatches | ForEach-Object { $_.Matches } | ForEach-Object { 
-	$url = $_.Groups[1].Value
-	$text = $_.Groups[2].Value
-		if($text -match "_(x64|neutral).*msix(|bundle)$") {
-			$downloadFile = Join-Path $downloadFolder $text
-			Invoke-WebRequest -Uri $url -OutFile $downloadFile
-		}
-	}
-	Set-Location WinRice
-	Add-AppxPackage Microsoft.Desktop*
-	Set-Location ../
-	Remove-Item WinRice -Recurse -Force
+	space
+	print "Installing WinGet..."
+	Start-BitsTransfer https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+	Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+	Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
 	if (!(Get-Command winget))
 	{
-		print "WinGet could not be installed. Falling back to legacy method."
-		print "Warning: Legacy method will install an older version of winget, please update 'App Installer' from Microsoft Store later on."
-		legacywinget
+		print "Could not install WinGet."
 		return
 	}
 	print "Installed WinGet."
@@ -700,7 +629,7 @@ Function DisableExperimentsWinGet {
 # Update to new Microsoft Store.
 function MicrosoftStore {
 $ProgressPreference = 'SilentlyContinue'
-	if ($CurrentBuild -lt 22000) 
+	if ($CurrentBuild -le 19044) 
 	{
 		return
 	}
@@ -725,9 +654,8 @@ $ProgressPreference = 'SilentlyContinue'
 		lang = 'en-US'
 	}
 	
-	# Deploy winget.
+	# Download Microsoft Store.
 	$raw = Invoke-RestMethod -Method Post -Uri $apiUrl -ContentType 'application/x-www-form-urlencoded' -Body $body
-	
 	$raw | Select-String '<tr style.*<a href=\"(?<url>.*)"\s.*>(?<text>.*)<\/a>' -AllMatches | ForEach-Object { $_.Matches } | ForEach-Object { 
 	$url = $_.Groups[1].Value
 	$text = $_.Groups[2].Value
@@ -737,27 +665,38 @@ $ProgressPreference = 'SilentlyContinue'
 		}
 	}
 	Set-Location WinRice
-	Add-AppxPackage Microsoft.Desktop*
+
+	# Update dependency - Microsoft UI XAML 2.7
+	Start-BitsTransfer https://github.com/WinRice/Files/raw/main/Microsoft.UI.Xaml.2.7_8wekyb3d8bbwe.Appx
+	Add-AppxPackage Microsoft.UI.Xaml.2.7_8wekyb3d8bbwe.Appx
+
+	# Update Microsoft Store
+	Get-AppxPackage "Microsoft.WindowsStore" | Remove-AppxPackage
+	Add-AppxPackage Microsoft.WindowsStore*
 	Set-Location ../
 	Remove-Item WinRice -Recurse -Force
-	if (!(Get-Command winget))
+	if ((Get-AppxPackage "Microsoft.WindowsStore").Version -lt "22110.1401.3.0")
 	{
-		print "WinGet could not be installed. Falling back to legacy method."
-		print "Warning: Legacy method will install an older version of winget, please update 'App Installer' from Microsoft Store later on."
-		legacywinget
+		print "Could not update Microsoft Store."
 		return
 	}
-	print "Installed WinGet."
+	print "Updated Microsoft Store."
 }
 	
 # Install NanaZip.
 Function InstallNanaZip {
 	space
 	if (!(Get-Command winget)) {
-		print "WinGet is not installed. Couldn't install 7-zip."
+		print "WinGet is not installed. Couldn't install NanaZip."
 		return 
 	}
 	print "Installing NanaZip... (Ctrl + Click: https://github.com/M2Team/NanaZip)"
+	$user = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name.split("\")[1]
+	$msa = Get-LocalUser $user | Where-Object { $_.Enabled -match "True"} | Where-Object { $_.PrincipalSource -match "MicrosoftAccount"}
+	if (!($msa)) {
+		print "No Microsoft Store account found, failed to acquire app."
+		return
+	}
 	winget install NanaZip -s msstore --accept-package-agreements --accept-source-agreements | Out-Null
 	print "Installed NanaZip."
 }
@@ -766,7 +705,7 @@ Function InstallNanaZip {
 Function UninstallNanaZip {
 	space
 	print "Uninstalling NanaZip..."
-	winget uninstall 40174MouriNaruto.NanaZip_gnj4mf6z9tkrc | Out-Null
+	winget uninstall 40174MouriNaruto.NanaZip_gnj4mf6z9tkrc --accept-source-agreements | Out-Null
 	print "Uninstalled NanaZip."
 }
 
@@ -781,19 +720,22 @@ Function WinGetImport {
 	}
 	space
 	[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
+	print "WinGet Import"
 	print "Select the exported JSON from File Picker UI"
 	$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
 	$OpenFileDialog.InitialDirectory = $initialDirectory
 	$OpenFileDialog.Filter = "JSON (*.json)| *.json"
 	$OpenFileDialog.ShowDialog() | Out-Null
 	if ($OpenFileDialog.FileName) {
-		print "Initializing JSON file..."
+		print "Starting winget import..."
 		Start-Sleep -Milliseconds 200
-		winget import $OpenFileDialog.FileName --accept-package-agreements --accept-source-agreements
+		winget import $OpenFileDialog.FileName --accept-package-agreements --accept-source-agreements | Out-Null
 	}
 	elseif (!($OpenFileDialog.FileName)) {
 		print "No JSON selected."
+		return
 	}
+	print "WinGet import has successfully imported the apps."
 }
 
 # Install apps from Winstall file (the Winstall.txt file must be on the same directory as WinRice).
@@ -811,8 +753,9 @@ $ErrorActionPreference = 'Continue'
 	}
 	# Try Winstall.txt
 	if (Test-Path Winstall.txt) {
-		print "Starting Winstall..."
+		print "Winstall"
 		# Get each line from the text file and use winget install command on it.
+		print "Select Winstall text file from File Picker UI"
 		Get-Content 'Winstall.txt' | ForEach-Object {
 			$App = $_.Split('=')
 			print "    Installing $App..."
@@ -822,8 +765,9 @@ $ErrorActionPreference = 'Continue'
 	}
 	# Try winstall.txt
 	elseif (Test-Path winstall.txt) {
-		print "Starting Winstall..."
+		print "Winstall"
 		# Get each line from the text file and use winget install command on it.
+		print "Select Winstall text file from File Picker UI"
 		Get-Content 'winstall.txt' | ForEach-Object {
 			$App = $_.Split('=')
 			print "    Installing $App..."
@@ -833,6 +777,7 @@ $ErrorActionPreference = 'Continue'
 	}
 	else {
 		[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
+		print "Winstall"
 		print "Select Winstall text file from File Picker UI"
 		$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
 		$OpenFileDialog.InitialDirectory = $initialDirectory
@@ -1045,6 +990,9 @@ Function UninstallerGUI {
     # ArrayList containing the UWP apps to remove.
     $AppxPackages = New-Object -TypeName System.Collections.ArrayList($null)
 
+	print "App Uninstaller GUI"
+	print "If app selection menu is not visible, use Alt + Tab to switch to that window."
+
     # List of UWP apps that won't be checked for removal.
     $UncheckedAppxPackages = @(
 
@@ -1201,14 +1149,14 @@ Function UninstallerGUI {
         [void]$Window.Close()
         $OFS = "|"
         if ($CheckboxRemoveAll.IsChecked) {   
-            print "Uninstalling $AppxPackages..."
+            print "Uninstalling selected apps..."
             Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage -AllUsers
-            print "Done."
+            print "Uninstalled."
         }
         else {  
-            print "Uninstalling $AppxPackages..."
+            print "Uninstalling selected apps..."
             Get-AppxPackage -PackageTypeFilter Bundle | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage
-            print "Done."
+            print "Uninstalled."
         }
         $OFS = " "
     }
@@ -1298,18 +1246,16 @@ Function UninstallerCLI {
 		"Microsoft.Microsoft3DViewer" 
 		"Microsoft.MicrosoftStickyNotes"  
 		"Microsoft.MSPaint" # Paint 3D app
-		"Microsoft.Paint"  # Paint app (MSIX)
-		"Microsoft.MicrosoftOfficeHub"
-		"Microsoft.Office.OneNote"
+		# "Microsoft.Paint"  # Paint app (MSIX)
+		"Microsoft.MicrosoftOfficeHub" # Office webview (packaged)
+		"Microsoft.Office.OneNote" # OneNote for Windows 10
 		"Microsoft.MixedReality.Portal"
 		"Microsoft.MicrosoftSolitaireCollection" 
 		"Microsoft.NetworkSpeedTest" 
 		"Microsoft.News" 
 		"Microsoft.Office.Sway" 
 		"Microsoft.OneConnect"
-		"Microsoft.People" 
 		"Microsoft.PowerAutomateDesktop"
-		"Microsoft.Print3D" 
 		"Microsoft.SkypeApp"
 		"Microsoft.Todos"
 		"Microsoft.WindowsAlarms"
@@ -1555,7 +1501,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	print "Uninstalling Microsoft OneDrive..."
 
 	# Uninstall using WinGet.
-	winget uninstall Microsoft.OneDrive --silent | Out-Null
+	winget uninstall Microsoft.OneDrive --accept-source-agreements --silent | Out-Null
 
 	# Cleanup leftover folders.
 	Remove-Item "$env:USERPROFILE\OneDrive" -Recurse -Force
@@ -1761,65 +1707,34 @@ $ErrorActionPreference = 'SilentlyContinue'
 	print "Added capabilities and features."
 }
 
-# Install WSL on Windows 11
-function installwslwin11 {
-	print "Installing Windows Subsystem for Linux..."
-	wsl --install | Out-Null
-	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Disabled") {
-		print "Could not install Windows Subsystem for Linux."
-		return
-	}
-	print "Installed Windows Subsystem for Linux."
-}
-
-# Install WSL on Windows 10
-function installwslwin10 {
-	# Check if KB5004296 is installed.
-	# https://support.microsoft.com/en-us/topic/july-29-2021-kb5004296-os-builds-19041-1151-19042-1151-and-19043-1151-preview-6aba536a-6ed2-41cb-bc3d-3980e8693cc4
-	# If yes, then use wsl --install, or else fallback to legacy deployment method.
-
-	$updated = Get-HotFix -ID KB5004296
-
-	print "Installing Windows Subsystem for Linux..."
-
-	if ($updated) {
-		wsl --install | Out-Null
-	}
-
-	elseif (!($updated)) {
-		print "Hotfix KB5004296 is not applied to this device, falling back to classic WSL deployment method..."
-		print "Please manually install Linux kernel updates and switch to WSL2 after device restart."
-		Enable-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux" -All -NoRestart | Out-Null
-	}
-	
-	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Disabled") {
-		print "Could not install Windows Subsystem for Linux."
-		return
-	}
-	print "Installed Windows Subsystem for Linux."
-}
-
 # Enable Windows Subsystem for Linux.
 Function EnableWSL {
 $ProgressPreference = 'SilentlyContinue'
 	if (!(check($wsl))) { 
 		return 
 	}
-
 	space 
+
+	# Inform user if WSL is already installed.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Enabled") {
-		print "Windows Subsystem for Linux is already enabled."
+		print "Windows Subsystem for Linux is already installed."
 		return
 	}
 
-	if ($CurrentBuild -ge 22000) {
-		# Call installwslwin11 function
-		installwslwin11
+	# Install WSL.
+	print "Installing Windows Subsystem for Linux..."
+	Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -All -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
+	Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -All -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
+	Start-BitsTransfer https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi 
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Disabled") {
+		print "Could not install Windows Subsystem for Linux."
+		return
 	}
-	elseif ($CurrentBuild -lt 22000) {
-		# Call installwslwin10 function
-		installwslwin10
-	}
+	Set-Content -Path 'WSL2.ps1' -value 'wsl --set-default-version 2'
+	$path = (Get-Location).Path
+	print "    In the current folder ($path), you will find two files: wsl_update_x64.msi and WSL2.ps1."
+	print "    First, run the wsl_update_x64.msi installer and install it. Next up, right click on WSL2.ps1 and run it with PowerShell."
+	print "Installed Windows Subsystem for Linux."
 }
 
 # Disable Windows Subsystem for Linux.
@@ -1827,19 +1742,23 @@ Function DisableWSL {
 $ProgressPreference = 'SilentlyContinue'
 $WarningPreference = 'SilentlyContinue'
 	space
+
+	# Inform user if WSL is already disabled.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Disabled") {
 		print "Windows Subsystem for Linux is already disabled."
 		return
 	}
 
-	print "Disabling Windows Subsystem for Linux..."
+	# Uninstall WSL.
+	print "Uninstalling Windows Subsystem for Linux..."
 	Disable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart | Out-Null
 
+	# Print status.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Enabled") {
-		print "Could not disable Windows Subsystem for Linux."
+		print "Could not uninstall Windows Subsystem for Linux."
 		return
 	}
-	print "Disabled Windows Subsystem for Linux."
+	print "Uninstalled Windows Subsystem for Linux."
 }
 
 # Enable Sandbox.
@@ -1849,12 +1768,26 @@ $ProgressPreference = 'SilentlyContinue'
 		return
 	}
 	space
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Enabled") {
+		print "Windows Sandbox is already enabled."
+		return
+	}
+
+	# Warn if unsupported Edition (not version).
 	if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) {
 		print "Could not enable Windows Sandbox since $ProductName does not support it."
 		return
 	}
+
+	# Enable Sandbox.
 	print "Enabling Windows Sandbox..."
 	Enable-WindowsOptionalFeature -FeatureName "Containers-DisposableClientVM" -All -Online -NoRestart -WarningAction Ignore | Out-Null
+
+	# Print status.
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Disabled") {
+		print "Could not enable Windows Sandbox."
+		return
+	}
 	print "Enabled Windows Sandbox."
 }
 
@@ -1862,12 +1795,28 @@ $ProgressPreference = 'SilentlyContinue'
 Function DisableSandbox {
 $ProgressPreference = 'SilentlyContinue'
 	space
+
+	# Check if already disabled.
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Disabled") {
+		print "Windows Sandbox is already disabled."
+		return
+	}
+
+	# Warn if unsupported Edition (not version)
 	if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) {
 		print "Windows Sandbox can't be toggled in $ProductName."
 		return
 	}
+
+	# Enable Sandbox
 	print "Disabling Windows Sandbox..."
 	Disable-WindowsOptionalFeature -FeatureName "Containers-DisposableClientVM" -All -Online -NoRestart -WarningAction Ignore | Out-Null
+	
+	# Print status.
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Enabled") {
+		print "Could not disable Windows Sandbox."
+		return
+	}
 	print "Disabled Windows Sandbox."
 }
 
@@ -1877,14 +1826,24 @@ $ProgressPreference = 'SilentlyContinue'
 	if (!(check($netfx3))) { 
 		return 
 	}
-	$netfx3state = (Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State
-	if ($netfx3state -like "Enabled"){
+	space
+
+	# Check if already enabled.
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Enabled"){
 		print "dotNET 3.5 is already enabled."
 		return
 	}
-	space
+
+	# Enable dotNET 3.5.
 	print "Enabling dotNET 3.5..."
 	Enable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -NoRestart | Out-Null
+
+	# Print status.
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Disabled")
+	{
+		print "Could not enable dotNET 3.5."
+		return
+	}
 	print "Enabled dotNET 3.5."
 }
 
@@ -1892,13 +1851,22 @@ $ProgressPreference = 'SilentlyContinue'
 Function DisabledotNET3.5 {
 $ProgressPreference = 'SilentlyContinue'
 	space
-	$netfx3state = (Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State
-	if ($netfx3state -like "Disabled"){
+
+	# Check if already disabled.
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Disabled"){
 		print "dotNET 3.5 is already disabled."
 		return
 	}
+
+	# Disable dotNET 3.5.
 	print "Disabling dotNET 3.5..."
 	Disable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -NoRestart | Out-Null
+
+	# Print status.
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Enabled"){
+		print "dotNET 3.5 is already disabled."
+		return
+	}
 	print "Disabled dotNET 3.5."
 }
 
@@ -2031,27 +1999,15 @@ Function EnableBackgroundApps {
 # Disable Windows Error Reporting 
 function DisableErrorReporting {
 	print "Turning off Windows Error Reporting..."
-	$result = Disable-WindowsErrorReporting
-	if ($result -like "True")
-	{
-		print "Turned off Windows Error Reporting."
-		return
-	}
-	print "Couldn't turn off Windows Error Reporting."
-
+	Disable-WindowsErrorReporting | Out-Null
+	print "Turned off Windows Error Reporting."
 }
 
 # Enable Windows Error Reporting 
 function EnableErrorReporting {
 	print "Turning on Windows Error Reporting..."
-	$result = Enable-WindowsErrorReporting
-	if ($result -like "True")
-	{
-		print "Turned on Windows Error Reporting."
-		return
-	}
-	print "Couldn't turn on Windows Error Reporting."
-
+	Enable-WindowsErrorReporting | Out-Null
+	print "Turned on Windows Error Reporting."
 }
 
 # Disable Feedback.
