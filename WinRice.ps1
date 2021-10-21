@@ -378,22 +378,43 @@ space
 print "Please take your time to answer the questions below in order to save user config."
 print "Press Enter to proceed after answering a question."
 space
-$systemrestore = ask "Create a system restore point? [y/N]"
-$uninstallapps = ask "Uninstall inbox apps?"
+$systemrestore = ask "Create a system restore point? [Y/n]"
+if (!($systemrestore))
+{
+    $systemrestore = "y"
+}
+$uninstallapps = ask "Uninstall non-essential apps? [Y/n]"
+if (!($uninstallapps))
+{
+    $uninstallapps = "y"
+}
 if ($uninstallapps -like "y") {
-	$uninstallmethod = ask "Use App Uninstaller CLI, GUI or List? [CLI/GUI/List]"
-	$uninstallod = ask "Uninstall Microsoft OneDrive?"
+	if ((Test-Path uninstallapps.txt) -or (Test-Path UninstallApps.txt) -or (Test-Path Uninstallapps.txt))
+	{
+		$uninstallmethod = "list"
+	}
+	elseif (!(Test-Path uninstallapps.txt) -or (!(Test-Path UninstallApps.txt)) -or (!(Test-Path Uninstallapps.txt)))
+	{
+		$uninstallmethod = ask "Do you want to select which apps to remove? [y/N]"
+	}
+	$uninstallod = ask "Do you want to uninstall Microsoft OneDrive? [y/N]"
 }
 if ($CurrentBuild -ge 22000) {
-	$widgets = ask "Remove Widgets?"
+	$widgets = ask "Remove Widgets? [y/N]"
 }
-$uninstallfeatures = ask "Uninstall unnecessary features?"
+$uninstallfeatures = ask "Uninstall unnecessary features? [Y/n]"
+if (!($uninstallfeatures))
+{
+    $uninstallfeatures = "y"
+}
 $netfx3 = ask "Enable dotNET 3.5?"
 $wsl = ask "Enable Windows Subsystem for Linux?"
 $sandbox = ask "Enable Windows Sandbox?"
-# $enableexperimentswinget = ask "winget: enable experimental features?"
-$wingetimport = ask "winget: use winget import?"
-$winstall = ask "winget: use Winstall?"
+$installapps = ask "Do you want to install any apps using winget import or Winstall? [y/N]"
+if ($installapps -like "y") 
+{
+	$installusing = ask "Do you want to use (1) winget import or (2) Winstall? [1/2]"
+}
 
 space 
 
@@ -405,7 +426,7 @@ Start-Sleep -Milliseconds 600
 Function WinRice {
 	Clear-Host
 	space
-	print "pratyakshm's WinRice - version 1.0"
+	print "pratyakshm's WinRice - v0.5.211021"
 	Start-Sleep -Milliseconds 100
 	space
 	print "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
@@ -711,7 +732,8 @@ Function UninstallNanaZip {
 
 # Use winget import (optional) (part of code used here was picked from https://devblogs.microsoft.com/scripting/hey-scripting-guy-can-i-open-a-file-dialog-box-with-windows-powershell/)
 Function WinGetImport {
-	if ($wingetimport -like "n" ) {
+	if (($installusing -like "2") -or (!($installusing)))
+	{
 		return
 	}
 	if (!(Get-Command winget)) {
@@ -741,9 +763,9 @@ Function WinGetImport {
 # Install apps from Winstall file (the Winstall.txt file must be on the same directory as WinRice).
 Function Winstall {
 $ErrorActionPreference = 'Continue'
-	# Check if WinGet installed - otherwise return.
-	if (!(check($winstall))) { 
-		return 
+	if (($installusing -like "1") -or (!($installusing)))
+	{
+		return
 	}
 	space
 	if (!(Get-Command winget)) { 
@@ -1307,8 +1329,9 @@ Function UninstallerCLI {
 
 # Get apps and uninstall from text file
 function UninstallerList {
-	if (Test-Path uninstallapps.txt) {
-		print "Uninstalling listed inbox apps..."
+	if (Test-Path uninstallapps.txt) 
+    {
+		print "Uninstalling listed apps..."
 		# Get each line from the text file and use winget install command on it.
 		Get-Content 'uninstallapps.txt' | ForEach-Object {
 			if (Get-AppxPackage $App) 
@@ -1321,49 +1344,57 @@ function UninstallerList {
 				print "     Couldn't find: $App"
 			}
 		}
-		print "Uninstalled listed inbox apps."
+		print "Uninstalled listed apps."
 	}
-	else
-	{
-		[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
-		print "App Uninstaller Lists"
-		print "Select a text file"
-		$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
-		$OpenFileDialog.InitialDirectory = $initialDirectory
-		$OpenFileDialog.Filter = "Text file (*.txt)| *.txt"
-		$OpenFileDialog.ShowDialog() | Out-Null
-		if ($OpenFileDialog.FileName) {
-			print "Uninstalling listed inbox apps..."
-			Get-Content $OpenFileDialog.FileName | ForEach-Object {	
-				$App = $_.Split('=')
+    elseif (Test-Path Uninstallapps.txt)
+    {
+		print "Uninstalling listed apps..."
+		# Get each line from the text file and use winget install command on it.
+		Get-Content 'Uninstallapps.txt' | ForEach-Object {
+			if (Get-AppxPackage $App) 
+			{
 				print "     Uninstalling $App"
 				Get-AppxPackage "$App" | Remove-AppxPackage
 			}
-			print "Uninstalled listed inbox apps."
+			elseif (!(Get-AppxPackage $App))
+			{
+				print "     Couldn't find: $App"
+			}
 		}
-		else {
-			print "No text file was picked."
+		print "Uninstalled listed apps."
+    }
+    elseif (Test-Path UninstallApps.txt)
+    {
+        print "Uninstalling listed apps..."
+		# Get each line from the text file and use winget install command on it.
+		Get-Content 'UninstallApps.txt' | ForEach-Object {
+			if (Get-AppxPackage $App) 
+			{
+				print "     Uninstalling $App"
+				Get-AppxPackage "$App" | Remove-AppxPackage
+			}
+			elseif (!(Get-AppxPackage $App))
+			{
+				print "     Couldn't find: $App"
+			}
 		}
-	}
+		print "Uninstalled listed apps."
+    }
 }
 
 # Main Uninstall function.
 Function UninstallApps {
 $ErrorActionPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
-	if (!(check($uninstallapps))) { 
-		return 
-	}
-	space
-	if ($uninstallmethod -like "CLI") 
-	{
-		UninstallerCLI
-	}
-	elseif ($uninstallmethod -like "GUI") 
+	if ($uninstallmethod -like "y")
 	{
 		UninstallerGUI
 	}
-	elseif ($uninstallmethod -like "List" -or $uninstallmethod -like "Lists")
+	elseif ($uninstallmethod -like "n")
+	{
+		UninstallerCLI
+	}
+	elseif ($uninstallmethod -like "list")
 	{
 		UninstallerList
 	}
