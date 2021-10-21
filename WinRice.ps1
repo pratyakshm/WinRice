@@ -1286,7 +1286,6 @@ Function UninstallerCLI {
 		"Microsoft.WindowsMaps" 
 		"Microsoft.WindowsSoundRecorder"
 		"Microsoft.XboxApp"
-		"Microsoft.YourPhone"
 		"Microsoft.ZuneMusic"
 		"Microsoft.ZuneVideo"
 	)
