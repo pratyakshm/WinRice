@@ -388,7 +388,8 @@ if (!($uninstallapps))
 {
     $uninstallapps = "y"
 }
-if ($uninstallapps -like "y") {
+if ($uninstallapps -like "y") 
+{
 	if ((Test-Path uninstallapps.txt) -or (Test-Path UninstallApps.txt) -or (Test-Path Uninstallapps.txt))
 	{
 		$uninstallmethod = "list"
@@ -401,6 +402,10 @@ if ($uninstallapps -like "y") {
 }
 if ($CurrentBuild -ge 22000) {
 	$widgets = ask "Remove Widgets? [y/N]"
+}
+if ($widgets -like "n")
+{
+	print "WinRice will update Widgets to the latest version."
 }
 $uninstallfeatures = ask "Uninstall unnecessary features? [Y/n]"
 if (!($uninstallfeatures))
@@ -426,7 +431,7 @@ Start-Sleep -Milliseconds 600
 Function WinRice {
 	Clear-Host
 	space
-	print "pratyakshm's WinRice - v0.5.211021"
+	print "pratyakshm's WinRice - v0.5.221021"
 	Start-Sleep -Milliseconds 100
 	space
 	print "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
@@ -467,7 +472,8 @@ Function ChangesDone {
 # Create a system restore point with type MODIFY_SETTINGS.
 Function CreateSystemRestore {
 $ProgressPreference = 'SilentlyContinue'
-	if ($systemrestore -like "y") {
+	if ($systemrestore -like "y") 
+	{
 		space
 		print "Creating a system restore point with type MODIFY_SETTINGS..."
 		Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name SystemRestorePointCreationFrequency -Type DWord -Value 0 -Force
@@ -539,11 +545,13 @@ Function AppsFeatures {
 Function InstallVCLibs {
 $ProgressPreference = 'SilentlyContinue'
 	# Create new folder and set location.
-	if (!(Test-Path WinRice)) {
+	if (!(Test-Path WinRice)) 
+	{
 		New-Item WinRice -ItemType Directory | out-Null
 		$currentdir = $(Get-Location).Path; $dir = "$currentdir/WinRice"; Set-Location $dir
 	}
-	else {
+	else 
+	{
 		Set-Location WinRice
 	}
 	
@@ -572,14 +580,16 @@ $ProgressPreference = 'SilentlyContinue'
 }
 
 Function UninstallVCLibs {
-	if (!(Get-AppxPackage *VCLibs*)) {
+	if (!(Get-AppxPackage *VCLibs*)) 
+	{
 		print "Visual C++ Libraries are not present on this device."
 		return
 	}
 	space
 	print "Uninstalling runtimes..."
 	Get-AppxPackage *VCLibs* | Remove-AppxPackage
-	if (Get-AppxPackage *VCLibs*) {
+	if (Get-AppxPackage *VCLibs*) 
+	{
 		print "Could not uninstall Visual C++ Libraries."
 		return
 	}
@@ -590,7 +600,8 @@ Function UninstallVCLibs {
 Function InstallWinGet {
 $ErrorActionPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
-	if (Get-Command winget) {
+	if (Get-Command winget) 
+	{
 		return 
 	}
 	space
@@ -610,10 +621,12 @@ $ProgressPreference = 'SilentlyContinue'
 # Enable all experimental features in WinGet.
 Function EnableExperimentsWinGet {
 $ProgressPreference = 'SilentlyContinue'
-	if (!(check($enableexperimentswinget))) { 
+	if (!(check($enableexperimentswinget))) 
+	{ 
 		return 
 	}
-	elseif (!(Get-Command winget)) {
+	elseif (!(Get-Command winget)) 
+	{
 		print "WinGet is not installed."
 		return
 	}
@@ -629,7 +642,8 @@ $ProgressPreference = 'SilentlyContinue'
 
 # Disable all experimental features in winget
 Function DisableExperimentsWinGet {
-	if (!(Get-Command winget)) {
+	if (!(Get-Command winget)) 
+	{
 		print "WinGet is not installed, couldn't turn off its experimental features."
 		return
 	}
@@ -665,7 +679,8 @@ $ProgressPreference = 'SilentlyContinue'
 	$apiUrl = "https://store.rg-adguard.net/api/GetFiles"
 	$productUrl = "https://www.microsoft.com/store/productId/9WZDNCRFJBMP"
 	$downloadFolder = Join-Path (Get-Location).Path "WinRice"
-	if(!(Test-Path $downloadFolder -PathType Container)) {
+	if(!(Test-Path $downloadFolder -PathType Container)) 
+	{
 		New-Item $downloadFolder -ItemType Directory -Force | Out-Null
 	}
 	$body = @{
@@ -707,14 +722,16 @@ $ProgressPreference = 'SilentlyContinue'
 # Install NanaZip.
 Function InstallNanaZip {
 	space
-	if (!(Get-Command winget)) {
+	if (!(Get-Command winget)) 
+	{
 		print "WinGet is not installed. Couldn't install NanaZip."
 		return 
 	}
 	print "Installing NanaZip... (Ctrl + Click: https://github.com/M2Team/NanaZip)"
 	$user = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name.split("\")[1]
 	$msa = Get-LocalUser $user | Where-Object { $_.Enabled -match "True"} | Where-Object { $_.PrincipalSource -match "MicrosoftAccount"}
-	if (!($msa)) {
+	if (!($msa)) 
+	{
 		print "No Microsoft Store account found, failed to acquire app."
 		return
 	}
@@ -736,7 +753,8 @@ Function WinGetImport {
 	{
 		return
 	}
-	if (!(Get-Command winget)) {
+	if (!(Get-Command winget)) 
+	{
 		print "WinGet is not installed. Please install WinGet first before using winget import."
 		return
 	}
@@ -748,12 +766,14 @@ Function WinGetImport {
 	$OpenFileDialog.InitialDirectory = $initialDirectory
 	$OpenFileDialog.Filter = "JSON (*.json)| *.json"
 	$OpenFileDialog.ShowDialog() | Out-Null
-	if ($OpenFileDialog.FileName) {
+	if ($OpenFileDialog.FileName) 
+	{
 		print "Starting winget import..."
 		Start-Sleep -Milliseconds 200
 		winget import $OpenFileDialog.FileName --accept-package-agreements --accept-source-agreements | Out-Null
 	}
-	elseif (!($OpenFileDialog.FileName)) {
+	elseif (!($OpenFileDialog.FileName)) 
+	{
 		print "No JSON selected."
 		return
 	}
@@ -768,17 +788,20 @@ $ErrorActionPreference = 'Continue'
 		return
 	}
 	space
-	if (!(Get-Command winget)) { 
+	if (!(Get-Command winget)) 
+	{ 
 		print "WinGet is not installed. Please install WinGet first before using Winstall."
 		Start-Process "https://bit.ly/Winstall" 
 		return
 	}
 	# Try Winstall.txt
-	if (Test-Path Winstall.txt) {
+	if (Test-Path Winstall.txt) 
+	{
 		print "Winstall"
 		# Get each line from the text file and use winget install command on it.
 		print "Select Winstall text file from File Picker UI"
-		Get-Content 'Winstall.txt' | ForEach-Object {
+		Get-Content 'Winstall.txt' | ForEach-Object 
+		{
 			$App = $_.Split('=')
 			print "    Installing $App..."
 			winget install "$App" --source winget --accept-package-agreements --accept-source-agreements --silent | Out-Null
@@ -786,18 +809,21 @@ $ErrorActionPreference = 'Continue'
 		print "Winstall has successfully installed the app(s)."
 	}
 	# Try winstall.txt
-	elseif (Test-Path winstall.txt) {
+	elseif (Test-Path winstall.txt)
+	{
 		print "Winstall"
 		# Get each line from the text file and use winget install command on it.
 		print "Select Winstall text file from File Picker UI"
-		Get-Content 'winstall.txt' | ForEach-Object {
+		Get-Content 'winstall.txt' | ForEach-Object 
+		{
 			$App = $_.Split('=')
 			print "    Installing $App..."
 			winget install "$App" --source winget --accept-package-agreements --accept-source-agreements --silent | Out-Null
 		}
 		print "Winstall has successfully installed the app(s)."
 	}
-	else {
+	else 
+	{
 		[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
 		print "Winstall"
 		print "Select Winstall text file from File Picker UI"
@@ -805,15 +831,19 @@ $ErrorActionPreference = 'Continue'
 		$OpenFileDialog.InitialDirectory = $initialDirectory
 		$OpenFileDialog.Filter = "Text file (*.txt)| *.txt"
 		$OpenFileDialog.ShowDialog() | Out-Null
-		if ($OpenFileDialog.FileName) {
+		if ($OpenFileDialog.FileName) 
+		{
 			print "Starting Winstall..."
-			Get-Content $OpenFileDialog.FileName | ForEach-Object {					$App = $_.Split('=')
+			Get-Content $OpenFileDialog.FileName | ForEach-Object 
+			{					
+				$App = $_.Split('=')
 				print "    Installing $App..."
 				winget install "$App" --source winget --accept-package-agreements --accept-source-agreements --silent | Out-Null
 			}
 			print "Winstall has successfully installed the app(s)."
 		}
-		else {
+		else 
+		{
 			print "No text file was picked."
 		}
 	}
@@ -823,7 +853,8 @@ $ErrorActionPreference = 'Continue'
 Function InstallHEVC {
 $ProgressPreference = 'SilentlyContinue'
 	space
-	if (Get-AppxPackage -Name Microsoft.HEVCVideoExtension) {
+	if (Get-AppxPackage -Name Microsoft.HEVCVideoExtension) 
+	{
 		print "HEVC Video Extensions are already installed on this device."
 		return
 	}
@@ -848,7 +879,8 @@ $ProgressPreference = 'SilentlyContinue'
 		$url = $_.Groups[1].Value
 		$text = $_.Groups[2].Value
 	
-		if($text -match "_(x64|neutral).*appx(|bundle)$") {
+		if($text -match "_(x64|neutral).*appx(|bundle)$")
+		{
 			$downloadFile = Join-Path $downloadFolder $text
 			Invoke-WebRequest -Uri $url -OutFile $downloadFile
 		}
@@ -870,16 +902,19 @@ $ProgressPreference = 'SilentlyContinue'
 Function UninstallHEVC {
 $ProgressPreference = 'SilentlyContinue'
 	space
-	if (!(Get-AppxPackage "Microsoft.HEVCVideoExtension")) {
+	if (!(Get-AppxPackage "Microsoft.HEVCVideoExtension")) 
+	{
 		print "HEVC Video Extensions may have already been uninstalled."
 		return
 	}
 	print "Uninstalling HEVC Video Extensions..."
 	Get-AppxPackage "Microsoft.HEVCVideoExtension" | Remove-AppxPackage
-	if (!(Get-AppxPackage "Microsoft.HEVCVideoExtension")) {
+	if (!(Get-AppxPackage "Microsoft.HEVCVideoExtension")) 
+	{
 		print "Uninstalled HEVC Video Extensions."
 	}
-	else {
+	else 
+	{
 		print "Could not uninstall HEVC Video Extensions."
 	}
 }
@@ -937,16 +972,19 @@ function UpdateWidgets {
 # Remove Widgets
 function RemoveWidgets {
 	space
-	if (!(Get-AppxPackage "MicrosoftWindows.Client.WebExperience")) {
+	if (!(Get-AppxPackage "MicrosoftWindows.Client.WebExperience")) 
+	{
 		print "Widgets may have already been removed."
 		return
 	}
 	print "Removing Widgets..."
 	Get-AppxPackage "MicrosoftWindows.Client.WebExperience" | Remove-AppxPackage
-	if (Get-AppxPackage "MicrosoftWindows.Client.WebExperience"){
+	if (Get-AppxPackage "MicrosoftWindows.Client.WebExperience")
+	{
 		print "Could not remove Widgets."
 	}
-	else {
+	else 
+	{
 		print "Removed Widgets."
 	}
 }
@@ -954,10 +992,12 @@ function RemoveWidgets {
 # Unfinished function.
 Function Widgets {
 $ProgressPreference = 'SilentlyContinue'
-	if ($widgets -like "n") {
+	if ($widgets -like "n") 
+	{
 		UpdateWidgets
 	}
-	elseif ($widgets -like "y") {
+	elseif ($widgets -like "y") 
+	{
 		RemoveWidgets
 	}
 }
@@ -968,7 +1008,8 @@ $ProgressPreference = 'SilentlyContinue'
 	space
 	# Check if Cascadia Code is installed and inform user.
 	$installed = "C:\Windows\Fonts\CascadiaCodePL.ttf"
-	if (Test-Path -Path $installed) {
+	if (Test-Path -Path $installed) 
+	{
 		print "Cascadia Code is already installed on this device."
 		return
 	}
@@ -987,17 +1028,20 @@ $ProgressPreference = 'SilentlyContinue'
 
 Function UninstallFonts {
 	$fontfile = "C:\Windows\Fonts\CascadiaCodePL.ttf"
-	if (!($fontfile)) {
+	if (!($fontfile)) 
+	{
 		print "Fonts may have already been uninstalled."
 		return
 	}
 	space
 	print "Uninstalling fonts..."
 	Remove-Item $fontfile
-	if (!($fontfile)) {
+	if (!($fontfile)) 
+	{
 		print "Uninstalled fonts."
 	}
-	else {
+	else 
+	{
 		print "Could not uninstall fonts."
 	}
 }
@@ -1289,15 +1333,18 @@ Function UninstallerCLI {
 		"Microsoft.ZuneMusic"
 		"Microsoft.ZuneVideo"
 	)
-	ForEach ($InboxApp in $InboxApps) {
-		if (Get-AppxPackage $InboxApp) {
+	ForEach ($InboxApp in $InboxApps) 
+	{
+		if (Get-AppxPackage $InboxApp) 
+		{
 			print "     Uninstalling $InboxApp..."
 			Get-AppxPackage -Name $InboxApp| Remove-AppxPackage 
 			Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $InboxApp | Remove-AppxProvisionedPackage -Online | Out-Null
 		}
 	}
 
-	if (!(Get-CimInstance -ClassName Win32_PnPEntity | Where-Object -FilterScript {($_.PNPClass -eq "Camera") -or ($_.PNPClass -eq "Image")})) {
+	if (!(Get-CimInstance -ClassName Win32_PnPEntity | Where-Object -FilterScript {($_.PNPClass -eq "Camera") -or ($_.PNPClass -eq "Image")})) 
+	{
 		print "     Uninstalling Microsoft.WindowsCamera..."
 		if (Get-AppxPackage "Microsoft.WindowsCamera")
 		{
@@ -1316,8 +1363,10 @@ Function UninstallerCLI {
 		"*Minecraft*"
 		"*Dolby*"
 	)
-	ForEach ($SponsoredApp in $SponsoredApps) {
-		if (Get-AppxPackage $SponsoredApp) {
+	ForEach ($SponsoredApp in $SponsoredApps) 
+	{
+		if (Get-AppxPackage $SponsoredApp) 
+		{
 			print "     Uninstalling $SponsoredApp.."
 			Get-AppxPackage -Name $SponsoredApp| Remove-AppxPackage 
 			Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $SponsoredApp | Remove-AppxProvisionedPackage -Online | Out-Null
@@ -1332,7 +1381,8 @@ function UninstallerList {
     {
 		print "Uninstalling listed apps..."
 		# Get each line from the text file and use winget install command on it.
-		Get-Content 'uninstallapps.txt' | ForEach-Object {
+		Get-Content 'uninstallapps.txt' | ForEach-Object 
+		{
 			if (Get-AppxPackage $App) 
 			{
 				print "     Uninstalling $App"
@@ -1349,7 +1399,8 @@ function UninstallerList {
     {
 		print "Uninstalling listed apps..."
 		# Get each line from the text file and use winget install command on it.
-		Get-Content 'Uninstallapps.txt' | ForEach-Object {
+		Get-Content 'Uninstallapps.txt' | ForEach-Object 
+		{
 			if (Get-AppxPackage $App) 
 			{
 				print "     Uninstalling $App"
@@ -1366,7 +1417,8 @@ function UninstallerList {
     {
         print "Uninstalling listed apps..."
 		# Get each line from the text file and use winget install command on it.
-		Get-Content 'UninstallApps.txt' | ForEach-Object {
+		Get-Content 'UninstallApps.txt' | ForEach-Object 
+		{
 			if (Get-AppxPackage $App) 
 			{
 				print "     Uninstalling $App"
@@ -1401,7 +1453,8 @@ $ProgressPreference = 'SilentlyContinue'
 
 # Remove Office webapps.
 function WebApps {
-	if (!(Test-Path "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk")) {
+	if (!(Test-Path "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk")) 
+	{
 		return
 	}
 	print "Removing Office web-apps..."
@@ -1414,7 +1467,8 @@ function WebApps {
 	
 # Uninstall Connect app.
 Function UninstallConnect {
-	if (!(Get-AppxPackage Microsoft-PPIProjection-Package))  {
+	if (!(Get-AppxPackage Microsoft-PPIProjection-Package))  
+	{
 		return
 	}
 	Start-BitsTransfer https://github.com/WinRice/Files/raw/main/install_wim_tweak.exe
@@ -1427,7 +1481,8 @@ Function UninstallConnect {
 
 # Unpin all start menu tiles.
 Function UnpinStartTiles {
-	if ($CurrentBuild -ge 22000) {
+	if ($CurrentBuild -ge 22000) 
+	{
 		return
 	}
 	space
@@ -1468,10 +1523,12 @@ Function UnpinStartTiles {
 	$START_MENU_LAYOUT | Out-File $layoutFile -Encoding ASCII
 	$regAliases = @("HKLM", "HKCU")
 	# Assign the start layout and force it to apply with "LockedStartLayout" at both the machine and user level.
-	foreach ($regAlias in $regAliases){
+	foreach ($regAlias in $regAliases)
+	{
 		$basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
 		$keyPath = $basePath + "\Explorer" 
-		if(!(Test-Path -Path $keyPath)) { 
+		if(!(Test-Path -Path $keyPath)) 
+		{ 
 			New-Item -Path $basePath -Name "Explorer" | Out-Null
 		}
 		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 1
@@ -1483,7 +1540,8 @@ Function UnpinStartTiles {
 	$wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
 	Start-Sleep -s 5
 	# Enable the ability to pin items again by disabling "LockedStartLayout".
-	foreach ($regAlias in $regAliases){
+	foreach ($regAlias in $regAliases)
+	{
 		$basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
 		$keyPath = $basePath + "\Explorer" 
 		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 0
@@ -1508,7 +1566,8 @@ Function UnpinAppsFromTaskbar {
 		"Office"
 		"Xbox"
 	)
-	ForEach ($AppName in $AppNames) {
+	ForEach ($AppName in $AppNames) 
+	{
 		if ( $App = ((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | Where-Object { $_.Name -eq $AppName })) {
 			$App.Verbs() | Where-Object { $_.Name.replace('&', '') -match 'Unpin from taskbar' } | ForEach-Object {$_.DoIt()} -ErrorAction SilentlyContinue | Out-Null
 		}	
@@ -1520,11 +1579,13 @@ Function UnpinAppsFromTaskbar {
 # Uninstall Microsoft OneDrive (supports 64-bit versions).
 Function UninstallOneDrive {
 $ErrorActionPreference = 'SilentlyContinue'
-	if (!(check($uninstallod))) { 
+	if (!(check($uninstallod))) 
+	{ 
 		return 
 	}
 	space
-	if (!(Get-Command winget)) {
+	if (!(Get-Command winget)) 
+	{
 		print "WinGet is not installed. Microsoft OneDrive could not be uninstalled."
 		return
 	}
@@ -1545,14 +1606,16 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 # Install Microsoft OneDrive 
 Function InstallOneDrive {
-	if (!(Get-Command winget)) {
+	if (!(Get-Command winget)) 
+	{
 		print "WinGet is not installed. Could not install Microsoft OneDrive."
 		return
 	}
 	print "Installing Microsoft OneDrive..."
 	winget install Microsoft.OneDrive --source winget --accept-package-agreements --accept-source-agreements --silent | Out-Null
 	$check = winget list Microsoft.OneDrive
-	if ($check -like "No installed package found matching input criteria.") {
+	if ($check -like "No installed package found matching input criteria.") 
+	{
 		print "Could not install Microsoft OneDrive."
 		return
 	}
@@ -1565,7 +1628,8 @@ Function UninstallFeatures {
 $ProgressPreference = 'SilentlyContinue'
 $WarningPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
-	if (!(check($uninstallfeatures))) { 
+	if (!(check($uninstallfeatures))) 
+	{ 
 		return 
 	}
 	space
@@ -1601,7 +1665,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 		)
 	}
 
-	ForEach ($Capability in $Capabilities) {
+	ForEach ($Capability in $Capabilities) 
+	{
 		Get-WindowsCapability -Online | Where-Object {$_.Name -like $Capability} | Remove-WindowsCapability -Online | Out-Null
 	}
 	
@@ -1662,7 +1727,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 		"MicrosoftWindowsPowerShellV2Root"
 		"WorkFolders-Client*"
 	)
-	ForEach ($OptionalFeature in $OptionalFeatures) {
+	ForEach ($OptionalFeature in $OptionalFeatures)
+	{
 		Get-WindowsOptionalFeature -Online | Where-Object {$_.FeatureName -like $OptionalFeature} | Disable-WindowsOptionalFeature -Online -NoRestart | Out-Null
 	}
 
@@ -1675,7 +1741,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 		"Work Folders Client"
 		"XPS Document Writer"
 	)
-	ForEach ($Feature in $Features) {
+	ForEach ($Feature in $Features) 
+	{
 		Start-Sleep -Milliseconds 20
 		print "    - Disabled $Feature"
 	}
@@ -1703,7 +1770,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 		"Print.Fax.Scan*"
 		"XPS.Viewer*"
 	)
-	ForEach ($Capability in $Capabilities) {
+	ForEach ($Capability in $Capabilities) 
+	{
 		Get-WindowsCapability -Online | Where-Object {$_.Name -like $Capability} | Add-WindowsCapability -Online | Out-Null
 	}
 	# Print user friendly list of capabilities installed.
@@ -1719,7 +1787,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 		"Windows XPS Features"
 		"WordPad"
 	)
-	ForEach ($CapList in $CapLists) {
+	ForEach ($CapList in $CapLists) 
+	{
 		Start-Sleep -Milliseconds 70
 		print "    - Installed $CapList"
 	}
@@ -1728,7 +1797,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 		"WorkFolders-Client*"
 		"Printing-XPSServices-Feature*"
 	)
-	ForEach ($OptionalFeature in $OptionalFeatures) {
+	ForEach ($OptionalFeature in $OptionalFeatures) 
+	{
 		Get-WindowsOptionalFeature -Online | Where-Object {$_.FeatureName -like $OptionalFeature} | Enable-WindowsOptionalFeature -Online -NoRestart | Out-Null
 	}
 	# Print user friendly list of features uninstalled.
@@ -1740,13 +1810,15 @@ $ErrorActionPreference = 'SilentlyContinue'
 # Enable Windows Subsystem for Linux.
 Function EnableWSL {
 $ProgressPreference = 'SilentlyContinue'
-	if (!(check($wsl))) { 
+	if (!(check($wsl))) 
+	{ 
 		return 
 	}
 	space 
 
 	# Inform user if WSL is already installed.
-	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Enabled") {
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Enabled") 
+	{
 		print "Windows Subsystem for Linux is already installed."
 		return
 	}
@@ -1756,7 +1828,8 @@ $ProgressPreference = 'SilentlyContinue'
 	Enable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -All -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
 	Enable-WindowsOptionalFeature -FeatureName "VirtualMachinePlatform" -All -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
 	Start-BitsTransfer https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi 
-	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Disabled") {
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Disabled") 
+	{
 		print "Could not install Windows Subsystem for Linux."
 		return
 	}
@@ -1774,7 +1847,8 @@ $WarningPreference = 'SilentlyContinue'
 	space
 
 	# Inform user if WSL is already disabled.
-	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Disabled") {
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Disabled") 
+	{
 		print "Windows Subsystem for Linux is already disabled."
 		return
 	}
@@ -1784,7 +1858,8 @@ $WarningPreference = 'SilentlyContinue'
 	Disable-WindowsOptionalFeature -FeatureName "Microsoft-Windows-Subsystem-Linux" -Online -All -NoRestart | Out-Null
 
 	# Print status.
-	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Enabled") {
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Enabled") 
+	{
 		print "Could not uninstall Windows Subsystem for Linux."
 		return
 	}
@@ -1794,17 +1869,20 @@ $WarningPreference = 'SilentlyContinue'
 # Enable Sandbox.
 Function EnableSandbox {
 $ProgressPreference = 'SilentlyContinue'
-	if ($sandbox -like "n") {
+	if ($sandbox -like "n") 
+	{
 		return
 	}
 	space
-	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Enabled") {
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Enabled")
+	 {
 		print "Windows Sandbox is already enabled."
 		return
 	}
 
 	# Warn if unsupported Edition (not version).
-	if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) {
+	if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) 
+	{
 		print "Could not enable Windows Sandbox since $ProductName does not support it."
 		return
 	}
@@ -1814,7 +1892,8 @@ $ProgressPreference = 'SilentlyContinue'
 	Enable-WindowsOptionalFeature -FeatureName "Containers-DisposableClientVM" -All -Online -NoRestart -WarningAction Ignore | Out-Null
 
 	# Print status.
-	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Disabled") {
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Disabled") 
+	{
 		print "Could not enable Windows Sandbox."
 		return
 	}
@@ -1827,13 +1906,15 @@ $ProgressPreference = 'SilentlyContinue'
 	space
 
 	# Check if already disabled.
-	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Disabled") {
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Disabled") 
+	{
 		print "Windows Sandbox is already disabled."
 		return
 	}
 
 	# Warn if unsupported Edition (not version)
-	if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) {
+	if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}))
+	{
 		print "Windows Sandbox can't be toggled in $ProductName."
 		return
 	}
@@ -1843,7 +1924,8 @@ $ProgressPreference = 'SilentlyContinue'
 	Disable-WindowsOptionalFeature -FeatureName "Containers-DisposableClientVM" -All -Online -NoRestart -WarningAction Ignore | Out-Null
 	
 	# Print status.
-	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Enabled") {
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Enabled") 
+	{
 		print "Could not disable Windows Sandbox."
 		return
 	}
@@ -1853,13 +1935,15 @@ $ProgressPreference = 'SilentlyContinue'
 # Enable dotNET 3.5.
 Function EnabledotNET3.5 {
 $ProgressPreference = 'SilentlyContinue'
-	if (!(check($netfx3))) { 
+	if (!(check($netfx3))) 
+	{ 
 		return 
 	}
 	space
 
 	# Check if already enabled.
-	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Enabled"){
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Enabled")
+	{
 		print "dotNET 3.5 is already enabled."
 		return
 	}
@@ -1883,7 +1967,8 @@ $ProgressPreference = 'SilentlyContinue'
 	space
 
 	# Check if already disabled.
-	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Disabled"){
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Disabled")
+	{
 		print "dotNET 3.5 is already disabled."
 		return
 	}
@@ -1893,7 +1978,8 @@ $ProgressPreference = 'SilentlyContinue'
 	Disable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -NoRestart | Out-Null
 
 	# Print status.
-	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Enabled"){
+	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Enabled")
+	{
 		print "dotNET 3.5 is already disabled."
 		return
 	}
@@ -1908,7 +1994,8 @@ Function SetPhotoViewerAssociation {
 	if (!(Test-Path "HKCR:")) {
 		New-PSDrive -Name "HKCR" -PSProvider "Registry" -Root "HKEY_CLASSES_ROOT" | Out-Null
 	}
-	ForEach ($type in @("Paint.Picture", "giffile", "jpegfile", "pngfile")) {
+	ForEach ($type in @("Paint.Picture", "giffile", "jpegfile", "pngfile")) 
+	{
 		New-Item -Path $("HKCR:\$type\shell\open") -Force | Out-Null
 		New-Item -Path $("HKCR:\$type\shell\open\command") | Out-Null
 		Set-ItemProperty -Path $("HKCR:\$type\shell\open") -Name "MuiVerb" -Type ExpandString -Value "@%ProgramFiles%\Windows Photo Viewer\photoviewer.dll,-3043"
@@ -1921,7 +2008,8 @@ Function SetPhotoViewerAssociation {
 # Unset Windows Photo Viewer association for bmp, gif, jpg, png and tif.
 Function UnsetPhotoViewerAssociation {
 	print "Removing Windows Photo Viewer (classic) from the 'Open with' menu..."
-	if (!(Test-Path "HKCR:")) {
+	if (!(Test-Path "HKCR:")) 
+	{
 		New-PSDrive -Name "HKCR" -PSProvider "Registry" -Root "HKEY_CLASSES_ROOT" | Out-Null
 	}
 	Remove-Item -Path "HKCR:\Paint.Picture\shell\open" -Recurse -ErrorAction SilentlyContinue
@@ -1976,7 +2064,8 @@ Function DisableAdvertisingID {
 	space
 	print "Turning off Advertising ID..."
 	$AdvertisingID = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
-	if (!(Test-Path $AdvertisingID)) {
+	if (!(Test-Path $AdvertisingID)) 
+	{
 		New-Item -Path $AdvertisingID | Out-Null
 	}
 	Set-ItemProperty -Path $AdvertisingID -Name "DisabledByGroupPolicy" -Type DWord -Value 1
@@ -1995,7 +2084,8 @@ Function EnableAdvertisingID {
 Function DisableBackgroundApps {
 	space
 	print "Turning off Background apps..."
-	Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process {
+	Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process 
+	{
 		Remove-ItemProperty -Path $_.PsPath -Name * -Force
 	}
 	$ExcludedApps = @(
@@ -2009,7 +2099,8 @@ Function DisableBackgroundApps {
 		"Microsoft.WindowsStore"
 		)
 		$OFS = "|"
-		Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | Where-Object -FilterScript {$_.PSChildName -notmatch "^$($ExcludedApps.ForEach({[regex]::Escape($_)}))"} | ForEach-Object -Process {
+		Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | Where-Object -FilterScript {$_.PSChildName -notmatch "^$($ExcludedApps.ForEach({[regex]::Escape($_)}))"} | ForEach-Object -Process 
+		{
 			New-ItemProperty -Path $_.PsPath -Name Disabled -PropertyType DWord -Value 1 -Force | Out-Null
 			New-ItemProperty -Path $_.PsPath -Name DisabledByUser -PropertyType DWord -Value 1 -Force | Out-Null
 		}
@@ -2020,7 +2111,8 @@ Function DisableBackgroundApps {
 # Enable Background apps.
 Function EnableBackgroundApps {
 	print "Turning on Background apps..."
-	Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process {
+	Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process 
+	{
 		Remove-ItemProperty -Path $_.PsPath -Name * -Force
 	}
 	print "Turned on Background apps."
@@ -2049,11 +2141,13 @@ $ErrorActionPreference = 'SilentlyContinue'
 	$Feedback2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
 	$Feedback3 = "Microsoft\Windows\Feedback\Siuf\DmClient"
 	$Feedback4 = "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
-	if (!(Test-Path $Feedback1)) {
+	if (!(Test-Path $Feedback1)) 
+	{
 		New-Item -Path $Feedback1 -Force | Out-Null
 	}
 	Set-ItemProperty -Path $Feedback1 -Name "NumberOfSIUFInPeriod" -Type DWord -Value 1
-	if (!(Test-Path $Feedback2)) {
+	if (!(Test-Path $Feedback2)) 
+	{
 		New-Item -Path $Feedback2 -Force | Out-Null
 	}
 	Set-ItemProperty -Path $Feedback2 -Name "DoNotShowFeedbackNotifications" -Type DWord -Value 1
@@ -2069,7 +2163,8 @@ Function EnableFeedback {
 	$Feedback2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
 	$Feedback3 = "Microsoft\Windows\Feedback\Siuf\DmClient"
 	$Feedback4 = "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
-	if (!(Test-Path $Feedback1 )) {
+	if (!(Test-Path $Feedback1 )) 
+	{
 		New-Item $Feedback1 -Force | Out-Null
 	}
 	Remove-ItemProperty -Path $Feedback1 -Name "NumberOfSIUFInPeriod"
@@ -2086,7 +2181,8 @@ Function DisableInkHarvesting {
 	$Ink1 = "HKCU:\Software\Microsoft\InputPersonalization"
 	$Ink2 = "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore"
 	$Ink3 = "HKCU:\Software\Microsoft\Personalization\Settings"
-	if (!(Test-Path $Ink1)) {
+	if (!(Test-Path $Ink1)) 
+	{
 		New-Item -Path $Ink1 -Force | Out-Null
 	}
 	New-ItemProperty -Path $Ink1 -Name "RestrictImplicitInkCollection" -Type DWord -Value 1 -Force | Out-Null 
@@ -2102,7 +2198,8 @@ Function EnableInkHarvesting {
 	$Ink1 = "HKCU:\Software\Microsoft\InputPersonalization"
 	$Ink2 = "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore"
 	$Ink3 = "HKCU:\Software\Microsoft\Personalization\Settings"
-	if (!(Test-Path $Ink1)) {
+	if (!(Test-Path $Ink1))
+	{
 		New-Item -Path $Ink1 -Force | Out-Null
 	}
 	New-ItemProperty -Path $Ink1 -Name "RestrictImplicitInkCollection" -Type DWord -Value 0 -Force | Out-Null 
@@ -2135,9 +2232,10 @@ Function DisableLocationTracking {
 	print "Turning off location tracking..."
 	$Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
 	$Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
-	if (!(Test-Path $Location1)) {
+	if (!(Test-Path $Location1)) 
+	{
 		New-Item -Path $Location1 -Force | Out-Null
-		}
+	}
 	Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Deny"
 	Set-ItemProperty -Path $Location2 -Name "SensorPermissionState" -Type DWord -Value 0
 	print "Turned off Location tracking."
@@ -2149,9 +2247,10 @@ Function EnableLocationTracking {
 	print "Turning on Location tracking..."
 	$Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
 	$Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
-	if (!(Test-Path )) {
+	if (!(Test-Path )) 
+	{
 		New-Item -Path $Location1 -Force | Out-Null
-		}
+	}
 	Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Allow"
 	Set-ItemProperty -Path $Location2 -Name "SensorPermissionState" -Type DWord -Value 1
 	print "Turned on Location tracking."
@@ -2178,7 +2277,8 @@ Function DisableSpeechRecognition {
 	space
 	print "Turning off Online Speech recognition..."
 	$Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
-	if (!(Test-Path $Speech)) {
+	if (!(Test-Path $Speech)) 
+	{
 		New-Item -Path $Speech -ErrorAction SilentlyContinue | Out-Null
 	}
 	Remove-ItemProperty -Path $Speech -Name "HasAccepted" -ErrorAction SilentlyContinue
@@ -2191,9 +2291,10 @@ Function EnableSpeechRecognition {
 	space
 	print "Turning on Speech recognition..."
 	$Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
-	if (!(Test-Path )) {
+	if (!(Test-Path )) 
+	{
 		New-Item -Path $Speech | Out-Null
-		}
+	}
 	Set-ItemProperty -Path $Speech -Name "HasAccepted" -Type DWord -Value 1
 	print "Turned on Online Speech recognition"
 }
@@ -2238,7 +2339,8 @@ Function ShowSuggestedContentInSettings {
 
 # Disable "Show me suggested content in Start menu".
 Function HideSuggestedContentInStart {
-	if ($CurrentBuild -ge 22000) {
+	if ($CurrentBuild -ge 22000) 
+	{
 		return
 	}
 	space 
@@ -2249,7 +2351,8 @@ Function HideSuggestedContentInStart {
 
 # Enable "Show me suggested content in Start menu".
 Function ShowSuggestedContentInStart {
-	if ($CurrentBuild -ge 22000) {
+	if ($CurrentBuild -ge 22000)
+	{
 		return
 	}
 	space 
@@ -2264,7 +2367,8 @@ Function DisableTailoredExperiences {
 	print "Turning off Tailored experiences..."
 	$TailoredExp1 = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
 	$TailoredExp2 = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting"
-	if (!(Test-Path $CloudContent )) {
+	if (!(Test-Path $CloudContent )) 
+	{
 		New-Item $CloudContent -Force | Out-Null
 	}
 	Set-ItemProperty -Path 
@@ -2383,9 +2487,10 @@ Function DisableAutorun {
 	space
 	print "Turning off Autorun for all drives..."
 	$Autorun = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-	if (!(Test-Path $Autorun)) {
+	if (!(Test-Path $Autorun)) 
+	{
 		New-Item -Path $Autorun | Out-Null
-		}
+	}
 	Set-ItemProperty -Path $Autorun -Name "NoDriveTypeAutoRun" -Type DWord -Value 255
 	print "Turned off Autorun for all drives."
 }
@@ -2400,7 +2505,8 @@ Function EnableAutorun {
 
 # Disable Hiberfile.sys
 Function DisableHibernation {
-	if ($isLaptop) {
+	if ($isLaptop)
+	{
 		return
 	}
 	space 
@@ -2411,7 +2517,8 @@ Function DisableHibernation {
 
 # Enable Hiberfile.sys
 Function EnableHibernation {
-	if ($isLaptop) {
+	if ($isLaptop) 
+	{
 		return
 	}
 	space 
@@ -2496,7 +2603,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 		"DiagTrack"
 		"SysMain"
     )
-    ForEach ($Service in $Services) {
+    ForEach ($Service in $Services) 
+	{
 		Stop-Service $Service | Out-Null
 		Set-Service $Service -StartupType Disabled
 		print "    Stopped service: $Service."
@@ -2513,7 +2621,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 		"DiagTrack"
 		"SysMain"
     )
-    ForEach ($Service in $Services) {
+    ForEach ($Service in $Services) 
+	{
 		Start-Service $Service | Out-Null
 		Set-Service $Service -StartupType Automatic
 		print "    Started service: $Service."
@@ -2537,7 +2646,8 @@ Function DisableTasks {
 		"Microsoft\Windows\Feedback\Siuf\DmClient"
 		"Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
     )
-    ForEach ($Task in $Tasks) {
+    ForEach ($Task in $Tasks) 
+	{
 		Disable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
 		print "    Turned off task: $Task."
 	}
@@ -2557,7 +2667,8 @@ Function EnableTasks {
 		"Microsoft\Windows\Feedback\Siuf\DmClient"
 		"Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
     )
-    ForEach ($Task in $Tasks) {
+    ForEach ($Task in $Tasks) 
+	{
 		Enable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
 		print "    Turned on task: $Task."
 	}
@@ -2568,7 +2679,8 @@ Function EnableTasks {
 Function SetupWindowsUpdate {
 	space
 	# Get Windows Edition, if its Professional, Education, or Enterprise.
-    if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) {
+    if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) 
+	{
 		print "$ProductName does not support setting up Windows Update policies."
 		return
 	}
@@ -2608,7 +2720,8 @@ Function SetupWindowsUpdate {
 		"Delayed quality updates by 4 days"
 		"Delayed feature updates by 20 days"
 	)
-	ForEach ($WinUpdatePolicy in $WinUpdatePolicies) {
+	ForEach ($WinUpdatePolicy in $WinUpdatePolicies) 
+	{
 		print "    - $WinUpdatePolicy"
 	}
 
@@ -2748,13 +2861,15 @@ Function Hide3DObjects {
 	Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Recurse -ErrorAction SilentlyContinue
 	$Hide3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
 	$Hide3DObjects2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-	if (!(Test-Path $Hide3DObjects1)) {
+	if (!(Test-Path $Hide3DObjects1)) 
+	{
 		New-Item -Path $Hide3DObjects1 -Force | Out-Null
-		}
+	}
 	Set-ItemProperty -Path $Hide3DObjects1 -Name "ThisPCPolicy" -Type String -Value "Hide"
-	if (!(Test-Path $Hide3DObjects2)) {
+	if (!(Test-Path $Hide3DObjects2)) 
+	{
 		New-Item -Path $Hide3DObjects2 -Force | Out-Null
-		}
+	}
 	Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
 	print "Turned off 3D Objects."
 	Start-Sleep -Milliseconds 200
@@ -2771,7 +2886,8 @@ Function Restore3DObjects {
 	$Restore3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
 	$Restore3DObjects2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
 	$Restore3DObjects3 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-	if (!(Test-Path $Restore3DObjects1)) {
+	if (!(Test-Path $Restore3DObjects1)) 
+	{
 		New-Item -Path $Restore3DObjects1 | Out-Null
 	}
 	Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
@@ -2781,13 +2897,15 @@ Function Restore3DObjects {
 
 # Hide Search bar from taskbar.
 Function HideSearchBar {
-	if ($CurrentBuild -lt 22000) {
+	if ($CurrentBuild -lt 22000) 
+	{
 		space
 		print "Turning off Search bar..."
 		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
 		print "Turned off Search bar."
 	}
-	elseif ($CurrentBuild -ge 22000) {
+	elseif ($CurrentBuild -ge 22000) 
+	{
 		space
 		print "Turning off Search icon..."
 		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
@@ -2799,13 +2917,15 @@ Function HideSearchBar {
 
 # Restore Search bar to taskbar.
 Function RestoreSearchBar {
-	if ($CurrentBuild -lt 22000) {
+	if ($CurrentBuild -lt 22000) 
+	{
 		space
 		print "Turning on Search bar..."
 		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
 		print "Turned on Search bar."
 	}
-	elseif ($CurrentBuild -ge 22000) {
+	elseif ($CurrentBuild -ge 22000) 
+	{
 		space
 		print "Turning off Search icon..."
 		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 1
@@ -2834,7 +2954,8 @@ Function RestoreTaskView {
 
 # Hide Cortana icon from taskbar.
 Function HideCortana {
-	if ($CurrentBuild -ge 22000) {
+	if ($CurrentBuild -ge 22000) 
+	{
 		return
 	}
 	space
@@ -2846,7 +2967,8 @@ Function HideCortana {
 
 # Restore Cortana button in taskbar.
 Function RestoreCortana {
-	if ($CurrentBuild -ge 22000) {
+	if ($CurrentBuild -ge 22000) 
+	{
 		return
 	}
 	print "Turning on Cortana icon..."
@@ -2857,7 +2979,8 @@ Function RestoreCortana {
 
 # Hide Meet Now icon from tray.
 Function HideMeetNow {
-	if ($CurrentBuild -ge 22000) {
+	if ($CurrentBuild -ge 22000) 
+	{
 		return
 	}
 	space
@@ -2872,7 +2995,8 @@ Function HideMeetNow {
 
 # Restore Meet Now icon on tray.
 Function RestoreMeetNow {
-	if ($CurrentBuild -ge 22000) {
+	if ($CurrentBuild -ge 22000) 
+	{
 		return
 	}
 	space
@@ -2887,7 +3011,8 @@ Function RestoreMeetNow {
 
 # Turn off News and interests feed.
 Function DisableTaskbarFeed {
-	if ($CurrentBuild -ge 22000) {
+	if ($CurrentBuild -ge 22000) 
+	{
 		return
 	}
 	space
@@ -2902,7 +3027,8 @@ Function DisableTaskbarFeed {
 
 # Turn on News and interests feed.
 Function EnableTaskbarFeed {
-	if ($CurrentBuild -ge 22000) {
+	if ($CurrentBuild -ge 22000) 
+	{
 		return
 	}
 	print "Turning on News and interests..."
