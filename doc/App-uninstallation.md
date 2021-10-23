@@ -1,12 +1,16 @@
 # App uninstallation 
-WinRice supports the following methods to uninstall apps:
-1.  App Uninstaller CLI
-2.  App Uninstaller GUI
-3.  App Uninstaller List
 
-### App Uninstaller CLI
-Automatically uninstall apps that are documented in the list.
+If the user wants to uninstall apps, WinRice asks if the user wants to choose which apps they want to uninstall.
+If the user does not answer the question, the predefined list of apps are uninstalled.
+If the user does not agree want to uninstall any apps, WinRice obeys that choice.
 
+```P.S.A.:
+If [uninstallapps.txt](https://github.com/pratyakshm/WinRice/blob/main/doc/App-uninstallation.md#Using-list-to-uninstall-apps) is found in the same directory as WinRice, WinRice proceeds to uninstall apps using the list without asking questions about app uninstallation.
+```
+***
+
+### Pre-defined list of apps
+The apps documented in this list are removed when the user chooses to uninstall apps without selecting which apps to uninstall.
 <details><summary>List of apps (tap to show/hide)</summary>
   
 - 3D Viewer   
@@ -44,25 +48,16 @@ Automatically uninstall apps that are documented in the list.
 - Weather
 - Xbox
 - Xbox Game bar
-- Your Phone
 </details>
 
-### App Uninstaller GUI
-Manually check/uncheck apps from App Uninstaller GUI and uninstall them.
-
-### App Uninstaller List
-Automatically uninstall apps from a custom list.  
+### Using list to uninstall apps
+Automatically uninstall apps from a list.  
 The list is a text file, and it must fulfil these conditions:
 - There is one app name per line
-- Write absolute app names, like `Microsoft.WindowsAlarms` instead of `Alarms & Clock`.
-- To get absolute name of an app, use `Get-AppxPackage *app*`.
-- Save the text file as `uninstallapps.txt`, or locate the text file when asked by WinRice.
-**Example**  
-This syntax uninstalls Microsoft News and Weather app:
-```
-Microsoft.BingNews
-Microsoft.BingWeather
-```  
+- It has absolute app names, example: `Microsoft.WindowsMaps`
+- List must be named `uninstallapps.txt`
+- List must be saved in the same folder as WinRice.
+**Note:** To get absolute name of an app, use `Get-AppxPackage *app*`.
 
 ***
 

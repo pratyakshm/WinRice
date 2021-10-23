@@ -21,7 +21,8 @@ $tasks = @(
 	"InstallNanaZip", 
 	# "UninstallNanaZip",
 	"WinGetImport",
-	"Winstall", 
+	"Winstall",
+	# "Winuninstall"
 	"InstallHEVC", 
 	# "UninstallHEVC",
 	"Widgets",
@@ -248,7 +249,6 @@ $ProductNameCore = $null
 $OSBuildCore = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Update\TargetingInfo\Installed\Client.OS.rs2.amd64" -Name Version 
 $OSBuild = $OSBuildCore.TrimStart("10.0")
 $BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
-# Source: https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%207/Module/Sophia.psm1#L825.
 $hkeyuser = (Get-CimInstance -ClassName Win32_UserAccount | Where-Object -FilterScript {$_.Name -eq $env:USERNAME}).SID
 
 ### Pre-execution tasks ###
@@ -378,15 +378,19 @@ space
 print "Please take your time to answer the questions below in order to save user config."
 print "Press Enter to proceed after answering a question."
 space
-$systemrestore = ask "Create a system restore point? [Y/n]"
-if (!($systemrestore))
+space
+# App Deployment
+print "APP DEPLOYMENT"
+$installapps = ask "Do you want to install apps using WinGet?"
+if ($installapps -like "y") 
 {
-    $systemrestore = "y"
+	$installusing = ask "Okay, do you want to use (1) winget import or (2) Winstall? [1/2]"
 }
-$uninstallapps = ask "Uninstall non-essential apps? [Y/n]"
+$uninstallapps = ask "Do you want to uninstall non-essential apps? [Y/n]"
 if (!($uninstallapps))
 {
     $uninstallapps = "y"
+	print "No input detected, WinRice will uninstall non-essential apps."
 }
 if ($uninstallapps -like "y") 
 {
@@ -396,34 +400,142 @@ if ($uninstallapps -like "y")
 	}
 	elseif (!(Test-Path uninstallapps.txt) -or (!(Test-Path UninstallApps.txt)) -or (!(Test-Path Uninstallapps.txt)))
 	{
-		$uninstallmethod = ask "Do you want to select which apps to remove? [y/N]"
+		$uninstallmethod = ask "Do you want to select which apps to uninstall? [y/N]"
 	}
 	$uninstallod = ask "Do you want to uninstall Microsoft OneDrive? [y/N]"
 }
-if ($CurrentBuild -ge 22000) {
-	$widgets = ask "Remove Widgets? [y/N]"
-}
-if ($widgets -like "n")
-{
-	print "WinRice will update Widgets to the latest version."
-}
-$uninstallfeatures = ask "Uninstall unnecessary features? [Y/n]"
+space
+
+# Feature Deployment
+print "FEATURE DEPLOYMENT"
+$netfx3 = ask "Do you want to install dotNET 3.5? (used for running legacy programs) [y/N]"
+$wsl = ask "Do you want to install Windows Subsystem for Linux? [y/N]"
+$sandbox = ask "Do you want to install Windows Sandbox? [y/N]"
+$uninstallfeatures = ask "Do you want to uninstall non-essential optional features? [Y/n]"
 if (!($uninstallfeatures))
 {
     $uninstallfeatures = "y"
+	print "No input detected, WinRice will uninstall non-essential features."
 }
-$netfx3 = ask "Enable dotNET 3.5?"
-$wsl = ask "Enable Windows Subsystem for Linux?"
-$sandbox = ask "Enable Windows Sandbox?"
-$installapps = ask "Do you want to install any apps using winget import or Winstall? [y/N]"
-if ($installapps -like "y") 
+if ($CurrentBuild -ge 22000) {
+	$widgets = ask "Do you want to uninstall Widgets [y/N]"
+}
+space
+$systemrestore = ask "Do you want to create a system restore point? [Y/n]"
+space
+space
+
+Start-Sleep -Milliseconds  200
+
+
+# REPRINT CONFIG TO USER
+print "To sum it up,"
+if ($installapps -like "y")
 {
-	$installusing = ask "Do you want to use (1) winget import or (2) Winstall? [1/2]"
+	Write-Host "Apps will be installed using " -NoNewline -ForegroundColor DarkCyan
+	if ($installusing -like "2")
+	{
+		Write-Host "Winstall method." -ForegroundColor DarkCyan
+	}
+	elseif ($installusing -like "1")
+	{
+		Write-Host "WinGet Import method." -ForegroundColor Cyan -BackgroundColor DarkGray
+	}
+}
+elseif ($installapps -like "n")
+{
+	Write-Host "Apps will not be installed." -ForegroundColor DarkGray
 }
 
-space 
+if ($uninstallapps -like "n")
+{
+	Write-Host "Non-essential apps will not be uninstalled." -ForegroundColor DarkGray
+}
+elseif ($uninstallapps -like "y")
+{
+	Write-Host "Non-essential apps will be uninstalled" -NoNewline -ForegroundColor DarkCyan
+	if ($uninstallmethod -like "list")
+	{
+		Write-Host " using LIST." -ForegroundColor DarkCyan
+	}
+	elseif ($uninstallmethod -like "y")
+	{
+		Write-Host " and you will SELECT which apps to uninstall down the line." -ForegroundColor Cyan
+	}
+	elseif ($uninstallmethod -like "n")
+	{
+		Write-Host ". The PREDEFINED LIST of apps will be used." -ForegroundColor DarkCyan
+	}
+}
 
-Start-Sleep -Milliseconds 100
+if ($netfx3 -like "y")
+{
+	Write-Host "dotNET 3.5 will be installed." -ForegroundColor DarkCyan
+}
+elseif (!($netfx3) -or $netfx3 -like "n")
+{
+	Write-Host "dotNET 3.5 will not be installed." -ForegroundColor DarkGray
+}
+
+if ($wsl -like "y")
+{
+	Write-Host "Windows Subsystem for Linux will be installed." -ForegroundColor DarkCyan
+}
+elseif (!($wsl) -or $wsl -like "n")
+{
+	Write-Host "Windows Subsystem for Linux will not be installed." -ForegroundColor DarkGray
+}
+
+if ($sandbox -like "y")
+{
+	Write-Host "Windows Sandbox will be installed." -ForegroundColor DarkCyan
+}
+elseif (!($sandbox) -or $sandbox -like "n")
+{
+	Write-Host "Windows Sandbox will not be installed." -ForegroundColor DarkGray
+}
+
+if ($uninstallfeatures -like "n")
+{
+	Write-Host "Non-essential optional features will not be uninstalled." -ForegroundColor DarkGray
+}
+elseif ($uninstallfeatures -like "y")
+{
+	Write-Host "Non-essential optional features will be uninstalled." -ForegroundColor DarkCyan
+}
+
+if ($widgets -like "n")
+{
+	Write-Host "Widgets will be not be uninstalled, and will instead be updated to the latest version." -ForegroundColor DarkGray
+}
+elseif ($widgets -like "y")
+{
+	Write-Host "Widgets will be uninstalled." -ForegroundColor DarkCyan
+}
+
+if (!($systemrestore))
+{
+    $systemrestore = "y"
+	Write-Host "No input detected, WinRice will create a System restore point." -ForegroundColor DarkCyan
+}
+if ($systemrestore -like "n")
+{
+	Write-Host "System restore point won't be created." -ForegroundColor DarkGray
+}
+
+Start-Sleep -Milliseconds 1700
+space
+space
+
+Write-Host "If this configuration is correct, " -NoNewline
+Write-Host "press any key to go ahead." -ForegroundColor Yellow
+Write-Host "To create a new configuration, restart WinRice."
+$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
+
+
+
+
+
 print "Starting WinRice..."
 Start-Sleep -Milliseconds 600
 
@@ -431,7 +543,7 @@ Start-Sleep -Milliseconds 600
 Function WinRice {
 	Clear-Host
 	space
-	print "pratyakshm's WinRice - v0.5.221021"
+	print "pratyakshm's WinRice - v0.5.231021"
 	Start-Sleep -Milliseconds 100
 	space
 	print "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
@@ -841,6 +953,78 @@ $ErrorActionPreference = 'Continue'
 				winget install "$App" --source winget --accept-package-agreements --accept-source-agreements --silent | Out-Null
 			}
 			print "Winstall has successfully installed the app(s)."
+		}
+		else 
+		{
+			print "No text file was picked."
+		}
+	}
+}
+
+# Uninstall apps from Winstall file (the Winstall.txt file must be on the same directory as WinRice). [reverting Winstall changes]
+# Using this is not recommended
+Function Winuninstall {
+$ErrorActionPreference = 'Continue'
+	space
+	if (!(Get-Command winget)) 
+	{ 
+		print "WinGet is not installed. Please install WinGet first before using Winstall."
+		Start-Process "https://bit.ly/Winstall" 
+		return
+	}
+	$sure = ask "Are you sure you want to uninstall apps installed using Winstall? This is not recommended.[y/N]"
+	if ($sure -like "n")
+	{
+		return
+	}
+
+	# Try Winstall.txt
+	if (Test-Path Winstall.txt) 
+	{
+		print "Winstall"
+		# Get each line from the text file and use winget install command on it.
+		print "Select Winstall text file from File Picker UI"
+		Get-Content 'Winstall.txt' | ForEach-Object 
+		{
+			$App = $_.Split('=')
+			print "    Uninstalling $App..."
+			winget uninstall "$App" --accept-source-agreements --silent | Out-Null
+		}
+		print "Winstall has uninstalled the app(s)."
+	}
+	# Try winstall.txt
+	elseif (Test-Path winstall.txt)
+	{
+		print "Winstall"
+		# Get each line from the text file and use winget install command on it.
+		print "Select Winstall text file from File Picker UI"
+		Get-Content 'winstall.txt' | ForEach-Object 
+		{
+			$App = $_.Split('=')
+			print "    Uninstalling $App..."
+			winget uninstall "$App" --accept-source-agreements --silent | Out-Null
+		}
+		print "Winstall has uninstalled the app(s)."
+	}
+	else 
+	{
+		[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
+		print "Winstall"
+		print "Select Winstall text file from File Picker UI"
+		$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
+		$OpenFileDialog.InitialDirectory = $initialDirectory
+		$OpenFileDialog.Filter = "Text file (*.txt)| *.txt"
+		$OpenFileDialog.ShowDialog() | Out-Null
+		if ($OpenFileDialog.FileName) 
+		{
+			print "Starting Winstall..."
+				Get-Content $OpenFileDialog.FileName | ForEach-Object 
+			{					
+				$App = $_.Split('=')
+				print "    Uninstalling $App..."
+				winget uninstall "$App" --accept-source-agreements --silent | Out-Null
+			}
+			print "Winstall has uninstalled the app(s)."
 		}
 		else 
 		{

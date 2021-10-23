@@ -7,6 +7,9 @@
 **A:** If you are a user, chances are that the [`doc`](https://github.com/pratyakshm/WinRice/tree/main/doc) folder has what you need.   
 Otherwise, you may want to check out the [Wiki](https://github.com/pratyakshm/WinRice/wiki).
 
+**Q:** **Is there a document that details what each function performs?**
+**A:** Yes, you can check [Functions at Wiki](https://github.com/pratyakshm/WinRice/wiki/Functions).
+
 **Q:** **How do I revert a change?**  
 **A:** Read [`Reverting-changes.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Reverting-changes.md).
 
