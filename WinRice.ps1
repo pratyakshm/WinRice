@@ -381,7 +381,7 @@ space
 space
 # App Deployment
 print "APP DEPLOYMENT"
-$installapps = ask "Do you want to install apps using WinGet?"
+$installapps = ask "Do you want to install apps using WinGet? [y/N]"
 if ($installapps -like "y") 
 {
 	$installusing = ask "Okay, do you want to use (1) winget import or (2) Winstall? [1/2]"
@@ -453,6 +453,7 @@ if ($uninstallapps -like "n")
 }
 elseif ($uninstallapps -like "y")
 {
+
 	Write-Host "Non-essential apps will be uninstalled" -NoNewline -ForegroundColor DarkCyan
 	if ($uninstallmethod -like "list")
 	{
@@ -462,9 +463,9 @@ elseif ($uninstallapps -like "y")
 	{
 		Write-Host " and you will SELECT which apps to uninstall down the line." -ForegroundColor Cyan
 	}
-	elseif ($uninstallmethod -like "n")
+	elseif ($uninstallmethod -like "n" -or $uninstallapps -like "y")
 	{
-		Write-Host ". The PREDEFINED LIST of apps will be used." -ForegroundColor DarkCyan
+		Write-Host " from the predefined list." -ForegroundColor DarkCyan
 	}
 }
 
@@ -531,10 +532,6 @@ Write-Host "If this configuration is correct, " -NoNewline
 Write-Host "press any key to go ahead." -ForegroundColor Yellow
 Write-Host "To create a new configuration, restart WinRice."
 $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
-
-
-
-
 
 print "Starting WinRice..."
 Start-Sleep -Milliseconds 600
