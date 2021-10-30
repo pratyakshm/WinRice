@@ -1,62 +1,61 @@
-# App uninstallation 
+# App Uninstallation
 
-If the user wants to uninstall apps, WinRice asks if the user wants to choose which apps they want to uninstall.  
-If the user does not answer the question, the predefined list of apps are uninstalled.  
-If the user does not agree want to uninstall any apps, WinRice obeys that choice.  
- 
-***
+WinRice can uninstall non-essential apps that come bundled with Windows.  
+The user is asked if they want to uninstall such apps. If they choose to do so, they are presented with an option to choose which apps to uninstall.  
+If the user chooses to uninstall apps but doesn't specify which apps to uninstall, the following apps will be uninstalled:
 
-### Pre-defined list of apps
-The apps documented in this list are removed when the user chooses to uninstall apps without selecting which apps to uninstall.
-<details><summary>List of apps (tap to show/hide)</summary>
-  
-- 3D Viewer   
+- 3D Viewer
 - Alarms & Clock
-- Cortana  
-- Camera  
+- Cortana
+- Camera
 - Connect
-- Feedback Hub 
-- Films & TV  
-- Get Help      
-- Get started  
-- Groove Music 
+- Feedback Hub
+- Films & TV
+- Get Help
+- Get started
+- Groove Music
 - HEVC Video Extensions
-- Mail and Calendar  
-- Messaging  
-- Maps  
-- Microsoft OneDrive (64-bit variants can also be uninstalled)
-- Microsoft News  
-- Microsoft Solitaire Collection  
+- Mail and Calendar
+- Messaging
+- Maps
+- Microsoft OneDrive (optional) (64-bit variants can also be uninstalled)
+- Microsoft News
+- Microsoft Solitaire Collection
 - Mixed Reality Portal
 - Network Speed Test
-- OneConnect  
-- OneNote  
+- OneConnect
+- OneNote
 - Office
 - Office Lens
-- Paint 3D  
+- Paint 3D
 - Power Automate Desktop
 - Print 3D
-- People  
+- People
 - Sway
-- Sticky Notes  
+- Sticky Notes
 - Skype
 - Voice Recorder
 - Whiteboard
 - Weather
 - Xbox
 - Xbox Game bar
-</details>
 
-### Using list to uninstall apps
-Automatically uninstall apps from a list.  
-The list is a text file, and it must fulfil these conditions:
-- There is one app name per line
-- It has absolute app names, example: `Microsoft.WindowsMaps`
-- List must be named `uninstallapps.txt`
+## Uninstall Apps From a Text File
+
+WinRice supports uninstalling a list of apps from a text file.  
+The text file must be formatted as follows:
+
+- There must be one app name per line.
+- App names must be absolute. Example: `Microsoft.WindowsMaps`
+- The filename must be `uninstallapps.txt`.
 - List must be saved in the same folder as WinRice.
+
+If an `uninstallapps.txt` file is detected, WinRice will not ask if the user wants to select which apps to uninstall. The list will be used automatically.
+
 **Note:** To get absolute name of an app, use `Get-AppxPackage *app*`.
 
-***
+---
 
 ## Feedback
+
 If you have observed an issue with docs or if there are accessibility issues, please consider [filing an issue](https://github.com/pratyakshm/WinRice/issues/new?assignees=pratyakshm&labels=Issue-Docs&template=doc_issue.yaml&title=Docs+issue%3A+).
