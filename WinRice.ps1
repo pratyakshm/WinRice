@@ -105,8 +105,6 @@ $tasks = @(
 	# "EnableServices",
 	"DisableTasks",				   
 	# "DisableTasks",
-	"DeferWU",
-	"DisableAU",
 	"SetupWindowsUpdate",		   
 	# "ResetWindowsUpdate",
 	# "EnablePowerdownAfterShutdown",
@@ -372,210 +370,253 @@ $pwshver = {
 RunWithProgress -Text "Setting up PowerShell" -Task $pwshver -Exit $true | Out-Null
 
 Start-Sleep -Milliseconds 800
+space
 
-# Take user configs.
-space
-print "Please take your time to answer the questions below in order to save user config."
-print "Press Enter to proceed after answering a question."
-space
-space
-# App Deployment
-print "APP DEPLOYMENT"
-$installapps = ask "Do you want to install apps using WinGet? [y/N]"
-if ($installapps -like "y") 
+# Save default config.
+$uninstallapps = "y"
+if ((Test-Path uninstallapps.txt) -or (Test-Path UninstallApps.txt) -or (Test-Path Uninstallapps.txt))
 {
-	$installusing = ask "Okay, do you want to use (1) winget import or (2) Winstall? [1/2]"
+	$uninstallmethod = "list"
 }
-$uninstallapps = ask "Do you want to uninstall non-essential apps? [Y/n]"
-if (!($uninstallapps))
+$uninstallfeatures = "y"
+$systemrestore = "y"
+
+# TODO: User message contain link to main brief document.
+
+# Take user config.
+print "Express Settings:"
+$settings = @(	
+	"A predefined set of unnecessary apps will be uninstalled."	
+	"A predefined set of unnecessary features will be uninstalled."			
+	"Apps will not be installed."
+	"dotNET 3.5 will not be uninstalled."
+	"Microsoft OneDrive will not be uninstalled."
+	"Widgets will not be uninstalled."
+	"Windows Subsystem for Linux will not be installed."
+	"Windows Sandbox will not be installed."
+)
+ForEach ($setting in $settings) 
 {
-    $uninstallapps = "y"
-	print "No input detected, WinRice will uninstall non-essential apps."
+	print " $setting"
 }
-if ($uninstallapps -like "y") 
+if (!($BuildBranch -like "rs_prerelease"))
 {
-	if ((Test-Path uninstallapps.txt) -or (Test-Path UninstallApps.txt) -or (Test-Path Uninstallapps.txt))
+	$dwu = "y"
+	$au = "y"
+	"Windows automatic updates will be turned off."
+	"Windows quality updates will be delayed by 4 days and feature updates will be delayed by 20 days."
+}
+
+space
+$customize = ask "Do you want to proceed with Express Settings or do you want to customize settings? [Y/n]" -ForegroundColor Yellow
+if ($customize -like "n" -or (!($customize)) 
+{
+	space
+	print "Please take your time to answer the questions below in order to save user config."
+	print "Press Enter to proceed after answering a question."
+	space
+	space
+
+	# App Deployment
+	print "APP DEPLOYMENT"
+	$installapps = ask "Do you want to install apps using WinGet? [y/N]"
+	if ($installapps -like "y") 
 	{
-		$uninstallmethod = "list"
+		$installusing = ask "Okay, do you want to use (1) winget import or (2) Winstall? [1/2]"
 	}
-	elseif (!(Test-Path uninstallapps.txt) -or (!(Test-Path UninstallApps.txt)) -or (!(Test-Path Uninstallapps.txt)))
+	$uninstallapps = ask "Do you want to uninstall non-essential apps? [Y/n]"
+	if (!($uninstallapps))
 	{
-		$uninstallmethod = ask "Do you want to select which apps to uninstall? [y/N]"
+		$uninstallapps = "y"
+		print "No input detected, WinRice will uninstall non-essential apps."
 	}
-	$uninstallod = ask "Do you want to uninstall Microsoft OneDrive? [y/N]"
-}
-space
-
-# Feature Deployment
-print "FEATURE DEPLOYMENT"
-$netfx3 = ask "Do you want to install dotNET 3.5? (used for running legacy programs) [y/N]"
-$wsl = ask "Do you want to install Windows Subsystem for Linux? [y/N]"
-$sandbox = ask "Do you want to install Windows Sandbox? [y/N]"
-$uninstallfeatures = ask "Do you want to uninstall non-essential optional features? [Y/n]"
-if (!($uninstallfeatures))
-{
-    $uninstallfeatures = "y"
-	print "No input detected, WinRice will uninstall non-essential features."
-}
-if ($CurrentBuild -ge 22000) {
-	$widgets = ask "Do you want to uninstall Widgets [y/N]"
-}
-space
-$systemrestore = ask "Do you want to create a system restore point? [Y/n]"
-space
-
-
-# OS
-print "WINDOWS UPDATE"
-$dwu = ask "Do you want to delay Windows updates by a few days?"
-if (!($dwu))
-{
-    $dwu = "y"
-	print "No input detected, Windows updates will be delayed by a few days."
-}
-Start-Sleep -Milliseconds 200
-$au = ask "Do you want to turn off automatic updates?"
-if (!($au))
-{
-    $au = "y"
-	print "No input detected, automatic updates will be turned off."
-}
-
-space
-space
-
-# REPRINT CONFIG TO USER
-print "To sum it up,"
-if ($installapps -like "y")
-{
-	Write-Host "Apps will be installed using " -NoNewline -ForegroundColor DarkCyan
-	if ($installusing -like "2")
+	if ($uninstallapps -like "y") 
 	{
-		Write-Host "Winstall method." -ForegroundColor DarkCyan
+		if ((Test-Path uninstallapps.txt) -or (Test-Path UninstallApps.txt) -or (Test-Path Uninstallapps.txt))
+		{
+			$uninstallmethod = "list"
+		}
+		elseif (!(Test-Path uninstallapps.txt) -or (!(Test-Path UninstallApps.txt)) -or (!(Test-Path Uninstallapps.txt)))
+		{
+			$uninstallmethod = ask "Do you want to select which apps to uninstall? [y/N]"
+		}
+		$uninstallod = ask "Do you want to uninstall Microsoft OneDrive? [y/N]"
 	}
-	elseif ($installusing -like "1")
+	space
+	
+	# Feature Deployment
+	print "FEATURE DEPLOYMENT"
+	$netfx3 = ask "Do you want to install dotNET 3.5? (used for running legacy programs) [y/N]"
+	$wsl = ask "Do you want to install Windows Subsystem for Linux? [y/N]"
+	$sandbox = ask "Do you want to install Windows Sandbox? [y/N]"
+	$uninstallfeatures = ask "Do you want to uninstall non-essential optional features? [Y/n]"
+	if (!($uninstallfeatures))
 	{
-		Write-Host "WinGet Import method." -ForegroundColor Cyan -BackgroundColor DarkGray
+		$uninstallfeatures = "y"
+		print "No input detected, WinRice will uninstall non-essential features."
 	}
-}
-elseif ($installapps -like "n")
-{
-	Write-Host "Apps will not be installed." -ForegroundColor DarkGray
-}
+	if ($CurrentBuild -ge 22000) {
+		$widgets = ask "Do you want to uninstall Widgets [y/N]"
+	}
+	
+	# OS
+	if (-not($BuildBranch -like "rs_prerelease"))
+	{	
+		space
+		print "WINDOWS UPDATE"
 
-if ($uninstallapps -like "n")
-{
-	Write-Host "Non-essential apps will not be uninstalled." -ForegroundColor DarkGray
-}
-elseif ($uninstallapps -like "y")
-{
+		$dwu = ask "Do you want to delay Windows updates by a few days?"
+		if (!($dwu))
+		{
+			$dwu = "y"
+			print "No input detected, Windows updates will be delayed by a few days."
+		}
 
-	Write-Host "Non-essential apps will be uninstalled" -NoNewline -ForegroundColor DarkCyan
-	if ($uninstallmethod -like "list")
+		$au = ask "Do you want to turn off automatic updates?"
+		if (!($au))
+		{
+			$au = "y"
+			print "No input detected, automatic updates will be turned off."
+		}
+	}
+
+	space
+	$systemrestore = ask "Do you want to create a system restore point? [Y/n]"
+	space 
+	space
+
+	# REPRINT CONFIG TO USER
+	print "To sum it up,"
+	if ($installapps -like "y")
 	{
-		Write-Host " using LIST." -ForegroundColor DarkCyan
+		Write-Host "Apps will be installed using " -NoNewline -ForegroundColor DarkCyan
+		if ($installusing -like "2")
+		{
+			Write-Host "Winstall method." -ForegroundColor DarkCyan
+		}
+		elseif ($installusing -like "1")
+		{
+			Write-Host "WinGet Import method." -ForegroundColor Cyan -BackgroundColor DarkGray
+		}
 	}
-	elseif ($uninstallmethod -like "y")
+	elseif ($installapps -like "n")
 	{
-		Write-Host " and you will SELECT which apps to uninstall down the line." -ForegroundColor Cyan
+		Write-Host "Apps will not be installed." -ForegroundColor DarkGray
 	}
-	elseif ($uninstallmethod -like "n" -or $uninstallapps -like "y")
+	
+	if ($uninstallapps -like "n")
 	{
-		Write-Host " from the predefined list." -ForegroundColor DarkCyan
+		Write-Host "Non-essential apps will not be uninstalled." -ForegroundColor DarkGray
 	}
+	elseif ($uninstallapps -like "y")
+	{
+	
+		Write-Host "Non-essential apps will be uninstalled" -NoNewline -ForegroundColor DarkCyan
+		if ($uninstallmethod -like "list")
+		{
+			Write-Host " using LIST." -ForegroundColor DarkCyan
+		}
+		elseif ($uninstallmethod -like "y")
+		{
+			Write-Host " and you will SELECT which apps to uninstall down the line." -ForegroundColor Cyan
+		}
+		elseif ($uninstallmethod -like "n" -or $uninstallapps -like "y")
+		{
+			Write-Host " from the predefined list." -ForegroundColor DarkCyan
+		}
+	}
+	
+	if ($netfx3 -like "y")
+	{
+		Write-Host "dotNET 3.5 will be installed." -ForegroundColor DarkCyan
+	}
+	elseif (!($netfx3) -or $netfx3 -like "n")
+	{
+		Write-Host "dotNET 3.5 will not be installed." -ForegroundColor DarkGray
+	}
+	
+	if ($wsl -like "y")
+	{
+		Write-Host "Windows Subsystem for Linux will be installed." -ForegroundColor DarkCyan
+	}
+	elseif (!($wsl) -or $wsl -like "n")
+	{
+		Write-Host "Windows Subsystem for Linux will not be installed." -ForegroundColor DarkGray
+	}
+	
+	if ($sandbox -like "y")
+	{
+		Write-Host "Windows Sandbox will be installed." -ForegroundColor DarkCyan
+	}
+	elseif (!($sandbox) -or $sandbox -like "n")
+	{
+		Write-Host "Windows Sandbox will not be installed." -ForegroundColor DarkGray
+	}
+	
+	if ($uninstallfeatures -like "n")
+	{
+		Write-Host "Non-essential optional features will not be uninstalled." -ForegroundColor DarkGray
+	}
+	elseif ($uninstallfeatures -like "y")
+	{
+		Write-Host "Non-essential optional features will be uninstalled." -ForegroundColor DarkCyan
+	}
+	
+	if ($widgets -like "n")
+	{
+		Write-Host "Widgets will be not be uninstalled, and will be updated to the latest version instead." -ForegroundColor DarkGray
+	}
+	elseif ($widgets -like "y")
+	{
+		Write-Host "Widgets will be uninstalled." -ForegroundColor DarkCyan
+	}
+	
+	if ($au -like "y")
+	{
+		Write-Host "Windows automatic updates will be turned off." -ForegroundColor DarkCyan
+	}
+	elseif ($au -like "n")
+	{
+		Write-Host "Windows automatic updates will not be turned off." -ForegroundColor DarkGray
+	}
+	
+	if ($dwu -like "y")
+	{
+		Write-Host "Windows quality updates will be delayed by 4 days and feature updates will be delayed by 20 days." -ForegroundColor DarkCyan
+	}
+	elseif ($dwu -like "n")
+	{
+		Write-Host "Windows updates will not be delayed." -ForegroundColor DarkGray
+	}
+	
+	if (!($systemrestore))
+	{
+		$systemrestore = "y"
+		Write-Host "No input detected, WinRice will create a System restore point." -ForegroundColor DarkCyan
+	}
+	if ($systemrestore -like "n")
+	{
+		Write-Host "System restore point will not be created." -ForegroundColor DarkGray
+	}
+
+	Start-Sleep -Milliseconds 1700
+	space
+	
+	Write-Host "If this configuration is correct, " -NoNewline
+	Write-Host "press any key to go ahead." -ForegroundColor Yellow
+	Write-Host "If this configuration is not correct, restart WinRice and create a new one."
+	$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
 }
 
-if ($netfx3 -like "y")
-{
-	Write-Host "dotNET 3.5 will be installed." -ForegroundColor DarkCyan
-}
-elseif (!($netfx3) -or $netfx3 -like "n")
-{
-	Write-Host "dotNET 3.5 will not be installed." -ForegroundColor DarkGray
-}
-
-if ($wsl -like "y")
-{
-	Write-Host "Windows Subsystem for Linux will be installed." -ForegroundColor DarkCyan
-}
-elseif (!($wsl) -or $wsl -like "n")
-{
-	Write-Host "Windows Subsystem for Linux will not be installed." -ForegroundColor DarkGray
-}
-
-if ($sandbox -like "y")
-{
-	Write-Host "Windows Sandbox will be installed." -ForegroundColor DarkCyan
-}
-elseif (!($sandbox) -or $sandbox -like "n")
-{
-	Write-Host "Windows Sandbox will not be installed." -ForegroundColor DarkGray
-}
-
-if ($uninstallfeatures -like "n")
-{
-	Write-Host "Non-essential optional features will not be uninstalled." -ForegroundColor DarkGray
-}
-elseif ($uninstallfeatures -like "y")
-{
-	Write-Host "Non-essential optional features will be uninstalled." -ForegroundColor DarkCyan
-}
-
-if ($widgets -like "n")
-{
-	Write-Host "Widgets will be not be uninstalled, and will be updated to the latest version instead." -ForegroundColor DarkGray
-}
-elseif ($widgets -like "y")
-{
-	Write-Host "Widgets will be uninstalled." -ForegroundColor DarkCyan
-}
-
-if ($au -like "y")
-{
-	Write-Host "Windows automatic updates will be turned off." -ForegroundColor DarkCyan
-}
-elseif ($au -like "n")
-{
-	Write-Host "Windows automatic updates will not be turned off." -ForegroundColor DarkGray
-}
-
-if ($dwu -like "y")
-{
-	Write-Host "Windows quality updates will be delayed by 4 days and feature updates will be delayed by 20 days." -ForegroundColor DarkCyan
-}
-elseif ($dwu -like "n")
-{
-	Write-Host "Windows updates will not be delayed." -ForegroundColor DarkGray
-}
-
-if (!($systemrestore))
-{
-    $systemrestore = "y"
-	Write-Host "No input detected, WinRice will create a System restore point." -ForegroundColor DarkCyan
-}
-if ($systemrestore -like "n")
-{
-	Write-Host "System restore point will not be created." -ForegroundColor DarkGray
-}
-
-
-Start-Sleep -Milliseconds 1700
-space
-space
-
-Write-Host "If this configuration is correct, " -NoNewline
-Write-Host "press any key to go ahead." -ForegroundColor Yellow
-Write-Host "To create a new configuration, restart WinRice."
-$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
 
 print "Starting WinRice..."
-Start-Sleep -Milliseconds 600
+Start-Sleep -Milliseconds 200
 
 # Intro.
 Function WinRice {
 	Clear-Host
 	space
-	print "pratyakshm's WinRice - v0.5.231021"
+	print "pratyakshm's WinRice - v0.5.311021"
 	Start-Sleep -Milliseconds 100
 	space
 	print "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
@@ -2888,57 +2929,18 @@ Function EnableTasks {
 		Enable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
 		print "    Turned on task: $Task."
 	}
-    print "Turned on redundant tasks."
-}
-
-# Defer Windows updates.
-function DeferWU {
-	if (!(check($dwu))) 
-	{ 
-		return 
-	}
-	space
-	$wureg = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
-	if (!(Test-Path $wureg)) 
-    {
-		New-Item -Path $wureg | Out-Null
-	}
-	Set-ItemProperty -Path $wureg -Name DeferQualityUpdates -Type DWord -Value 1
-	Set-ItemProperty -Path $wureg -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
-	Set-ItemProperty -Path $wureg -Name DeferFeatureUpdates -Type DWord -Value 1
-	Set-ItemProperty -Path $wureg -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
-
-	# Print user message; policies applied.
-	$WinUpdatePolicies =@(
-		"Delayed quality updates by 4 days."
-		"Delayed feature updates by 20 days."
-	)
-	ForEach ($WinUpdatePolicy in $WinUpdatePolicies) 
-	{
-		print "$WinUpdatePolicy"
-	}
-}
-
-# Turn off auto updates.
-function DisableAU {
-	if (!(check($au))) 
-	{ 
-		return 
-	}
-	space
-	$aureg = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
-	if (!(Test-Path $aureg)) 
-    {
-		New-Item -Path $aureg | Out-Null
-	}
-	Set-ItemProperty -Path $aureg -Name NoAutoUpdate -Type DWord -Value 1
-	print "Turned off automatic updates."
+    print "Turned on unnecessary tasks."
 }
 
 # Intelligently setup Windows Update policies.
 Function SetupWindowsUpdate {
 	space
-	# Get Windows Edition, if its Professional, Education, or Enterprise.
+	# Perform checks.
+	if ($BuildBranch -like "rs_prerelease")
+	{
+		print "Windows pre-release software detected. Windows Update policies will be left unchanged."
+		return
+	}
     if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) 
 	{
 		print "$ProductName does not support setting up Windows Update policies."
@@ -2948,9 +2950,9 @@ Function SetupWindowsUpdate {
 
     # Declare registry keys locations.
 	$Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
-	
+	$Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
 	$DeliveryOptimization = "Registry::HKEY_USERS\$hkeyuser\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"
-	
+
 	if (!(Test-Path $Update1)) 
     {
 		New-Item -Path $Update1 | Out-Null
@@ -2966,11 +2968,35 @@ Function SetupWindowsUpdate {
 	Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
     New-ItemProperty -Path $DeliveryOptimization -Name DownloadMode -Type DWord -Value 0 -Force
 
+	if ($au -like "y")
+	{
+		Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
+		print "    - Turned off automatic updates"
+	}
+
+	if ($dwu -like "y")
+	{
+		Set-ItemProperty -Path $wureg -Name DeferQualityUpdates -Type DWord -Value 1
+		Set-ItemProperty -Path $wureg -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
+		Set-ItemProperty -Path $wureg -Name DeferFeatureUpdates -Type DWord -Value 1
+		Set-ItemProperty -Path $wureg -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
+	
+		# Print user message; policies applied.
+		$WinUpdatePolicies =@(
+			"Delayed quality updates by 4 days."
+			"Delayed feature updates by 20 days."
+		)
+		ForEach ($WinUpdatePolicy in $WinUpdatePolicies) 
+		{
+			print "    - $WinUpdatePolicy"
+		}
+	}
+
 	# Print user message; policies applied.
 	$WinUpdatePolicies =@(
-		"Turn off Delivery optimization"
-		"Device will no longer auto restart if users are signed in"
-		"Turned off re-installation of apps after Windows Updates"
+		"Turned off Delivery optimization."
+		"Device will no longer auto restart if users are signed in."
+		"Turned off re-installation of apps after Windows Updates."
 	)
 	ForEach ($WinUpdatePolicy in $WinUpdatePolicies) 
 	{
