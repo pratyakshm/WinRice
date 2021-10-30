@@ -1,12 +1,9 @@
 # App uninstallation 
 
-If the user wants to uninstall apps, WinRice asks if the user wants to choose which apps they want to uninstall.
-If the user does not answer the question, the predefined list of apps are uninstalled.
-If the user does not agree want to uninstall any apps, WinRice obeys that choice.
-
-```P.S.A.:
-If [uninstallapps.txt](https://github.com/pratyakshm/WinRice/blob/main/doc/App-uninstallation.md#Using-list-to-uninstall-apps) is found in the same directory as WinRice, WinRice proceeds to uninstall apps using the list without asking questions about app uninstallation.
-```
+If the user wants to uninstall apps, WinRice asks if the user wants to choose which apps they want to uninstall.  
+If the user does not answer the question, the predefined list of apps are uninstalled.  
+If the user does not agree want to uninstall any apps, WinRice obeys that choice.  
+ 
 ***
 
 ### Pre-defined list of apps

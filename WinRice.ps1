@@ -104,7 +104,9 @@ $tasks = @(
 	"DisableServices",			   
 	# "EnableServices",
 	"DisableTasks",				   
-	# "EnableTasks",
+	# "DisableTasks",
+	"DeferWU",
+	"DisableAU",
 	"SetupWindowsUpdate",		   
 	# "ResetWindowsUpdate",
 	# "EnablePowerdownAfterShutdown",
@@ -119,8 +121,6 @@ $tasks = @(
 	# "HideExtensions",
 	"HideRecentFilesInQuickAccess",
 	# "ShowRecentFilesInQuickAccess",
-	"EnableExtensions",
-	# "DisableExtensions",
 	"DisableStickyKeys",           
 	# "EnableStickyKeys",
 	"SetExplorerThisPC",           
@@ -165,7 +165,7 @@ Function check($test) {
 	}
 }
 
-Function cwexit {
+Function wrexit {
 	Write-Host "WinRice will now exit."
 	Start-Sleep -Seconds 2
 	exit
@@ -223,7 +223,7 @@ function RunWithProgress {
     }
     Write-Host -NoNewline -ForegroundColor $color "`r  [$ind] "; Write-Host "$endtext"
 	# Exit on failure
-	if ($Exit -and $fail) { cwexit }
+	if ($Exit -and $fail) { wrexit }
     return $result
 }
 
@@ -423,10 +423,26 @@ if ($CurrentBuild -ge 22000) {
 space
 $systemrestore = ask "Do you want to create a system restore point? [Y/n]"
 space
+
+
+# OS
+print "WINDOWS UPDATE"
+$dwu = ask "Do you want to delay Windows updates by a few days?"
+if (!($dwu))
+{
+    $dwu = "y"
+	print "No input detected, Windows updates will be delayed by a few days."
+}
+Start-Sleep -Milliseconds 200
+$au = ask "Do you want to turn off automatic updates?"
+if (!($au))
+{
+    $au = "y"
+	print "No input detected, automatic updates will be turned off."
+}
+
 space
-
-Start-Sleep -Milliseconds  200
-
+space
 
 # REPRINT CONFIG TO USER
 print "To sum it up,"
@@ -507,11 +523,29 @@ elseif ($uninstallfeatures -like "y")
 
 if ($widgets -like "n")
 {
-	Write-Host "Widgets will be not be uninstalled, and will instead be updated to the latest version." -ForegroundColor DarkGray
+	Write-Host "Widgets will be not be uninstalled, and will be updated to the latest version instead." -ForegroundColor DarkGray
 }
 elseif ($widgets -like "y")
 {
 	Write-Host "Widgets will be uninstalled." -ForegroundColor DarkCyan
+}
+
+if ($au -like "y")
+{
+	Write-Host "Windows automatic updates will be turned off." -ForegroundColor DarkCyan
+}
+elseif ($au -like "n")
+{
+	Write-Host "Windows automatic updates will not be turned off." -ForegroundColor DarkGray
+}
+
+if ($dwu -like "y")
+{
+	Write-Host "Windows quality updates will be delayed by 4 days and feature updates will be delayed by 20 days." -ForegroundColor DarkCyan
+}
+elseif ($dwu -like "n")
+{
+	Write-Host "Windows updates will not be delayed." -ForegroundColor DarkGray
 }
 
 if (!($systemrestore))
@@ -521,8 +555,9 @@ if (!($systemrestore))
 }
 if ($systemrestore -like "n")
 {
-	Write-Host "System restore point won't be created." -ForegroundColor DarkGray
+	Write-Host "System restore point will not be created." -ForegroundColor DarkGray
 }
+
 
 Start-Sleep -Milliseconds 1700
 space
@@ -2856,6 +2891,50 @@ Function EnableTasks {
     print "Turned on redundant tasks."
 }
 
+# Defer Windows updates.
+function DeferWU {
+	if (!(check($dwu))) 
+	{ 
+		return 
+	}
+	space
+	$wureg = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
+	if (!(Test-Path $wureg)) 
+    {
+		New-Item -Path $wureg | Out-Null
+	}
+	Set-ItemProperty -Path $wureg -Name DeferQualityUpdates -Type DWord -Value 1
+	Set-ItemProperty -Path $wureg -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
+	Set-ItemProperty -Path $wureg -Name DeferFeatureUpdates -Type DWord -Value 1
+	Set-ItemProperty -Path $wureg -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
+
+	# Print user message; policies applied.
+	$WinUpdatePolicies =@(
+		"Delayed quality updates by 4 days."
+		"Delayed feature updates by 20 days."
+	)
+	ForEach ($WinUpdatePolicy in $WinUpdatePolicies) 
+	{
+		print "$WinUpdatePolicy"
+	}
+}
+
+# Turn off auto updates.
+function DisableAU {
+	if (!(check($au))) 
+	{ 
+		return 
+	}
+	space
+	$aureg = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
+	if (!(Test-Path $aureg)) 
+    {
+		New-Item -Path $aureg | Out-Null
+	}
+	Set-ItemProperty -Path $aureg -Name NoAutoUpdate -Type DWord -Value 1
+	print "Turned off automatic updates."
+}
+
 # Intelligently setup Windows Update policies.
 Function SetupWindowsUpdate {
 	space
@@ -2869,7 +2948,7 @@ Function SetupWindowsUpdate {
 
     # Declare registry keys locations.
 	$Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
-	$Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
+	
 	$DeliveryOptimization = "Registry::HKEY_USERS\$hkeyuser\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"
 	
 	if (!(Test-Path $Update1)) 
@@ -2884,22 +2963,14 @@ Function SetupWindowsUpdate {
     }
 
 	# Write registry values.
-	Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
-	Set-ItemProperty -Path $Update1 -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
-	Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
-	Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
-	Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
 	Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
     New-ItemProperty -Path $DeliveryOptimization -Name DownloadMode -Type DWord -Value 0 -Force
 
 	# Print user message; policies applied.
 	$WinUpdatePolicies =@(
-		"Turned off automatic updates"
 		"Turn off Delivery optimization"
 		"Device will no longer auto restart if users are signed in"
 		"Turned off re-installation of apps after Windows Updates"
-		"Delayed quality updates by 4 days"
-		"Delayed feature updates by 20 days"
 	)
 	ForEach ($WinUpdatePolicy in $WinUpdatePolicies) 
 	{
