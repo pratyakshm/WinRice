@@ -2364,13 +2364,15 @@ Function EnableBackgroundApps {
 
 # Disable Windows Error Reporting 
 function DisableErrorReporting {
+	space
 	if (!($BuildBranch -like "co_release" -or $BuildBranch -like "vb_release"))
 	{
+		print "Error reporting will be left unchanged in Windows pre-release software."
+		return
+	}
 		print "Turning off Windows Error Reporting..."
 		Disable-WindowsErrorReporting | Out-Null
 		print "Turned off Windows Error Reporting."
-	}
-
 }
 
 # Enable Windows Error Reporting 
@@ -2384,6 +2386,11 @@ function EnableErrorReporting {
 Function DisableFeedback {
 $ErrorActionPreference = 'SilentlyContinue'
 	space
+	if (!($BuildBranch -like "co_release" -or $BuildBranch -like "vb_release"))
+	{
+		print "Feedback notifications will be left unchanged in Windows pre-release software."
+		return
+	}
 	print "Turning off Feedback notifications..."
 	$Feedback1 = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
 	$Feedback2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
@@ -2639,6 +2646,11 @@ Function EnableTailoredExperiences {
 # Disable Telemetry. 
 Function DisableTelemetry {
 	space
+	if (!($BuildBranch -like "co_release" -or $BuildBranch -like "vb_release"))
+	{
+		print "Telemetry settings will be left unchanged in Windows pre-release software."
+		return
+	}
 	print "Turning off telemetry..."
 	$Telemetry1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
 	$Telemetry2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
