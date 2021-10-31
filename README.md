@@ -20,6 +20,14 @@ WinRice uses automation to make your Windows experience better. Continue reading
 
 ---
 
+## 📃 Documentation
+
+The documentation for WinRice is available in the below link. Make sure you (the user) have read the documentation before going ahead.
+
+**Documentation: [Tap here](https://github.com/pratyakshm/WinRice/tree/main/doc)**
+
+---
+
 ## ✔️ Prerequisites
 
 ### Windows Terminal
@@ -51,14 +59,6 @@ WinRice supports the latest Windows retail and pre-release builds.
 ### Internet Connection
 
 An active internet connection is needed.
-
----
-
-## 📃 Documentation
-
-Make sure you (the user) have read the documentation before running WinRice.
-
-**Documentation: [Tap here](https://github.com/pratyakshm/WinRice/tree/main/doc)**
 
 ---
 
