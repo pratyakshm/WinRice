@@ -4,41 +4,26 @@ WinRice can uninstall non-essential apps that come bundled with Windows.
 The user is asked if they want to uninstall such apps. If they choose to do so, they are presented with an option to choose which apps to uninstall.  
 If the user chooses to uninstall apps but doesn't specify which apps to uninstall, the following apps will be uninstalled:
 
-- 3D Viewer
-- Alarms & Clock
+- Calendar
 - Cortana
-- Camera
-- Connect
+- Camera (if no camera is connected)
 - Feedback Hub
-- Films & TV
 - Get Help
-- Get started
-- Groove Music
-- HEVC Video Extensions
-- Mail and Calendar
-- Messaging
+- Mail 
 - Maps
-- Microsoft OneDrive (optional) (64-bit variants can also be uninstalled)
+- Microsoft OneDrive
 - Microsoft News
 - Microsoft Solitaire Collection
+- Microsoft Teams
 - Mixed Reality Portal
-- Network Speed Test
-- OneConnect
-- OneNote
+- OneNote for Windows 10
 - Office
-- Office Lens
 - Paint 3D
 - Power Automate Desktop
-- Print 3D
-- People
-- Sway
-- Sticky Notes
-- Skype
-- Voice Recorder
+- Tips
 - Whiteboard
 - Weather
 - Xbox
-- Xbox Game bar
 
 ## Uninstall Apps From a Text File
 

@@ -2,7 +2,7 @@
 
 ## System Restore Point
 
-WinRice provides the option for creating a system restore point before modifying the system. Restoring to the restore point will all settings changes performed by WinRice. However, if WinRice didn't create a System restore point, you can still revert changes using the revert preset. Read more about it below.
+WinRice provides the option for creating a system restore point before modifying the system. Restoring to the restore point will revert all settings changes performed by WinRice. However, if WinRice didn't create a System restore point, you can still revert changes using the revert preset. Read more about it below.
 
 ---
 
@@ -10,7 +10,7 @@ WinRice provides the option for creating a system restore point before modifying
 
 1. [Click here](https://github.com/pratyakshm/WinRice/archive/refs/heads/main.zip) to download the latest code from main branch.
 2. Extract the ZIP file and locate `WinRice.ps1`.
-3. Open the file on your desired text editor of choice.
+3. Open the file in your desired text editor of choice.
 4. Replace the default preset with the [revert preset](https://github.com/pratyakshm/WinRice/blob/main/doc/Reverting-changes.md#revert-preset) given below.
 5. Save the file.
 6. Open Windows Terminal (Admin).
@@ -184,10 +184,7 @@ $tasks = @(
 ### Re-Installation of Uninstalled Apps
 
 [Microsoft Store](ms-windows-store:) is the recommended place to re-install apps uninstalled by WinRice.  
-However, there are cases where an app is not listed on Microsoft Store, for instance the Get help app.  
-At the time of writing this, there's no known way to re-install that app. Even though the app might be important for some people (justified), most people don't use it.  
-However, currently in the main branch and starting the next WinRice release, uninstalling apps will be optional.
-I highly recommend users to use WinRice GUI to selectively uninstall apps they don't need.
+However there are cases where a few apps are not available in Microsoft Store.
 
 ---
 

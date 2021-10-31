@@ -1,10 +1,8 @@
 # Features
 
-# Apps & Features
-
 ## Apps
 
-### Apps Installed:
+### Things Installed:
 
 - Cascadia Code
 - HEVC Video Extensions
@@ -33,24 +31,19 @@ Read [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/main/d
 - Office
 - Xbox
 
-### Misc. Changes:
-
-- The classic Windows Photo Viewer desktop app is added into the "Open with" menu for the following extensions: JPG, JPEG, GIF and PNG.
-
 ## Features
 
 ### Features Installed:
 
-- dotNET 3.5
-- Windows Sandbox
-- Windows Subsystem for Linux
+- dotNET 3.5 (optional)
+- Windows Sandbox (optional)
+- Windows Subsystem for Linux (optional)
 
 ### Features Uninstalled:
 
 - Hello Face
 - Legacy Components (DirectPlay)
 - Math Recognizer
-- Microsoft Paint (Desktop app)
 - OpenSSH Client
 - PowerShell 2.0
 - PowerShell ISE
@@ -66,7 +59,7 @@ Read [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/main/d
 - XPS Printer
 - XPS Viewer
 
-# Privacy & Security
+# Privacy
 
 ## Turn Off the Following:
 
@@ -88,9 +81,7 @@ Read [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/main/d
 - Clipboard history
 </details>
 
-# Tasks & Services
-
-## Tasks
+# System
 
 ### Turn Off the Following Tasks:
 
@@ -106,7 +97,6 @@ Read [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/main/d
 - UsbCeip
   </details>
 
-## Services
 
 ### Turn Off the Following Services:
 
@@ -146,14 +136,14 @@ Setup the following policies to Windows Update:
 
 | Item               | Place                 | OS                        |
 | ------------------ | --------------------- | ------------------------- |
-| Widgets icon       | Next to Start         | Windows 11                |
-| Chat icon          | Next to Start         | Windows 11                |
-| Search icon        | Next to Start         | Windows 11 and Windows 10 |
-| Task view          | Next to Start         | Windows 11 and Windows 10 |
-| Cortana            | Next to Start         | Windows 10                |
+| Widgets icon       | Taskbar         | Windows 11                |
+| Chat icon          | Taskbar         | Windows 11                |
+| Search icon        | Taskbar         | Windows 11 and Windows 10 |
+| Task view          | Taskbar         | Windows 11 and Windows 10 |
+| Cortana            | Taskbar         | Windows 10                |
 | 3D Objects         | File Explorer sidebar | Windows 10                |
-| Meet now           | System tray           | Windows 10                |
-| News and interests | System tray           | Windows 10                |
+| Meet now           | Apps tray           | Windows 10                |
+| News and interests | Apps tray           | Windows 10                |
 
 </details>
 

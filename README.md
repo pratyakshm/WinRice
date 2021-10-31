@@ -1,6 +1,5 @@
-<p align="center"><a href="https://github.com/pratyakshm/WinRice"><img src="assets/icon.png" width="150"></a></p> 
-<h2 align="center">WinRice</h2>
-<h2 align ="center">Automates setting up Windows devices</h2>
+<p align="center"><a href="https://github.com/pratyakshm/WinRice"><img src="assets/banner.png" width="500" height="250"></a></p> 
+<h2 align ="center">Set up your Windows device using automation</h2>
 <p align="center">
 <a href="https://github.com/pratyakshm/WinRice#running-WinRice"><img src="https://img.shields.io/static/v1?label=pratyakshm&message=WinRice&color=blue&logo=github" alt="pratyakshm - WinRice"></a>
 <a href="https://github.com/pratyakshm/WinRice"><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/pratyakshm/WinRice/total?color=blue"></a>
@@ -17,7 +16,7 @@
 
 ## 😃 Description
 
-WinRice performs a bunch of tasks including (but not limited to) removing unused apps, installing useful apps (read [`winget.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winget.md#winrice-x-winget)), cleaning up the Windows UI, maximizing privacy, setting up Windows Update policies, configuring optional features, etc. - while retaining maximum OS stability and functionality.
+WinRice uses automation to make your Windows experience better. Continue reading to learn more.
 
 ---
 
@@ -59,7 +58,7 @@ An active internet connection is needed.
 
 Make sure you (the user) have read the documentation before running WinRice.
 
-**Documentation: [Click here](https://github.com/pratyakshm/WinRice/tree/main/doc)**
+**Documentation: [Tap here](https://github.com/pratyakshm/WinRice/tree/main/doc)**
 
 ---
 
@@ -92,10 +91,12 @@ WinRice accepts all kinds of contributions such as finding bugs, fixing bugs, ad
 
 I ask that **before you start your work on a feature that you would like to request or contribute**, please read the WinRice [principles](https://github.com/pratyakshm/WinRice/wiki/Principles). I will be happy to work with you to figure out good approaches and provide guidance throughout feature development, and help avoid any wasted or duplicated effort.
 
-## 🗣️ Discussion
-
-<a href="https://matrix.to/#/!UQlisJCpjpplqFPKLc:matrix.org?via=matrix.org&via=t2bot.io"><img src="https://img.shields.io/badge/Chat-Matrix-brightgreen" alt="Chat on Matrix"></a>
-
+## Credits and acknowledgements
+<h4 align="left"> &bull; The awesome WinRice logo and banner are created by <a href="https://t.me/vancelmusic">Vancel</a></h4>
+  <p align="left"> Vancel is a music producer, he mostly produces future bass or dance music. Do check out his <a href="https://open.spotify.com/artist/0G4AZNtTIxerdDkVLZP4t1?si=Zr_gW6P5T6Gi4eIQrpRWqA&nd=1">Spotify</a> &bull; <a href="https://soundcloud.com/vancelmusic">SoundCloud</a> &bull; <a href="https://youtube.com/vancelmusic">YouTube</a> &bull; <a href="https://music.apple.com/us/artist/vancel/531284996">Apple Music</a>.</p>
+<h4 align=left> &bull; Documentation and UX are written and directed by <a href="https://kenharris.xyz/">Ken</a></h4>
+  <p align="left">Ken likes to tinker with Android and the Linux kernel. He also writes Python projects for fun. You can check out his projects over at his <a href="https://github.com/kenhv">GitHub</a>.</p>
+  
 ---
 
 ## ⚖️ License

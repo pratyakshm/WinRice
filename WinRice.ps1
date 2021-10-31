@@ -1564,31 +1564,20 @@ Function UninstallerCLI {
 		"Microsoft.BingWeather"
 		"Microsoft.GamingApp"
 		"Microsoft.GetHelp" 
-		"Microsoft.Getstarted" 
-		"Microsoft.Messaging"
-		"Microsoft.Microsoft3DViewer" 
-		"Microsoft.MicrosoftStickyNotes"  
+		"Microsoft.Getstarted" # Tips app 
 		"Microsoft.MSPaint" # Paint 3D app
 		# "Microsoft.Paint"  # Paint app (MSIX)
 		"Microsoft.MicrosoftOfficeHub" # Office webview (packaged)
 		"Microsoft.Office.OneNote" # OneNote for Windows 10
 		"Microsoft.MixedReality.Portal"
 		"Microsoft.MicrosoftSolitaireCollection" 
-		"Microsoft.NetworkSpeedTest" 
 		"Microsoft.News" 
-		"Microsoft.Office.Sway" 
-		"Microsoft.OneConnect"
 		"Microsoft.PowerAutomateDesktop"
-		"Microsoft.SkypeApp"
-		"Microsoft.Todos"
-		"Microsoft.WindowsAlarms"
+		"Microsoft.Whiteboard"
 		"Microsoft.WindowsCommunicationsApps" 
 		"Microsoft.WindowsFeedbackHub" 
 		"Microsoft.WindowsMaps" 
-		"Microsoft.WindowsSoundRecorder"
 		"Microsoft.XboxApp"
-		"Microsoft.ZuneMusic"
-		"Microsoft.ZuneVideo"
 	)
 	ForEach ($InboxApp in $InboxApps) 
 	{
@@ -1900,7 +1889,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 			"MathRecognizer*"
 			"Media.WindowsMediaPlayer*"
 			"Microsoft-Windows-SnippingTool*"
-			"Microsoft.Windows.MSPaint*" 
 			"Microsoft.Windows.PowerShell.ISE*"
 			"Microsoft.Windows.WordPad*"
 			"Print.Fax.Scan*"
@@ -1938,7 +1926,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	{
 		$CapLists =@(
 			"Math Recognizer"
-			"Microsoft Paint"
 			"Steps Recorder"
 			"Snipping Tool" 
 			"Windows Fax & Scan"
