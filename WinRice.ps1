@@ -409,7 +409,7 @@ if (!($BuildBranch -like "rs_prerelease"))
 
 space
 $customize = ask "Do you want to proceed with Express Settings or do you want to customize settings? [Y/n]" -ForegroundColor Yellow
-if ($customize -like "n" -or (!($customize)) 
+if (!(check($customize)))
 {
 	space
 	print "Please take your time to answer the questions below in order to save user config."
@@ -420,7 +420,7 @@ if ($customize -like "n" -or (!($customize))
 	# App Deployment
 	print "APP DEPLOYMENT"
 	$installapps = ask "Do you want to install apps using WinGet? [y/N]"
-	if ($installapps -like "y") 
+	if (check($installapps))
 	{
 		$installusing = ask "Okay, do you want to use (1) winget import or (2) Winstall? [1/2]"
 	}
@@ -430,7 +430,7 @@ if ($customize -like "n" -or (!($customize))
 		$uninstallapps = "y"
 		print "No input detected, WinRice will uninstall non-essential apps."
 	}
-	if ($uninstallapps -like "y") 
+	if (check($uninstallapps))
 	{
 		if ((Test-Path uninstallapps.txt) -or (Test-Path UninstallApps.txt) -or (Test-Path Uninstallapps.txt))
 		{
@@ -487,7 +487,7 @@ if ($customize -like "n" -or (!($customize))
 
 	# REPRINT CONFIG TO USER
 	print "To sum it up,"
-	if ($installapps -like "y")
+	if (check($installapps))
 	{
 		Write-Host "Apps will be installed using " -NoNewline -ForegroundColor DarkCyan
 		if ($installusing -like "2")
@@ -499,16 +499,16 @@ if ($customize -like "n" -or (!($customize))
 			Write-Host "WinGet Import method." -ForegroundColor Cyan -BackgroundColor DarkGray
 		}
 	}
-	elseif ($installapps -like "n")
+	elseif (!(check($installapps)))
 	{
 		Write-Host "Apps will not be installed." -ForegroundColor DarkGray
 	}
 	
-	if ($uninstallapps -like "n")
+	ielseif (!(check($uninstallapps)))
 	{
 		Write-Host "Non-essential apps will not be uninstalled." -ForegroundColor DarkGray
 	}
-	elseif ($uninstallapps -like "y")
+	elseif (check($uninstallapps))
 	{
 	
 		Write-Host "Non-essential apps will be uninstalled" -NoNewline -ForegroundColor DarkCyan
@@ -516,75 +516,75 @@ if ($customize -like "n" -or (!($customize))
 		{
 			Write-Host " using LIST." -ForegroundColor DarkCyan
 		}
-		elseif ($uninstallmethod -like "y")
+		elseif (check($uninstallmethod))
 		{
 			Write-Host " and you will SELECT which apps to uninstall down the line." -ForegroundColor Cyan
 		}
-		elseif ($uninstallmethod -like "n" -or $uninstallapps -like "y")
+		elseif (!(check($uninstallmethod)) -and (check($uninstallapps)))
 		{
 			Write-Host " from the predefined list." -ForegroundColor DarkCyan
 		}
 	}
 	
-	if ($netfx3 -like "y")
+	if (check($netfx3))
 	{
 		Write-Host "dotNET 3.5 will be installed." -ForegroundColor DarkCyan
 	}
-	elseif (!($netfx3) -or $netfx3 -like "n")
+	elseif (!(check($netfx3)))
 	{
 		Write-Host "dotNET 3.5 will not be installed." -ForegroundColor DarkGray
 	}
 	
-	if ($wsl -like "y")
+	if (check($wsl))
 	{
 		Write-Host "Windows Subsystem for Linux will be installed." -ForegroundColor DarkCyan
 	}
-	elseif (!($wsl) -or $wsl -like "n")
+	elseif (!(check($wsl)))
 	{
 		Write-Host "Windows Subsystem for Linux will not be installed." -ForegroundColor DarkGray
 	}
 	
-	if ($sandbox -like "y")
+	if (check($sandbox))
 	{
 		Write-Host "Windows Sandbox will be installed." -ForegroundColor DarkCyan
 	}
-	elseif (!($sandbox) -or $sandbox -like "n")
+	elseif (!(check($sandbox)))
 	{
 		Write-Host "Windows Sandbox will not be installed." -ForegroundColor DarkGray
 	}
 	
-	if ($uninstallfeatures -like "n")
+	if (!(check($uninstallfeatures)))
 	{
 		Write-Host "Non-essential optional features will not be uninstalled." -ForegroundColor DarkGray
 	}
-	elseif ($uninstallfeatures -like "y")
+	elseif (check($uninstallfeatures))
 	{
 		Write-Host "Non-essential optional features will be uninstalled." -ForegroundColor DarkCyan
 	}
 	
-	if ($widgets -like "n")
+	if (!(check($widgets)))
 	{
 		Write-Host "Widgets will be not be uninstalled, and will be updated to the latest version instead." -ForegroundColor DarkGray
 	}
-	elseif ($widgets -like "y")
+	elseif (check($widgets))
 	{
 		Write-Host "Widgets will be uninstalled." -ForegroundColor DarkCyan
 	}
 	
-	if ($au -like "y")
+	if (check($au))
 	{
 		Write-Host "Windows automatic updates will be turned off." -ForegroundColor DarkCyan
 	}
-	elseif ($au -like "n")
+	elseif (!(check($au)))
 	{
 		Write-Host "Windows automatic updates will not be turned off." -ForegroundColor DarkGray
 	}
 	
-	if ($dwu -like "y")
+	if (check($dwu))
 	{
 		Write-Host "Windows quality updates will be delayed by 4 days and feature updates will be delayed by 20 days." -ForegroundColor DarkCyan
 	}
-	elseif ($dwu -like "n")
+	elseif (!(check($dwu)))
 	{
 		Write-Host "Windows updates will not be delayed." -ForegroundColor DarkGray
 	}
@@ -594,7 +594,7 @@ if ($customize -like "n" -or (!($customize))
 		$systemrestore = "y"
 		Write-Host "No input detected, WinRice will create a System restore point." -ForegroundColor DarkCyan
 	}
-	if ($systemrestore -like "n")
+	if (!(check($systemrestore)))
 	{
 		Write-Host "System restore point will not be created." -ForegroundColor DarkGray
 	}
@@ -657,7 +657,7 @@ Function ChangesDone {
 # Create a system restore point with type MODIFY_SETTINGS.
 Function CreateSystemRestore {
 $ProgressPreference = 'SilentlyContinue'
-	if ($systemrestore -like "y") 
+	if (check($systemrestore))
 	{
 		space
 		print "Creating a system restore point with type MODIFY_SETTINGS..."
@@ -1046,7 +1046,7 @@ $ErrorActionPreference = 'Continue'
 		return
 	}
 	$sure = ask "Are you sure you want to uninstall apps installed using Winstall? This is not recommended.[y/N]"
-	if ($sure -like "n")
+	if (!(check($sure)))
 	{
 		return
 	}
@@ -1249,11 +1249,11 @@ function RemoveWidgets {
 # Unfinished function.
 Function Widgets {
 $ProgressPreference = 'SilentlyContinue'
-	if ($widgets -like "n") 
+	if (!(check($widgets)))
 	{
 		UpdateWidgets
 	}
-	elseif ($widgets -like "y") 
+	elseif (check($widgets))
 	{
 		RemoveWidgets
 	}
@@ -1683,11 +1683,11 @@ function UninstallerList {
 Function UninstallApps {
 $ErrorActionPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
-	if ($uninstallmethod -like "y")
+	if (check($uninstallmethod))
 	{
 		UninstallerGUI
 	}
-	elseif ($uninstallmethod -like "n")
+	(!(check($uninstallmethod)))
 	{
 		UninstallerCLI
 	}
@@ -2113,7 +2113,7 @@ $WarningPreference = 'SilentlyContinue'
 # Enable Sandbox.
 Function EnableSandbox {
 $ProgressPreference = 'SilentlyContinue'
-	if ($sandbox -like "n") 
+	if (!(check($sandbox)))
 	{
 		return
 	}
@@ -2364,9 +2364,13 @@ Function EnableBackgroundApps {
 
 # Disable Windows Error Reporting 
 function DisableErrorReporting {
-	print "Turning off Windows Error Reporting..."
-	Disable-WindowsErrorReporting | Out-Null
-	print "Turned off Windows Error Reporting."
+	if (!($BuildBranch -like "co_release" -or $BuildBranch -like "vb_release"))
+	{
+		print "Turning off Windows Error Reporting..."
+		Disable-WindowsErrorReporting | Out-Null
+		print "Turned off Windows Error Reporting."
+	}
+
 }
 
 # Enable Windows Error Reporting 
@@ -2955,13 +2959,13 @@ Function SetupWindowsUpdate {
 	Set-ItemProperty -Path $Update2 -Name NoAutoRebootWithLoggedOnUsers -Type Dword -Value 1
     New-ItemProperty -Path $DeliveryOptimization -Name DownloadMode -Type DWord -Value 0 -Force
 
-	if ($au -like "y")
+	if (check($au))
 	{
 		Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
 		print "    - Turned off automatic updates"
 	}
 
-	if ($dwu -like "y")
+	if (check($dwu))
 	{
 		Set-ItemProperty -Path $wureg -Name DeferQualityUpdates -Type DWord -Value 1
 		Set-ItemProperty -Path $wureg -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
