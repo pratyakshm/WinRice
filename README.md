@@ -8,9 +8,9 @@
 <a href="#license"><img src="https://img.shields.io/badge/License-GPL_v3-blue" alt="License"></a>
 </p>
 
-<p align="center"><a href="#-description">Description</a> &bull; <a href="https://github.com/pratyakshm/WinRice/blob/main/doc/Features.md">Features</a> &bull; <a href="https://github.com/pratyakshm/WinRice/tree/main/doc">Documentation</a> &bull; <a href="#-running-winrice">Usage</a>
+<p align="center"><a href="doc/Main-brief.md">A brief on WinRice</a> &bull; <a href="doc">Documentation</a> &bull; <a href="#-running-winrice">Usage</a>
 
-<p align="center"><a href="https://github.com/pratyakshm/WinRice/blob/main/doc/Frequently-answered-questions.md">FAQ</a>   &bull; <a href="#%EF%B8%8F-license">License</a> &bull; <a href="#%EF%B8%8F-contributing">Contribution</a>
+<p align="center"><a href="doc/Frequently-answered-questions.md">FAQ</a>   &bull; <a href="LICENSE">License</a> &bull; <a href="#%EF%B8%8F-contributing">Contribution</a>
 
 ---
 
@@ -101,4 +101,4 @@ I ask that **before you start your work on a feature that you would like to requ
 
 ## ⚖️ License
 
-WinRice is licensed under the [GPL-3.0 License](https://github.com/pratyakshm/WinRice/blob/main/LICENSE).
+WinRice is licensed under the [GPL-3.0 License](LICENSE).
