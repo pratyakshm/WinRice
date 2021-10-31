@@ -1577,6 +1577,7 @@ Function UninstallerCLI {
 		"Microsoft.WindowsCommunicationsApps" 
 		"Microsoft.WindowsFeedbackHub" 
 		"Microsoft.WindowsMaps" 
+		"Microsoft.WindowsSoundRecorder"
 		"Microsoft.XboxApp"
 	)
 	ForEach ($InboxApp in $InboxApps) 
