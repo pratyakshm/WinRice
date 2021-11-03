@@ -43,18 +43,18 @@ More installation methods include:
 
 WinRice supports the latest Windows retail and pre-release builds.
 
-⚠️ This table features builds from Windows retail channel (Production/General availability/ Release to manufacturing). Windows Insider channels are still supported but no longer featured in the list.
+⚠️ This table does not include builds from Windows Insider Program. But if you are a Windows Insider, you can still run WinRice provided you're on a recent build.
 
 | OS Version | Version | OS Build | Servicing Option    |
 | ---------- | ------- | -------- | ------------------- |
 | Windows 11 | 21H2    | 22000    | Annual Channel      |
 | Windows 10 | 21H1    | 19043    | Semi-Annual Channel |
 
-#### Notes
-
-- To check if your device is compatible, go to **Settings > System > About** and scroll down to the **Windows specifications** section. Make sure that the **Version** or **OS Build** you are currently running is listed in the table above.
-  - If you are not running a supported OS version, you need to update your device. A fresh installation is strongly recommended and is easy: [Read the document](https://github.com/pratyakshm/WinRice/wiki/Fresh-installation-of-Windows)!
-- In case of Retail channel (GA/RTM), WinRice supports **only** the latest retail channel build. I could include support for older Retail (GA/RTM) builds but honestly, I do not have the time to test each change in more than two OS builds.
+### How to check if my device is compatible?
+Go to **Settings > System > About** and scroll down to the **Windows specifications** section.
+In here, check out **Version** and **OS build** and verify if its listed in the table provided above.
+  
+If the Version and OS build that you are currently on are **NOT** listed in the table above, you need to update your device. [Learn more](https://github.com/pratyakshm/WinRice/wiki/Fresh-installation-of-Windows).
 
 ### Internet Connection
 

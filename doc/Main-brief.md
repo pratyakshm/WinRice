@@ -1,4 +1,4 @@
-# Features
+# Ordered list of jobs WinRice performs
 
 ## Apps
 
@@ -22,7 +22,7 @@
 
 ### Apps Uninstalled:
 
-Read [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/App-uninstallation.md)
+Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/App-uninstallation.md)
 
 ### Apps Unpinned From Taskbar:
 
