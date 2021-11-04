@@ -849,10 +849,6 @@ Function DisableExperimentsWinGet {
 # Update to new Microsoft Store.
 function MicrosoftStore {
 $ProgressPreference = 'SilentlyContinue'
-	if ($CurrentBuild -le 19044) 
-	{
-		return
-	}
 	if ((Get-AppxPackage "Microsoft.WindowsStore").Version -ge "22110.1401.3.0")
 	{
 		return
