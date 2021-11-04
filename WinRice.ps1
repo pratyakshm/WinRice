@@ -389,7 +389,7 @@ $settings = @(
 	"A predefined set of unnecessary apps will be uninstalled."	
 	"A predefined set of unnecessary features will be uninstalled."			
 	"Apps will not be installed."
-	"dotNET 3.5 will not be uninstalled."
+	".NET 3.5 will not be installed."
 	"Microsoft OneDrive will not be uninstalled."
 	"Widgets will not be uninstalled."
 	"Windows Subsystem for Linux will not be installed."
