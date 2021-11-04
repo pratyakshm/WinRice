@@ -465,14 +465,14 @@ if (!(check($customize)))
 		space
 		print "WINDOWS UPDATE"
 
-		$dwu = ask "Do you want to delay Windows updates by a few days?"
+		$dwu = ask "Do you want to delay Windows updates by a few days? [Y/n]"
 		if (!($dwu))
 		{
 			$dwu = "y"
 			print "No input detected, Windows updates will be delayed by a few days."
 		}
 
-		$au = ask "Do you want to turn off automatic updates?"
+		$au = ask "Do you want to turn off automatic updates? [Y/n]"
 		if (!($au))
 		{
 			$au = "y"
