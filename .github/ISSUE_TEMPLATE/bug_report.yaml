@@ -17,7 +17,7 @@ body:
       multiple: true
       options:
         - main branch
-        - v0.4 August release
+        - v0.5.04112021 November Release
     validations:
       required: true
   - type: dropdown
@@ -28,8 +28,8 @@ body:
       description: Check all that apply.
       multiple: true
       options: 
-        - Windows 10 21H1
         - Windows 11 21H2
+        - Windows 10 21H1
     validations:
       required: true
   - type: textarea
@@ -45,29 +45,29 @@ body:
       description: Check all that apply.
       multiple: true
       options:
-        - Apps and Features
-        - Privacy and Security
+        - Apps
+        - Features
+        - Privacy
         - Tasks and Services
-        - Windows UI
+        - Windows Explorer / User Interface
         - Other
     validations: 
       required: true   
   - type: dropdown
     id: areaofconcern
     attributes: 
-      label: Does something on the OS break or does WinRice functionality not work?
-      description: Does something break on the Operating System after running WinRice, or does a particular WinRice functionality not work?
+      label: When you run WinRice, does it fail to perform a job or does it break something on your device?
       multiple: false
       options:
-        - WinRice not working as expected
-        - Something wrong with OS after running WinRice
+        - WinRice fails to perform a job
+        - WinRice broke something in my device
     validations: 
       required: true
   - type: textarea
     id: expectedbehavior
     attributes:
       label: ✔️ Expected Behavior
-      placeholder: Tell us what was expected to happen.
+      placeholder: What was expected to happen?
     validations:
       required: false
   - type: textarea
@@ -81,7 +81,7 @@ body:
     id: stepstorepro
     attributes:
       label: Steps to reproduce
-      description: Tell us the steps required to trigger your bug.
+      description: How do we reproduce the bug?
     validations:
       required: true
   - type: textarea

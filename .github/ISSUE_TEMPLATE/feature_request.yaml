@@ -18,7 +18,7 @@ body:
   - type: dropdown
     id: question2
     attributes:
-      label: Have you written the code for it?
+      label: Have you written 
       multiple: false
       options:
          - "Yes"
@@ -30,13 +30,13 @@ body:
     attributes:
       label: Explain the feature
       description: Describe it in as much detail as possible.
-      placeholder: Provide screenshots or code snippet if you can.
+      placeholder: Provide screenshots and/or code snippets if you can.
     validations:
       required: true
   - type: checkboxes
     id: principles
     attributes:
-      label: Does this Feature Request follow WinRice principles?
+      label: Does this Feature Request follow the WinRice principles?
       description: https://github.com/pratyakshm/WinRice/wiki/Principles
       options:
         - label: "Yes"
