@@ -2592,7 +2592,6 @@ Function DisableTailoredExperiences {
 	{
 		New-Item $CloudContent -Force | Out-Null
 	}
-	Set-ItemProperty -Path 
 	Set-ItemProperty -Path $TailoredExp1 -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
 	Set-ItemProperty -Path $TailoredExp2 -Name "Disabled" -Type DWord -Value 1
 	print "Turned off Tailored experiences."
