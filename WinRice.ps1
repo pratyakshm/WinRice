@@ -860,12 +860,13 @@ $ProgressPreference = 'SilentlyContinue'
 	Start-BitsTransfer https://github.com/WinRice/Files/raw/main/Microsoft.UI.Xaml.2.7_8wekyb3d8bbwe.Appx
 	Start-BitsTransfer https://dl.pratyakshm.workers.dev/0:/Software/Microsoft/Apps/Microsoft.WindowsStore_22110.1401.12.0_neutral___8wekyb3d8bbwe.Msixbundle
 	Add-AppxPackage -Path Microsoft.WindowsStore_22110.1401.12.0_neutral___8wekyb3d8bbwe.Msixbundle -DependencyPath Microsoft.UI.Xaml.2.7_8wekyb3d8bbwe.Appx
-	Remove-Item Microsoft.UI.Xaml.2.7_8wekyb3d8bbwe.Appx; Remove-Item Microsoft.WindowsStore_22110.1401.12.0_neutral___8wekyb3d8bbwe.Msixbundle
 	if ((Get-AppxPackage "Microsoft.WindowsStore").Version -ne "22110.1401.12.0")
 	{
 		print "Could not update Microsoft Store."
+		print "Please try manually deploying the downloaded packages. They are contained in the same folder as WinRice."
 		return
 	}
+	Remove-Item Microsoft.UI.Xaml.2.7_8wekyb3d8bbwe.Appx; Remove-Item Microsoft.WindowsStore_22110.1401.12.0_neutral___8wekyb3d8bbwe.Msixbundle
 	print "Updated Microsoft Store."
 }
 	
