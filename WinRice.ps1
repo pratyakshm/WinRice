@@ -1649,11 +1649,15 @@ function UninstallerList {
 Function UninstallApps {
 $ErrorActionPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
-	if (check($uninstallmethod))
+	if (!(check($uninstallapps)))
+	{
+		return
+	}
+	elseif (check($uninstallmethod))
 	{
 		UninstallerGUI
 	}
-	(!(check($uninstallmethod)))
+	elseif (!(check($uninstallmethod)))
 	{
 		UninstallerCLI
 	}
