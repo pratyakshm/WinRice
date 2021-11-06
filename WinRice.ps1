@@ -857,42 +857,12 @@ $ProgressPreference = 'SilentlyContinue'
 
 	# Credit: https://dev.to/kaiwalter/download-windows-store-apps-with-powershell-from-https-store-rg-adguard-net-155m.
 	print "Updating Microsoft Store..."
-	$apiUrl = "https://store.rg-adguard.net/api/GetFiles"
-	$productUrl = "https://www.microsoft.com/store/productId/9WZDNCRFJBMP"
-	$downloadFolder = Join-Path (Get-Location).Path "WinRice"
-	if(!(Test-Path $downloadFolder -PathType Container)) 
-	{
-		New-Item $downloadFolder -ItemType Directory -Force | Out-Null
-	}
-	$body = @{
-		type = 'url'
-		url  = $productUrl
-		ring = 'Retail'
-		lang = 'en-US'
-	}
-	
-	# Download Microsoft Store.
-	$raw = Invoke-RestMethod -Method Post -Uri $apiUrl -ContentType 'application/x-www-form-urlencoded' -Body $body
-	$raw | Select-String '<tr style.*<a href=\"(?<url>.*)"\s.*>(?<text>.*)<\/a>' -AllMatches | ForEach-Object { $_.Matches } | ForEach-Object { 
-	$url = $_.Groups[1].Value
-	$text = $_.Groups[2].Value
-		if($text -match "_(x64|neutral).*msix(|bundle)$") {
-			$downloadFile = Join-Path $downloadFolder $text
-			Invoke-WebRequest -Uri $url -OutFile $downloadFile
-		}
-	}
-	Set-Location WinRice
 
-	# Update dependency - Microsoft UI XAML 2.7
 	Start-BitsTransfer https://github.com/WinRice/Files/raw/main/Microsoft.UI.Xaml.2.7_8wekyb3d8bbwe.Appx
-	Add-AppxPackage Microsoft.UI.Xaml.2.7_8wekyb3d8bbwe.Appx
-
-	# Update Microsoft Store
-	Get-AppxPackage "Microsoft.WindowsStore" | Remove-AppxPackage
-	Add-AppxPackage Microsoft.WindowsStore*
-	Set-Location ../
-	Remove-Item WinRice -Recurse -Force
-	if ((Get-AppxPackage "Microsoft.WindowsStore").Version -lt "22110.1401.3.0")
+	Start-BitsTransfer https://dl.pratyakshm.workers.dev/0:/Software/Microsoft/Apps/Microsoft.WindowsStore_22110.1401.12.0_neutral___8wekyb3d8bbwe.Msixbundle
+	Add-AppxPackage -Path Microsoft.WindowsStore_22110.1401.12.0_neutral___8wekyb3d8bbwe.Msixbundle -DependencyPath Microsoft.UI.Xaml.2.7_8wekyb3d8bbwe.Appx
+	Remove-Item Microsoft.UI.Xaml.2.7_8wekyb3d8bbwe.Appx; Remove-Item Microsoft.WindowsStore_22110.1401.12.0_neutral___8wekyb3d8bbwe.Msixbundle
+	if ((Get-AppxPackage "Microsoft.WindowsStore").Version -ne "22110.1401.12.0")
 	{
 		print "Could not update Microsoft Store."
 		return
