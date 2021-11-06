@@ -408,7 +408,7 @@ if (!($BuildBranch -like "rs_prerelease"))
 }
 
 space
-$customize = ask "Do you want to proceed with Express Settings or do you want to customize settings? [Y/n]" -ForegroundColor Yellow
+$customize = ask "Do you want to proceed with Express Settings? [Y/n]" -ForegroundColor Yellow
 if (!(check($customize)))
 {
 	space
@@ -430,7 +430,7 @@ if (!(check($customize)))
 		$uninstallapps = "y"
 		print "No input detected, WinRice will uninstall non-essential apps."
 	}
-	if (check($uninstallapps))
+	elseif (check($uninstallapps))
 	{
 		if ((Test-Path uninstallapps.txt) -or (Test-Path UninstallApps.txt) -or (Test-Path Uninstallapps.txt))
 		{
@@ -442,7 +442,6 @@ if (!(check($customize)))
 		}
 		$uninstallod = ask "Do you want to uninstall Microsoft OneDrive? [y/N]"
 	}
-	space
 	
 	# Feature Deployment
 	print "FEATURE DEPLOYMENT"
@@ -504,7 +503,7 @@ if (!(check($customize)))
 		Write-Host "Apps will not be installed." -ForegroundColor DarkGray
 	}
 	
-	ielseif (!(check($uninstallapps)))
+	elseif (!(check($uninstallapps)))
 	{
 		Write-Host "Non-essential apps will not be uninstalled." -ForegroundColor DarkGray
 	}
