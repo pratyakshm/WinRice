@@ -266,7 +266,8 @@ $WarningPreference = 'SilentlyContinue'
 
 
 ####### BEGIN CHECKS #########
-
+Write-Host "Beginning checks..."
+space
 # Check if supported OS build.
 $oscheck = {
 	$CurrentBuild = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name CurrentBuild
@@ -277,7 +278,7 @@ $oscheck = {
 		return $true
 	}
 }
-RunWithProgress -Text "Supported Windows version" -Task $oscheck -Exit $true | Out-Null
+RunWithProgress -Text "Windows version is supported" -Task $oscheck -Exit $true | Out-Null
 
 
 # Check if session is elevated.
@@ -287,7 +288,7 @@ $isadmin = {
 	return $admin
 }
 
-RunWithProgress -Text "Elevated PowerShell session" -Task $isadmin -Exit $true | Out-Null
+RunWithProgress -Text "Session is elevated" -Task $isadmin -Exit $true | Out-Null
 
 # Exit WinRice if PC is not connected.
 $isonline = {
@@ -302,7 +303,7 @@ $isonline = {
 	}
 }
 
-RunWithProgress -Text "Device connection" -Task $isonline -Exit $true | Out-Null
+RunWithProgress -Text "Device is connnected to the internet" -Task $isonline -Exit $true | Out-Null
 
 # Check if laptop (https://devblogs.microsoft.com/scripting/hey-scripting-guy-weekend-scripter-how-can-i-use-wmi-to-detect-laptops/).
 Param(
@@ -316,6 +317,17 @@ if(Get-WmiObject -Class Win32_Battery -ComputerName $computer) {
 	$isLaptop = $true | Out-Null
 	}
 $isLaptop
+
+# Check PowerShell version and import required modules.
+$pwshver = {
+	if ((($PSVersionTable).PSVersion).Major -eq "5") { 
+		return $true 
+	}
+	Import-Module -Name Appx, Microsoft.PowerShell.Management, PackageManagement -UseWindowsPowerShell -WarningAction "SilentlyContinue" | Out-Null
+	return $true
+}
+
+RunWithProgress -Text "Setting up PowerShell" -Task $pwshver -Exit $true | Out-Null
 
 # Check for pending restart (part of code used here was picked from https://thesysadminchannel.com/remotely-check-pending-reboot-status-powershell).
 $isrestartpending = {
@@ -343,35 +355,30 @@ $isrestartpending = {
 			}
 		
 			if ($PendingReboot -eq $true) {
-				return $false
+				return $true
 			}
 			else {
-				return $true
+				return $false
 			}
 		}   
 	}
 }
 
-RunWithProgress -Text "No restarts needed" -Task $isrestartpending -Exit $true | Out-Null
+RunWithProgress -Text "Device restart required" -Task $isrestartpending -Exit $false | Out-Null
 
 # Clear variables.
 $WMI_Reg        = $null
 $SCCM_Namespace = $null
 
-# Check PowerShell version and import required modules.
-$pwshver = {
-	if ((($PSVersionTable).PSVersion).Major -eq "5") { 
-		return $true 
-	}
-	Import-Module -Name Appx, Microsoft.PowerShell.Management, PackageManagement -UseWindowsPowerShell -WarningAction "SilentlyContinue" | Out-Null
-	return $true
-}
-
-RunWithProgress -Text "Setting up PowerShell" -Task $pwshver -Exit $true | Out-Null
-
+space
+Start-Sleep -Milliseconds 200
+Write-Host "Checks passing." -ForegroundColor green 
 Start-Sleep -Milliseconds 800
 space
+space
 
+Write-Host "Configure WinRice"
+space
 # Save default config.
 $uninstallapps = "y"
 if ((Test-Path uninstallapps.txt) -or (Test-Path UninstallApps.txt) -or (Test-Path Uninstallapps.txt))

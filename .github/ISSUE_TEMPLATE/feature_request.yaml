@@ -18,7 +18,7 @@ body:
   - type: dropdown
     id: question2
     attributes:
-      label: Have you written 
+      label: Have you written the code that adds this feature?
       multiple: false
       options:
          - "Yes"
