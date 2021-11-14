@@ -17,7 +17,7 @@ $tasks = @(
 	"InstallWinGet",
 	# "EnableExperimentsWinGet",
 	# "DisableExperimentsWinGet",
-	"MicrosoftStore",
+	# "MicrosoftStore",
 	"InstallNanaZip", 
 	# "UninstallNanaZip",
 	"WinGetImport",
@@ -615,7 +615,7 @@ Start-Sleep -Milliseconds 200
 Function WinRice {
 	Clear-Host
 	space
-	print "pratyakshm's WinRice - v0.5.04112021"
+	print "pratyakshm's WinRice - main branch"
 	Start-Sleep -Milliseconds 100
 	space
 	print "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
