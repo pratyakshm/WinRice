@@ -47,8 +47,8 @@ WinRice supports the latest Windows retail and pre-release builds.
 
 | OS Version | Version | OS Build | Servicing Option    |
 | ---------- | ------- | -------- | ------------------- |
-| Windows 11 | 21H2    | 22000    | Annual Channel      |
-| Windows 10 | 21H1    | 19043    | Semi-Annual Channel |
+| Windows 11 | 21H2    | 22000    | General Availability |
+| Windows 10 | 21H2    | 19044    | General Availability |
 
 ### How to check if my device is compatible?
 Go to **Settings > System > About** and scroll down to the **Windows specifications** section.

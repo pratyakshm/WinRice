@@ -271,10 +271,10 @@ space
 # Check if supported OS build.
 $oscheck = {
 	$CurrentBuild = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name CurrentBuild
-	if ($CurrentBuild -lt 19043) {
+	if ($CurrentBuild -lt 19044) {
 		return $false
 	}
-	elseif ($CurrentBuild -ge 19043) {
+	elseif ($CurrentBuild -ge 19044) {
 		return $true
 	}
 }
