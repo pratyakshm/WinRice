@@ -53,7 +53,7 @@ $tasks = @(
 	# "EnableActivityHistory",
 	"DisableAdvertisingID",			
 	# "EnableAdvertisingID",
-	"DisableBackgroundApps",        
+	# "DisableBackgroundApps",        
 	# "EnableBackgroundApps",
 	"DisableErrorReporting",
 	# "EnableErrorReporting",
@@ -1279,7 +1279,7 @@ Function UninstallFonts {
 
 # Uninstaller GUI.
 Function UninstallerGUI {
-	
+	space
     Add-Type -AssemblyName PresentationCore, PresentationFramework
 
     #region Variables.
