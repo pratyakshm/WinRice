@@ -1558,7 +1558,7 @@ Function UninstallerCLI {
 		if (Get-AppxPackage $InboxApp) 
 		{
 			print "     Uninstalling $InboxApp..."
-			Get-AppxPackage -Name $InboxApp| Remove-AppxPackage 
+			Get-AppxPackage -Name $InboxApp | Remove-AppxPackage 
 			Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $InboxApp | Remove-AppxProvisionedPackage -Online | Out-Null
 		}
 	}
@@ -1588,7 +1588,7 @@ Function UninstallerCLI {
 		if (Get-AppxPackage $SponsoredApp) 
 		{
 			print "     Uninstalling $SponsoredApp.."
-			Get-AppxPackage -Name $SponsoredApp| Remove-AppxPackage 
+			Get-AppxPackage -Name $SponsoredApp | Remove-AppxPackage 
 			Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $SponsoredApp | Remove-AppxProvisionedPackage -Online | Out-Null
 		}
 	}
