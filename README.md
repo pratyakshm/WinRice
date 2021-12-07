@@ -64,21 +64,10 @@ An active internet connection is needed.
 
 ## 🚀 Running WinRice
 
-#### There are two methods to run WinRice.
-
-### 1. Run the latest release:
-
-- Get the [latest release](https://github.com/pratyakshm/WinRice/releases/latest).
-- Run the EXE (as admin).
-
-### 2. Main branch:
-
-- Open Windows Terminal (Admin) and paste:
-
-```
-Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JBpYc'))
-```
-
+#### Download and run [this executable (.EXE) file](https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice-main.exe).
+  
+**Notes:**
+  - WinRice's Releases page has been hidden because WinRice is a continuously updated project, and using a particular release means that you as a user are still lagging behind in terms of the latest code.
 ---
 
 ## 🤕 Known Issues
