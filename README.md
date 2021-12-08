@@ -16,40 +16,37 @@
 
 ## 😃 Description
 
-WinRice uses automation to make your Windows experience better. Continue reading to learn more.
+WinRice uses PowerShell automation to setup a Windows. WinRice currently supports only the latest retail builds of Windows 11 and 10.
+  
+WinRice, amongst a host of other things, improves privacy, de-clutters the Windows user interface and removes non-essential apps from Windows.
+It aims to provide a clutter free, private and secure Windows experience without breaking any OS functionality.
 
 ---
 
 ## 📃 Documentation
 
-The documentation for WinRice is available in the below link. Make sure you (the user) have read the documentation before going ahead.
+The documentation for WinRice is available in the below link. The documentation explains every task that WinRice performs on your PC. Make sure you (the user) have read the documentation before going ahead.
 
-**Documentation: [Tap here](https://github.com/pratyakshm/WinRice/tree/main/doc)**
-
+**Documentation:** [Tap here](https://github.com/pratyakshm/WinRice/tree/main/doc)  
+  P.S. Reading the documentation is strongly recommended
+ 
+**Functions**: See [Functions](https://github.com/pratyakshm/WinRice/wiki/Functions) to get a detailed explanation of each function.
+ 
 ---
 
-## ✔️ Prerequisites
-
-### Windows Terminal
-
-<a href="https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701"> <img src="https://user-images.githubusercontent.com/54220235/130347354-d4e7af6e-a153-4954-a7f4-3d7ad27da7c9.png" alt="Windows Terminal product page on Microsoft Store"></a>
-
-More installation methods include:
-
-- Getting the latest release from [GitHub](https://github.com/microsoft/terminal/releases)
-- Windows Package Manager CLI (winget): `winget install --id=Microsoft.WindowsTerminal --source winget`
+## ✔️ Requirements
 
 ### Supported OS Versions
 
 WinRice supports the latest Windows retail and pre-release builds.
 
-⚠️ This table does not include builds from Windows Insider Program. But if you are a Windows Insider, you can still run WinRice provided you're on a recent build.
-
 | OS Version | Version | OS Build | Servicing Option    |
 | ---------- | ------- | -------- | ------------------- |
 | Windows 11 | 21H2    | 22000    | General Availability |
 | Windows 10 | 21H2    | 19044    | General Availability |
-
+  
+⚠️ This table does not include builds from Windows Insider Program. But if you are a Windows Insider, you can still run WinRice provided you're on a recent build.
+  
 ### How to check if my device is compatible?
 Go to **Settings > System > About** and scroll down to the **Windows specifications** section.
 In here, check out **Version** and **OS build** and verify if its listed in the table provided above.
@@ -81,10 +78,8 @@ WinRice accepts all kinds of contributions such as finding bugs, fixing bugs, ad
 I ask that **before you start your work on a feature that you would like to request or contribute**, please read the WinRice [principles](https://github.com/pratyakshm/WinRice/wiki/Principles). I will be happy to work with you to figure out good approaches and provide guidance throughout feature development, and help avoid any wasted or duplicated effort.
 
 ## Credits and acknowledgements
-<h4 align="left"> &bull; The awesome WinRice logo and banner are created by <a href="https://t.me/vancelmusic">Vancel</a></h4>
-  <p align="left"> Vancel is a music producer, he mostly produces future bass or dance music. Do check out his <a href="https://open.spotify.com/artist/0G4AZNtTIxerdDkVLZP4t1?si=Zr_gW6P5T6Gi4eIQrpRWqA&nd=1">Spotify</a> &bull; <a href="https://soundcloud.com/vancelmusic">SoundCloud</a> &bull; <a href="https://youtube.com/vancelmusic">YouTube</a> &bull; <a href="https://music.apple.com/us/artist/vancel/531284996">Apple Music</a>.</p>
-<h4 align=left> &bull; Documentation and UX are written and directed by <a href="https://kenharris.xyz/">Ken</a></h4>
-  <p align="left">Ken likes to tinker with Android and the Linux kernel. He also writes Python projects for fun. You can check out his projects over at his <a href="https://github.com/kenhv">GitHub</a>.</p>
+<p align="left"> &bull; WinRice logo and banner is created by <a href="https://linktr.ee/vancelmusic">Vancel</a></p>
+<p align=left> &bull; Documentation and UX are contributed to by <a href="https://kenharris.xyz/">Ken</a></p>
   
 ---
 
