@@ -1,4 +1,4 @@
-<p align="center"><a href="https://github.com/pratyakshm/WinRice"><img src="assets/banner.png" width="470" height="250"></a></p> 
+<p align="center"><a href="https://github.com/pratyakshm/WinRice"><img src="files/banner.png" width="470" height="250"></a></p> 
 <h2 align ="center">Set up your Windows device using automation</h2>
 <p align="center">
 <a href="https://github.com/pratyakshm/WinRice#running-WinRice"><img src="https://img.shields.io/static/v1?label=pratyakshm&message=WinRice&color=blue&logo=github" alt="pratyakshm - WinRice"></a>
