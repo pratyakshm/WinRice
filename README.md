@@ -16,7 +16,7 @@
 
 ## 😃 Description
 
-WinRice uses PowerShell automation to setup a Windows. WinRice currently supports only the latest retail builds of Windows 11 and 10.
+WinRice uses PowerShell automation to setup a Windows device. It currently supports only the latest retail builds of Windows 11 and 10.
   
 WinRice, amongst a host of other things, improves privacy, de-clutters the Windows user interface and removes non-essential apps from Windows.
 It aims to provide a clutter free, private and secure Windows experience without breaking any OS functionality.
