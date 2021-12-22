@@ -2,12 +2,12 @@
 
 | Feature                                 | Code to run (paste in Windows Terminal (Admin)                                                 |
 | --------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| Windows Update: Setup policies          | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JurYt'`)) |
-| Windows Update: Reset policies          | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JurY4'`)) |
-| Windows Subsystem for Linux: Enable WSL | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JurYa'`)) |
+| Windows Update: Setup policies          | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JurYt'))` |
+| Windows Update: Reset policies          | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JurY4'))` |
+| Windows Subsystem for Linux: Enable WSL | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JurYa'))` |
 | WinGet: Install WinGet                  | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JurY1'))` |
-| WinGet: Use Winstall                    | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jur3G'`)) |
-| WinGet: Import apps                     | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jur3F'`)) |
+| WinGet: Use Winstall                    | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jur3G'))` |
+| WinGet: Import apps                     | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jur3F'))` |
 
 ---
 
