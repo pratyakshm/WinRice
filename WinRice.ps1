@@ -1689,7 +1689,7 @@ Function UnpinStartTiles {
 	print "Unpinned all tiles from Start Menu."
 }
 
-# Unpin Apps from taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
+# Unpin apps from taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
 Function UnpinAppsFromTaskbar {
 	space
 	print "Unpinning apps from taskbar..."
@@ -1711,7 +1711,7 @@ Function UnpinAppsFromTaskbar {
 	Start-Sleep -Milliseconds 100
 }
 
-# Uninstall Microsoft OneDrive (supports 64-bit versions).
+# Uninstall Microsoft OneDrive.
 Function UninstallOneDrive {
 $ErrorActionPreference = 'SilentlyContinue'
 	if (!(check($uninstallod))) 
@@ -1727,7 +1727,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	print "Uninstalling Microsoft OneDrive..."
 
 	# Uninstall using WinGet.
-	winget uninstall Microsoft.OneDrive --accept-source-agreements --silent | Out-Null
+	winget uninstall Microsoft.OneDrive --accept-source-agreements --accept-package-agreements --silent | Out-Null
 
 	# Cleanup leftover folders.
 	Remove-Item "$env:USERPROFILE\OneDrive" -Recurse -Force
@@ -1969,7 +1969,7 @@ $ProgressPreference = 'SilentlyContinue'
 	Set-Content -Path 'WSL2.ps1' -value 'wsl --set-default-version 2'
 	$path = (Get-Location).Path
 	print "    In the current folder ($path), you will find two files: wsl_update_x64.msi and WSL2.ps1."
-	print "    First, run the wsl_update_x64.msi installer and install it. Next up, right click on WSL2.ps1 and run it with PowerShell."
+	print "    Once your PC has restarted, install wsl_update_x64.msi. Next, right click on WSL2.ps1 and run it with PowerShell."
 	print "Installed Windows Subsystem for Linux."
 }
 
@@ -2077,21 +2077,21 @@ $ProgressPreference = 'SilentlyContinue'
 	# Check if already enabled.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Enabled")
 	{
-		print "dotNET 3.5 is already enabled."
+		print ".NET 3.5 is already enabled."
 		return
 	}
 
 	# Enable dotNET 3.5.
-	print "Enabling dotNET 3.5..."
+	print "Enabling .NET 3.5..."
 	Enable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -NoRestart | Out-Null
 
 	# Print status.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Disabled")
 	{
-		print "Could not enable dotNET 3.5."
+		print "Could not enable .NET 3.5."
 		return
 	}
-	print "Enabled dotNET 3.5."
+	print "Enabled .NET 3.5."
 }
 
 # Disable dotNET 3.5
@@ -2102,21 +2102,21 @@ $ProgressPreference = 'SilentlyContinue'
 	# Check if already disabled.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Disabled")
 	{
-		print "dotNET 3.5 is already disabled."
+		print ".NET 3.5 is already disabled."
 		return
 	}
 
 	# Disable dotNET 3.5.
-	print "Disabling dotNET 3.5..."
+	print "Disabling .NET 3.5..."
 	Disable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -NoRestart | Out-Null
 
 	# Print status.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Enabled")
 	{
-		print "dotNET 3.5 is already disabled."
+		print ".NET 3.5 is already disabled."
 		return
 	}
-	print "Disabled dotNET 3.5."
+	print "Disabled .NET 3.5."
 }
 
 
