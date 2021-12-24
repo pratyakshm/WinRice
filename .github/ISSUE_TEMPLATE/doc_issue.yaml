@@ -1,7 +1,6 @@
 name: 📃 Documentation issue
 description: File an issue with documentation
-title: "Docs issue: "
-labels: Issue-Docs
+labels: Documentation issue
 assignees:
   - pratyakshm
 body:

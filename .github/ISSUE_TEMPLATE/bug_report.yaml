@@ -1,7 +1,6 @@
 name: 🐛 Bug report
 description: File a bug report
-title: "Bug: "
-labels: Issue-Bug
+labels: Bug report
 assignees:
   - pratyakshm
 body:

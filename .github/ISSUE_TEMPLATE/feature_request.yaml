@@ -1,7 +1,6 @@
 name: 🚀 Feature request
 description: Request a feature
-title: "Feature Request: "
-labels: Issue-Feature
+labels: Feature request
 assignees:
   - pratyakshm
 body:
