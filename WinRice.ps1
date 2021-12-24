@@ -916,15 +916,8 @@ Function InstallNanaZip {
 		print "WinGet is not installed. Couldn't install NanaZip."
 		return 
 	}
-	print "Installing NanaZip... (Ctrl + Click: https://github.com/M2Team/NanaZip)"
-	$user = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name.split("\")[1]
-	$msa = Get-LocalUser $user | Where-Object { $_.Enabled -match "True"} | Where-Object { $_.PrincipalSource -match "MicrosoftAccount"}
-	if (!($msa)) 
-	{
-		print "No Microsoft Store account found, failed to acquire app."
-		return
-	}
-	winget install NanaZip -s msstore --accept-package-agreements --accept-source-agreements | Out-Null
+	print "Installing NanaZip... https://github.com/M2Team/NanaZip"
+	winget install NanaZip -s msstore --accept-source-agreements --accept-package-agreements | Out-Null
 	print "Installed NanaZip."
 }
 
@@ -932,11 +925,11 @@ Function InstallNanaZip {
 Function UninstallNanaZip {
 	space
 	print "Uninstalling NanaZip..."
-	winget uninstall 40174MouriNaruto.NanaZip_gnj4mf6z9tkrc --accept-source-agreements | Out-Null
+	winget uninstall 40174MouriNaruto.NanaZip_gnj4mf6z9tkrc --accept-package-agreements | Out-Null
 	print "Uninstalled NanaZip."
 }
 
-# Use winget import (optional) (part of code used here was picked from https://devblogs.microsoft.com/scripting/hey-scripting-guy-can-i-open-a-file-dialog-box-with-windows-powershell/)
+# Use winget import (part of code used here was picked from https://devblogs.microsoft.com/scripting/hey-scripting-guy-can-i-open-a-file-dialog-box-with-windows-powershell/)
 Function WinGetImport {
 	if (($installusing -like "2") -or (!($installusing)))
 	{
