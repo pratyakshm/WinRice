@@ -4,23 +4,19 @@
 
 ### Things Installed:
 
-- Cascadia Code
 - HEVC Video Extensions
 - Visual C++ Libraries
 - Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/))
 - NanaZip ([GitHub](https://github.com/M2Team/NanaZip))
 
-#### Leveraging WinGet to Install Apps
+#### Leveraging WinGet to Install Apps (optional)
 
 - [`winget.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winget.md)
 - [`import.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/import.md)
 - [`winstall.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winstall.md)
 
-### Apps Updated:
 
-- Windows 11: Microsoft Store and Widgets are updated to newer versions if older versions are detected.
-
-### Apps Uninstalled:
+### Apps Uninstalled: (optional)
 
 Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/App-uninstallation.md)
 
@@ -35,11 +31,11 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 
 ### Features Installed:
 
-- dotNET 3.5 (optional)
+- .NET 3.5 (optional)
 - Windows Sandbox (optional)
 - Windows Subsystem for Linux (optional)
 
-### Features Uninstalled:
+### Features Uninstalled: (optional)
 
 - Hello Face
 - Legacy Components (DirectPlay)
@@ -103,7 +99,7 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 - DiagTrack
 - SysMain
 
-## Windows Update
+## Windows Update (optional)
 
 ### Setup Windows Update
 

@@ -15,19 +15,13 @@ $tasks = @(
 	"InstallVCLibs",
 	# "UninstallVCLibs",
 	"InstallWinGet",
-	# "EnableExperimentsWinGet",
-	# "DisableExperimentsWinGet",
-	# "MicrosoftStore",
 	"InstallNanaZip", 
 	# "UninstallNanaZip",
 	"WinGetImport",
 	"Winstall",
 	# "Winuninstall"
 	"InstallHEVC", 
-	# "UninstallHEVC",
-	"Widgets",
-	"InstallFonts",
-	# "UninstallFonts",
+	# "UninstallHEVC"
 	"EnableWSL", "Activity", 
 	# "DisableWSL",
 	"EnabledotNET3.5", "Activity", 
@@ -229,7 +223,7 @@ function RunWithProgress {
 # Did you read the docs? (Funny stuff).
 $hasReadDoc = ask "By proceeding ahead, you acknowledge that you have read and understood the program documentation. [y/n]"
 if (!(check($hasReadDoc))) {
-	log "Denied, exiting WinRice in 2 seconds."
+	log "You (the user) have not read the program documentation. WinRice will now exit."
 	exit
 }
 
@@ -249,7 +243,7 @@ $OSBuild = $OSBuildCore.TrimStart("10.0")
 $BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
 $hkeyuser = (Get-CimInstance -ClassName Win32_UserAccount | Where-Object -FilterScript {$_.Name -eq $env:USERNAME}).SID
 
-### Pre-execution tasks ###
+### DISPLAY INFO ###
 
 Clear-Host
 print "WinRice pre-execution environment"
@@ -267,7 +261,7 @@ $WarningPreference = 'SilentlyContinue'
 
 ####### BEGIN CHECKS #########
 Write-Host "Beginning checks..."
-space
+
 # Check if supported OS build.
 $oscheck = {
 	$CurrentBuild = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name CurrentBuild
@@ -278,7 +272,7 @@ $oscheck = {
 		return $true
 	}
 }
-RunWithProgress -Text "Windows version is supported" -Task $oscheck -Exit $true | Out-Null
+RunWithProgress -Text "[1/5] Windows version is supported" -Task $oscheck -Exit $true | Out-Null
 
 
 # Check if session is elevated.
@@ -288,7 +282,7 @@ $isadmin = {
 	return $admin
 }
 
-RunWithProgress -Text "Session is elevated" -Task $isadmin -Exit $true | Out-Null
+RunWithProgress -Text "[2/5] Session is elevated" -Task $isadmin -Exit $true | Out-Null
 
 # Exit WinRice if PC is not connected.
 $isonline = {
@@ -303,7 +297,7 @@ $isonline = {
 	}
 }
 
-RunWithProgress -Text "Device is connnected to the internet" -Task $isonline -Exit $true | Out-Null
+RunWithProgress -Text "[3/5] Device is connnected to the Internet" -Task $isonline -Exit $true | Out-Null
 
 # Check if laptop (https://devblogs.microsoft.com/scripting/hey-scripting-guy-weekend-scripter-how-can-i-use-wmi-to-detect-laptops/).
 Param(
@@ -323,11 +317,11 @@ $pwshver = {
 	if ((($PSVersionTable).PSVersion).Major -eq "5") { 
 		return $true 
 	}
-	Import-Module -Name Appx, Microsoft.PowerShell.Management, PackageManagement -UseWindowsPowerShell -WarningAction "SilentlyContinue" | Out-Null
+	Import-Module -Name Appx -UseWindowsPowerShell -WarningAction "SilentlyContinue" | Out-Null
 	return $true
 }
 
-RunWithProgress -Text "Setting up PowerShell" -Task $pwshver -Exit $true | Out-Null
+RunWithProgress -Text "[4/5] Setting up PowerShell" -Task $pwshver -Exit $true | Out-Null
 
 # Check for pending restart (part of code used here was picked from https://thesysadminchannel.com/remotely-check-pending-reboot-status-powershell).
 $isrestartpending = {
@@ -355,31 +349,27 @@ $isrestartpending = {
 			}
 		
 			if ($PendingReboot -eq $true) {
-				return $true
+				return $false
 			}
 			else {
-				return $false
+				return $true
 			}
 		}   
 	}
 }
-
-RunWithProgress -Text "Device restart required" -Task $isrestartpending -Exit $false | Out-Null
-
 # Clear variables.
 $WMI_Reg        = $null
 $SCCM_Namespace = $null
 
-space
+RunWithProgress -Text "[5/5] Session is fresh" -Task $isrestartpending -Exit $true | Out-Null
+
+
 Start-Sleep -Milliseconds 200
-Write-Host "Checks passing." -ForegroundColor green 
+Write-Host "Completed checks." -ForegroundColor green 
 Start-Sleep -Milliseconds 800
 space
-space
 
-Write-Host "Configure WinRice"
-space
-# Save default config.
+# Declare Express Settings.
 $uninstallapps = "y"
 if ((Test-Path uninstallapps.txt) -or (Test-Path UninstallApps.txt) -or (Test-Path Uninstallapps.txt))
 {
@@ -390,55 +380,73 @@ $systemrestore = "y"
 
 # TODO: User message contain link to main brief document.
 
-# Take user config.
+# Print Express Settings.
 print "Express Settings:"
 $settings = @(	
-	"A predefined set of unnecessary apps will be uninstalled."	
-	"A predefined set of unnecessary features will be uninstalled."			
-	"Apps will not be installed."
-	".NET 3.5 will not be installed."
-	"Microsoft OneDrive will not be uninstalled."
-	"Widgets will not be uninstalled."
-	"Windows Subsystem for Linux will not be installed."
-	"Windows Sandbox will not be installed."
+	"A set of unessential apps WILL be uninstalled."	
+	"A set of unessential features WILL be uninstalled."
+	"Apps will NOT be installed."
+	"NO optional features are installed."
 )
 ForEach ($setting in $settings) 
 {
-	print " $setting"
+	print "  $setting"
 }
-if (!($BuildBranch -like "rs_prerelease"))
+if ( (-not($BuildBranch -like "rs_prerelease")) -and (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) ) 
 {
 	$dwu = "y"
 	$au = "y"
-	"Windows automatic updates will be turned off."
-	"Windows quality updates will be delayed by 4 days and feature updates will be delayed by 20 days."
+	print "  Windows automatic updates will be turned off."
+	print "  Windows quality updates will be delayed by 4 days and feature updates will be delayed by 20 days."
 }
-
+elseif ($BuildBranch -like "rs_prerelease")
+{
+	print "  Windows Update policies are left unchanged in Windows pre-release software."
+}
 space
-$customize = ask "Do you want to proceed with Express Settings? [Y/n]" -ForegroundColor Yellow
+print "To learn more, visit https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md"
+print "Standard privacy, security, tasks, services and UI changes as listed in WinRice documentation will apply. These changes are not configurable."
+space
+$customize = ask "Do you want to proceed with Express Settings? [Y/n]"
 if (!(check($customize)))
 {
 	space
+	space
 	print "Please take your time to answer the questions below in order to save user config."
 	print "Press Enter to proceed after answering a question."
-	space
 	space
 
 	# App Deployment
 	print "APP DEPLOYMENT"
 	$installapps = ask "Do you want to install apps using WinGet? [y/N]"
+	Start-Sleep -Milliseconds 100
 	if (check($installapps))
 	{
 		$installusing = ask "Okay, do you want to use (1) winget import or (2) Winstall? [1/2]"
 	}
-	$uninstallapps = ask "Do you want to uninstall non-essential apps? [Y/n]"
+	elseif ((!($installapps))) 
+	{
+		print "  No apps will be installed."
+	}
+	if ($installusing -eq "1")
+	{
+		print "  Apps WILL be installed using: winget import."
+	}
+	elseif ($installusing -eq "2")
+	{
+		print "  Apps WILL be installed using: Winstall."
+	}
+	
+	$uninstallapps = ask "Do you want to uninstall unessential apps? [Y/n]"
+	Start-Sleep -Milliseconds 100
 	if (!($uninstallapps))
 	{
 		$uninstallapps = "y"
-		print "No input detected, WinRice will uninstall non-essential apps."
+		print "No input detected, unessential apps WILL be uninstalled."
 	}
 	elseif (check($uninstallapps))
 	{
+		print "  Unessential apps WILL be uninstalled."
 		if ((Test-Path uninstallapps.txt) -or (Test-Path UninstallApps.txt) -or (Test-Path Uninstallapps.txt))
 		{
 			$uninstallmethod = "list"
@@ -446,48 +454,139 @@ if (!(check($customize)))
 		elseif (!(Test-Path uninstallapps.txt) -or (!(Test-Path UninstallApps.txt)) -or (!(Test-Path Uninstallapps.txt)))
 		{
 			$uninstallmethod = ask "Do you want to select which apps to uninstall? [y/N]"
+			Start-Sleep -Milliseconds 100
+			if (check($uninstallmethod))
+			{
+				print "  You will select which apps you want to uninstall."
+			}
+			elseif (!(check($uninstallmethod)))
+			{
+				print " A predefined list of apps will be uninstalled."
+			}
 		}
 		$uninstallod = ask "Do you want to uninstall Microsoft OneDrive? [y/N]"
+		Start-Sleep -Milliseconds 100
+		if (check($uninstallod))
+		{
+			print "  Microsoft OneDrive WILL be uninstalled."
+		}
+		elseif (!(check($uninstallod)))
+		{
+			print "  Microsoft OneDrive will NOT be uninstalled."
+		}
 	}
-	
+	elseif (!(check($uninstallapps)))
+	{
+		print "  No changes will be made to unessential apps."
+	}
+
+	space
+
 	# Feature Deployment
 	print "FEATURE DEPLOYMENT"
-	$netfx3 = ask "Do you want to install dotNET 3.5? (used for running legacy programs) [y/N]"
+
+	$netfx3 = ask "Do you want to install .NET 3.5? (used for running legacy programs) [y/N]"
+	Start-Sleep -Milliseconds 100
+	if (check($netfx3))
+	{
+		print "  .NET 3.5 WILL be installed."
+	}
+	elseif (!(check($netfx3)))
+	{
+		print "  NO changes will be made to .NET 3.5."
+	}
+
 	$wsl = ask "Do you want to install Windows Subsystem for Linux? [y/N]"
+	Start-Sleep -Milliseconds 100
+	if (check($wsl))
+	{
+		print "  Windows Subsystem for Linux WILL be installed."
+	}
+	elseif (!(check($wsl)))
+	{
+		print "  NO changes will be made to Windows Subsystem for Linux."
+	}
+
 	$sandbox = ask "Do you want to install Windows Sandbox? [y/N]"
-	$uninstallfeatures = ask "Do you want to uninstall non-essential optional features? [Y/n]"
+	Start-Sleep -Milliseconds 100
+	if (check($sandbox))
+	{
+		print " Windows Sandbox WILL be installed."
+	}
+	elseif (!(check($sandbox)))
+	{
+		print "  NO changes will be made to Windows Sandbox."
+	}
+
+	$uninstallfeatures = ask "Do you want to uninstall unessential optional features? [Y/n]"
+	Start-Sleep -Milliseconds 100
 	if (!($uninstallfeatures))
 	{
 		$uninstallfeatures = "y"
-		print "No input detected, WinRice will uninstall non-essential features."
+		print "  NO input detected, unessential features WILL be uninstalled."
 	}
+	if (check($uninstallfeatures))
+	{
+		print "  Unessential features WILL be uninstalled."
+	}
+	elseif (!(check($uninstallfeatures)))
+	{
+		print "  NO changes will be made to unessential features."
+	}
+
 	if ($CurrentBuild -ge 22000) {
 		$widgets = ask "Do you want to uninstall Widgets [y/N]"
 	}
+	Start-Sleep -Milliseconds 100
+	if (check($widgets))
+	{
+		print "  Widgets WILL be uninstalled."
+	}
+	elseif (!(check($widgets)))
+	{
+		print "  NO changes will be made to Widgets."
+	}
 	
-	# OS
-	if (-not($BuildBranch -like "rs_prerelease"))
+	if ( (-not($BuildBranch -like "rs_prerelease")) -and (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) )
 	{	
 		space
 		print "WINDOWS UPDATE"
 
 		$dwu = ask "Do you want to delay Windows updates by a few days? [Y/n]"
-		if (!($dwu))
+		Start-Sleep -Milliseconds 100
+		if (check($dwu))
 		{
-			$dwu = "y"
-			print "No input detected, Windows updates will be delayed by a few days."
+			print "  Windows updates will be delayed."
+		}
+		elseif (!(check($dwu)))
+		{
+			print "  NO changes will be made to Windows update delivery time."
 		}
 
 		$au = ask "Do you want to turn off automatic updates? [Y/n]"
-		if (!($au))
+		Start-Sleep -Milliseconds 100
+		if (check($au))
 		{
-			$au = "y"
-			print "No input detected, automatic updates will be turned off."
+			print "  Windows automatic updates will be turned off."
+		}
+		elseif (!(check($au)))
+		{
+			print "  NO changes will be made to automatic Windows updates."
 		}
 	}
-
 	space
+
 	$systemrestore = ask "Do you want to create a system restore point? [Y/n]"
+	Start-Sleep -Milliseconds 100
+	if (check($systemrestore))
+	{
+		print "  A system restore point will be created."
+	}
+	elseif (!(check($systemrestore)))
+	{
+		print " NO system restore point will be created."
+	}
+
 	space 
 	space
 
@@ -498,29 +597,29 @@ if (!(check($customize)))
 		Write-Host "Apps will be installed using " -NoNewline -ForegroundColor DarkCyan
 		if ($installusing -like "2")
 		{
-			Write-Host "Winstall method." -ForegroundColor DarkCyan
+			Write-Host "Winstall." -ForegroundColor DarkCyan
 		}
 		elseif ($installusing -like "1")
 		{
-			Write-Host "WinGet Import method." -ForegroundColor Cyan -BackgroundColor DarkGray
+			Write-Host "winget import method." -ForegroundColor Cyan
 		}
 	}
 	elseif (!(check($installapps)))
 	{
-		Write-Host "Apps will not be installed." -ForegroundColor DarkGray
+		Write-Host "NO apps will be installed." -ForegroundColor DarkGray
 	}
 	
 	elseif (!(check($uninstallapps)))
 	{
-		Write-Host "Non-essential apps will not be uninstalled." -ForegroundColor DarkGray
+		Write-Host "NO changes will be made to unessential features." -ForegroundColor DarkGray
 	}
 	elseif (check($uninstallapps))
 	{
 	
-		Write-Host "Non-essential apps will be uninstalled" -NoNewline -ForegroundColor DarkCyan
+		Write-Host "Unessential apps will be uninstalled" -NoNewline -ForegroundColor DarkCyan
 		if ($uninstallmethod -like "list")
 		{
-			Write-Host " using LIST." -ForegroundColor DarkCyan
+			Write-Host " using List." -ForegroundColor DarkCyan
 		}
 		elseif (check($uninstallmethod))
 		{
@@ -534,11 +633,11 @@ if (!(check($customize)))
 	
 	if (check($netfx3))
 	{
-		Write-Host "dotNET 3.5 will be installed." -ForegroundColor DarkCyan
+		Write-Host ".NET 3.5 will be installed." -ForegroundColor DarkCyan
 	}
 	elseif (!(check($netfx3)))
 	{
-		Write-Host "dotNET 3.5 will not be installed." -ForegroundColor DarkGray
+		Write-Host "NO changes will be made to .NET 3.5." -ForegroundColor DarkGray
 	}
 	
 	if (check($wsl))
@@ -547,7 +646,7 @@ if (!(check($customize)))
 	}
 	elseif (!(check($wsl)))
 	{
-		Write-Host "Windows Subsystem for Linux will not be installed." -ForegroundColor DarkGray
+		Write-Host "NO changes will be made to Windows Subsystem for Linux." -ForegroundColor DarkGray
 	}
 	
 	if (check($sandbox))
@@ -556,21 +655,21 @@ if (!(check($customize)))
 	}
 	elseif (!(check($sandbox)))
 	{
-		Write-Host "Windows Sandbox will not be installed." -ForegroundColor DarkGray
+		Write-Host "NO changes will be made to Windows Sandbox." -ForegroundColor DarkGray
 	}
 	
 	if (!(check($uninstallfeatures)))
 	{
-		Write-Host "Non-essential optional features will not be uninstalled." -ForegroundColor DarkGray
+		Write-Host "NO changes will be made to unessential features." -ForegroundColor DarkGray
 	}
 	elseif (check($uninstallfeatures))
 	{
-		Write-Host "Non-essential optional features will be uninstalled." -ForegroundColor DarkCyan
+		Write-Host "Unessential features will be uninstalled." -ForegroundColor DarkCyan
 	}
 	
 	if (!(check($widgets)))
 	{
-		Write-Host "Widgets will be not be uninstalled, and will be updated to the latest version instead." -ForegroundColor DarkGray
+		Write-Host "NO changes will be made to Widgets." -ForegroundColor DarkGray
 	}
 	elseif (check($widgets))
 	{
@@ -583,7 +682,7 @@ if (!(check($customize)))
 	}
 	elseif (!(check($au)))
 	{
-		Write-Host "Windows automatic updates will not be turned off." -ForegroundColor DarkGray
+		Write-Host "No changes will be made to automatic Windows updates." -ForegroundColor DarkGray
 	}
 	
 	if (check($dwu))
@@ -592,17 +691,17 @@ if (!(check($customize)))
 	}
 	elseif (!(check($dwu)))
 	{
-		Write-Host "Windows updates will not be delayed." -ForegroundColor DarkGray
+		Write-Host "No changes will be made to Windows updates' delivery time." -ForegroundColor DarkGray
 	}
 	
 	if (!($systemrestore))
 	{
 		$systemrestore = "y"
-		Write-Host "No input detected, WinRice will create a System restore point." -ForegroundColor DarkCyan
+		Write-Host "A System restore point WILL be created." -ForegroundColor DarkCyan
 	}
 	if (!(check($systemrestore)))
 	{
-		Write-Host "System restore point will not be created." -ForegroundColor DarkGray
+		Write-Host "NO system restore point will be created." -ForegroundColor DarkGray
 	}
 
 	Start-Sleep -Milliseconds 1700
@@ -625,7 +724,7 @@ Function WinRice {
 	print "pratyakshm's WinRice - main branch"
 	Start-Sleep -Milliseconds 100
 	space
-	print "Copyright (c) Pratyaksh Mehrotra (a.k.a. pratyakshm) and contributors"
+	print "Copyright (c) Pratyaksh Mehrotra sand contributors"
 	Start-Sleep -Milliseconds 100
 	print "https://github.com/pratyakshm/WinRice"
 	Start-Sleep 1
@@ -663,17 +762,18 @@ Function ChangesDone {
 # Create a system restore point with type MODIFY_SETTINGS.
 Function CreateSystemRestore {
 $ProgressPreference = 'SilentlyContinue'
-	if (check($systemrestore))
+	if (!(check($systemrestore)))
 	{
-		space
-		print "Creating a system restore point with type MODIFY_SETTINGS..."
-		Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name SystemRestorePointCreationFrequency -Type DWord -Value 0 -Force
-		Enable-ComputerRestore -Drive $env:SystemDrive
-		Checkpoint-Computer -Description "WinRice" -RestorePointType "MODIFY_SETTINGS" -WarningAction SilentlyContinue
-		Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name SystemRestorePointCreationFrequency -Type DWord -Value 1440 -Force
-		Disable-ComputerRestore -Drive $env:SystemDrive
-		print "Created system restore point."
+		return
 	}
+	space
+	print "Creating a system restore point..."
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name SystemRestorePointCreationFrequency -Type DWord -Value 0 -Force
+	Enable-ComputerRestore -Drive $env:SystemDrive
+	Checkpoint-Computer -Description "WinRice" -RestorePointType "MODIFY_SETTINGS" -WarningAction SilentlyContinue
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -Name SystemRestorePointCreationFrequency -Type DWord -Value 1440 -Force
+	Disable-ComputerRestore -Drive $env:SystemDrive
+	print "Created system restore point."
 }
 
 # Prevent the console output from freezing by emulating backspace key. (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Module/Sophia.psm1#L728-L767)
@@ -750,23 +850,25 @@ $ProgressPreference = 'SilentlyContinue'
 	Get-AppxPackage *VCLibs.140.00* | Remove-AppxPackage
 
 	# Download VCLibs.
-	print "Updating Visual C++ libraries..."
+	print "Updating Visual C++ Libraries..."
 	$VCLibs = "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx"
-	Start-BitsTransfer $VCLibs
 	$VCLibsUWP = "https://github.com/WinRice/Files/raw/main/Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.Appx"
-	Start-BitsTransfer $VCLibsUWP
+	Start-BitsTransfer $VCLibs ; Start-BitsTransfer $VCLibsUWP
 
 	# Install VCLibs.
-	Add-AppxPackage "Microsoft.VCLibs.x64.14.00.Desktop.appx"
-	Add-AppxPackage "Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.Appx"
+	Add-AppxPackage "Microsoft.VCLibs.x64.14.00.Desktop.appx" ; Add-AppxPackage "Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.Appx"
 	Set-Location ..
 	Remove-Item WinRice -Recurse -Force
 		
 	# Get-Command VCLibs, if it works then print success message.
 	if ((Get-AppxPackage *UWPDesktop*).Version -ge 14.0.30035.0) 
 	{
-		print "Updated Visual C++ libraries."
+		print "Updated Visual C++ Libraries."
 		return
+	}
+	else
+	{
+		print "Could not update Visual C++ Libraries."
 	}
 }
 
@@ -777,7 +879,7 @@ Function UninstallVCLibs {
 		return
 	}
 	space
-	print "Uninstalling runtimes..."
+	print "Uninstalling Visual C++ Libraries..."
 	Get-AppxPackage *VCLibs* | Remove-AppxPackage
 	if (Get-AppxPackage *VCLibs*) 
 	{
@@ -787,7 +889,7 @@ Function UninstallVCLibs {
 	print "Uninstalled Visual C++ Libraries."
 }
 
-# Install WinGet (Windows Package Manager) [UPDATED METHOD]
+# Install WinGet (Windows Package Manager)
 Function InstallWinGet {
 $ErrorActionPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
@@ -806,75 +908,6 @@ $ProgressPreference = 'SilentlyContinue'
 		return
 	}
 	print "Installed WinGet."
-}
-
-
-# Enable all experimental features in WinGet.
-Function EnableExperimentsWinGet {
-$ProgressPreference = 'SilentlyContinue'
-	if (!(check($enableexperimentswinget))) 
-	{ 
-		return 
-	}
-	elseif (!(Get-Command winget)) 
-	{
-		print "WinGet is not installed."
-		return
-	}
-	space
-	print "Turning on experimental features in WinGet..."
-	$currentdir = $(Get-Location).Path
-	Set-Location "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\"
-	Rename-Item settings.json settings.json.backup
-	Start-BitsTransfer "https://raw.githubusercontent.com/WinRice/Files/main/settings.json"
-	Set-Location $currentdir
-	print "Turned on experimental features in WinGet."
-}
-
-# Disable all experimental features in winget
-Function DisableExperimentsWinGet {
-	if (!(Get-Command winget)) 
-	{
-		print "WinGet is not installed, couldn't turn off its experimental features."
-		return
-	}
-	print "Turning off experimental features in WinGet."
-	$currentdir = $(Get-Location).Path
-	Set-Location "$env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\"
-	Remove-Item settings.json
-	if (!(Test-Path settings.json))
-	{
-		print "Could not find winget settings backup. Could not turn off experimental features."
-		return
-	}
-	Rename-Item settings.json.backup settings.json
-	Set-Location $currentdir
-	print "Turned off experimental features in WinGet."
-}
-
-# Update to new Microsoft Store.
-function MicrosoftStore {
-$ProgressPreference = 'SilentlyContinue'
-	if ((Get-AppxPackage "Microsoft.WindowsStore").Version -ge "22110.1401.3.0")
-	{
-		return
-	}
-	space
-
-	# Credit: https://dev.to/kaiwalter/download-windows-store-apps-with-powershell-from-https-store-rg-adguard-net-155m.
-	print "Updating Microsoft Store..."
-
-	Start-BitsTransfer https://github.com/WinRice/Files/raw/main/Microsoft.UI.Xaml.2.7_8wekyb3d8bbwe.Appx
-	Start-BitsTransfer https://dl.pratyakshm.workers.dev/0:/Software/Microsoft/Apps/Microsoft.WindowsStore_22110.1401.12.0_neutral___8wekyb3d8bbwe.Msixbundle
-	Add-AppxPackage -Path Microsoft.WindowsStore_22110.1401.12.0_neutral___8wekyb3d8bbwe.Msixbundle -DependencyPath Microsoft.UI.Xaml.2.7_8wekyb3d8bbwe.Appx
-	if ((Get-AppxPackage "Microsoft.WindowsStore").Version -ne "22110.1401.12.0")
-	{
-		print "Could not update Microsoft Store."
-		print "Please try manually deploying the downloaded packages. They are contained in the same folder as WinRice."
-		return
-	}
-	Remove-Item Microsoft.UI.Xaml.2.7_8wekyb3d8bbwe.Appx; Remove-Item Microsoft.WindowsStore_22110.1401.12.0_neutral___8wekyb3d8bbwe.Msixbundle
-	print "Updated Microsoft Store."
 }
 	
 # Install NanaZip.
@@ -1085,7 +1118,7 @@ $ProgressPreference = 'SilentlyContinue'
 	space
 	if (Get-AppxPackage -Name Microsoft.HEVCVideoExtension) 
 	{
-		print "HEVC Video Extensions are already installed on this device."
+		print "HEVC Video Extensions are already installed in this device."
 		return
 	}
 	# Credit: https://dev.to/kaiwalter/download-windows-store-apps-with-powershell-from-https-store-rg-adguard-net-155m.
@@ -1148,134 +1181,6 @@ $ProgressPreference = 'SilentlyContinue'
 		print "Could not uninstall HEVC Video Extensions."
 	}
 }
-
-# Update Widgets
-function UpdateWidgets {
-	space
-	print "Checking if Widgets are updated..."
-	$version = (Get-AppxPackage "MicrosoftWindows.Client.WebExperience").Version
-	if ($version -ge 421.20031.315.0)
-	{	
-		print "Widgets are up to date."
-		return
-	}
-	
-	# Credit: https://dev.to/kaiwalter/download-windows-store-apps-with-powershell-from-https-store-rg-adguard-net-155m.
-	Write-Host "Updating Widgets..."
-	$apiUrl = "https://store.rg-adguard.net/api/GetFiles"
-	$productUrl = "https://www.microsoft.com/store/productId/9MSSGKG348SP"
-	$downloadFolder = Join-Path (Get-Location).Path "WinRice"
-	if(!(Test-Path $downloadFolder -PathType Container)) {
-		New-Item $downloadFolder -ItemType Directory -Force | Out-Null
-	}
-	$body = @{
-		type = 'url'
-		url  = $productUrl
-		ring = 'Retail'
-		lang = 'en-US'
-	}
-		
-	# Deploy Widgets.
-	$raw = Invoke-RestMethod -Method Post -Uri $apiUrl -ContentType 'application/x-www-form-urlencoded' -Body $body
-	
-	$raw | Select-String '<tr style.*<a href=\"(?<url>.*)"\s.*>(?<text>.*)<\/a>' -AllMatches | ForEach-Object { $_.Matches } | ForEach-Object { 
-		$url = $_.Groups[1].Value
-		$text = $_.Groups[2].Value
-		if($text -match "_(x64|neutral).*appx(|bundle)$") {
-			$downloadFile = Join-Path $downloadFolder $text
-			Invoke-WebRequest -Uri $url -OutFile $downloadFile
-		}
-	}
-	Set-Location WinRice	
-	Add-AppxPackage MicrosoftWindows.Client.WebExperience
-	Set-Location ../
-	Remove-Item WinRice -Recurse -Force
-	if (!(Get-AppxPackage *MicrosoftWindows.Client.WebExperience*))
-	{
-		print "Could not update Widgets."
-		return
-	}
-	
-	print "Updated Widgets."
-}
-
-# Remove Widgets
-function RemoveWidgets {
-	space
-	if (!(Get-AppxPackage "MicrosoftWindows.Client.WebExperience")) 
-	{
-		print "Widgets may have already been removed."
-		return
-	}
-	print "Removing Widgets..."
-	Get-AppxPackage "MicrosoftWindows.Client.WebExperience" | Remove-AppxPackage
-	if (Get-AppxPackage "MicrosoftWindows.Client.WebExperience")
-	{
-		print "Could not remove Widgets."
-	}
-	else 
-	{
-		print "Removed Widgets."
-	}
-}
-
-# Unfinished function.
-Function Widgets {
-$ProgressPreference = 'SilentlyContinue'
-	if (!(check($widgets)))
-	{
-		UpdateWidgets
-	}
-	elseif (check($widgets))
-	{
-		RemoveWidgets
-	}
-}
-
-# Install fonts (part of code here was picked from https://github.com/code-rgb/WinRice).
-Function InstallFonts {
-$ProgressPreference = 'SilentlyContinue'
-	space
-	# Check if Cascadia Code is installed and inform user.
-	$installed = "C:\Windows\Fonts\CascadiaCodePL.ttf"
-	if (Test-Path -Path $installed) 
-	{
-		print "Cascadia Code is already installed on this device."
-		return
-	}
-	# Install Cascadia Code if not already installed.
-	print "Installing Cascadia Code..."
-	$response = Invoke-RestMethod -Uri "https://api.github.com/repos/microsoft/cascadia-code/releases/latest"
-	Start-BitsTransfer -Source $response.assets.browser_download_url -Destination "CascadiaCode.zip"
-	Expand-Archive CascadiaCode.zip
-	$font = $(Get-ChildItem "CascadiaCode\ttf\CascadiaCodePL.ttf").FullName
-	$installed = "C:\Windows\Fonts\CascadiaCodePL.ttf"
-	Move-Item $font $installed
-	Remove-Item CascadiaCode.zip
-	Remove-Item CascadiaCode -Recurse -Force
-	print "Installed Cascadia Code."
-}
-
-Function UninstallFonts {
-	$fontfile = "C:\Windows\Fonts\CascadiaCodePL.ttf"
-	if (!($fontfile)) 
-	{
-		print "Fonts may have already been uninstalled."
-		return
-	}
-	space
-	print "Uninstalling fonts..."
-	Remove-Item $fontfile
-	if (!($fontfile)) 
-	{
-		print "Uninstalled fonts."
-	}
-	else 
-	{
-		print "Could not uninstall fonts."
-	}
-}
-
 
 # Uninstaller GUI.
 Function UninstallerGUI {
@@ -1571,6 +1476,12 @@ Function UninstallerCLI {
 			Get-AppxPackage "Microsoft.WindowsCamera" | Remove-AppxPackage
 			Get-AppxProvisionedPackage -Online "Microsoft.WindowsCamera" | Remove-AppxProvisionedPackage 
 		}
+	}
+
+	if (check($widgets))
+	{
+		Get-AppxPackage "MicrosoftWindows.Client.WebExperience" | Remove-AppxPackage
+		Get-AppxProvisionedPackage -Online "MicrosoftWindows.Client.WebExperience" | Remove-AppxProvisionedPackage
 	}
 
 	$SponsoredApps = @(					# Remove Sponsored apps.
@@ -2831,11 +2742,11 @@ Function EnableReservedStorage {
 	print "Turned on Reserved Storage."
 }
 
-# Disable unnecessary services.
+# Disable unessential services.
 Function DisableServices {
 $ErrorActionPreference = 'SilentlyContinue'
 	space
-	print "Turning off unnecessary services..."
+	print "Turning off unessential services..."
     	$Services = @(
 		"DiagTrack"
 		"SysMain"
@@ -2849,11 +2760,11 @@ $ErrorActionPreference = 'SilentlyContinue'
 	print "Turned off unnecesarry services."
 }
 
-# Enable unnecessary services.
+# Enable unessential services.
 Function EnableServices {
 $ErrorActionPreference = 'SilentlyContinue'
 	space
-	print "Turning on unnecessary services..."
+	print "Turning on unessential services..."
     	$Services = @(
 		"DiagTrack"
 		"SysMain"
@@ -2867,10 +2778,10 @@ $ErrorActionPreference = 'SilentlyContinue'
 	print "Turned on redundant services."
 }
 
-# Disable unnecessary scheduled tasks.
+# Disable unessential scheduled tasks.
 Function DisableTasks {
 	space
-	print "Turning off unnecessary tasks..."
+	print "Turning off unessential tasks..."
 	$Tasks = @(
 		"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser"
 		"Microsoft\Windows\Application Experience\ProgramDataUpdater"
@@ -2888,10 +2799,10 @@ Function DisableTasks {
 		Disable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
 		print "    Turned off task: $Task."
 	}
-    print "Turned off unnecessary tasks."
+    print "Turned off unessential tasks."
 }
 
-# Enable unnecessary scheduled tasks.
+# Enable unessential scheduled tasks.
 Function EnableTasks {
 	$Tasks = @(
 		"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser"
@@ -2909,7 +2820,7 @@ Function EnableTasks {
 		Enable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
 		print "    Turned on task: $Task."
 	}
-    print "Turned on unnecessary tasks."
+    print "Turned on unessential tasks."
 }
 
 # Intelligently setup Windows Update policies.
@@ -2918,7 +2829,7 @@ Function SetupWindowsUpdate {
 	# Perform checks.
 	if ($BuildBranch -like "rs_prerelease")
 	{
-		print "Windows pre-release software detected. Windows Update policies will be left unchanged."
+		print "Windows Update policies will be left unchanged in Windows pre-release software."
 		return
 	}
     if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) 
@@ -3312,7 +3223,6 @@ function DisableWidgetsItem {
 }
 
 # Enable Widgets item - Windows 11 only
-
 function EnableWidgetsItem {
 	if ($CurrentBuild -lt 22000)
 	{
