@@ -37,8 +37,6 @@ $tasks = @(
 	# "InstallOneDrive",
 	"UninstallFeatures", "Activity", 
 	# "InstallFeatures", "Activity", 
-	# "SetPhotoViewerAssociation",
-	# "UnsetPhotoViewerAssociation",
 	"ChangesDone",
 
 ### Privacy & Security ###
@@ -2119,41 +2117,6 @@ $ProgressPreference = 'SilentlyContinue'
 	print "Disabled .NET 3.5."
 }
 
-
-# Set Windows Photo Viewer association for bmp, gif, jpg, png and tif.
-Function SetPhotoViewerAssociation {
-	space
-	print "Adding Windows Photo Viewer (classic) to the 'Open with' menu..."
-	if (!(Test-Path "HKCR:")) {
-		New-PSDrive -Name "HKCR" -PSProvider "Registry" -Root "HKEY_CLASSES_ROOT" | Out-Null
-	}
-	ForEach ($type in @("Paint.Picture", "giffile", "jpegfile", "pngfile")) 
-	{
-		New-Item -Path $("HKCR:\$type\shell\open") -Force | Out-Null
-		New-Item -Path $("HKCR:\$type\shell\open\command") | Out-Null
-		Set-ItemProperty -Path $("HKCR:\$type\shell\open") -Name "MuiVerb" -Type ExpandString -Value "@%ProgramFiles%\Windows Photo Viewer\photoviewer.dll,-3043"
-		Set-ItemProperty -Path $("HKCR:\$type\shell\open\command") -Name "(Default)" -Type ExpandString -Value "%SystemRoot%\System32\rundll32.exe `"%ProgramFiles%\Windows Photo Viewer\PhotoViewer.dll`", ImageView_Fullscreen %1"
-	}
-	print "Added Windows Photo Viewer (classic) to the 'Open with' menu."
-
-}
-
-# Unset Windows Photo Viewer association for bmp, gif, jpg, png and tif.
-Function UnsetPhotoViewerAssociation {
-	print "Removing Windows Photo Viewer (classic) from the 'Open with' menu..."
-	if (!(Test-Path "HKCR:")) 
-	{
-		New-PSDrive -Name "HKCR" -PSProvider "Registry" -Root "HKEY_CLASSES_ROOT" | Out-Null
-	}
-	Remove-Item -Path "HKCR:\Paint.Picture\shell\open" -Recurse -ErrorAction SilentlyContinue
-	Remove-ItemProperty -Path "HKCR:\giffile\shell\open" -Name "MuiVerb" -ErrorAction SilentlyContinue
-	Set-ItemProperty -Path "HKCR:\giffile\shell\open" -Name "CommandId" -Type String -Value "IE.File"
-	Set-ItemProperty -Path "HKCR:\giffile\shell\open\command" -Name "(Default)" -Type String -Value "`"$env:SystemDrive\Program Files\Internet Explorer\iexplore.exe`" %1"
-	Set-ItemProperty -Path "HKCR:\giffile\shell\open\command" -Name "DelegateExecute" -Type String -Value "{17FE9752-0B5A-4665-84CD-569794602F5C}"
-	Remove-Item -Path "HKCR:\jpegfile\shell\open" -Recurse -ErrorAction SilentlyContinue
-	Remove-Item -Path "HKCR:\pngfile\shell\open" -Recurse -ErrorAction SilentlyContinue
-	print "Removed Windows Photo Viewer association."
-}
 
 
 
