@@ -100,7 +100,7 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 - SysMain
 
 ## Windows Update (optional)
-
+##### P.S. Windows Update policies are only applied to Windows editions that support Group policies. These are Education, Enterprise, Enterprise LTSC and Professional editions.
 ### Setup Windows Update
 
 Setup the following policies to Windows Update:
