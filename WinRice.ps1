@@ -107,7 +107,7 @@ $tasks = @(
 	"PrintExplorerChanges",
 	"EnablePrtScrToSnip",		   
 	# "DisablePrtScrSnip",
-	"ShowExtensions",
+	# "ShowExtensions",
 	# "HideExtensions",
 	"HideRecentFilesInQuickAccess",
 	# "ShowRecentFilesInQuickAccess",
@@ -1436,7 +1436,7 @@ Function UninstallerCLI {
 		"Microsoft.Getstarted" # Tips app 
 		"Microsoft.MSPaint" # Paint 3D app
 		# "Microsoft.Paint"  # Paint app (MSIX)
-		"Microsoft.MicrosoftOfficeHub" # Office webview (packaged)
+		"Microsoft.MicrosoftOfficeHub" # Office webview
 		"Microsoft.Office.OneNote" # OneNote for Windows 10
 		"Microsoft.MixedReality.Portal"
 		"Microsoft.MicrosoftSolitaireCollection" 
@@ -2182,7 +2182,9 @@ Function DisableBackgroundApps {
 		"Microsoft.Windows.ContentDeliveryManager",
 		"Microsoft.549981C3F5F10",
 		"Microsoft.Windows.Search",
-		"Microsoft.Windows.SecHealthUI",
+		"MicrosoftWindows.Client.CBS",
+		"Microsoft.Windows.SecHealthUI"
+		"Microsoft.SecHealthUI",
 		"Microsoft.Windows.ShellExperienceHost",
 		"Microsoft.Windows.StartMenuExperienceHost",
 		"Microsoft.WindowsStore"
@@ -2619,7 +2621,7 @@ Function DisableHibernation {
 	print "Turned off hibernation."
 }
 
-# Enable Hiberfile.sys
+# Enable Hibernation
 Function EnableHibernation {
 	if ($isLaptop) 
 	{
@@ -2666,9 +2668,9 @@ Function DisableNumLock {
 Function EnableStorageSense {
 	space
 	print "Turning on Storage Sense..."
-	$EnableStorageSense = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
-	New-Item -Path $EnableStorageSense -ItemType Directory -Force | Out-Null
-	New-ItemProperty -Path $EnableStorageSense -Name 01 -PropertyType DWord -Value 1 -Force | Out-Null
+	$StorageSense = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
+	New-Item -Path $StorageSense -ItemType Directory -Force | Out-Null
+	New-ItemProperty -Path $StorageSense -Name 01 -PropertyType DWord -Value 1 -Force | Out-Null
 	print "Turned on Storage Sense."
 }
 
@@ -2676,9 +2678,9 @@ Function EnableStorageSense {
 Function DisableStorageSense {
 	space
 	print "Turning off Storage Sense..."
-	$DisableStorageSense = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
-	New-Item -Path $DisableStorageSense -ItemType Directory -Force | Out-Null
-	New-ItemProperty -Path $DisableStorageSense -Name 01 -PropertyType DWord -Value 0 -Force | Out-Null
+	$StorageSense = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
+	New-Item -Path $StorageSense -ItemType Directory -Force | Out-Null
+	New-ItemProperty -Path $StorageSense -Name 01 -PropertyType DWord -Value 0 -Force | Out-Null
 	print "Turned off Storage Sense."
 }
 
@@ -2731,7 +2733,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Set-Service $Service -StartupType Automatic
 		print "    Started service: $Service."
 	}
-	print "Turned on redundant services."
+	print "Turned on unessential services."
 }
 
 # Disable unessential scheduled tasks.
