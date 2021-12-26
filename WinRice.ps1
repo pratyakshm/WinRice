@@ -75,6 +75,8 @@ $tasks = @(
 	# "DisableClipboard",
 	"AutoLoginPostUpdate", 		    
 	# "StayOnLockscreenPostUpdate",
+	"DisableVBS",
+	"EnableVBS",
 	"ChangesDone",
 
 ### Tasks & Services ###
@@ -1406,8 +1408,6 @@ Function UninstallerGUI {
         $Button.Content = "Uninstall"
     })
 
-    preventfreeze
-
     # Button Click Event.
     $Button.Add_Click({DeleteButton})
     #endregion Events Handlers.
@@ -2557,7 +2557,40 @@ Function StayOnLockscreenPostUpdate {
 	print "Turned off Automatic login after applying updates."
 }
 
+Function DisableVBS {
+	space
+	# Check if current processor supports MBEC (https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity)
+	# This function disables Virtualization based security if your device's processor does not support MBEC. On unsupported processors, MBEC is emulated which taxes CPU performance.
+	$mbecvalue = Get-CimInstance -ClassName Win32_DeviceGuard -Namespace root\Microsoft\Windows\DeviceGuard | Select-Object AvailableSecurityProperties
+	if ($mbecvalue -contains 7)
+	{
+		$mbec = $true
+	}
+	else 
+	{
+		$mbec = $false   
+	}
+	if ($mbec -eq $true)
+	{
+		return
+	}
+	print "Turning off Virtualization-based security..."
+	print "  This processor does not natively support MBEC. Emulating it will result in bigger impact on performance on MBEC-unsupported CPUs."
+	print "See https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity."
+	Start-Sleep -Milliseconds 400
+	# Disable Memory Integrity Core isolation (this needs to be disabled in order to disable VBS)
+	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" -Name "Enabled" -Type DWord -Value 0
+	# Disable VBS
+	bcdedit.exe /set hypervisorlaunchtype off | Out-Null
+	print "Turned off Virtualization-based security."
+}
 
+Function EnableVBS {
+	print "Turning on Virtualization-based security..."
+	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" -Name "Enabled" -Type DWord -Value 1
+	bcdedit.exe /set hypervisorlaunchtype auto | Out-Null
+	print "Turned on Virtualization-based security."
+}
 
 ####################################
 ######### TASKS & SERVICES #########
