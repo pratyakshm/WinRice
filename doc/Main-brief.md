@@ -77,6 +77,16 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 - Clipboard history
 </details>
 
+# Security
+
+### Virtualization-based Security
+Virtualization-based security, or VBS, uses hardware virtualization features to create and isolate a secure region of memory from the normal operating system. 
+Virtualization-based security causes big performance impact in devices that do not support, amongst many other things, MBEC. In MBEC-unsupported devices, its behavior is emulated which causes the impact.
+
+Hence, WinRice turns off Virtualization-based security on MBEC-unsuppported devices.
+
+See more at [Enable virtualization-based protection of code integrity - docs.microsoft.com](https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity).
+
 # System
 
 ### Turn Off the Following Tasks:
