@@ -87,6 +87,14 @@ Hence, WinRice turns off Virtualization-based security on MBEC-unsuppported devi
 
 See more at [Enable virtualization-based protection of code integrity - docs.microsoft.com](https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity).
 
+### Windows WDigest Credential Caching
+
+Digest Authentication is a challenge/response protocol that was primarily used in Windows Server 2003 for LDAP and web-based authentication. It utilizes Hypertext Transfer Protocol (HTTP) and Simple Authentication Security Layer (SASL) exchanges to authenticate. 
+
+This is where WDigest comes into play, something to be concerned with related to WDigest is that it stores passwords in clear-text, in memory. If a malicious user has access to an endpoint and is able to run a tool like Mimikatz, not only would they get the hashes currently stored in memory, but they’d also be able to get the clear-text password for the accounts as well. 
+
+See more at [What is Digest Authentication?: Logon and Authentication - docs.microsoft.com](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc778868(v%3dws.10))
+
 # System
 
 ### Turn Off the Following Tasks:

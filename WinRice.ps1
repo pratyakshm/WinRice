@@ -77,6 +77,8 @@ $tasks = @(
 	# "StayOnLockscreenPostUpdate",
 	"DisableVBS",
 	"EnableVBS",
+	"DisableCredentialCache",
+	"EnableCredentialCache",
 	"ChangesDone",
 
 ### Tasks & Services ###
@@ -2591,6 +2593,26 @@ Function EnableVBS {
 	bcdedit.exe /set hypervisorlaunchtype auto | Out-Null
 	print "Turned on Virtualization-based security."
 }
+
+# Disables Windows WDigest credential caching (https://stealthbits.com/blog/wdigest-clear-text-passwords-stealing-more-than-a-hash/).
+Function DisableLogonCredential {
+	space
+	print "Turning off Windows WDigest credential caching..."
+	# https://stealthbits.com/blog/wdigest-clear-text-passwords-stealing-more-than-a-hash/
+	Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\SecurityProviders\Wdigest" -Name "UseLogonCredential" -Type "DWORD" -Value 0
+	print "Turned off Windows WDigest credential caching."
+}
+
+# Enables Windows WDigest credential caching.
+Function EnableLogonCredential {
+	space
+	print "Turning on Windows WDigest credential caching..."
+	Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\SecurityProviders\Wdigest" -Name "UseLogonCredential" -Type "DWORD" -Value 1
+	print "Turned on Windows WDigest credential caching."
+}
+
+
+
 
 ####################################
 ######### TASKS & SERVICES #########
