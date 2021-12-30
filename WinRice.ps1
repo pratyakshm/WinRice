@@ -2563,16 +2563,8 @@ Function DisableVBS {
 	space
 	# Check if current processor supports MBEC (https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity)
 	# This function disables Virtualization based security if your device's processor does not support MBEC. On unsupported processors, MBEC is emulated which taxes CPU performance.
-	$mbecvalue = Get-CimInstance -ClassName Win32_DeviceGuard -Namespace root\Microsoft\Windows\DeviceGuard | Select-Object AvailableSecurityProperties
-	if ($mbecvalue -contains 7)
-	{
-		$mbec = $true
-	}
-	else 
-	{
-		$mbec = $false   
-	}
-	if ($mbec -eq $true)
+	$mbec = Get-CimInstance -ClassName Win32_DeviceGuard -Namespace root\Microsoft\Windows\DeviceGuard | Select-Object AvailableSecurityProperties
+	if ($mbec -contains 7)
 	{
 		return
 	}
@@ -2611,6 +2603,22 @@ Function EnableLogonCredential {
 	print "Turned on Windows WDigest credential caching."
 }
 
+# Disable LLMNR (https://www.blackhillsinfosec.com/how-to-disable-llmnr-why-you-want-to/).
+Function DisableLLMNR {
+	space
+	print "Turning off LLMNR..."
+	New-Item -Path "HKLM:\Software\Policies\Microsoft\Windows NT\" -Name "DNSClient" -Force | Out-Null
+	Set-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\Windows NT\DNSClient" -Name "EnableMulticast" -Type "DWORD" -Value 0 -Force | Out-Null
+	print "Turned off LLMNR."
+}
+
+# Enable LLMNR
+Function EnableLLMNR {
+	space
+	print "Turning on LLMNR..."
+	Remove-Item -Path "HKLM:\Software\Policies\Microsoft\Windows NT\DNS Client" | Out-Null
+	print "Turned on LLMNR."
+}
 
 
 
