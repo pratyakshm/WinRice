@@ -83,7 +83,7 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 Virtualization-based security, or VBS, uses hardware virtualization features to create and isolate a secure region of memory from the normal operating system. 
 Virtualization-based security causes big performance impact in devices that do not support, amongst many other things, MBEC. In MBEC-unsupported devices, its behavior is emulated which causes the impact.
 
-Hence, WinRice turns off Virtualization-based security on MBEC-unsuppported devices.
+Hence, WinRice disables Virtualization-based security on MBEC-unsuppported devices.
 
 See more at [Enable virtualization-based protection of code integrity - docs.microsoft.com](https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity).
 
@@ -93,7 +93,17 @@ Digest Authentication is a challenge/response protocol that was primarily used i
 
 This is where WDigest comes into play, something to be concerned with related to WDigest is that it stores passwords in clear-text, in memory. If a malicious user has access to an endpoint and is able to run a tool like Mimikatz, not only would they get the hashes currently stored in memory, but they’d also be able to get the clear-text password for the accounts as well. 
 
-See more at [What is Digest Authentication?: Logon and Authentication - docs.microsoft.com](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc778868(v%3dws.10))
+Thus, WinRice disables WDiogest Credential Caching on all devices.
+
+See more at [What is Digest Authentication?: Logon and Authentication - docs.microsoft.com](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc778868(v%3dws.10)).
+
+### Link-Local Multicast Name Resolution
+LLMNR was (is) a protocol used that allowed name resolution without the requirement of a DNS server. It was (is) able to provide a hostname-to-IP based off a multicast packet sent across the network asking all listening Network-Interfaces to reply if they are authoritatively known as the hostname in the query. 
+Windows will use LLMNR in certain circumstances to identify certain machines on the network, such as file-servers. If Windows attempts to use LLMNR to identify the server of a file-share and it receives a reply, it will send the current user’s credentials directly to that server assuming it wouldn’t have replied if it wasn’t the authoritative file-server. If that LLMNR received response was actually an impersonator, Windows just disclosed that user’s credential hash to a third-party. What’s worse? The impersonator may forward that packet to the actual file-server, so the user never realizes anything is amiss.
+
+Thus, WinRice disables LLMNR on all devices.
+
+See more at [How to Disable LLMNR & Why You Want To - Black Hills Information Security - blackhillsinfosec.com](https://www.blackhillsinfosec.com/how-to-disable-llmnr-why-you-want-to/).
 
 # System
 
