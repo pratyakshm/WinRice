@@ -87,16 +87,16 @@ $tasks = @(
 	"TasksServices",
 	# "DisableStorageSense",		   
 	"EnableStorageSense",
-	"DisableReservedStorage",	   
-	# "EnableReservedStorage",
+	"DisableReserves",	   
+	# "EnableReserves",
 	"DisableAutoplay",             
 	# "EnableAutoplay",
 	"DisableAutorun",              
 	# "EnableAutorun",
 	"DisableHibernation",
 	# "EnableHibernation",
-	"SetBIOSTimeUTC",              
-	# "SetBIOSTimeLocal",
+	"BIOSTimeUTC",              
+	# "BIOSTimeLocal",
 	"EnableNumLock",			   
 	# "DisableNumLock",
 	"DisableServices",			   
@@ -123,20 +123,20 @@ $tasks = @(
 	# "SetExplorerQuickAccess",
     "Hide3DObjects",      		   
 	# "Restore3DObjects",
-	"HideSearchBar",			   
-	# "RestoreSearchBar"
+	"HideSearch",			   
+	# "RestoreSearch"
 	"HideTaskView",                
 	# "RestoreTaskView",
 	"HideCortana",			       
 	# "RestoreCortana",
 	"HideMeetNow",				   
 	# "RestoreMeetNow",
-	"DisableTaskbarFeed",		   
-	# "EnableTaskbarFeed",  (News and Interests)
-	"DisableWidgetsItem",
-	# "EnableWidgetsItem",
-	"DisableChatItem",
-	# "EnableChatItem",
+	"HideNI",		   
+	# "RestoreNI",  (News and Interests)
+	"HideWidgets",
+	# "RestoreWidgets",
+	"HideChat",
+	# "RestoreChat",
 	"ChangesDone",
 
 ###  Tasks after successful run ###
@@ -2717,7 +2717,7 @@ Function EnableHibernation {
 }
 
 # Set BIOS time to UTC.
-Function SetBIOSTimeUTC {
+Function BIOSTimeUTC {
 	space
 	print "Setting BIOS time to UTC..."
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name "RealTimeIsUniversal" -Type DWord -Value 1
@@ -2725,7 +2725,7 @@ Function SetBIOSTimeUTC {
 }
 
 # Set BIOS time to local time.
-Function SetBIOSTimeLocal {
+Function BIOSTimeLocal {
 	space
 	print "Setting BIOS time to Local time..."
 	Remove-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name "RealTimeIsUniversal" -ErrorAction SilentlyContinue
@@ -2768,7 +2768,7 @@ Function DisableStorageSense {
 }
 
 # Disable Reserved Storage. 
-Function DisableReservedStorage {
+Function DisableReserves {
 	space
 	print "Turning off Reserved Storage..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager" -Name "ShippedWithReserves" -Type DWord -Value 0
@@ -2776,7 +2776,7 @@ Function DisableReservedStorage {
 }
 
 # Enable Reserved Storage. 
-Function EnableReservedStorage {
+Function EnableReserves {
 	space
 	print "Turning on Reserved Storage..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager" -Name "ShippedWithReserves" -Type DWord -Value 1
@@ -3106,7 +3106,7 @@ Function Restore3DObjects {
 }
 
 # Hide Search bar from taskbar.
-Function HideSearchBar {
+Function HideSearch {
 	if ($CurrentBuild -lt 22000) 
 	{
 		space
@@ -3126,7 +3126,7 @@ Function HideSearchBar {
 }
 
 # Restore Search bar to taskbar.
-Function RestoreSearchBar {
+Function RestoreSearch {
 	if ($CurrentBuild -lt 22000) 
 	{
 		space
@@ -3220,7 +3220,7 @@ Function RestoreMeetNow {
 }
 
 # Turn off News and interests feed.
-Function DisableTaskbarFeed {
+Function HideNI {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
@@ -3236,7 +3236,7 @@ Function DisableTaskbarFeed {
 }
 
 # Turn on News and interests feed.
-Function EnableTaskbarFeed {
+Function RestoreNI {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
@@ -3251,7 +3251,7 @@ Function EnableTaskbarFeed {
 }
 
 # Disable Widgets item - Windows 11 only.
-function DisableWidgetsItem {
+function HideWidgets {
 	if ($CurrentBuild -lt 22000)
 	{
 		return
@@ -3264,7 +3264,7 @@ function DisableWidgetsItem {
 }
 
 # Enable Widgets item - Windows 11 only
-function EnableWidgetsItem {
+function RestoreWidgets {
 	if ($CurrentBuild -lt 22000)
 	{
 		return
@@ -3277,7 +3277,7 @@ function EnableWidgetsItem {
 }
 
 # Disable chat item - Windows 11 only
-function DisableChatItem {
+function HideChat {
 	if ($CurrentBuild -lt 22000)
 	{
 		return
@@ -3290,7 +3290,7 @@ function DisableChatItem {
 }
 
 # Enable Chat item - Windows 11 only
-function EnableChatItem {
+function RestoreChat {
 	if ($CurrentBuild -lt 22000)
 	{
 		return
