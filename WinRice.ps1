@@ -30,7 +30,6 @@ $tasks = @(
 	# "DisableSandbox",
 	"UninstallApps", "Activity", 
 	"WebApps",
-	"UninstallConnect",
 	"UnpinStartTiles", "Activity", 
 	"UnpinAppsFromTaskbar", 
 	"UninstallOneDrive", "Activity",
@@ -1593,20 +1592,6 @@ function WebApps {
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk"
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Word.lnk"
 	print "Removed Office web-apps."
-}
-	
-# Uninstall Connect app.
-Function UninstallConnect {
-	if (!(Get-AppxPackage Microsoft-PPIProjection-Package))  
-	{
-		return
-	}
-	Start-BitsTransfer https://github.com/WinRice/Files/raw/main/install_wim_tweak.exe
-	Start-BitsTransfer https://raw.githubusercontent.com/WinRice/Files/main/connect.cmd
-	./connect.cmd | Out-Null
-	Remove-Item install_wim_tweak.exe
-	Remove-Item connect.cmd
-	Remove-Item Packages.txt
 }
 
 # Unpin all start menu tiles.
