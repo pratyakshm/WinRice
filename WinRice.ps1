@@ -79,6 +79,8 @@ $tasks = @(
 	"EnableVBS",
 	"DisableCredentialCache",
 	"EnableCredentialCache",
+	"EnableSEHOP",
+	"DisableSEHOP",
 	"ChangesDone",
 
 ### Tasks & Services ###
@@ -2620,7 +2622,25 @@ Function EnableLLMNR {
 	print "Turned on LLMNR."
 }
 
+Function EnableSEHOP {
+	space
+	$SEHOP = "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"
+	$Enabled = Get-ItemPropertyValue -Path $SEHOP -Name DisableExceptionChainValidation
+	if ($Enabled -like 0)
+	{
+		return
+	}
+	print "Enabling Structured Exception Handling Overwrite Protection..."
+	New-ItemProperty -Path $SEHOP -Type DWord -Name DisableExceptionChainValidation -Value 0 -Force | Out-Null
+	print "Enabled Structured Exception Handling Overwrite Protection."
+}
 
+Function DisableSEHOP {
+	space
+	print "Disabling Structured Exception Handling Overwrite Protection..."
+	Remove-ItemProperty -Path $SEHOP -Type DWord -Name DisableExceptionChainValidation | Out-Null
+	print "Disabled Structured Exception Handling Overwrite Protection."
+}
 
 ####################################
 ######### TASKS & SERVICES #########
