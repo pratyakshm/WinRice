@@ -737,7 +737,7 @@ Function WinRice {
 	print "pratyakshm's WinRice - main branch"
 	Start-Sleep -Milliseconds 100
 	space
-	print "Copyright (c) Pratyaksh Mehrotra sand contributors"
+	print "Copyright (c) Pratyaksh Mehrotra and contributors"
 	Start-Sleep -Milliseconds 100
 	print "https://github.com/pratyakshm/WinRice"
 	Start-Sleep 1
