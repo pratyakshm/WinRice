@@ -12,7 +12,7 @@ $tasks = @(
 
 ### Apps & Features ###
 	"AppsFeatures",
-	"InstallVCLibs",
+	# "InstallVCLibs",
 	# "UninstallVCLibs",
 	"InstallWinGet",
 	"InstallNanaZip", 
@@ -859,9 +859,6 @@ $ProgressPreference = 'SilentlyContinue'
 		Set-Location WinRice
 	}
 	
-	# Cleanup currently installed packages.
-	Get-AppxPackage *VCLibs.140.00* | Remove-AppxPackage
-
 	# Download VCLibs.
 	print "Updating Visual C++ Libraries..."
 	$VCLibs = "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx"
