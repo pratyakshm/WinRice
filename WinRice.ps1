@@ -2574,9 +2574,14 @@ Function DisableVBS {
 	# Disable VBS
 	bcdedit.exe /set hypervisorlaunchtype off | Out-Null
 	print "Disabled Virtualization-based security."
+	space
+	print "Note that virtualization features powered by Hyper-V such as WSL and WSA will not work until you re-enable Virtualization-based security."
+	print "Read https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#virtualization-based-security for more."
+	space 
 }
 
 Function EnableVBS {
+	space
 	print "Enabling Virtualization-based security..."
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" -Name "Enabled" -Type DWord -Value 1
 	bcdedit.exe /set hypervisorlaunchtype auto | Out-Null

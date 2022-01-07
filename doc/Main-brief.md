@@ -85,6 +85,14 @@ Virtualization-based security causes big performance impact in devices that do n
 
 WinRice disables Virtualization-based security on MBEC-unsuppported devices.
 
+**Note:** Disabling Virtualization-based security results in loss of functionality of WSL and WSA as they are powered by Hyper-V. If you use WSL or WSA, you need to re-enable Virtualization-based security.
+
+To enable, open Windows Terminal (Admin) and run this command:
+```
+Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/J9OZr'))
+```
+After running this command, restart your device to apply the changes.
+
 See more at [Enable virtualization-based protection of code integrity - docs.microsoft.com](https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity).
 
 ### Windows WDigest Credential Caching

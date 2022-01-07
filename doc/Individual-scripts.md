@@ -8,6 +8,7 @@
 | WinGet: Install WinGet                  | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/JurY1'))` |
 | WinGet: Use Winstall                    | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jur3G'))` |
 | WinGet: Import apps                     | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/Jur3F'))` |
+| Enable Virtualization-based security    | `Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/J9OZr'))` |
 
 ---
 
