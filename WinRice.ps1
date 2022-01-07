@@ -80,6 +80,8 @@ $tasks = @(
 	"EnableCredentialCache",
 	"EnableSEHOP",
 	"DisableSEHOP",
+	"DisableWPAD",
+	"EnableWPAD",
 	"ChangesDone",
 
 ### Tasks & Services ###
@@ -2626,6 +2628,25 @@ Function DisableSEHOP {
 	Remove-ItemProperty -Path $SEHOP -Type DWord -Name DisableExceptionChainValidation | Out-Null
 	print "Disabled Structured Exception Handling Overwrite Protection."
 }
+
+Function DisableWPAD {
+	space
+	print "Disabling Web Proxy Auto-Discovery..."
+	New-Item -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" -Name "Wpad" -Force | Out-Null
+    New-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad" -Name "Wpad" -Force | Out-Null
+    Set-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad" -Name "WpadOverride" -Type "DWORD" -Value 1 -Force
+    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad" -Name "WpadOverride" -Type "DWORD" -Value 1 -Force
+	print "Disabled Web Proxy Auto-Discovery."
+}
+
+Function EnableWPAD {
+	space
+	print "Enabling Web Proxy Auto-Discovery..."
+	Remove-Item -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" -Name "Wpad" -Force | Out-Null
+    Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad" -Name "Wpad" -Force | Out-Null
+	print "Enabled Web Proxy Auto-Discovery."
+}
+
 
 ####################################
 ######### TASKS & SERVICES #########

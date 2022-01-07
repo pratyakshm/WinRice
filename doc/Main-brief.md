@@ -112,6 +112,21 @@ WinRice enables Structured Exception Handling Overwrite Protection on all device
 
 See more at [How to enable Structured Exception Handling Overwrite Protection (SEHOP) in Windows operating systems - support.microsoft.com](https://support.microsoft.com/en-us/topic/how-to-enable-structured-exception-handling-overwrite-protection-sehop-in-windows-operating-systems-8d4595f7-827f-72ee-8c34-fa8e0fe7b915).
 
+### Web Proxy Auto-Discovery
+
+WPAD is a protocol, developed in 1999 by people from Microsoft and other technology companies, that allows computers to automatically discover which web proxy they should use. The proxy is defined in a JavaScript file called a proxy auto-config (PAC) file.
+
+The location of PAC files can be discovered through WPAD in several ways: through a special Dynamic Host Configuration Protocol (DHCP) option, through local Domain Name System (DNS) lookups, or through Link-Local Multicast Name Resolution (LLMNR).
+
+Attackers can abuse these options to supply computers on a local network with a PAC file that specifies a rogue web proxy under their control. This can be done on an open wireless network or if the attackers compromise a router or access point.
+
+WinRice disables Web Proxy Auto-Discovery or WPAD on all devices.
+
+See more at [Disable WPAD now or have your accounts and private data compromised - csoonline.com](https://www.csoonline.com/article/3106076/disable-wpad-now-or-have-your-accounts-and-private-data-compromised.html).
+
+Also read: [Disable WPAD on Your PC So Your HTTPS Traffic Won't Be Vulnerable to the Latest SSL Attack -null-byte.wonderhowto.com](https://null-byte.wonderhowto.com/how-to/disable-wpad-your-pc-so-your-https-traffic-wont-be-vulnerable-latest-ssl-attack-0172499).
+
+
 # System
 
 ### Turn Off the Following Tasks:
