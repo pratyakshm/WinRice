@@ -401,7 +401,7 @@ if ( (-not($BuildBranch -like "rs_prerelease")) -and (Get-WindowsEdition -Online
 {
 	$dwu = "y"
 	$au = "y"
-	print "  Windows automatic updates will be turned off."
+	print "  Windows automatic updates will be disabled."
 	print "  Windows quality updates will be delayed by 4 days and feature updates will be delayed by 20 days."
 }
 elseif ($BuildBranch -like "rs_prerelease")
@@ -572,7 +572,7 @@ if (!(check($customize)))
 		Start-Sleep -Milliseconds 100
 		if (check($au))
 		{
-			print "  Windows automatic updates will be turned off."
+			print "  Windows automatic updates will be disabled."
 		}
 		elseif (!(check($au)))
 		{
@@ -683,7 +683,7 @@ if (!(check($customize)))
 	
 	if (check($au))
 	{
-		Write-Host "Windows automatic updates will be turned off." -ForegroundColor DarkCyan
+		Write-Host "Windows automatic updates will be disabled." -ForegroundColor DarkCyan
 	}
 	elseif (!(check($au)))
 	{
@@ -2121,49 +2121,49 @@ Function PrivacySecurity {
 # Disable Activity History.
 Function DisableActivityHistory {
 	space
-	print "Turning off Activity History..."
+	print "Disabling Activity History..."
 	$ActivityFeed = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
 	Set-ItemProperty -Path $ActivityFeed -Name "EnableActivityFeed" -Type DWord -Value 0
 	Set-ItemProperty -Path $ActivityFeed -Name "PublishUserActivities" -Type DWord -Value 0
 	Set-ItemProperty -Path $ActivityFeed -Name "UploadUserActivities" -Type DWord -Value 0	
-	print "Turned off Activity History."
+	print "Disabled Activity History."
 }
 
 # Enable Activity History.
 Function EnableActivityHistory {
-	print "Turning on Activity History..."
+	print "Enabling Activity History..."
 	$ActivityHistory = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
 	Set-ItemProperty -Path $ActivityHistory -Name "EnableActivityFeed" -Type DWord -Value 1
 	Set-ItemProperty -Path $ActivityHistory -Name "PublishUserActivities" -Type DWord -Value 1
 	Set-ItemProperty -Path $ActivityHistory -Name "UploadUserActivities" -Type DWord -Value 1
-	print "Turned on Activity History."
+	print "Enabled Activity History."
 }
 
 # Disable Advertising ID.
 Function DisableAdvertisingID {
 	space
-	print "Turning off Advertising ID..."
+	print "Disabling Advertising ID..."
 	$AdvertisingID = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
 	if (!(Test-Path $AdvertisingID)) 
 	{
 		New-Item -Path $AdvertisingID | Out-Null
 	}
 	Set-ItemProperty -Path $AdvertisingID -Name "DisabledByGroupPolicy" -Type DWord -Value 1
-	print "Turned off Advertising ID."
+	print "Disabled Advertising ID."
 }
 
 # Enable Advertising ID.
 Function EnableAdvertisingID {
-	print "Turning on Advertising ID..."
+	print "Enabling Advertising ID..."
 	$Advertising = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
 	Remove-ItemProperty -Path $Advertising -Name "DisabledByGroupPolicy" -ErrorAction SilentlyContinue
-	print "Turned on Advertising ID."
+	print "Enabled Advertising ID."
 }
 
 # Disable Background apps (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Sophia.psm1#L8988-L9033).
 Function DisableBackgroundApps {
 	space
-	print "Turning off Background apps..."
+	print "Disabling Background apps..."
 	Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process 
 	{
 		Remove-ItemProperty -Path $_.PsPath -Name * -Force
@@ -2187,17 +2187,17 @@ Function DisableBackgroundApps {
 			New-ItemProperty -Path $_.PsPath -Name DisabledByUser -PropertyType DWord -Value 1 -Force | Out-Null
 		}
 		$OFS = " "
-	print "Turned off Background apps."
+	print "Disabled Background apps."
 }
 
 # Enable Background apps.
 Function EnableBackgroundApps {
-	print "Turning on Background apps..."
+	print "Enabling Background apps..."
 	Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process 
 	{
 		Remove-ItemProperty -Path $_.PsPath -Name * -Force
 	}
-	print "Turned on Background apps."
+	print "Enabled Background apps."
 }
 
 # Disable Windows Error Reporting 
@@ -2208,16 +2208,16 @@ function DisableErrorReporting {
 		print "Error reporting will be left unchanged in Windows pre-release software."
 		return
 	}
-		print "Turning off Windows Error Reporting..."
+		print "Disabling Windows Error Reporting..."
 		Disable-WindowsErrorReporting | Out-Null
-		print "Turned off Windows Error Reporting."
+		print "Disabled Windows Error Reporting."
 }
 
 # Enable Windows Error Reporting 
 function EnableErrorReporting {
-	print "Turning on Windows Error Reporting..."
+	print "Enabling Windows Error Reporting..."
 	Enable-WindowsErrorReporting | Out-Null
-	print "Turned on Windows Error Reporting."
+	print "Enabled Windows Error Reporting."
 }
 
 # Disable Feedback.
@@ -2229,7 +2229,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		print "Feedback notifications will be left unchanged in Windows pre-release software."
 		return
 	}
-	print "Turning off Feedback notifications..."
+	print "Disabling Feedback notifications..."
 	$Feedback1 = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
 	$Feedback2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
 	$Feedback3 = "Microsoft\Windows\Feedback\Siuf\DmClient"
@@ -2246,12 +2246,12 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Set-ItemProperty -Path $Feedback2 -Name "DoNotShowFeedbackNotifications" -Type DWord -Value 1
 	Disable-ScheduledTask -TaskName $Feedback3 | Out-Null
 	Disable-ScheduledTask -TaskName $Feedback4 | Out-Null
-	print "Turned off Feedback notifications."
+	print "Disabled Feedback notifications."
 }
 
 # Enable Feedback.
 Function EnableFeedback {
-	print "Turning on Feedback notifications..."
+	print "Enabling Feedback notifications..."
 	$Feedback1 = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
 	$Feedback2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
 	$Feedback3 = "Microsoft\Windows\Feedback\Siuf\DmClient"
@@ -2264,13 +2264,13 @@ Function EnableFeedback {
 	Remove-ItemProperty -Path $Feedback2 -Name "DoNotShowFeedbackNotifications"
 	Enable-ScheduledTask -TaskName $Feedback3 | Out-Null
 	Enable-ScheduledTask` -TaskName $Feedback4 | Out-Null
-	print "Turned on Feedback notifications."
+	print "Enabled Feedback notifications."
 }
 
 # Disable inking personalization.
 Function DisableInkHarvesting {
 	space
-	print "Turning off Inking & typing personalization..."
+	print "Disabling Inking & typing personalization..."
 	$Ink1 = "HKCU:\Software\Microsoft\InputPersonalization"
 	$Ink2 = "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore"
 	$Ink3 = "HKCU:\Software\Microsoft\Personalization\Settings"
@@ -2281,13 +2281,13 @@ Function DisableInkHarvesting {
 	New-ItemProperty -Path $Ink1 -Name "RestrictImplicitInkCollection" -Type DWord -Value 1 -Force | Out-Null 
 	Set-ItemProperty -Path $Ink2 -Name "HarvestContacts" -Type DWord -Value 0
 	Set-ItemProperty -Path $Ink3 -Name "AcceptedPrivacyPolicy" -Type DWord -Value 0
-	print "Turned off Inking & typing personalization."
+	print "Disabled Inking & typing personalization."
 }
 
 # Enable inking personalization. 
 Function EnableInkHarvesting {
 	space
-	print "Turning on Inking & typing personalization..."
+	print "Enabling Inking & typing personalization..."
 	$Ink1 = "HKCU:\Software\Microsoft\InputPersonalization"
 	$Ink2 = "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore"
 	$Ink3 = "HKCU:\Software\Microsoft\Personalization\Settings"
@@ -2298,31 +2298,31 @@ Function EnableInkHarvesting {
 	New-ItemProperty -Path $Ink1 -Name "RestrictImplicitInkCollection" -Type DWord -Value 0 -Force | Out-Null 
 	Set-ItemProperty -Path $Ink2 -Name "HarvestContacts" -Type DWord -Value 1
 	Set-ItemProperty -Path $Ink3 -Name "AcceptedPrivacyPolicy" -Type DWord -Value 1
-	print "Turned on Inking & typing personalization."
+	print "Enabled Inking & typing personalization."
 }
 
 # Disable "Let websites provide locally relevant content by accessing my language list".
 Function DisableLangAccess {
 	space
-	print "Turning off websites' ability to provide you with locally relevant content by accessing your language list..."
+	print "Disabling websites' ability to provide you with locally relevant content by accessing your language list..."
 	$LangAccess = "HKCU:\Control Panel\International\User Profile"
 	Remove-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -ErrorAction SilentlyContinue | Out-Null
 	New-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 1 | Out-Null
-	print "Turned off websites' ability to provide you with locally relevant content by accessing your language list."
+	print "Disabled websites' ability to provide you with locally relevant content by accessing your language list."
 }
 
 # Enable "Let websites provide locally relevant content by accessing my language list".
 Function EnableLangAccess {
-	print "Turning on websites' ability to provide you with locally relevant content by accessing your language list..."
+	print "Enabling websites' ability to provide you with locally relevant content by accessing your language list..."
 	$LangAccess = "HKCU:\Control Panel\International\User Profile"
 	Set-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 0
-	print "Turned on websites' ability to provide you with locally relevant content by accessing your language list."
+	print "Enabled websites' ability to provide you with locally relevant content by accessing your language list."
 }
 
 # Disable Location Tracking.
 Function DisableLocationTracking {
 	space
-	print "Turning off location tracking..."
+	print "Disabling location tracking..."
 	$Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
 	$Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
 	if (!(Test-Path $Location1)) 
@@ -2331,13 +2331,13 @@ Function DisableLocationTracking {
 	}
 	Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Deny"
 	Set-ItemProperty -Path $Location2 -Name "SensorPermissionState" -Type DWord -Value 0
-	print "Turned off Location tracking."
+	print "Disabled Location tracking."
 }
 
 # Enable location tracking.
 Function EnableLocationTracking {
 	space
-	print "Turning on Location tracking..."
+	print "Enabling Location tracking..."
 	$Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
 	$Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
 	if (!(Test-Path )) 
@@ -2346,29 +2346,29 @@ Function EnableLocationTracking {
 	}
 	Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Allow"
 	Set-ItemProperty -Path $Location2 -Name "SensorPermissionState" -Type DWord -Value 1
-	print "Turned on Location tracking."
+	print "Enabled Location tracking."
 }
 
 # Disable automatic Maps updates.
 Function DisableMapUpdates {
 	space
-	print "Turning off automatic Maps updates..."
+	print "Disabling automatic Maps updates..."
 	Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 0
-	print "Turned off automatic Maps updates."
+	print "Disabled automatic Maps updates."
 }
 
 # Enable maps updates.
 Function EnableMapsUpdates {
 	space
-	print "Turning on automatic Maps updates..."
+	print "Enabling automatic Maps updates..."
 	Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 1
-	print "Turned on automatic Maps updates."
+	print "Enabled automatic Maps updates."
 }
 
 # Disable Speech Recognition.
 Function DisableSpeechRecognition {
 	space
-	print "Turning off Online Speech recognition..."
+	print "Disabling Online Speech recognition..."
 	$Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
 	if (!(Test-Path $Speech)) 
 	{
@@ -2376,58 +2376,58 @@ Function DisableSpeechRecognition {
 	}
 	Remove-ItemProperty -Path $Speech -Name "HasAccepted" -ErrorAction SilentlyContinue
 	New-ItemProperty -Path $Speech -Name "HasAccepted" -Type DWord -Value 0 -ErrorAction SilentlyContinue | Out-Null
-	print "Turned off Online Speech recognition."
+	print "Disabled Online Speech recognition."
 }
 
 # Enable speech recognition. 
 Function EnableSpeechRecognition {
 	space
-	print "Turning on Speech recognition..."
+	print "Enabling Speech recognition..."
 	$Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
 	if (!(Test-Path )) 
 	{
 		New-Item -Path $Speech | Out-Null
 	}
 	Set-ItemProperty -Path $Speech -Name "HasAccepted" -Type DWord -Value 1
-	print "Turned on Online Speech recognition"
+	print "Enabled Online Speech recognition"
 }
 
 # Disable silent installation of recommended apps.
 Function DisableSilentInstallApps {
 	space
-	print "Turning off silent installation of suggested apps..."
+	print "Disabling silent installation of suggested apps..."
 	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SilentInstalledAppsEnabled -Type DWord -Value 1
-	print "Turned off silent installation of suggested apps."
+	print "Disabled silent installation of suggested apps."
 }
 
 # Enable silent installation of recommended apps.
 Function EnableSilentInstallApps {
 	space
-	print "Turning on silent installation of suggested apps..."
+	print "Enabling silent installation of suggested apps..."
 	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SilentInstalledAppsEnabled -Type DWord -Value 1
-	print "Turned on silent installation of suggested apps."
+	print "Enabled silent installation of suggested apps."
 }
 
 # Disable "Show suggested content in Settings app"
 Function HideSuggestedContentInSettings {
 	space
-	print "Turning off suggested content in Settings app..."
+	print "Disabling suggested content in Settings app..."
 	$CDN = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
 	Set-ItemProperty -Path $CDN -Name SubscribedContent-353694Enabled -Type DWord -Value 0
 	Set-ItemProperty -Path $CDN -Name SubscribedContent-353696Enabled -Type DWord -Value 0
 	Set-ItemProperty -Path $CDN -Name SubscribedContent-338393Enabled -Type DWord -Value 0
-	print "Turned off suggested content in Settings app."
+	print "Disabled suggested content in Settings app."
 }
 
 # Enable "Show suggested content in Settings app"
 Function ShowSuggestedContentInSettings {
 	space
-	print "Turning on suggested content in Settings app..."
+	print "Enabling suggested content in Settings app..."
 	$CDN = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
 	Set-ItemProperty -Path $CDN -Name SubscribedContent-353694Enabled -Type DWord -Value 1
 	Set-ItemProperty -Path $CDN -Name SubscribedContent-353696Enabled -Type DWord -Value 1
 	Set-ItemProperty -Path $CDN -Name SubscribedContent-338393Enabled -Type DWord -Value 1
-	print "Turned on suggested content in Settings app."
+	print "Enabled suggested content in Settings app."
 }
 
 # Disable "Show me suggested content in Start menu".
@@ -2437,9 +2437,9 @@ Function HideSuggestedContentInStart {
 		return
 	}
 	space 
-	print "Turning off suggested content in Start menu..."
+	print "Disabling suggested content in Start menu..."
 	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 0
-	print "Turned off suggested content in Start menu."
+	print "Disabled suggested content in Start menu."
 }
 
 # Enable "Show me suggested content in Start menu".
@@ -2449,15 +2449,15 @@ Function ShowSuggestedContentInStart {
 		return
 	}
 	space 
-	print "Turning on Suggested content in Start menu..."
+	print "Enabling Suggested content in Start menu..."
 	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 1
-	print "Turned on Suggested content in Start menu."
+	print "Enabled Suggested content in Start menu."
 }
 
 # Disable Tailored experiences.
 Function DisableTailoredExperiences {
 	space
-	print "Turning off Tailored experiences..."
+	print "Disabling Tailored experiences..."
 	$TailoredExp1 = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
 	$TailoredExp2 = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting"
 	if (!(Test-Path $CloudContent )) 
@@ -2466,18 +2466,18 @@ Function DisableTailoredExperiences {
 	}
 	Set-ItemProperty -Path $TailoredExp1 -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
 	Set-ItemProperty -Path $TailoredExp2 -Name "Disabled" -Type DWord -Value 1
-	print "Turned off Tailored experiences."
+	print "Disabled Tailored experiences."
 }
 
 # Enable Tailored experiences.
 Function EnableTailoredExperiences {
 	space
-	print "Turning on Tailored experiences..."
+	print "Enabling Tailored experiences..."
 	$TailoredExp1 = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
 	$TailoredExp2 = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting"
 	Remove-ItemProperty -Path $TailoredExp1 -Name "DisableTailoredExperiencesWithDiagnosticData" -ErrorAction SilentlyContinue
 	Remove-ItemProperty -Path $TailoredExp2 -Name "Disabled" -ErrorAction SilentlyContinue
-	print "Turned on Tailed experiences."
+	print "Enabled Tailed experiences."
 }
 
 # Disable Telemetry. 
@@ -2488,36 +2488,36 @@ Function DisableTelemetry {
 		print "Telemetry settings will be left unchanged in Windows pre-release software."
 		return
 	}
-	print "Turning off telemetry..."
+	print "Disabling telemetry..."
 	$Telemetry1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
 	$Telemetry2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
 	$Telemetry3 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
 	Set-ItemProperty -Path $Telemetry1 -Name "AllowTelemetry" -Type DWord -Value 0
 	Set-ItemProperty -Path $Telemetry2 -Name "AllowTelemetry" -Type DWord -Value 0
 	Set-ItemProperty -Path $Telemetry3 -Name "AllowTelemetry" -Type DWord -Value 0
-	print "Turned off telemetry."
+	print "Disabled telemetry."
 }
 
 # Enable Telemetry.
 Function EnableTelemetry {
 	space
-	print "Turning on Telemetry..."
+	print "Enabling Telemetry..."
 	$Telemetry1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
 	$Telemetry2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
 	$Telemetry3 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
 	Set-ItemProperty -Path $Telemetry1  -Name "AllowTelemetry" -Type DWord -Value 3
 	Set-ItemProperty -Path $Telemetry2 -Name "AllowTelemetry" -Type DWord -Value 3
 	Set-ItemProperty -Path $Telemetry3 -Name "AllowTelemetry" -Type DWord -Value 3
-	print "Turned off telemetry."
+	print "Disabled telemetry."
 }
 
 # Enable Clipboard History.
 Function EnableClipboard {
 	space
-	print "Turning on Clipboard History..."
+	print "Enabling Clipboard History..."
 	$Clipboard = "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Clipboard"
 	Set-ItemProperty -Path $Clipboard -Name "EnableClipboardHistory" -Value 1 -ErrorAction SilentlyContinue
-	print "Turned on Clipboard History."
+	print "Enabled Clipboard History."
     Start-Sleep 1
     Set-Clipboard "Demo text by WinRice."
 	print "You can now copy multiple items to your clipboard."
@@ -2528,24 +2528,24 @@ Function EnableClipboard {
 # Disable Clipboard History.
 Function DisableClipboard {
 	space
-	print "Turning off Clipboard History..."
+	print "Disabling Clipboard History..."
 	$Clipboard = "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Clipboard"
 	Set-ItemProperty -Path $Clipboard -Name "EnableClipboardHistory" -Value 0 -ErrorAction SilentlyContinue
-	print "Turned off Clipboard History."
+	print "Disabled Clipboard History."
 }
 
 Function AutoLoginPostUpdate {
 	space
-	print "Turning on automatic login post updates..."
+	print "Enabling automatic login post updates..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 1
-	print "Turned on Automatic login applying updates"
+	print "Enabled Automatic login applying updates"
 } 
 
 Function StayOnLockscreenPostUpdate {
 	space
-	print "Turning off automatic login post updates..."
+	print "Disabling automatic login post updates..."
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent"
-	print "Turned off Automatic login after applying updates."
+	print "Disabled Automatic login after applying updates."
 }
 
 Function DisableVBS {
@@ -2557,7 +2557,7 @@ Function DisableVBS {
 	{
 		return
 	}
-	print "Turning off Virtualization-based security..."
+	print "Disabling Virtualization-based security..."
 	print "  This processor does not natively support MBEC. Emulating it will result in bigger impact on performance on MBEC-unsupported CPUs."
 	print "See https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity."
 	Start-Sleep -Milliseconds 400
@@ -2565,48 +2565,48 @@ Function DisableVBS {
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" -Name "Enabled" -Type DWord -Value 0
 	# Disable VBS
 	bcdedit.exe /set hypervisorlaunchtype off | Out-Null
-	print "Turned off Virtualization-based security."
+	print "Disabled Virtualization-based security."
 }
 
 Function EnableVBS {
-	print "Turning on Virtualization-based security..."
+	print "Enabling Virtualization-based security..."
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" -Name "Enabled" -Type DWord -Value 1
 	bcdedit.exe /set hypervisorlaunchtype auto | Out-Null
-	print "Turned on Virtualization-based security."
+	print "Enabled Virtualization-based security."
 }
 
 # Disables Windows WDigest credential caching (https://stealthbits.com/blog/wdigest-clear-text-passwords-stealing-more-than-a-hash/).
 Function DisableLogonCredential {
 	space
-	print "Turning off Windows WDigest credential caching..."
+	print "Disabling Windows WDigest credential caching..."
 	# https://stealthbits.com/blog/wdigest-clear-text-passwords-stealing-more-than-a-hash/
 	Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\SecurityProviders\Wdigest" -Name "UseLogonCredential" -Type "DWORD" -Value 0
-	print "Turned off Windows WDigest credential caching."
+	print "Disabled Windows WDigest credential caching."
 }
 
 # Enables Windows WDigest credential caching.
 Function EnableLogonCredential {
 	space
-	print "Turning on Windows WDigest credential caching..."
+	print "Enabling Windows WDigest credential caching..."
 	Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\SecurityProviders\Wdigest" -Name "UseLogonCredential" -Type "DWORD" -Value 1
-	print "Turned on Windows WDigest credential caching."
+	print "Enabled Windows WDigest credential caching."
 }
 
 # Disable LLMNR (https://www.blackhillsinfosec.com/how-to-disable-llmnr-why-you-want-to/).
 Function DisableLLMNR {
 	space
-	print "Turning off LLMNR..."
+	print "Disabling LLMNR..."
 	New-Item -Path "HKLM:\Software\Policies\Microsoft\Windows NT\" -Name "DNSClient" -Force | Out-Null
 	Set-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\Windows NT\DNSClient" -Name "EnableMulticast" -Type "DWORD" -Value 0 -Force | Out-Null
-	print "Turned off LLMNR."
+	print "Disabled LLMNR."
 }
 
 # Enable LLMNR
 Function EnableLLMNR {
 	space
-	print "Turning on LLMNR..."
+	print "Enabling LLMNR..."
 	Remove-Item -Path "HKLM:\Software\Policies\Microsoft\Windows NT\DNS Client" | Out-Null
-	print "Turned on LLMNR."
+	print "Enabled LLMNR."
 }
 
 Function EnableSEHOP {
@@ -2664,38 +2664,38 @@ Function TasksServices {
 # Disable Autoplay.
 Function DisableAutoplay {
 	space
-	print "Turning off AutoPlay..."
+	print "Disabling AutoPlay..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -Name "DisableAutoplay" -Type DWord -Value 1
-	print "Turned off AutoPlay."
+	print "Disabled AutoPlay."
 }
 
 # Enable Autoplay.
 Function EnableAutoplay {
 	space
-	print "Turning on Autoplay..."
+	print "Enabling Autoplay..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -Name "DisableAutoplay" -Type DWord -Value 0
-	print "Turned on AutoPlay."
+	print "Enabled AutoPlay."
 }
 
 # Disable Autorun for all drives.
 Function DisableAutorun {
 	space
-	print "Turning off Autorun for all drives..."
+	print "Disabling Autorun for all drives..."
 	$Autorun = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
 	if (!(Test-Path $Autorun)) 
 	{
 		New-Item -Path $Autorun | Out-Null
 	}
 	Set-ItemProperty -Path $Autorun -Name "NoDriveTypeAutoRun" -Type DWord -Value 255
-	print "Turned off Autorun for all drives."
+	print "Disabled Autorun for all drives."
 }
 
 # Enable Autorun for removable drives.
 Function EnableAutorun {
 	space
-	print "Turning on Autorun for all drives..."
+	print "Enabling Autorun for all drives..."
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoDriveTypeAutoRun" -ErrorAction SilentlyContinue
-	print "Turned on Autorun for all drives."
+	print "Enabled Autorun for all drives."
 }
 
 # Disable Hiberfile.sys
@@ -2705,9 +2705,9 @@ Function DisableHibernation {
 		return
 	}
 	space 
-	print "Turning off hibernation..."
+	print "Disabling hibernation..."
 	powercfg.exe -h off
-	print "Turned off hibernation."
+	print "Disabled hibernation."
 }
 
 # Enable Hibernation
@@ -2717,9 +2717,9 @@ Function EnableHibernation {
 		return
 	}
 	space 
-	print "Turning on hibernation..."
+	print "Enabling hibernation..."
 	powercfg.exe -h on
-	print "Turned on hibernation."
+	print "Enabled hibernation."
 }
 
 # Set BIOS time to UTC.
@@ -2756,44 +2756,44 @@ Function DisableNumLock {
 # Enable Storage Sense. 
 Function EnableStorageSense {
 	space
-	print "Turning on Storage Sense..."
+	print "Enabling Storage Sense..."
 	$StorageSense = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
 	New-Item -Path $StorageSense -ItemType Directory -Force | Out-Null
 	New-ItemProperty -Path $StorageSense -Name 01 -PropertyType DWord -Value 1 -Force | Out-Null
-	print "Turned on Storage Sense."
+	print "Enabled Storage Sense."
 }
 
 # Disable Storage Sense.
 Function DisableStorageSense {
 	space
-	print "Turning off Storage Sense..."
+	print "Disabling Storage Sense..."
 	$StorageSense = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
 	New-Item -Path $StorageSense -ItemType Directory -Force | Out-Null
 	New-ItemProperty -Path $StorageSense -Name 01 -PropertyType DWord -Value 0 -Force | Out-Null
-	print "Turned off Storage Sense."
+	print "Disabled Storage Sense."
 }
 
 # Disable Reserved Storage. 
 Function DisableReserves {
 	space
-	print "Turning off Reserved Storage..."
+	print "Disabling Reserved Storage..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager" -Name "ShippedWithReserves" -Type DWord -Value 0
-	print "Turned off Reserved Storage."
+	print "Disabled Reserved Storage."
 }
 
 # Enable Reserved Storage. 
 Function EnableReserves {
 	space
-	print "Turning on Reserved Storage..."
+	print "Enabling Reserved Storage..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager" -Name "ShippedWithReserves" -Type DWord -Value 1
-	print "Turned on Reserved Storage."
+	print "Enabled Reserved Storage."
 }
 
 # Disable unessential services.
 Function DisableServices {
 $ErrorActionPreference = 'SilentlyContinue'
 	space
-	print "Turning off unessential services..."
+	print "Disabling unessential services..."
     	$Services = @(
 		"DiagTrack"
 		"SysMain"
@@ -2804,14 +2804,14 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Set-Service $Service -StartupType Disabled
 		print "    Stopped service: $Service."
 	}
-	print "Turned off unnecesarry services."
+	print "Disabled unnecesarry services."
 }
 
 # Enable unessential services.
 Function EnableServices {
 $ErrorActionPreference = 'SilentlyContinue'
 	space
-	print "Turning on unessential services..."
+	print "Enabling unessential services..."
     	$Services = @(
 		"DiagTrack"
 		"SysMain"
@@ -2822,13 +2822,13 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Set-Service $Service -StartupType Automatic
 		print "    Started service: $Service."
 	}
-	print "Turned on unessential services."
+	print "Enabled unessential services."
 }
 
 # Disable unessential scheduled tasks.
 Function DisableTasks {
 	space
-	print "Turning off unessential tasks..."
+	print "Disabling unessential tasks..."
 	$Tasks = @(
 		"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser"
 		"Microsoft\Windows\Application Experience\ProgramDataUpdater"
@@ -2844,9 +2844,9 @@ Function DisableTasks {
     ForEach ($Task in $Tasks) 
 	{
 		Disable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
-		print "    Turned off task: $Task."
+		print "    Disabled task: $Task."
 	}
-    print "Turned off unessential tasks."
+    print "Disabled unessential tasks."
 }
 
 # Enable unessential scheduled tasks.
@@ -2865,9 +2865,9 @@ Function EnableTasks {
     ForEach ($Task in $Tasks) 
 	{
 		Enable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
-		print "    Turned on task: $Task."
+		print "    Enabled task: $Task."
 	}
-    print "Turned on unessential tasks."
+    print "Enabled unessential tasks."
 }
 
 # Intelligently setup Windows Update policies.
@@ -2909,7 +2909,7 @@ Function SetupWindowsUpdate {
 	if (check($au))
 	{
 		Set-ItemProperty -Path $Update2 -Name NoAutoUpdate -Type DWord -Value 1
-		print "    - Turned off automatic updates"
+		print "    - Disabled automatic updates"
 	}
 
 	if (check($dwu))
@@ -2932,9 +2932,9 @@ Function SetupWindowsUpdate {
 
 	# Print user message; policies applied.
 	$WinUpdatePolicies =@(
-		"Turned off Delivery optimization."
+		"Disabled Delivery optimization."
 		"Device will no longer auto restart if users are signed in."
-		"Turned off re-installation of apps after Windows Updates."
+		"Disabled re-installation of apps after Windows Updates."
 	)
 	ForEach ($WinUpdatePolicy in $WinUpdatePolicies) 
 	{
@@ -3035,18 +3035,18 @@ function ShowRecentFilesInQuickAccess {
 # Disable Sticky keys.
 Function DisableStickyKeys {
 	space
-	print "Turning off Sticky keys..."
+	print "Disabling Sticky keys..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
-	print "Turned off Sticky keys."
+	print "Disabled Sticky keys."
 	Start-Sleep -Milliseconds 200
 }
 
 # Enable Sticky keys.
 Function EnableStickyKeys {
 	space
-	print "Turning on Sticky keys..."
+	print "Enabling Sticky keys..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "510"
-	print "Turned on Sticky keys."
+	print "Enabled Sticky keys."
 }
 
 # Change default File Explorer view to This PC.
@@ -3073,7 +3073,7 @@ Function Hide3DObjects {
 		return
 	}
 	space
-	print "Turning off 3D Objects..."
+	print "Hiding 3D Objects..."
 	Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Recurse -ErrorAction SilentlyContinue
 	$Hide3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
 	$Hide3DObjects2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
@@ -3087,7 +3087,7 @@ Function Hide3DObjects {
 		New-Item -Path $Hide3DObjects2 -Force | Out-Null
 	}
 	Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
-	print "Turned off 3D Objects."
+	print "Hid 3D Objects."
 	Start-Sleep -Milliseconds 200
 }
 
@@ -3098,7 +3098,7 @@ Function Restore3DObjects {
 		return
 	}
 	space
-	print "Turning on 3D Objects..."
+	print "Restoring 3D Objects..."
 	$Restore3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
 	$Restore3DObjects2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
 	$Restore3DObjects3 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
@@ -3108,63 +3108,42 @@ Function Restore3DObjects {
 	}
 	Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
 	Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
-	print "Turned on 3D Objects."
+	print "Restoring 3D Objects."
 }
 
 # Hide Search bar from taskbar.
 Function HideSearch {
-	if ($CurrentBuild -lt 22000) 
-	{
-		space
-		print "Turning off Search bar..."
-		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
-		print "Turned off Search bar."
-	}
-	elseif ($CurrentBuild -ge 22000) 
-	{
-		space
-		print "Turning off Search icon..."
-		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
-		print "Turned off Search icon."
-	}
+	space
+	print "Hiding Search button..."
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
+	print "Hid Search button."
 	Start-Sleep -Milliseconds 200
-
 }
 
 # Restore Search bar to taskbar.
 Function RestoreSearch {
-	if ($CurrentBuild -lt 22000) 
-	{
-		space
-		print "Turning on Search bar..."
-		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
-		print "Turned on Search bar."
-	}
-	elseif ($CurrentBuild -ge 22000) 
-	{
-		space
-		print "Turning off Search icon..."
-		Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 1
-		print "Turned off Search icon."
-	}
+	space
+	print "Restoring Search button..."
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
+	print "Restored Search button."
 	Start-Sleep -Milliseconds 200
 }
 
 # Hide Task View.
 Function HideTaskView {
 	space
-	print "Turning off Task view icon..."
+	print "Hiding Task view button..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
-	print "Turned off Task view icon."
+	print "Hid Task view button."
 	Start-Sleep -Milliseconds 200
 }
 
 # Restore Task View button.
 Function RestoreTaskView {
 	space
-	print "Turning on Task view icon..."
+	print "Restoring Task view button..."
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -ErrorAction SilentlyContinue
-	print "Turned on Task view icon."
+	print "Restored Task view icon."
 	Start-Sleep -Milliseconds 200
 }
 
@@ -3175,9 +3154,9 @@ Function HideCortana {
 		return
 	}
 	space
-	print "Turning off Cortana icon..."
+	print "Hiding Cortana button..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
-	print "Turned off Cortana icon."
+	print "Hid Cortana button."
 	Start-Sleep -Milliseconds 200
 }
 
@@ -3187,9 +3166,9 @@ Function RestoreCortana {
 	{
 		return
 	}
-	print "Turning on Cortana icon..."
+	print "Restoring Cortana button..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
-	print "Turned on Cortana icon."
+	print "Restored Cortana button."
 	Start-Sleep -Milliseconds 200
 }
 
@@ -3200,12 +3179,12 @@ Function HideMeetNow {
 		return
 	}
 	space
-	print "Turning off Meet now..."
+	print "Hiding Meet now..."
     $Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
     $Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
     Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1
     Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
-	print "Turned off Meet now."
+	print "Hid Meet now."
 	Start-Sleep -Milliseconds 200
 }
 
@@ -3216,12 +3195,12 @@ Function RestoreMeetNow {
 		return
 	}
 	space
-	print "Turning on Meet now..."
+	print "Restoring Meet now..."
     $Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
     $Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
     Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 0
     Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
-	print "Turned on Meet now."
+	print "Restored Meet now."
 	Start-Sleep -Milliseconds 200
 }
 
@@ -3232,12 +3211,12 @@ Function HideNI {
 		return
 	}
 	space
-	print "Turning off News and interests..."
+	print "Disabling News and interests..."
 	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
 	$Feed2 = "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Feeds"
 	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
 	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
-	print "Turned off News and interests."
+	print "Disabled News and interests."
 	Start-Sleep -Milliseconds 200
 }
 
@@ -3247,12 +3226,12 @@ Function RestoreNI {
 	{
 		return
 	}
-	print "Turning on News and interests..."
+	print "Enabling News and interests..."
 	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
 	$Feed2 = "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Feeds"
 	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0 | Out-Null
 	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 0 | Out-Null
-	print "Turned on News and interests."
+	print "Enabled News and interests."
 	Start-Sleep -Milliseconds 200
 }
 
@@ -3263,9 +3242,9 @@ function HideWidgets {
 		return
 	}
 	space
-	print "Turning off Widgets Item..."
+	print "Hiding Widgets..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 0
-	print "Turned off Widgets Item."
+	print "Hidden Widgets."
 	Start-Sleep -Milliseconds 200
 }
 
@@ -3276,9 +3255,9 @@ function RestoreWidgets {
 		return
 	}
 	space
-	print "Turning on Widgets Item..."
+	print "Restoring Widgets..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 1
-	print "Turned on Widgets Item."
+	print "Restored Widgets."
 	Start-Sleep -Milliseconds 200
 }
 
@@ -3289,9 +3268,9 @@ function HideChat {
 		return
 	}
 	space
-	print "Turning off Chat Item..."
+	print "Hiding Chat..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 0
-	print "Turned off Chat Item."
+	print "Hid Chat."
 	Start-Sleep -Milliseconds 200
 }
 
@@ -3302,9 +3281,9 @@ function RestoreChat {
 		return
 	}
 	space
-	print "Turning on Chat Item..."
+	print "Restoring Chat..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 1
-	print "Turned on Chat Item."
+	print "Restored Chat."
 	Start-Sleep -Milliseconds 200
 }
 
