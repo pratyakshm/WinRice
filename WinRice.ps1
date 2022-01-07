@@ -75,13 +75,13 @@ $tasks = @(
 	"AutoLoginPostUpdate", 		    
 	# "StayOnLockscreenPostUpdate",
 	"DisableVBS",
-	"EnableVBS",
+	# "EnableVBS",
 	"DisableCredentialCache",
-	"EnableCredentialCache",
+	# "EnableCredentialCache",
 	"EnableSEHOP",
-	"DisableSEHOP",
+	# "DisableSEHOP",
 	"DisableWPAD",
-	"EnableWPAD",
+	# "EnableWPAD",
 	"ChangesDone",
 
 ### Tasks & Services ###
