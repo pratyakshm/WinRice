@@ -76,12 +76,20 @@ $tasks = @(
 	# "StayOnLockscreenPostUpdate",
 	"DisableVBS",
 	# "EnableVBS",
-	"DisableCredentialCache",
-	# "EnableCredentialCache",
+	"DisableLogonCredential",
+	# "EnableLogonCredential",
+	"DisableLLMNR",
+	# "EnableLLMNR",
 	"EnableSEHOP",
 	# "DisableSEHOP",
 	"DisableWPAD",
 	# "EnableWPAD",
+	"EnableLSAProtection"
+	# "DisableLSAProtection"
+	"DisableScriptHost"
+	# "EnableScriptHost"
+	"DisableOfficeOLE",
+	# "EnableOfficeOLE",
 	"ChangesDone",
 
 ### Tasks & Services ###
@@ -2625,6 +2633,7 @@ Function EnableSEHOP {
 Function DisableSEHOP {
 	space
 	print "Disabling Structured Exception Handling Overwrite Protection..."
+	$SEHOP = "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"
 	Remove-ItemProperty -Path $SEHOP -Type DWord -Name DisableExceptionChainValidation | Out-Null
 	print "Disabled Structured Exception Handling Overwrite Protection."
 }
@@ -2642,10 +2651,73 @@ Function DisableWPAD {
 Function EnableWPAD {
 	space
 	print "Enabling Web Proxy Auto-Discovery..."
-	Remove-Item -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" -Name "Wpad" -Force | Out-Null
-    Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad" -Name "Wpad" -Force | Out-Null
+	Remove-Item -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad" -Force | Out-Null
+    Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad" -Force | Out-Null
 	print "Enabled Web Proxy Auto-Discovery."
 }
+
+Function EnableLSAProtection {
+	space
+	print "Enabling LSA Protection/Auditing..."
+	New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\" -Name "LSASSs.exe" -Force | Out-Null
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LSASS.exe" -Name "AuditLevel" -Type "DWORD" -Value 8 -Force
+	print "Enabled LSA Protection/Auditing."
+}
+
+Function DisableLSAProtection {
+	space
+	print "Disabling LSA Protection/Auditing..."
+	Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LSASS.exe"
+	print "Disabled LSA Protection/Auditing."
+}
+
+Function DisableScriptHost {
+	space
+	print "Disabling Windows Script Host..."
+	New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows Script Host\" -Name "Settings" -Force | Out-Null
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Script Host\Settings" -Name "Enabled" -Type "DWORD" -Value 0 -Force
+	print "Disabled Windows Script Host."
+}
+
+Function EnableScriptHost {
+	space
+	print "Enabling Windows Script Host..."
+	Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows Script Host\Settings" -Force | Out-Null
+	print "Enabled Windows Script Host."
+}
+
+Function DisableOfficeOLE {
+	space 
+	if (-not (Test-Path "C:\Program Files\Microsoft Office"))
+	{
+		return
+	}
+	print "Disabling Office OLE..."
+	$Keys = Get-Item -Path "HKLM:\Software\RegisteredApplications" | Select-Object -ExpandProperty property
+	$Product = $Keys | Where-Object {$_ -Match "Outlook.Application."}
+	$OfficeVersion = ($Product.Replace("Outlook.Application.","")+".0")
+	New-Item -Path "HKLM:\SOFTWARE\Microsoft\Office\$OfficeVersion\Outlook\" -Name "Security" -Force | Out-Null
+	New-Item -Path "HKCU:\SOFTWARE\Microsoft\Office\$OfficeVersion\Outlook\" -Name "Security" -Force | Out-Null
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Office\$OfficeVersion\Outlook\Security\" -Name "ShowOLEPackageObj" -Type "DWORD" -Value "0" -Force
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Office\$OfficeVersion\Outlook\Security\" -Name "ShowOLEPackageObj" -Type "DWORD" -Value "0" -Force
+	print "Disabled Office OLE."
+}
+
+Function EnableOfficeOLE {
+	space
+	if (-not (Test-Path "C:\Program Files\Microsoft Office"))
+	{
+		return
+	}
+	print "Enabling Office OLE..."
+	$Keys = Get-Item -Path "HKLM:\Software\RegisteredApplications" | Select-Object -ExpandProperty property
+	$Product = $Keys | Where-Object {$_ -Match "Outlook.Application."}
+	$OfficeVersion = ($Product.Replace("Outlook.Application.","")+".0")
+	Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Office\$OfficeVersion\Outlook\Security"
+	Remove-Item -Path "HKCU:\SOFTWARE\Microsoft\Office\$OfficeVersion\Outlook\Security"
+	print "Enabled Office OLE."
+}
+
 
 
 ####################################

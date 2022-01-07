@@ -126,6 +126,30 @@ See more at [Disable WPAD now or have your accounts and private data compromised
 
 Also read: [Disable WPAD on Your PC So Your HTTPS Traffic Won't Be Vulnerable to the Latest SSL Attack -null-byte.wonderhowto.com](https://null-byte.wonderhowto.com/how-to/disable-wpad-your-pc-so-your-https-traffic-wont-be-vulnerable-latest-ssl-attack-0172499).
 
+### Local Security Authority (LSA) Protection
+
+The LSA, which includes the Local Security Authority Server Service (LSASS) process, validates users for local and remote sign-ins and enforces local security policies. The Windows 8.1 operating system provides additional protection for the LSA to prevent reading memory and code injection by non-protected processes. This provides added security for the credentials that the LSA stores and manages.
+
+WinRice enables LSA Protection on all devices.
+
+See more at [Configuring Additional LSA Protection](https://docs.microsoft.com/en-us/windows-server/security/credentials-protection-and-management/configuring-additional-lsa-protection)
+
+### Windows Script Host
+
+Numerous spam campaigns are pushing various crypto-ransomware families (and backdoors) via ZIP file attachments. And such ZIP files typically contain a JScript (.js/.jse) file which, if clicked, will be run via Windows Script Host.
+
+Since Windows Script Host is also not used by personal PC users, WinRice disables this feature.
+
+See more at [How-To Disable Windows Script Host - blog.f-secure.com](https://blog.f-secure.com/how-to-disable-windows-script-host/).
+
+### Office OLE
+
+OLE allows an editing application to export part of a document to another editing application and then import it with additional content. For example, a desktop publishing system might send some text to a word processor or a picture to a bitmap editor using OLE. 
+OLE is misused by malware and is often treated by some as an exploit.
+
+WinRice disables Office OLE.
+
+See more at [111 Attacking EvilCorp Anatomy of a Corporate Hack Sean Metcalf Will Schroeder - youtube.com](https://youtu.be/nJSMJyRNvlM?).
 
 # System
 
