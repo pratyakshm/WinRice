@@ -50,7 +50,6 @@ body:
     attributes:
       label: WinRice output
       description: WinRice output is saved in C:\WinRice. Copy paste the output of the output file here.
-      render: powershell
     validations:
       required: true
   - type: checkboxes
