@@ -4,10 +4,26 @@ labels: Feature request
 assignees:
   - pratyakshm
 body:
+  - type: checkboxes
+    id: principles
+    attributes:
+      label: WinRice principles
+      description: https://github.com/pratyakshm/WinRice/wiki/Principles
+      options:
+        - label: "I have read the WinRice principles and I believe that this feature request abides by the WinRice principles to my truest sense."
+          required: true
+  - type: textarea
+    id: explain1
+    attributes:
+      label: Explain the feature.
+      description: Please explain the feature in as much detail as you can. Providing screenshots, if helpful, is highly appreciated.
+    validations:
+      required: true
   - type: dropdown
-    id: question
+    id: question2
     attributes:
       label: Does your feature request involve usage of third party software?
+      description: Know that feature requests which suggest usage of third party software are often low prioritized. Exceptions apply.
       multiple: false
       options:
         - "Yes"
@@ -15,7 +31,7 @@ body:
     validations:
       required: true
   - type: dropdown
-    id: question2
+    id: question3
     attributes:
       label: Have you written the code that adds this feature?
       multiple: false
@@ -25,19 +41,10 @@ body:
     validations:
       required: true
   - type: textarea
-    id: explain
+    id: code
     attributes:
-      label: Explain the feature
-      description: Describe it in as much detail as possible.
-      placeholder: Provide screenshots and/or code snippets if you can.
+      label: Your code for the feature
+      description: If you have written it, you may provide code for the feature below.
+      render: powershell
     validations:
-      required: true
-  - type: checkboxes
-    id: principles
-    attributes:
-      label: Does this Feature Request follow the WinRice principles?
-      description: https://github.com/pratyakshm/WinRice/wiki/Principles
-      options:
-        - label: "Yes"
-          required: true
-  
+      required: false

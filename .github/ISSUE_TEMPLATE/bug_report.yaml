@@ -1,91 +1,71 @@
 name: 🐛 Bug report
-description: File a bug report
+description: Report a bug
 labels: Bug report
 assignees:
   - pratyakshm
 body:
-  - type: markdown
-    attributes:
-      value: |
-        Thanks for taking your time to file this report.
-  - type: dropdown
-    id: Windows-version
-    attributes:
-      label: Windows version
-      multiple: true
-      description: Check all that apply.
-      multiple: true
-      options: 
-        - Windows 11 21H2
-        - Windows 10 21H2
-        - Windows 10 21H1
-        - Windows 10 20H2
-    validations:
-      required: true
-  - type: textarea
-    id: osbuild
-    attributes:
-      label: Write absolute OS build version
-      description: Run this command in PowerShell - `Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Update\TargetingInfo\Installed\Client.OS.rs2.amd64" -Name Version` 
-      placeholder: Raw output of the command.
   - type: dropdown
     id: category
     attributes:
-      label: Which category is the issue related to?
-      description: Check all that apply.
-      multiple: true
-      options:
-        - Apps
-        - Features
-        - Privacy
-        - Tasks and Services
-        - Windows Explorer / User Interface
-        - Other
-    validations: 
-      required: true   
-  - type: dropdown
-    id: areaofconcern
-    attributes: 
-      label: When you run WinRice, does it fail to perform a job or does it break something in your device?
+      label: Select category
+      description: Which category is this issue filed against?
       multiple: false
       options:
-        - WinRice fails to perform a job
-        - WinRice broke something in my device
-    validations: 
-      required: true
-  - type: textarea
-    id: expectedbehavior
-    attributes:
-      label: ✔️ Expected Behavior
-      placeholder: What was expected to happen?
+        - "Apps"
+        - "Features"
+        - "Privacy"
+        - "Security"
+        - "Tasks"
+        - "Services"
+        - "Windows Explorer / User Interface"
     validations:
-      required: false
-  - type: textarea
-    id: actualbehavior
-    attributes:
-      label: ❌ Actual Behavior
-      placeholder: What actually happened?
-    validations: 
       required: true
-  - type: textarea
-    id: stepstorepro
+  - type: dropdown
+    id: winver
     attributes:
-      label: Steps to reproduce
-      description: How do we reproduce the bug?
+      label: Windows version
+      description: "Check all that apply."
+      multiple: true
+      options:
+         - "Windows 11 21H2"
+         - "Windows 10 21H2"
+         - "Windows 10 21H1"
+         - "Windows 10 20H2"
     validations:
       required: true
   - type: textarea
-    id: logs
+    id: expected
     attributes:
-      label: PowerShell transcript output
-      description: Please copy and paste the PowerShell transcript output. You may get it from "C:\WinRice" folder.
-      placeholder: PowerShell transcript comes here.
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: WinRice output
+      description: WinRice output is saved in C:\WinRice. Copy paste the output of the output file here.
       render: powershell
+    validations:
+      required: true
+  - type: checkboxes
+    id: similar
+    attributes:
+      label: Alternative software run
+      description: Check this box if you have run alternative software similar to WinRice
+      options:
+        - label: "I have run alternative software that offers functionality similar to WinRice"
+          required: false
   - type: textarea
-    id: othersoftware
-    attributes: 
-      label: Other software run
-      description: Tell us about other similar software you ran on your device (if any).
-      placeholder: "Paste repository link. Do know that support might be limited if your device is detected to have run other software of similar kind."
+    id: similarlink
+    attributes:
+      label: Link to alternative similar software
+      description: Provide link to alternative software which you have run.
     validations:
       required: false
+  
