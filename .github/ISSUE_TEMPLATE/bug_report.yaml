@@ -29,8 +29,8 @@ body:
       options: 
         - Windows 11 21H2
         - Windows 10 21H2
-	- Windows 10 21H1
-	- Windows 10 20H2
+        - Windows 10 21H1
+        - Windows 10 20H2
     validations:
       required: true
   - type: textarea
