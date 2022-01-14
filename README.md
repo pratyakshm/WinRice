@@ -65,8 +65,6 @@ An active internet connection is needed.
 
 #### Download and run [this executable (.EXE) file](https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice-main.exe).
   
-**Notes:**
-  - WinRice's Releases page has been hidden because WinRice is a continuously updated project, and using a particular release means that you as a user are still lagging behind in terms of the latest code.
 ---
 
 ## 🤕 Known Issues

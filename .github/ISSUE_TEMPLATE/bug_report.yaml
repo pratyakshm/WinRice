@@ -9,17 +9,6 @@ body:
       value: |
         Thanks for taking your time to file this report.
   - type: dropdown
-    id: version
-    attributes:
-      label: WinRice version
-      description: Check all that apply.
-      multiple: true
-      options:
-        - main branch
-        - v0.5.04112021 November Release
-    validations:
-      required: true
-  - type: dropdown
     id: Windows-version
     attributes:
       label: Windows version
