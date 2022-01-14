@@ -28,7 +28,9 @@ body:
       multiple: true
       options: 
         - Windows 11 21H2
-        - Windows 10 21H1
+        - Windows 10 21H2
+	- Windows 10 21H1
+	- Windows 10 20H2
     validations:
       required: true
   - type: textarea
@@ -55,7 +57,7 @@ body:
   - type: dropdown
     id: areaofconcern
     attributes: 
-      label: When you run WinRice, does it fail to perform a job or does it break something on your device?
+      label: When you run WinRice, does it fail to perform a job or does it break something in your device?
       multiple: false
       options:
         - WinRice fails to perform a job
@@ -95,6 +97,6 @@ body:
     attributes: 
       label: Other software run
       description: Tell us about other similar software you ran on your device (if any).
-      placeholder: "Paste repository link. Do know that support might be limited if you run other software of similar kind."
+      placeholder: "Paste repository link. Do know that support might be limited if your device is detected to have run other software of similar kind."
     validations:
       required: false

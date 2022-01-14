@@ -40,22 +40,14 @@ The documentation for WinRice is available in the below link. The documentation 
 
 WinRice supports the latest Windows retail and pre-release builds.
 
-| OS Version | Version | OS Build | Servicing Option    |
-| ---------- | ------- | -------- | ------------------- |
+| OS Version | Version | OS Build | Servicing Option     |
+| ---------- | ------- | -------- | -------------------- |
 | Windows 11 | 21H2    | 22000    | General Availability |
 | Windows 10 | 21H2    | 19044    | General Availability |
+| Windows 10 | 21H1    | 19043    | Semi-Annual Channel  |
+| Windows 10 | 20H2    | 19042    | Semi-Annual Channel  |
   
 ⚠️ This table does not include builds from Windows Insider Program. But if you are a Windows Insider, you can still run WinRice provided you're on a recent build.
-
-### Unsupported OS Versions
-| OS Version | Version | OS Build | Servicing Option    |
-| ---------- | ------- | -------- | ------------------- |
-| Windows 10 | 21H1    | 19043    | Semi-Annual Channel |
-| Windows 10 | 20H2    | 19042    | Semi-Annual Channel |
-
-**Notes:**
- - These OS versions are not officially supported by WinRice, but WinRice still runs on these devices because during the time of making this modification (January 2022), OEMs still ship laptops with Windows 10 20H2.
- - As WinRice is not supported on these devices, I do not follow up with bug reports for these specific OS versions. Infact, there is no way to file bug reports for these OS versions.
   
 ### How to check if my device is compatible?
 Go to **Settings > System > About** and scroll down to the **Windows specifications** section.
