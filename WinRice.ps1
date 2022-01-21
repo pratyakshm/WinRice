@@ -72,8 +72,8 @@ $tasks = @(
 	# "EnableTelemetry",
 	"EnableClipboard",				
 	# "DisableClipboard",
-	"AutoLoginPostUpdate", 		    
-	# "StayOnLockscreenPostUpdate",
+	# "AutoLoginPostUpdate", 		    
+	"StayOnLockscreenPostUpdate",
 	"DisableVBS",
 	# "EnableVBS",
 	"DisableLogonCredential",
@@ -2136,6 +2136,7 @@ Function PrivacySecurity {
 	space
 }
 
+# Privacy and advertising
 
 # Disable Activity History.
 Function DisableActivityHistory {
@@ -2584,6 +2585,8 @@ Function DisableClipboard {
 	print "Disabled Clipboard History."
 	Start-Sleep -Milliseconds 200
 }
+
+# Security features
 
 Function AutoLoginPostUpdate {
 	space

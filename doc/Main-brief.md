@@ -79,6 +79,9 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 
 # Security
 
+### Stay on lock screen post a Windows Update restart
+After a device restarts after applying a Windows Update, it stays on the lock screen and awaits manual login from a user.
+
 ### Virtualization-based Security
 Virtualization-based security, or VBS, uses hardware virtualization features to create and isolate a secure region of memory from the normal operating system. 
 Virtualization-based security causes big performance impact in devices that do not support, amongst many other things, MBEC. In MBEC-unsupported devices, its behavior is emulated which causes the impact.
