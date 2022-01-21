@@ -18,8 +18,7 @@
 
 WinRice uses PowerShell automation to setup a Windows device. It currently supports only the latest retail builds of Windows 11 and 10.
   
-WinRice, amongst a host of other things, improves privacy, de-clutters the Windows user interface and removes non-essential apps from Windows.
-It aims to provide a clutter free, private and secure Windows experience without breaking any OS functionality.
+WinRice, amongst a host of other things, improves privacy, de-clutters the Windows user interface and removes non-essential apps from Windows while still retaining OS functionality.
 
 ---
 
@@ -36,30 +35,13 @@ The documentation for WinRice is available in the below link. The documentation 
 
 ## ✔️ Requirements
 
-### Supported OS Versions
+WinRice, when run, checks if all of the following requirements are met:
+- Device is online and connected to the Internet.
+- Device is powered by a Windows build that's currently in service. [See more](https://github.com/pratyakshm/WinRice/blob/main/doc/Supported-winver.md).
+- PowerShell session is elevated to administrator.
+- If there are any pending device restarts.
 
-WinRice supports the latest Windows retail and pre-release builds.
-
-| OS Version | Version | OS Build | Servicing Option     |
-| ---------- | ------- | -------- | -------------------- |
-| Windows 11 | 21H2    | 22000    | General Availability |
-| Windows 10 | 21H2    | 19044    | General Availability |
-| Windows 10 | 21H1    | 19043    | Semi-Annual Channel  |
-| Windows 10 | 20H2    | 19042    | Semi-Annual Channel  |
-  
-⚠️ This table does not include builds from Windows Insider Program. But if you are a Windows Insider, you can still run WinRice provided you're on a recent build.
-  
-### How to check if my device is compatible?
-Go to **Settings > System > About** and scroll down to the **Windows specifications** section.
-In here, check out **Version** and **OS build** and verify if its listed in the table provided above.
-  
-If the Version and OS build that you are currently on are **NOT** listed in the table above, you need to update your device. [Learn more](https://github.com/pratyakshm/WinRice/wiki/Fresh-installation-of-Windows).
-
-### Internet Connection
-
-An active internet connection is needed.
-
----
+If any one of the criteria is not met, WinRice terminates itself.
 
 ## 🚀 Running WinRice
 
@@ -73,16 +55,4 @@ Known issues are tracked [here](https://github.com/pratyakshm/WinRice/issues/16)
 
 ## 💁‍♂️ Contributing
 
-WinRice accepts all kinds of contributions such as finding bugs, fixing bugs, adding features, removal of deprecated features and/or values, improving documentation, etc. I'm excited to work with the users and fellow PowerShell enthusiasts to further improve this project.
-
-I ask that **before you start your work on a feature that you would like to request or contribute**, please read the WinRice [principles](https://github.com/pratyakshm/WinRice/wiki/Principles). I will be happy to work with you to figure out good approaches and provide guidance throughout feature development, and help avoid any wasted or duplicated effort.
-
-## Credits and acknowledgements
-<p align="left"> &bull; WinRice logo and banner is created by <a href="https://linktr.ee/vancelmusic">Vancel</a></p>
-<p align=left> &bull; Documentation and UX are contributed to by <a href="https://kenharris.xyz/">Ken</a></p>
-  
----
-
-## ⚖️ License
-
-WinRice is licensed under the [GPL-3.0 License](LICENSE).
+Read [CONTRIBUTING.MD](https://github.com/pratyakshm/WinRice/blob/main/CONTRIBUTING.md).
