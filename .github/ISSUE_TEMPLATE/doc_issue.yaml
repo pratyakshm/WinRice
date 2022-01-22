@@ -8,7 +8,7 @@ body:
     attributes:
       value: |
         Thanks for taking your time to file this report.
-  - type: textarea
+  - type: input
     id: location
     attributes:
       label: Concerned document

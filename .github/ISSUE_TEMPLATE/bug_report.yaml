@@ -4,6 +4,10 @@ labels: Bug report
 assignees:
   - pratyakshm
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking your time to file this report.
   - type: dropdown
     id: category
     attributes:

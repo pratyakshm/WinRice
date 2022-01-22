@@ -4,6 +4,10 @@ labels: Feature request
 assignees:
   - pratyakshm
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking your time to file this feature request.
   - type: checkboxes
     id: principles
     attributes:
@@ -30,21 +34,3 @@ body:
         - "No"
     validations:
       required: true
-  - type: dropdown
-    id: question3
-    attributes:
-      label: Have you written the code that adds this feature?
-      multiple: false
-      options:
-         - "Yes"
-         - "No"
-    validations:
-      required: true
-  - type: textarea
-    id: code
-    attributes:
-      label: Your code for the feature
-      description: If you have written it, you may provide code for the feature below.
-      render: powershell
-    validations:
-      required: false
