@@ -74,7 +74,7 @@ $tasks = @(
 	# "DisableClipboard",
 	# "AutoLoginPostUpdate", 		    
 	"StayOnLockscreenPostUpdate",
-	"DisableVBS",
+	# "DisableVBS",
 	# "EnableVBS",
 	"DisableLogonCredential",
 	# "EnableLogonCredential",

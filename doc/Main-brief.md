@@ -82,6 +82,7 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 ### Stay on lock screen post a Windows Update restart
 After a device restarts after applying a Windows Update, it stays on the lock screen and awaits manual login from a user.
 
+<!-- >
 ### Virtualization-based Security
 Virtualization-based security, or VBS, uses hardware virtualization features to create and isolate a secure region of memory from the normal operating system. 
 Virtualization-based security causes big performance impact in devices that do not support, amongst many other things, MBEC. In MBEC-unsupported devices, its behavior is emulated which causes the impact.
@@ -97,7 +98,7 @@ Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git
 After running this command, restart your device to apply the changes.
 
 See more at [Enable virtualization-based protection of code integrity - docs.microsoft.com](https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity).
-
+<--->
 ### Windows WDigest Credential Caching
 
 Digest Authentication is a challenge/response protocol that was primarily used in Windows Server 2003 for LDAP and web-based authentication. It utilizes Hypertext Transfer Protocol (HTTP) and Simple Authentication Security Layer (SASL) exchanges to authenticate. 
