@@ -589,6 +589,22 @@ if (!(check($customize)))
 	}
 	space
 
+	print "If your device has Windows and Linux dual booted, its recommended to make Windows OS follow the UTC time in order to avoid time differences with Linux."
+	$biostime = ask "Do you want Windows to follow UTC time? [y/N]"
+	if (not($biostime))
+	{
+		$biostime = "n"
+	}
+	if (check($biostime))
+	{
+		print "Windows will follow UTC time."
+	}
+	elseif (!check($biostime))
+	{
+		print "Windows will not follow UTC time."
+	}
+	space
+
 	$systemrestore = ask "Do you want to create a system restore point? [Y/n]"
 	Start-Sleep -Milliseconds 100
 	if (check($systemrestore))
@@ -2869,21 +2885,25 @@ Function EnableHibernation {
 	Start-Sleep -Milliseconds 200
 }
 
-# Set BIOS time to UTC.
+# Make Windows follow BIOS time
 Function BIOSTimeUTC {
+	if (!(check($biostime)))
+	{
+		return
+	}
 	space
-	print "Setting BIOS time to UTC..."
+	print "Setting Windows to follow BIOS Time..."
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name "RealTimeIsUniversal" -Type DWord -Value 1
-	print "BIOS Time is set to UTC."
+	print "Windows is set to follow BIOS Time."
 	Start-Sleep -Milliseconds 200
 }
 
-# Set BIOS time to local time.
+# Make Windows follow local time
 Function BIOSTimeLocal {
 	space
-	print "Setting BIOS time to Local time..."
+	print "Setting Windows to follow Local Time..."
 	Remove-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name "RealTimeIsUniversal" -ErrorAction SilentlyContinue
-	print "BIOS Time is set to Local time."
+	print "Windows is set to follow Local Time."
 	Start-Sleep -Milliseconds 200
 }
 
