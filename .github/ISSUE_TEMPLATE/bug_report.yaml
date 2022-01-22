@@ -18,6 +18,7 @@ body:
         - "Tasks"
         - "Services"
         - "Windows Explorer / User Interface"
+        - "Other"
     validations:
       required: true
   - type: dropdown
@@ -33,13 +34,13 @@ body:
          - "Windows 10 20H2"
     validations:
       required: true
-  - type: textarea
+  - type: input
     id: expected
     attributes:
       label: Expected behavior
     validations:
       required: true
-  - type: textarea
+  - type: input
     id: actual
     attributes:
       label: Actual behavior
@@ -49,22 +50,14 @@ body:
     id: output
     attributes:
       label: WinRice output
-      description: WinRice output is saved in C:\WinRice. Copy paste the output of the output file here.
+      description: Copy paste or drag and drop below the transcript files logged by WinRice in C:\WinRice. Paste only the file(s), not their content.
     validations:
       required: true
-  - type: checkboxes
-    id: similar
-    attributes:
-      label: Alternative software run
-      description: Check this box if you have run alternative software similar to WinRice
-      options:
-        - label: "I have run alternative software that offers functionality similar to WinRice"
-          required: false
   - type: textarea
-    id: similarlink
+    id: notes
     attributes:
-      label: Link to alternative similar software
-      description: Provide link to alternative software which you have run.
+      label: Anything else I should know?
+      description: Additional stuff you think I should know. 
     validations:
       required: false
   
