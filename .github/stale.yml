@@ -1,0 +1,14 @@
+# Number of days of inactivity before an issue becomes stale
+daysUntilStale: 30
+# Number of days of inactivity before a stale issue is closed
+daysUntilClose: 90
+# Label to use when marking an issue as stale
+staleLabel: Stale
+# Comment to post when marking an issue as stale. Set to `false` to disable
+markComment: >
+  Hi, is this issue still relevant? If so, what makes it relevant? And if its relevant, why is this issue stale?
+
+  This issue has been automatically marked as stale because it has not had
+  recent activity. It will be automatically closed in 90 days if no further activity occurs.
+# Comment to post when closing a stale issue. Set to `false` to disable
+closeComment: false
