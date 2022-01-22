@@ -12,47 +12,39 @@
 
 <p align="center"><a href="doc/Frequently-answered-questions.md">FAQ</a>   &bull; <a href="LICENSE">License</a> &bull; <a href="#%EF%B8%8F-contributing">Contribution</a>
 
----
-
-## 😃 Description
+## Description
 
 WinRice uses PowerShell automation to setup a Windows device. It currently supports only the latest retail builds of Windows 11 and 10.
   
 WinRice, amongst a host of other things, improves privacy, de-clutters the Windows user interface and removes non-essential apps from Windows while still retaining OS functionality.
 
----
-
-## 📃 Documentation
+## Documentation
 
 The documentation for WinRice is available in the below link. The documentation explains every task that WinRice performs on your PC. Make sure you (the user) have read the documentation before going ahead.
 
-**Documentation:** [Tap here](https://github.com/pratyakshm/WinRice/tree/main/doc)  
+**Documentation folder:** [Tap here](https://github.com/pratyakshm/WinRice/tree/main/doc)  
   P.S. Reading the documentation is strongly recommended
  
 **Functions**: See [Functions](https://github.com/pratyakshm/WinRice/wiki/Functions) to get a detailed explanation of each function.
- 
----
 
-## ✔️ Requirements
+## Requirements
 
 WinRice, when run, checks if all of the following requirements are met:
 - Device is online and connected to the Internet.
 - Device is powered by a Windows build that's currently in service. [See more](https://github.com/pratyakshm/WinRice/blob/main/doc/Supported-winver.md).
-- PowerShell session is elevated to administrator.
+- PowerShell session is elevated to admin.
 - If there are any pending device restarts.
 
 If any one of the criteria is not met, WinRice terminates itself.
 
-## 🚀 Running WinRice
+## Running WinRice
 
 #### Download and run [this executable (.EXE) file](https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice-main.exe).
-  
----
 
-## 🤕 Known Issues
+## Known Issues
 
 Known issues are tracked [here](https://github.com/pratyakshm/WinRice/issues/16).
 
-## 💁‍♂️ Contributing
+## Contributing
 
 Read [CONTRIBUTING.MD](https://github.com/pratyakshm/WinRice/blob/main/CONTRIBUTING.md).
