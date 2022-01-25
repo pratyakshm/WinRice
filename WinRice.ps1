@@ -188,6 +188,7 @@ Function space {
 
 Function print($text) {
 	Write-Host $text
+	Start-Sleep -Milliseconds 150
 }
 
 function RunWithProgress {
@@ -381,7 +382,6 @@ RunWithProgress -Text "[5/5] Session is fresh" -Task $isrestartpending -Exit $tr
 
 Start-Sleep -Milliseconds 200
 Write-Host "Completed checks." -ForegroundColor green 
-Start-Sleep -Milliseconds 800
 space
 
 # Declare Express Settings.
@@ -746,17 +746,14 @@ if (!(check($customize)))
 
 
 print "Starting WinRice..."
-Start-Sleep -Milliseconds 200
 
 # Intro.
 Function WinRice {
 	Clear-Host
 	space
 	print "pratyakshm's WinRice - main branch"
-	Start-Sleep -Milliseconds 100
 	space
 	print "Copyright (c) Pratyaksh Mehrotra and contributors"
-	Start-Sleep -Milliseconds 100
 	print "https://github.com/pratyakshm/WinRice"
 	Start-Sleep 1
 }
@@ -773,8 +770,6 @@ Function OSBuildInfo {
 	{
 		print "Build $OSBuildCore, $BuildBranch branch"
 	}
-	
-	Start-Sleep -Milliseconds 200
 	space
 	space
 	Start-Sleep 1
@@ -898,7 +893,6 @@ $ProgressPreference = 'SilentlyContinue'
 	{
 		print "Could not update Visual C++ Libraries."
 	}
-	Start-Sleep -Milliseconds 200
 }
 
 Function UninstallVCLibs {
@@ -916,7 +910,6 @@ Function UninstallVCLibs {
 		return
 	}
 	print "Uninstalled Visual C++ Libraries."
-	Start-Sleep -Milliseconds 200
 }
 
 # Install WinGet (Windows Package Manager)
@@ -938,7 +931,6 @@ $ProgressPreference = 'SilentlyContinue'
 		return
 	}
 	print "Installed WinGet."
-	Start-Sleep -Milliseconds 200
 }
 	
 # Install NanaZip.
@@ -960,7 +952,6 @@ Function UninstallNanaZip {
 	print "Uninstalling NanaZip..."
 	winget uninstall 40174MouriNaruto.NanaZip_gnj4mf6z9tkrc --accept-package-agreements | Out-Null
 	print "Uninstalled NanaZip."
-	Start-Sleep -Milliseconds 200
 }
 
 # Use winget import (part of code used here was picked from https://devblogs.microsoft.com/scripting/hey-scripting-guy-can-i-open-a-file-dialog-box-with-windows-powershell/)
@@ -985,7 +976,6 @@ Function WinGetImport {
 	if ($OpenFileDialog.FileName) 
 	{
 		print "Starting winget import..."
-		Start-Sleep -Milliseconds 200
 		winget import $OpenFileDialog.FileName --accept-package-agreements --accept-source-agreements | Out-Null
 	}
 	elseif (!($OpenFileDialog.FileName)) 
@@ -1205,7 +1195,6 @@ $ProgressPreference = 'SilentlyContinue'
 	{
 		print "Could not uninstall HEVC Video Extensions."
 	}
-	Start-Sleep -Milliseconds 200
 }
 
 # Uninstaller GUI.
@@ -1697,7 +1686,6 @@ Function UnpinStartTiles {
 	Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
 	Remove-Item $layoutFile
 	print "Unpinned all tiles from Start Menu."
-	Start-Sleep -Milliseconds 200
 }
 
 # Unpin apps from taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
@@ -1719,7 +1707,6 @@ Function UnpinAppsFromTaskbar {
 		}	
 	}
 	print "Unpinned apps from taskbar."
-	Start-Sleep -Milliseconds 200
 }
 
 # Uninstall Microsoft OneDrive.
@@ -1747,7 +1734,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Remove-Item "$env:LOCALAPPDATA\OneDrive" -Recurse -Force
 
 	print "Uninstalled Microsoft OneDrive."
-	Start-Sleep -Milliseconds 200
 }
 
 
@@ -1767,7 +1753,6 @@ Function InstallOneDrive {
 		return
 	}
 	print "Installed Microsoft OneDrive."
-	Start-Sleep -Milliseconds 200
 }
 
 
@@ -1984,7 +1969,6 @@ $ProgressPreference = 'SilentlyContinue'
 	print "    In the current folder ($path), you will find two files: wsl_update_x64.msi and WSL2.ps1."
 	print "    Once your PC has restarted, install wsl_update_x64.msi. Next, right click on WSL2.ps1 and run it with PowerShell."
 	print "Installed Windows Subsystem for Linux."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Windows Subsystem for Linux.
@@ -2011,7 +1995,6 @@ $WarningPreference = 'SilentlyContinue'
 		return
 	}
 	print "Uninstalled Windows Subsystem for Linux."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Sandbox.
@@ -2046,7 +2029,6 @@ $ProgressPreference = 'SilentlyContinue'
 		return
 	}
 	print "Enabled Windows Sandbox."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Sandbox
@@ -2079,7 +2061,6 @@ $ProgressPreference = 'SilentlyContinue'
 		return
 	}
 	print "Disabled Windows Sandbox."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable dotNET 3.5.
@@ -2109,7 +2090,6 @@ $ProgressPreference = 'SilentlyContinue'
 		return
 	}
 	print "Enabled .NET 3.5."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable dotNET 3.5
@@ -2135,7 +2115,6 @@ $ProgressPreference = 'SilentlyContinue'
 		return
 	}
 	print "Disabled .NET 3.5."
-	Start-Sleep -Milliseconds 200
 }
 
 
@@ -2165,7 +2144,6 @@ Function DisableActivityHistory {
 	Set-ItemProperty -Path $ActivityFeed -Name "PublishUserActivities" -Type DWord -Value 0
 	Set-ItemProperty -Path $ActivityFeed -Name "UploadUserActivities" -Type DWord -Value 0	
 	print "Disabled Activity History."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Activity History.
@@ -2176,7 +2154,6 @@ Function EnableActivityHistory {
 	Set-ItemProperty -Path $ActivityHistory -Name "PublishUserActivities" -Type DWord -Value 1
 	Set-ItemProperty -Path $ActivityHistory -Name "UploadUserActivities" -Type DWord -Value 1
 	print "Enabled Activity History."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Advertising ID.
@@ -2190,7 +2167,6 @@ Function DisableAdvertisingID {
 	}
 	Set-ItemProperty -Path $AdvertisingID -Name "DisabledByGroupPolicy" -Type DWord -Value 1
 	print "Disabled Advertising ID."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Advertising ID.
@@ -2199,7 +2175,6 @@ Function EnableAdvertisingID {
 	$Advertising = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
 	Remove-ItemProperty -Path $Advertising -Name "DisabledByGroupPolicy" -ErrorAction SilentlyContinue
 	print "Enabled Advertising ID."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Background apps (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Sophia.psm1#L8988-L9033).
@@ -2230,7 +2205,6 @@ Function DisableBackgroundApps {
 		}
 		$OFS = " "
 	print "Disabled Background apps."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Background apps.
@@ -2241,7 +2215,6 @@ Function EnableBackgroundApps {
 		Remove-ItemProperty -Path $_.PsPath -Name * -Force
 	}
 	print "Enabled Background apps."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Windows Error Reporting 
@@ -2255,7 +2228,6 @@ function DisableErrorReporting {
 	print "Disabling Windows Error Reporting..."
 	Disable-WindowsErrorReporting | Out-Null
 	print "Disabled Windows Error Reporting."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Windows Error Reporting 
@@ -2263,7 +2235,6 @@ function EnableErrorReporting {
 	print "Enabling Windows Error Reporting..."
 	Enable-WindowsErrorReporting | Out-Null
 	print "Enabled Windows Error Reporting."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Feedback.
@@ -2293,7 +2264,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	Disable-ScheduledTask -TaskName $Feedback3 | Out-Null
 	Disable-ScheduledTask -TaskName $Feedback4 | Out-Null
 	print "Disabled Feedback notifications."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Feedback.
@@ -2312,7 +2282,6 @@ Function EnableFeedback {
 	Enable-ScheduledTask -TaskName $Feedback3 | Out-Null
 	Enable-ScheduledTask` -TaskName $Feedback4 | Out-Null
 	print "Enabled Feedback notifications."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable inking personalization.
@@ -2330,7 +2299,6 @@ Function DisableInkHarvesting {
 	Set-ItemProperty -Path $Ink2 -Name "HarvestContacts" -Type DWord -Value 0
 	Set-ItemProperty -Path $Ink3 -Name "AcceptedPrivacyPolicy" -Type DWord -Value 0
 	print "Disabled Inking & typing personalization."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable inking personalization. 
@@ -2348,7 +2316,6 @@ Function EnableInkHarvesting {
 	Set-ItemProperty -Path $Ink2 -Name "HarvestContacts" -Type DWord -Value 1
 	Set-ItemProperty -Path $Ink3 -Name "AcceptedPrivacyPolicy" -Type DWord -Value 1
 	print "Enabled Inking & typing personalization."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable "Let websites provide locally relevant content by accessing my language list".
@@ -2359,7 +2326,6 @@ Function DisableLangAccess {
 	Remove-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -ErrorAction SilentlyContinue | Out-Null
 	New-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 1 | Out-Null
 	print "Disabled websites' ability to provide you with locally relevant content by accessing your language list."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable "Let websites provide locally relevant content by accessing my language list".
@@ -2368,7 +2334,6 @@ Function EnableLangAccess {
 	$LangAccess = "HKCU:\Control Panel\International\User Profile"
 	Set-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 0
 	print "Enabled websites' ability to provide you with locally relevant content by accessing your language list."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Location Tracking.
@@ -2384,7 +2349,6 @@ Function DisableLocationTracking {
 	Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Deny"
 	Set-ItemProperty -Path $Location2 -Name "SensorPermissionState" -Type DWord -Value 0
 	print "Disabled Location tracking."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable location tracking.
@@ -2400,7 +2364,6 @@ Function EnableLocationTracking {
 	Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Allow"
 	Set-ItemProperty -Path $Location2 -Name "SensorPermissionState" -Type DWord -Value 1
 	print "Enabled Location tracking."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable automatic Maps updates.
@@ -2409,7 +2372,6 @@ Function DisableMapUpdates {
 	print "Disabling automatic Maps updates..."
 	Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 0
 	print "Disabled automatic Maps updates."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable maps updates.
@@ -2418,7 +2380,6 @@ Function EnableMapsUpdates {
 	print "Enabling automatic Maps updates..."
 	Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 1
 	print "Enabled automatic Maps updates."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Speech Recognition.
@@ -2433,7 +2394,6 @@ Function DisableSpeechRecognition {
 	Remove-ItemProperty -Path $Speech -Name "HasAccepted" -ErrorAction SilentlyContinue
 	New-ItemProperty -Path $Speech -Name "HasAccepted" -Type DWord -Value 0 -ErrorAction SilentlyContinue | Out-Null
 	print "Disabled Online Speech recognition."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable speech recognition. 
@@ -2447,7 +2407,6 @@ Function EnableSpeechRecognition {
 	}
 	Set-ItemProperty -Path $Speech -Name "HasAccepted" -Type DWord -Value 1
 	print "Enabled Online Speech recognition"
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable silent installation of recommended apps.
@@ -2456,7 +2415,6 @@ Function DisableSilentInstallApps {
 	print "Disabling silent installation of suggested apps..."
 	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SilentInstalledAppsEnabled -Type DWord -Value 1
 	print "Disabled silent installation of suggested apps."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable silent installation of recommended apps.
@@ -2465,7 +2423,6 @@ Function EnableSilentInstallApps {
 	print "Enabling silent installation of suggested apps..."
 	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SilentInstalledAppsEnabled -Type DWord -Value 1
 	print "Enabled silent installation of suggested apps."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable "Show suggested content in Settings app"
@@ -2477,7 +2434,6 @@ Function HideSuggestedContentInSettings {
 	Set-ItemProperty -Path $CDN -Name SubscribedContent-353696Enabled -Type DWord -Value 0
 	Set-ItemProperty -Path $CDN -Name SubscribedContent-338393Enabled -Type DWord -Value 0
 	print "Disabled suggested content in Settings app."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable "Show suggested content in Settings app"
@@ -2489,7 +2445,6 @@ Function ShowSuggestedContentInSettings {
 	Set-ItemProperty -Path $CDN -Name SubscribedContent-353696Enabled -Type DWord -Value 1
 	Set-ItemProperty -Path $CDN -Name SubscribedContent-338393Enabled -Type DWord -Value 1
 	print "Enabled suggested content in Settings app."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable "Show me suggested content in Start menu".
@@ -2502,7 +2457,6 @@ Function HideSuggestedContentInStart {
 	print "Disabling suggested content in Start menu..."
 	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 0
 	print "Disabled suggested content in Start menu."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable "Show me suggested content in Start menu".
@@ -2515,7 +2469,6 @@ Function ShowSuggestedContentInStart {
 	print "Enabling Suggested content in Start menu..."
 	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 1
 	print "Enabled Suggested content in Start menu."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Tailored experiences.
@@ -2531,7 +2484,6 @@ Function DisableTailoredExperiences {
 	Set-ItemProperty -Path $TailoredExp1 -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
 	Set-ItemProperty -Path $TailoredExp2 -Name "Disabled" -Type DWord -Value 1
 	print "Disabled Tailored experiences."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Tailored experiences.
@@ -2543,7 +2495,6 @@ Function EnableTailoredExperiences {
 	Remove-ItemProperty -Path $TailoredExp1 -Name "DisableTailoredExperiencesWithDiagnosticData" -ErrorAction SilentlyContinue
 	Remove-ItemProperty -Path $TailoredExp2 -Name "Disabled" -ErrorAction SilentlyContinue
 	print "Enabled Tailed experiences."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Telemetry. 
@@ -2562,7 +2513,6 @@ Function DisableTelemetry {
 	Set-ItemProperty -Path $Telemetry2 -Name "AllowTelemetry" -Type DWord -Value 0
 	Set-ItemProperty -Path $Telemetry3 -Name "AllowTelemetry" -Type DWord -Value 0
 	print "Disabled telemetry."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Telemetry.
@@ -2576,7 +2526,6 @@ Function EnableTelemetry {
 	Set-ItemProperty -Path $Telemetry2 -Name "AllowTelemetry" -Type DWord -Value 3
 	Set-ItemProperty -Path $Telemetry3 -Name "AllowTelemetry" -Type DWord -Value 3
 	print "Disabled telemetry."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Clipboard History.
@@ -2591,7 +2540,6 @@ Function EnableClipboard {
 	print "You can now copy multiple items to your clipboard."
     print "Access your clipboard now using Windows key + V."
 	Write-Warning "If the Clipboard History feature does not work, retry it after a device restart."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Clipboard History.
@@ -2601,7 +2549,6 @@ Function DisableClipboard {
 	$Clipboard = "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Clipboard"
 	Set-ItemProperty -Path $Clipboard -Name "EnableClipboardHistory" -Value 0 -ErrorAction SilentlyContinue
 	print "Disabled Clipboard History."
-	Start-Sleep -Milliseconds 200
 }
 
 # Security features
@@ -2611,7 +2558,6 @@ Function AutoLoginPostUpdate {
 	print "Enabling automatic login post updates..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 1
 	print "Enabled Automatic login applying updates."
-	Start-Sleep -Milliseconds 200
 } 
 
 Function StayOnLockscreenPostUpdate {
@@ -2619,7 +2565,6 @@ Function StayOnLockscreenPostUpdate {
 	print "Disabling automatic login post updates..."
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent"
 	print "Disabled Automatic login after applying updates."
-	Start-Sleep -Milliseconds 200
 }
 
 Function DisableVBS {
@@ -2643,8 +2588,7 @@ Function DisableVBS {
 	space
 	print "  Note that virtualization features powered by Hyper-V such as WSL and WSA will not work until you re-enable Virtualization-based security."
 	print "  Read https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#virtualization-based-security for more."
-	space 
-	Start-Sleep -Milliseconds 200
+	space
 }
 
 Function EnableVBS {
@@ -2653,7 +2597,6 @@ Function EnableVBS {
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" -Name "Enabled" -Type DWord -Value 1
 	bcdedit.exe /set hypervisorlaunchtype auto | Out-Null
 	print "Enabled Virtualization-based security."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disables Windows WDigest credential caching (https://stealthbits.com/blog/wdigest-clear-text-passwords-stealing-more-than-a-hash/).
@@ -2663,7 +2606,6 @@ Function DisableLogonCredential {
 	# https://stealthbits.com/blog/wdigest-clear-text-passwords-stealing-more-than-a-hash/
 	Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\SecurityProviders\Wdigest" -Name "UseLogonCredential" -Type "DWORD" -Value 0
 	print "Disabled Windows WDigest credential caching."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enables Windows WDigest credential caching.
@@ -2672,7 +2614,6 @@ Function EnableLogonCredential {
 	print "Enabling Windows WDigest credential caching..."
 	Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\SecurityProviders\Wdigest" -Name "UseLogonCredential" -Type "DWORD" -Value 1
 	print "Enabled Windows WDigest credential caching."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable LLMNR (https://www.blackhillsinfosec.com/how-to-disable-llmnr-why-you-want-to/).
@@ -2682,7 +2623,6 @@ Function DisableLLMNR {
 	New-Item -Path "HKLM:\Software\Policies\Microsoft\Windows NT\" -Name "DNSClient" -Force | Out-Null
 	Set-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\Windows NT\DNSClient" -Name "EnableMulticast" -Type "DWORD" -Value 0 -Force | Out-Null
 	print "Disabled LLMNR."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable LLMNR
@@ -2691,7 +2631,6 @@ Function EnableLLMNR {
 	print "Enabling LLMNR..."
 	Remove-Item -Path "HKLM:\Software\Policies\Microsoft\Windows NT\DNS Client" | Out-Null
 	print "Enabled LLMNR."
-	Start-Sleep -Milliseconds 200
 }
 
 Function EnableSEHOP {
@@ -2705,7 +2644,6 @@ Function EnableSEHOP {
 	print "Enabling Structured Exception Handling Overwrite Protection..."
 	New-ItemProperty -Path $SEHOP -Type DWord -Name DisableExceptionChainValidation -Value 0 -Force | Out-Null
 	print "Enabled Structured Exception Handling Overwrite Protection."
-	Start-Sleep -Milliseconds 200
 }
 
 Function DisableSEHOP {
@@ -2714,7 +2652,6 @@ Function DisableSEHOP {
 	$SEHOP = "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"
 	Remove-ItemProperty -Path $SEHOP -Type DWord -Name DisableExceptionChainValidation | Out-Null
 	print "Disabled Structured Exception Handling Overwrite Protection."
-	Start-Sleep -Milliseconds 200
 }
 
 Function DisableWPAD {
@@ -2725,7 +2662,6 @@ Function DisableWPAD {
     Set-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad" -Name "WpadOverride" -Type "DWORD" -Value 1 -Force
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad" -Name "WpadOverride" -Type "DWORD" -Value 1 -Force
 	print "Disabled Web Proxy Auto-Discovery."
-	Start-Sleep -Milliseconds 200
 }
 
 Function EnableWPAD {
@@ -2734,7 +2670,6 @@ Function EnableWPAD {
 	Remove-Item -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad" -Force | Out-Null
     Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad" -Force | Out-Null
 	print "Enabled Web Proxy Auto-Discovery."
-	Start-Sleep -Milliseconds 200
 }
 
 Function EnableLSAProtection {
@@ -2743,7 +2678,6 @@ Function EnableLSAProtection {
 	New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\" -Name "LSASSs.exe" -Force | Out-Null
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LSASS.exe" -Name "AuditLevel" -Type "DWORD" -Value 8 -Force
 	print "Enabled LSA Protection/Auditing."
-	Start-Sleep -Milliseconds 200
 }
 
 Function DisableLSAProtection {
@@ -2751,7 +2685,6 @@ Function DisableLSAProtection {
 	print "Disabling LSA Protection/Auditing..."
 	Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LSASS.exe"
 	print "Disabled LSA Protection/Auditing."
-	Start-Sleep -Milliseconds 200
 }
 
 Function DisableScriptHost {
@@ -2760,7 +2693,6 @@ Function DisableScriptHost {
 	New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows Script Host\" -Name "Settings" -Force | Out-Null
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Script Host\Settings" -Name "Enabled" -Type "DWORD" -Value 0 -Force
 	print "Disabled Windows Script Host."
-	Start-Sleep -Milliseconds 200
 }
 
 Function EnableScriptHost {
@@ -2768,7 +2700,6 @@ Function EnableScriptHost {
 	print "Enabling Windows Script Host..."
 	Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows Script Host\Settings" -Force | Out-Null
 	print "Enabled Windows Script Host."
-	Start-Sleep -Milliseconds 200
 }
 
 Function DisableOfficeOLE {
@@ -2786,7 +2717,6 @@ Function DisableOfficeOLE {
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Office\$OfficeVersion\Outlook\Security\" -Name "ShowOLEPackageObj" -Type "DWORD" -Value "0" -Force
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Office\$OfficeVersion\Outlook\Security\" -Name "ShowOLEPackageObj" -Type "DWORD" -Value "0" -Force
 	print "Disabled Office OLE."
-	Start-Sleep -Milliseconds 200
 }
 
 Function EnableOfficeOLE {
@@ -2802,7 +2732,6 @@ Function EnableOfficeOLE {
 	Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Office\$OfficeVersion\Outlook\Security"
 	Remove-Item -Path "HKCU:\SOFTWARE\Microsoft\Office\$OfficeVersion\Outlook\Security"
 	print "Enabled Office OLE."
-	Start-Sleep -Milliseconds 200
 }
 
 
@@ -2826,7 +2755,6 @@ Function DisableAutoplay {
 	print "Disabling AutoPlay..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -Name "DisableAutoplay" -Type DWord -Value 1
 	print "Disabled AutoPlay."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Autoplay.
@@ -2835,7 +2763,6 @@ Function EnableAutoplay {
 	print "Enabling Autoplay..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -Name "DisableAutoplay" -Type DWord -Value 0
 	print "Enabled AutoPlay."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Autorun for all drives.
@@ -2849,7 +2776,6 @@ Function DisableAutorun {
 	}
 	Set-ItemProperty -Path $Autorun -Name "NoDriveTypeAutoRun" -Type DWord -Value 255
 	print "Disabled Autorun for all drives."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Autorun for removable drives.
@@ -2858,7 +2784,6 @@ Function EnableAutorun {
 	print "Enabling Autorun for all drives..."
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoDriveTypeAutoRun" -ErrorAction SilentlyContinue
 	print "Enabled Autorun for all drives."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Hiberfile.sys
@@ -2871,7 +2796,6 @@ Function DisableHibernation {
 	print "Disabling hibernation..."
 	powercfg.exe -h off
 	print "Disabled hibernation."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Hibernation
@@ -2884,7 +2808,6 @@ Function EnableHibernation {
 	print "Enabling hibernation..."
 	powercfg.exe -h on
 	print "Enabled hibernation."
-	Start-Sleep -Milliseconds 200
 }
 
 # Make Windows follow BIOS time
@@ -2897,7 +2820,6 @@ Function BIOSTimeUTC {
 	print "Setting Windows to follow BIOS Time..."
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name "RealTimeIsUniversal" -Type DWord -Value 1
 	print "Windows is set to follow BIOS Time."
-	Start-Sleep -Milliseconds 200
 }
 
 # Make Windows follow local time
@@ -2906,7 +2828,6 @@ Function BIOSTimeLocal {
 	print "Setting Windows to follow Local Time..."
 	Remove-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name "RealTimeIsUniversal" -ErrorAction SilentlyContinue
 	print "Windows is set to follow Local Time."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Num lock on startup.
@@ -2915,7 +2836,6 @@ Function EnableNumLock {
 	print "Setting Num lock to turn on autoamtically on Startup..."
 	New-ItemProperty -Path "Registry::HKEY_USERS\.DEFAULT\Control Panel\Keyboard" -Name InitialKeyboardIndicators -PropertyType String -Value 2147483650 -Force | Out-Null
 	print "Num lock will turn on automatically on Startup."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Num lock on startup.
@@ -2923,7 +2843,6 @@ Function DisableNumLock {
 	space
 	New-ItemProperty -Path "Registry::HKEY_USERS\.DEFAULT\Control Panel\Keyboard" -Name InitialKeyboardIndicators -PropertyType String -Value 2147483648 -Force | Out-Null
 	print "Num lock will no longer turn on automatically on Startup."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Storage Sense. 
@@ -2934,7 +2853,6 @@ Function EnableStorageSense {
 	New-Item -Path $StorageSense -ItemType Directory -Force | Out-Null
 	New-ItemProperty -Path $StorageSense -Name 01 -PropertyType DWord -Value 1 -Force | Out-Null
 	print "Enabled Storage Sense."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Storage Sense.
@@ -2945,7 +2863,6 @@ Function DisableStorageSense {
 	New-Item -Path $StorageSense -ItemType Directory -Force | Out-Null
 	New-ItemProperty -Path $StorageSense -Name 01 -PropertyType DWord -Value 0 -Force | Out-Null
 	print "Disabled Storage Sense."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Reserved Storage. 
@@ -2954,7 +2871,6 @@ Function DisableReserves {
 	print "Disabling Reserved Storage..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager" -Name "ShippedWithReserves" -Type DWord -Value 0
 	print "Disabled Reserved Storage."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Reserved Storage. 
@@ -2963,7 +2879,6 @@ Function EnableReserves {
 	print "Enabling Reserved Storage..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager" -Name "ShippedWithReserves" -Type DWord -Value 1
 	print "Enabled Reserved Storage."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable unessential services.
@@ -2982,7 +2897,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 		print "    Stopped service: $Service."
 	}
 	print "Disabled unnecesarry services."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable unessential services.
@@ -3001,7 +2915,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 		print "    Started service: $Service."
 	}
 	print "Enabled unessential services."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable unessential scheduled tasks.
@@ -3026,7 +2939,6 @@ Function DisableTasks {
 		print "    Disabled task: $Task."
 	}
     print "Disabled unessential tasks."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable unessential scheduled tasks.
@@ -3048,7 +2960,6 @@ Function EnableTasks {
 		print "    Enabled task: $Task."
 	}
     print "Enabled unessential tasks."
-	Start-Sleep -Milliseconds 200
 }
 
 # Intelligently setup Windows Update policies.
@@ -3119,11 +3030,10 @@ Function SetupWindowsUpdate {
 	)
 	ForEach ($WinUpdatePolicy in $WinUpdatePolicies) 
 	{
-		print "    - $WinUpdatePolicy"
+		log "    - $WinUpdatePolicy"
 	}
 
 	print "Set up Windows Update policies."
-	Start-Sleep -Milliseconds 200
 }
 
 # Reset all Windows Update policies
@@ -3131,7 +3041,6 @@ Function ResetWindowsUpdate {
     space
     Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Recurse
     print "All Windows Update policies were reset."
-	Start-Sleep -Milliseconds 200
 }
 
 # A simple registry edit that fixes an issue where a small batch of devices turn back on after powering down.
@@ -3141,7 +3050,6 @@ Function EnablePowerdownAfterShutdown {
 	print "This is known to fix issues where some PCs might boot up without user input after shutdown."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name PowerdownAfterShutdown -Type DWord -Value 1
 	print "Enabled full power down on shut down."
-	Start-Sleep -Milliseconds 200
 }
 
 # Revert the EnablePowerdownAfterShutdown edit.
@@ -3150,7 +3058,6 @@ Function DisablePowerdownAfterShutdown {
 	print "Disabling full powerdown on shut down..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name PowerdownAfterShutdown -Type DWord -Value 0
 	print "Disabled full powerdown on shut down."
-	Start-Sleep -Milliseconds 200
 }
 
 
@@ -3174,7 +3081,6 @@ Function EnablePrtScrToSnip {
 	print "Binding Print Screen key to launch Snip overlay..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 1
 	print "Bound Print Screen key to launch Snip overlay."
-	Start-Sleep -Milliseconds 200
 }
 	
 # Don't use Print screen button to open screen skipping.
@@ -3183,7 +3089,6 @@ Function DisablePrtScrSnip {
 	print "Unbinding Snip overlay launch from Print screen key...."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
 	print "Unbound Snip overlay launch from Print screen key."
-	Start-Sleep -Milliseconds 200
 }
 
 # Show extensions.
@@ -3192,7 +3097,6 @@ Function ShowExtensions {
 	print "Showing extensions in file names..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 0
 	print "Showed extensions in file names."
-	Start-Sleep -Milliseconds 200
 }
 
 # Hide extensions.
@@ -3201,7 +3105,6 @@ function HideExtensions {
 	print "Hiding extensions from file names..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 1
 	print "Hidden extensions in file names."
-	Start-Sleep -Milliseconds 200
 }
 
 # Hide Recent files in Quick Access.
@@ -3210,7 +3113,6 @@ function HideRecentFilesInQuickAccess {
 	print "Hiding recent files from Quick Access..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name ShowRecent -Type DWord -Value 0
 	print "Hidden recent files from Quick Access."
-	Start-Sleep -Milliseconds 200
 }
 
 # Show Recent files in Quick Access.
@@ -3219,7 +3121,6 @@ function ShowRecentFilesInQuickAccess {
 	print "Showing Recent files in Quick Access..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name ShowRecent -Type DWord -Value 1
 	print "Shown Recent files in Quick Access."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Sticky keys.
@@ -3228,7 +3129,6 @@ Function DisableStickyKeys {
 	print "Disabling Sticky keys..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
 	print "Disabled Sticky keys."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Sticky keys.
@@ -3237,7 +3137,6 @@ Function EnableStickyKeys {
 	print "Enabling Sticky keys..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "510"
 	print "Enabled Sticky keys."
-	Start-Sleep -Milliseconds 200
 }
 
 # Change default File Explorer view to This PC.
@@ -3246,7 +3145,6 @@ Function SetExplorerThisPC {
 	print "Setting default File Explorer view to This PC..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -Type DWord -Value 1
 	print "Set default File Explorer view to This PC."
-	Start-Sleep -Milliseconds 200
 }
 
 # Change default File Explorer view to Quick Access.
@@ -3255,7 +3153,6 @@ Function SetExplorerQuickAccess {
 	print "Setting default File Explorer view to Quick Access..."
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -ErrorAction SilentlyContinue
 	print "Set default File Explorer view to Quick Access."
-	Start-Sleep -Milliseconds 200
 }
 
 # Hide 3D Objects.
@@ -3280,7 +3177,6 @@ Function Hide3DObjects {
 	}
 	Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
 	print "Hid 3D Objects."
-	Start-Sleep -Milliseconds 200
 }
 
 # Restore 3D Objects.
@@ -3301,7 +3197,6 @@ Function Restore3DObjects {
 	Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
 	Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
 	print "Restoring 3D Objects."
-	Start-Sleep -Milliseconds 200
 }
 
 # Hide Search bar from taskbar.
@@ -3310,7 +3205,6 @@ Function HideSearch {
 	print "Hiding Search button..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
 	print "Hid Search button."
-	Start-Sleep -Milliseconds 200
 }
 
 # Restore Search bar to taskbar.
@@ -3319,7 +3213,6 @@ Function RestoreSearch {
 	print "Restoring Search button..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
 	print "Restored Search button."
-	Start-Sleep -Milliseconds 200
 }
 
 # Hide Task View.
@@ -3328,7 +3221,6 @@ Function HideTaskView {
 	print "Hiding Task view button..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
 	print "Hid Task view button."
-	Start-Sleep -Milliseconds 200
 }
 
 # Restore Task View button.
@@ -3337,7 +3229,6 @@ Function RestoreTaskView {
 	print "Restoring Task view button..."
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -ErrorAction SilentlyContinue
 	print "Restored Task view icon."
-	Start-Sleep -Milliseconds 200
 }
 
 # Hide Cortana icon from taskbar.
@@ -3350,7 +3241,6 @@ Function HideCortana {
 	print "Hiding Cortana button..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
 	print "Hid Cortana button."
-	Start-Sleep -Milliseconds 200
 }
 
 # Restore Cortana button in taskbar.
@@ -3362,7 +3252,6 @@ Function RestoreCortana {
 	print "Restoring Cortana button..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
 	print "Restored Cortana button."
-	Start-Sleep -Milliseconds 200
 }
 
 # Hide Meet Now icon from tray.
@@ -3378,7 +3267,6 @@ Function HideMeetNow {
     Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1
     Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
 	print "Hid Meet now."
-	Start-Sleep -Milliseconds 200
 }
 
 # Restore Meet Now icon on tray.
@@ -3394,7 +3282,6 @@ Function RestoreMeetNow {
     Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 0
     Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
 	print "Restored Meet now."
-	Start-Sleep -Milliseconds 200
 }
 
 # Turn off News and interests feed.
@@ -3410,7 +3297,6 @@ Function HideNI {
 	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
 	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
 	print "Disabled News and interests."
-	Start-Sleep -Milliseconds 200
 }
 
 # Turn on News and interests feed.
@@ -3425,7 +3311,6 @@ Function RestoreNI {
 	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 0 | Out-Null
 	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 0 | Out-Null
 	print "Enabled News and interests."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable Widgets item - Windows 11 only.
@@ -3438,7 +3323,6 @@ function HideWidgets {
 	print "Hiding Widgets..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 0
 	print "Hidden Widgets."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Widgets item - Windows 11 only
@@ -3451,7 +3335,6 @@ function RestoreWidgets {
 	print "Restoring Widgets..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 1
 	print "Restored Widgets."
-	Start-Sleep -Milliseconds 200
 }
 
 # Disable chat item - Windows 11 only
@@ -3464,7 +3347,6 @@ function HideChat {
 	print "Hiding Chat..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 0
 	print "Hid Chat."
-	Start-Sleep -Milliseconds 200
 }
 
 # Enable Chat item - Windows 11 only
@@ -3477,7 +3359,6 @@ function RestoreChat {
 	print "Restoring Chat..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 1
 	print "Restored Chat."
-	Start-Sleep -Milliseconds 200
 }
 
 Start-Sleep -Seconds 2
