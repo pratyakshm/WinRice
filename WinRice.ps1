@@ -38,7 +38,7 @@ $tasks = @(
 	# "InstallFeatures", "Activity", 
 	"ChangesDone",
 
-### Privacy & Security ###
+### Privacy ###
 	"PrivacySecurity",
 	"DisableActivityHistory",	
 	# "EnableActivityHistory",
@@ -72,6 +72,8 @@ $tasks = @(
 	# "EnableTelemetry",
 	"EnableClipboard",				
 	# "DisableClipboard",
+
+	### Security ###
 	# "AutoLoginPostUpdate", 		    
 	"StayOnLockscreenPostUpdate",
 	# "DisableVBS",
