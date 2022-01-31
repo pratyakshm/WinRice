@@ -588,6 +588,17 @@ if (!(check($customize)))
 		{
 			print "  NO changes will be made to automatic Windows updates."
 		}
+
+		$drivers = ask "Do you want to turn off driver updates from Windows Update? [y/N]"
+		Start-Sleep -Milliseconds 100
+		if (check($drivers))
+		{
+			print "  Drivers will no longer be delivered using Windows Update."
+		}
+		elseif (!(check($drivers)))
+		{
+			print "  NO changes will be made to driver updates."
+		}
 	}
 	space
 
@@ -3006,10 +3017,10 @@ Function SetupWindowsUpdate {
 
 	if (check($dwu))
 	{
-		Set-ItemProperty -Path $wureg -Name DeferQualityUpdates -Type DWord -Value 1
-		Set-ItemProperty -Path $wureg -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
-		Set-ItemProperty -Path $wureg -Name DeferFeatureUpdates -Type DWord -Value 1
-		Set-ItemProperty -Path $wureg -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
+		Set-ItemProperty -Path $Update1 -Name DeferQualityUpdates -Type DWord -Value 1
+		Set-ItemProperty -Path $Update1 -Name DeferQualityUpdatesPeriodInDays -Type DWord -Value 4
+		Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdates -Type DWord -Value 1
+		Set-ItemProperty -Path $Update1 -Name DeferFeatureUpdatesPeriodInDays -Type DWord -Value 20
 	
 		# Print user message; policies applied.
 		$WinUpdatePolicies =@(
@@ -3020,6 +3031,12 @@ Function SetupWindowsUpdate {
 		{
 			print "    - $WinUpdatePolicy"
 		}
+	}
+
+	if (check($drivers))
+	{
+		Set-ItemProperty -Path $Update1 -Name ExcludeWUDriversInQualityUpdate -Type DWord -Value 1
+		print "    - Disabled driver updates from Windows Update."
 	}
 
 	# Print user message; policies applied.
@@ -3035,6 +3052,7 @@ Function SetupWindowsUpdate {
 
 	print "Set up Windows Update policies."
 }
+
 
 # Reset all Windows Update policies
 Function ResetWindowsUpdate {
