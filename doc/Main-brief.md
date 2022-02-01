@@ -1,4 +1,11 @@
-# Ordered list of jobs WinRice performs
+# Ordered list of jobs which WinRice performs
+
+Your WinRice experience can be customized. Please read [`Settings.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Settings.md) to learn more.
+
+Legend
+| Symbol | Significance |
+| ---------- | -------  |
+| 🎛️  | Tasks prefixed with 🎛️ "control knob" are such tasks which are only run when they are configured. You may learn more by visiting [Settings](https://github.com/pratyakshm/WinRice/blob/main/doc/Settings.md) |
 
 ## Apps
 
@@ -9,14 +16,14 @@
 - Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/))
 - NanaZip ([GitHub](https://github.com/M2Team/NanaZip))
 
-#### Leveraging WinGet to Install Apps (optional)
+#### 🎛️ Leveraging WinGet to Install Apps
 
 - [`winget.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winget.md)
 - [`import.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/import.md)
 - [`winstall.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winstall.md)
 
 
-### Apps Uninstalled: (optional)
+### 🎛️ Apps Uninstalled:
 
 Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/App-uninstallation.md)
 
@@ -29,13 +36,13 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 
 ## Features
 
-### Features Installed:
+### 🎛️ Features Installed:
 
-- .NET 3.5 (optional)
-- Windows Sandbox (optional)
-- Windows Subsystem for Linux (optional)
+- .NET 3.5
+- Windows Sandbox 
+- Windows Subsystem for Linux
 
-### Features Uninstalled: (optional)
+### 🎛️ Features Uninstalled: 
 
 - Hello Face
 - Legacy Components (DirectPlay)
@@ -99,6 +106,7 @@ After running this command, restart your device to apply the changes.
 
 See more at [Enable virtualization-based protection of code integrity - docs.microsoft.com](https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity).
 <--->
+
 ### Windows WDigest Credential Caching
 
 Digest Authentication is a challenge/response protocol that was primarily used in Windows Server 2003 for LDAP and web-based authentication. It utilizes Hypertext Transfer Protocol (HTTP) and Simple Authentication Security Layer (SASL) exchanges to authenticate. 
@@ -171,7 +179,6 @@ See more at [111 Attacking EvilCorp Anatomy of a Corporate Hack Sean Metcalf Wil
 - DmClient
 - DmClientOnScenarioDownload
 - Disk Diagnostics Data Collector
-- Disk Defragmentation (optional)
 - Feedback Notifications task
 - Microsoft Compatibility Appraiser
 - ProgramDataUpdater
@@ -185,8 +192,10 @@ See more at [111 Attacking EvilCorp Anatomy of a Corporate Hack Sean Metcalf Wil
 - DiagTrack
 - SysMain
 
-## Windows Update (optional)
+## 🎛️ Windows Update
+
 ##### P.S. Windows Update policies are only applied to Windows editions that support Group policies. These are Education, Enterprise, Enterprise LTSC and Professional editions.
+
 ### Setup Windows Update
 
 Setup the following policies to Windows Update:
@@ -208,7 +217,7 @@ Setup the following policies to Windows Update:
 - Turn off Autorun
 - Turn off Reserved Storage
   - This setting will only take effect after an update is installed.
-- Set BIOS time to UTC
+- 🎛️ Set BIOS time to UTC
 - Turn on Storage Sense
 - Turn on Num lock on startup
 

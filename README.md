@@ -20,11 +20,12 @@ WinRice, amongst a host of other things, improves privacy, de-clutters the Windo
 
 ## Documentation
 
-The documentation for WinRice is available in the below link. The documentation explains every task that WinRice performs on your PC. Make sure you (the user) have read the documentation before going ahead.
+The documentation for WinRice is available below. Before running WinRice, please ensure that you have read the essential documentation.
 
 **Documentation folder:** [Tap here](https://github.com/pratyakshm/WinRice/tree/main/doc)  
-  P.S. Reading the documentation is strongly recommended
  
+**Known issues**: See [Known issues](https://github.com/pratyakshm/WinRice/issues?q=is%3Aopen+is%3Aissue+label%3A%22Bug+report%22) before running WinRice.
+
 **Functions**: See [Functions](https://github.com/pratyakshm/WinRice/wiki/Functions) to get a detailed explanation of each function.
 
 ## Requirements

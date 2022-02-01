@@ -19,3 +19,9 @@ Go to **Settings > System > About** and scroll down to the **Windows specificati
 In here, check out **Version** and **OS build** and verify if its listed in the table provided above.
   
 If the Version and OS build that you are currently on are **NOT** listed in the table above, you need to update your device. [Learn more](https://github.com/pratyakshm/WinRice/wiki/Fresh-installation-of-Windows).
+
+---
+
+## Feedback
+
+If you have observed an issue with docs or if there are accessibility issues, please consider [filing an issue](https://github.com/pratyakshm/WinRice/issues/new?assignees=pratyakshm&labels=Issue-Docs&template=doc_issue.yaml&title=Docs+issue%3A+).
