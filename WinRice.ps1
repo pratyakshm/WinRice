@@ -952,6 +952,11 @@ Function InstallNanaZip {
 		print "WinGet is not installed. Couldn't install NanaZip."
 		return 
 	}
+	if (Get-AppxPackage *NanaZip*)
+	{
+		print "Skipped NanaZip installation because it is already installed on this device."
+		return
+	}
 	print "Installing NanaZip... (https://github.com/M2Team/NanaZip)"
 	winget install NanaZip -s msstore --accept-source-agreements --accept-package-agreements | Out-Null
 	print "Installed NanaZip."
