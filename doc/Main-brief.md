@@ -173,7 +173,7 @@ See more at [111 Attacking EvilCorp Anatomy of a Corporate Hack Sean Metcalf Wil
 
 # System
 
-### Turn Off the Following Tasks:
+### Disables the following tasks:
 
 - Consolidator
 - DmClient
@@ -184,10 +184,16 @@ See more at [111 Attacking EvilCorp Anatomy of a Corporate Hack Sean Metcalf Wil
 - ProgramDataUpdater
 - QueueReporting
 - UsbCeip
-  </details>
 
+#### Disables these additional tasks if your device is powered by an AMD processor:
 
-### Turn Off the Following Services:
+- AMDLinkUpdate
+- AMDRyzenMasterSDKTask
+- ModifyLinkUpdate
+- StartCN
+- StartDVR
+
+### Disables the following services:
 
 - DiagTrack
 - SysMain

@@ -114,6 +114,8 @@ $tasks = @(
 	# "EnableServices",
 	"DisableTasks",				   
 	# "DisableTasks",
+	"DisableAMDTasks",
+	# "EnableAMDTasks",
 	"SetupWindowsUpdate",		   
 	# "ResetWindowsUpdate",
 	# "EnablePowerdownAfterShutdown",
@@ -2976,6 +2978,50 @@ Function EnableTasks {
 		print "    Enabled task: $Task."
 	}
     print "Enabled unessential tasks."
+}
+
+# Disable AMD tasks
+function DisableAMDTasks {
+	if ((Get-WmiObject Win32_Processor).Manufacturer -ne "AuthenticAMD")
+	{
+		return
+	}
+	print "This device is powered by an AMD processor, disabling additional AMD specific tasks..."
+	$Tasks = @(
+		"AMDLinkUpdate"
+		"AMDRyzenMasterSDKTask"
+		"ModifyLinkUpdate"
+		"StartCN"
+		"StartDVR"
+    )
+	ForEach ($Task in $Tasks) 
+	{
+		Disable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
+		print "    Disabled task: $Task."
+	}
+	print "Disabled additional AMD specific tasks."
+}
+
+# Enable AMD tasks
+function EnableAMDTasks {
+	if ((Get-WmiObject Win32_Processor).Manufacturer -ne "AuthenticAMD")
+	{
+		return
+	}
+	print "Enabling additional AMD specific tasks..."
+	$Tasks = @(
+		"AMDLinkUpdate"
+		"AMDRyzenMasterSDKTask"
+		"ModifyLinkUpdate"
+		"StartCN"
+		"StartDVR"
+    )
+	ForEach ($Task in $Tasks) 
+	{
+		Enable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
+		print "    Enabled task: $Task."
+	}
+	print "Enabled additional AMD specific tasks."
 }
 
 # Intelligently setup Windows Update policies.
