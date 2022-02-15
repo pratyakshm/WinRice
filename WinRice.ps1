@@ -197,6 +197,11 @@ Function print($text) {
 	Start-Sleep -Milliseconds 150
 }
 
+Function 
+	currentuser {
+	print "  Note: This setting will not affect other user accounts in this device."
+}
+
 function RunWithProgress {
     param(
         [Parameter(Mandatory = $true)]
@@ -2203,6 +2208,7 @@ Function EnableAdvertisingID {
 Function DisableBackgroundApps {
 	space
 	print "Disabling Background apps..."
+	currentuser
 	Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process 
 	{
 		Remove-ItemProperty -Path $_.PsPath -Name * -Force
@@ -2232,6 +2238,7 @@ Function DisableBackgroundApps {
 # Enable Background apps.
 Function EnableBackgroundApps {
 	print "Enabling Background apps..."
+	currentuser
 	Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process 
 	{
 		Remove-ItemProperty -Path $_.PsPath -Name * -Force
@@ -2269,6 +2276,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		return
 	}
 	print "Disabling Feedback notifications..."
+	currentuser
 	$Feedback1 = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
 	$Feedback2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
 	$Feedback3 = "Microsoft\Windows\Feedback\Siuf\DmClient"
@@ -2291,6 +2299,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 # Enable Feedback.
 Function EnableFeedback {
 	print "Enabling Feedback notifications..."
+	currentuser
 	$Feedback1 = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
 	$Feedback2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
 	$Feedback3 = "Microsoft\Windows\Feedback\Siuf\DmClient"
@@ -2310,6 +2319,7 @@ Function EnableFeedback {
 Function DisableInkHarvesting {
 	space
 	print "Disabling Inking & typing personalization..."
+	currentuser
 	$Ink1 = "HKCU:\Software\Microsoft\InputPersonalization"
 	$Ink2 = "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore"
 	$Ink3 = "HKCU:\Software\Microsoft\Personalization\Settings"
@@ -2327,6 +2337,7 @@ Function DisableInkHarvesting {
 Function EnableInkHarvesting {
 	space
 	print "Enabling Inking & typing personalization..."
+	currentuser
 	$Ink1 = "HKCU:\Software\Microsoft\InputPersonalization"
 	$Ink2 = "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore"
 	$Ink3 = "HKCU:\Software\Microsoft\Personalization\Settings"
@@ -2344,6 +2355,7 @@ Function EnableInkHarvesting {
 Function DisableLangAccess {
 	space
 	print "Disabling websites' ability to provide you with locally relevant content by accessing your language list..."
+	currentuser
 	$LangAccess = "HKCU:\Control Panel\International\User Profile"
 	Remove-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -ErrorAction SilentlyContinue | Out-Null
 	New-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 1 | Out-Null
@@ -2353,6 +2365,7 @@ Function DisableLangAccess {
 # Enable "Let websites provide locally relevant content by accessing my language list".
 Function EnableLangAccess {
 	print "Enabling websites' ability to provide you with locally relevant content by accessing your language list..."
+	currentuser
 	$LangAccess = "HKCU:\Control Panel\International\User Profile"
 	Set-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 0
 	print "Enabled websites' ability to provide you with locally relevant content by accessing your language list."
@@ -2408,6 +2421,7 @@ Function EnableMapsUpdates {
 Function DisableSpeechRecognition {
 	space
 	print "Disabling Online Speech recognition..."
+	currentuser
 	$Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
 	if (!(Test-Path $Speech)) 
 	{
@@ -2422,6 +2436,7 @@ Function DisableSpeechRecognition {
 Function EnableSpeechRecognition {
 	space
 	print "Enabling Speech recognition..."
+	currentuser
 	$Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
 	if (!(Test-Path )) 
 	{
@@ -2435,6 +2450,7 @@ Function EnableSpeechRecognition {
 Function DisableSilentInstallApps {
 	space
 	print "Disabling silent installation of suggested apps..."
+	currentuser
 	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SilentInstalledAppsEnabled -Type DWord -Value 1
 	print "Disabled silent installation of suggested apps."
 }
@@ -2443,6 +2459,7 @@ Function DisableSilentInstallApps {
 Function EnableSilentInstallApps {
 	space
 	print "Enabling silent installation of suggested apps..."
+	currentuser
 	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SilentInstalledAppsEnabled -Type DWord -Value 1
 	print "Enabled silent installation of suggested apps."
 }
@@ -2451,6 +2468,7 @@ Function EnableSilentInstallApps {
 Function HideSuggestedContentInSettings {
 	space
 	print "Disabling suggested content in Settings app..."
+	currentuser
 	$CDN = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
 	Set-ItemProperty -Path $CDN -Name SubscribedContent-353694Enabled -Type DWord -Value 0
 	Set-ItemProperty -Path $CDN -Name SubscribedContent-353696Enabled -Type DWord -Value 0
@@ -2462,6 +2480,7 @@ Function HideSuggestedContentInSettings {
 Function ShowSuggestedContentInSettings {
 	space
 	print "Enabling suggested content in Settings app..."
+	currentuser
 	$CDN = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
 	Set-ItemProperty -Path $CDN -Name SubscribedContent-353694Enabled -Type DWord -Value 1
 	Set-ItemProperty -Path $CDN -Name SubscribedContent-353696Enabled -Type DWord -Value 1
@@ -2477,6 +2496,7 @@ Function HideSuggestedContentInStart {
 	}
 	space 
 	print "Disabling suggested content in Start menu..."
+	currentuser
 	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 0
 	print "Disabled suggested content in Start menu."
 }
@@ -2489,6 +2509,7 @@ Function ShowSuggestedContentInStart {
 	}
 	space 
 	print "Enabling Suggested content in Start menu..."
+	currentuser
 	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 1
 	print "Enabled Suggested content in Start menu."
 }
@@ -2497,6 +2518,7 @@ Function ShowSuggestedContentInStart {
 Function DisableTailoredExperiences {
 	space
 	print "Disabling Tailored experiences..."
+	currentuser
 	$TailoredExp1 = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
 	$TailoredExp2 = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting"
 	if (!(Test-Path $CloudContent )) 
@@ -2512,6 +2534,7 @@ Function DisableTailoredExperiences {
 Function EnableTailoredExperiences {
 	space
 	print "Enabling Tailored experiences..."
+	currentuser
 	$TailoredExp1 = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
 	$TailoredExp2 = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting"
 	Remove-ItemProperty -Path $TailoredExp1 -Name "DisableTailoredExperiencesWithDiagnosticData" -ErrorAction SilentlyContinue
@@ -2775,6 +2798,7 @@ Function OS {
 Function DisableAutoplay {
 	space
 	print "Disabling AutoPlay..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -Name "DisableAutoplay" -Type DWord -Value 1
 	print "Disabled AutoPlay."
 }
@@ -2783,6 +2807,7 @@ Function DisableAutoplay {
 Function EnableAutoplay {
 	space
 	print "Enabling Autoplay..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -Name "DisableAutoplay" -Type DWord -Value 0
 	print "Enabled AutoPlay."
 }
@@ -2871,6 +2896,7 @@ Function DisableNumLock {
 Function EnableStorageSense {
 	space
 	print "Enabling Storage Sense..."
+	currentuser
 	$StorageSense = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
 	New-Item -Path $StorageSense -ItemType Directory -Force | Out-Null
 	New-ItemProperty -Path $StorageSense -Name 01 -PropertyType DWord -Value 1 -Force | Out-Null
@@ -2881,6 +2907,7 @@ Function EnableStorageSense {
 Function DisableStorageSense {
 	space
 	print "Disabling Storage Sense..."
+	currentuser
 	$StorageSense = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
 	New-Item -Path $StorageSense -ItemType Directory -Force | Out-Null
 	New-ItemProperty -Path $StorageSense -Name 01 -PropertyType DWord -Value 0 -Force | Out-Null
@@ -3136,6 +3163,7 @@ Function DisablePowerdownAfterShutdown {
 Function DisableWindowsTipsNotifications {
 	space
 	print "Disabling Windows tips and suggestions notifications...."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-338389Enabled" -Type DWord -Value 0
 	print "Disabled Windows tips and suggestions notifications."
 }
@@ -3143,6 +3171,7 @@ Function DisableWindowsTipsNotifications {
 Function EnableWindowsTipsNotifications {
 	space
 	print "Enabling Windows tips and suggestions notifications...."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-338389Enabled" -Type DWord -Value 1
 	print "Enabled Windows tips and suggestions notifications."
 }
@@ -3150,6 +3179,7 @@ Function EnableWindowsTipsNotifications {
 Function DisableWindowsWelcomeExperience {
 	space
 	print "Disabling Windows welcome experience..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-310093Enabled" -Type DWord -Value 0 
 	print "Disabled Windows welcome experience."
 }
@@ -3157,6 +3187,7 @@ Function DisableWindowsWelcomeExperience {
 Function EnableWindowsWelcomeExperience {
 	space
 	print "Enabling Windows welcome experience..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-310093Enabled" -Type DWord -Value 1
 	print "Enabled Windows welcome experience."
 }
@@ -3180,6 +3211,7 @@ Function PrintExplorerChanges {
 Function EnablePrtScrToSnip {
 	space
 	print "Binding Print Screen key to launch Snip overlay..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 1
 	print "Bound Print Screen key to launch Snip overlay."
 }
@@ -3188,6 +3220,7 @@ Function EnablePrtScrToSnip {
 Function DisablePrtScrSnip {
 	space
 	print "Unbinding Snip overlay launch from Print screen key...."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
 	print "Unbound Snip overlay launch from Print screen key."
 }
@@ -3196,6 +3229,7 @@ Function DisablePrtScrSnip {
 Function ShowExtensions {
 	space
 	print "Showing extensions in file names..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 0
 	print "Showed extensions in file names."
 }
@@ -3204,6 +3238,7 @@ Function ShowExtensions {
 function HideExtensions {
 	space
 	print "Hiding extensions from file names..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 1
 	print "Hidden extensions in file names."
 }
@@ -3212,6 +3247,7 @@ function HideExtensions {
 function HideRecentFilesInQuickAccess {
 	space
 	print "Hiding recent files from Quick Access..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name ShowRecent -Type DWord -Value 0
 	print "Hidden recent files from Quick Access."
 }
@@ -3220,6 +3256,7 @@ function HideRecentFilesInQuickAccess {
 function ShowRecentFilesInQuickAccess {
 	space 
 	print "Showing Recent files in Quick Access..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name ShowRecent -Type DWord -Value 1
 	print "Shown Recent files in Quick Access."
 }
@@ -3228,6 +3265,7 @@ function ShowRecentFilesInQuickAccess {
 Function DisableStickyKeys {
 	space
 	print "Disabling Sticky keys..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
 	print "Disabled Sticky keys."
 }
@@ -3236,6 +3274,7 @@ Function DisableStickyKeys {
 Function EnableStickyKeys {
 	space
 	print "Enabling Sticky keys..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "510"
 	print "Enabled Sticky keys."
 }
@@ -3244,6 +3283,7 @@ Function EnableStickyKeys {
 Function SetExplorerThisPC {
 	space
 	print "Setting default File Explorer view to This PC..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -Type DWord -Value 1
 	print "Set default File Explorer view to This PC."
 }
@@ -3252,6 +3292,7 @@ Function SetExplorerThisPC {
 Function SetExplorerQuickAccess {
 	space
 	print "Setting default File Explorer view to Quick Access..."
+	currentuser
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -ErrorAction SilentlyContinue
 	print "Set default File Explorer view to Quick Access."
 }
@@ -3304,6 +3345,7 @@ Function Restore3DObjects {
 Function HideSearch {
 	space
 	print "Hiding Search button..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
 	print "Hid Search button."
 }
@@ -3312,6 +3354,7 @@ Function HideSearch {
 Function RestoreSearch {
 	space
 	print "Restoring Search button..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
 	print "Restored Search button."
 }
@@ -3320,6 +3363,7 @@ Function RestoreSearch {
 Function HideTaskView {
 	space
 	print "Hiding Task view button..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
 	print "Hid Task view button."
 }
@@ -3328,6 +3372,7 @@ Function HideTaskView {
 Function RestoreTaskView {
 	space
 	print "Restoring Task view button..."
+	currentuser
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -ErrorAction SilentlyContinue
 	print "Restored Task view icon."
 }
@@ -3340,6 +3385,7 @@ Function HideCortana {
 	}
 	space
 	print "Hiding Cortana button..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
 	print "Hid Cortana button."
 }
@@ -3351,6 +3397,7 @@ Function RestoreCortana {
 		return
 	}
 	print "Restoring Cortana button..."
+	currentuser
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
 	print "Restored Cortana button."
 }
