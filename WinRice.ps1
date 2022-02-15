@@ -94,8 +94,8 @@ $tasks = @(
 	# "EnableOfficeOLE",
 	"ChangesDone",
 
-### Tasks & Services ###
-	"TasksServices",
+### OS ###
+	"OS",
 	# "DisableStorageSense",		   
 	"EnableStorageSense",
 	"DisableReserves",	   
@@ -120,6 +120,10 @@ $tasks = @(
 	# "ResetWindowsUpdate",
 	# "EnablePowerdownAfterShutdown",
 	# "DisablePowerdownAfterShutdown",
+	"DisableWindowsTipsNotifications",
+	# "EnableWindowsTipsNotifications",
+	"DisableWindowsWelcomeExperience",
+	# "EnableWindowsWelcomeExperience",
 	"ChangesDone",
 
 ### Windows Explorer ###
@@ -2755,14 +2759,14 @@ Function EnableOfficeOLE {
 
 
 ####################################
-######### TASKS & SERVICES #########
+######### OPERATING SYSTEM #########
 ####################################
 
 # Update status.
-Function TasksServices {
+Function OS {
 	space
 	print "---------------------------"
-	print "      TASKS & SERVICES     "   
+	print "      OPERATING SYSTEM     "   
 	print "---------------------------"
 	space
 }
@@ -3127,6 +3131,34 @@ Function DisablePowerdownAfterShutdown {
 	print "Disabling full powerdown on shut down..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name PowerdownAfterShutdown -Type DWord -Value 0
 	print "Disabled full powerdown on shut down."
+}
+
+Function DisableWindowsTipsNotifications {
+	space
+	print "Disabling Windows tips and suggestions notifications...."
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-338389Enabled" -Type DWord -Value 0
+	print "Disabled Windows tips and suggestions notifications."
+}
+
+Function EnableWindowsTipsNotifications {
+	space
+	print "Enabling Windows tips and suggestions notifications...."
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-338389Enabled" -Type DWord -Value 1
+	print "Enabled Windows tips and suggestions notifications."
+}
+
+Function DisableWindowsWelcomeExperience {
+	space
+	print "Disabling Windows welcome experience..."
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-310093Enabled" -Type DWord -Value 0 
+	print "Disabled Windows welcome experience."
+}
+
+Function EnableWindowsWelcomeExperience {
+	space
+	print "Enabling Windows welcome experience..."
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-310093Enabled" -Type DWord -Value 1
+	print "Enabled Windows welcome experience."
 }
 
 
