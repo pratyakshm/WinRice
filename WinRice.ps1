@@ -127,7 +127,7 @@ $tasks = @(
 	"ChangesDone",
 
 ### Windows Explorer ###
-	"PrintExplorerChanges",
+	"WindowsExplorer",
 	"EnablePrtScrToSnip",		   
 	# "DisablePrtScrSnip",
 	# "ShowExtensions",
@@ -418,14 +418,14 @@ ForEach ($setting in $settings)
 {
 	print "  $setting"
 }
-if ( (-not($BuildBranch -like "rs_prerelease")) -and (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) ) 
+if ( (-not($BuildBranch -like "rs_prerelease" -or $BuildBranch -like "ni_release")) -and (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) ) 
 {
 	$dwu = "y"
 	$au = "y"
 	print "  Windows automatic updates will be disabled."
 	print "  Windows quality updates will be delayed by 4 days and feature updates will be delayed by 20 days."
 }
-elseif ($BuildBranch -like "rs_prerelease")
+elseif ($BuildBranch -like "rs_prerelease" -or $BuildBranch -like "ni_release")
 {
 	print "  Windows Update policies are left unchanged in Windows pre-release software."
 }
@@ -573,7 +573,7 @@ if (!(check($customize)))
 		print "  NO changes will be made to Widgets."
 	}
 	
-	if ( (-not($BuildBranch -like "rs_prerelease")) -and (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) )
+	if ( (-not($BuildBranch -like "rs_prerelease" -or $BuildBranch -like "ni_release")) -and (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) )
 	{	
 		space
 		print "WINDOWS UPDATE"
@@ -877,7 +877,6 @@ Function AppsFeatures {
 	print "-------------------------"
 	print "     APPS & FEATURES     "
 	print "-------------------------"
-	space
 }
 
 # Install VCLibs packages .
@@ -1518,12 +1517,6 @@ Function UninstallerCLI {
 		}
 	}
 
-	if (check($widgets))
-	{
-		Get-AppxPackage "MicrosoftWindows.Client.WebExperience" | Remove-AppxPackage
-		Get-AppxProvisionedPackage -Online "MicrosoftWindows.Client.WebExperience" | Remove-AppxProvisionedPackage
-	}
-
 	$SponsoredApps = @(					# Remove Sponsored apps.
 		"*AdobePhotoshopExpress*"
 		"*CandyCrush*"
@@ -1623,6 +1616,11 @@ $ProgressPreference = 'SilentlyContinue'
 	elseif ($uninstallmethod -like "list")
 	{
 		UninstallerList
+	}
+	if (check($widgets))
+	{
+		Get-AppxPackage "MicrosoftWindows.Client.WebExperience" | Remove-AppxPackage
+		Get-AppxProvisionedPackage -Online "MicrosoftWindows.Client.WebExperience" | Remove-AppxProvisionedPackage
 	}
 }
 
@@ -2157,7 +2155,6 @@ Function PrivacySecurity {
 	print "-------------------------"
 	print "    PRIVACY & SECURITY   "
 	print "-------------------------"
-	space
 }
 
 # Privacy and advertising
@@ -2791,7 +2788,6 @@ Function OS {
 	print "---------------------------"
 	print "      OPERATING SYSTEM     "   
 	print "---------------------------"
-	space
 }
 
 # Disable Autoplay.
@@ -3059,7 +3055,7 @@ function EnableAMDTasks {
 Function SetupWindowsUpdate {
 	space
 	# Perform checks.
-	if ($BuildBranch -like "rs_prerelease")
+	if ($BuildBranch -like "rs_prerelease" -or $BuildBranch -like "ni_release")
 	{
 		print "Windows Update policies will be left unchanged in Windows pre-release software."
 		return
@@ -3199,12 +3195,11 @@ Function EnableWindowsWelcomeExperience {
 ####################################
 
 # Update status: Explorer Changes.
-Function PrintExplorerChanges {	
+Function WindowsExplorer {	
 	space
 	print "----------------------------------"
 	print "          WINDOWS EXPLORER        "
 	print "----------------------------------"
-	space
 }
 
 # Use Print screen button to open screen skipping.
@@ -3240,7 +3235,7 @@ function HideExtensions {
 	print "Hiding extensions from file names..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 1
-	print "Hidden extensions in file names."
+	print "Hid extensions in file names."
 }
 
 # Hide Recent files in Quick Access.
@@ -3249,7 +3244,7 @@ function HideRecentFilesInQuickAccess {
 	print "Hiding recent files from Quick Access..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name ShowRecent -Type DWord -Value 0
-	print "Hidden recent files from Quick Access."
+	print "Hid recent files from Quick Access."
 }
 
 # Show Recent files in Quick Access.
@@ -3470,7 +3465,7 @@ function HideWidgets {
 	space
 	print "Hiding Widgets..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 0
-	print "Hidden Widgets."
+	print "Hid Widgets."
 }
 
 # Enable Widgets item - Windows 11 only
@@ -3494,7 +3489,7 @@ function HideChat {
 	space
 	print "Hiding Chat..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 0
-	print "Hid Chat."
+	print "Hidd Chat."
 }
 
 # Enable Chat item - Windows 11 only
