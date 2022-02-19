@@ -406,8 +406,6 @@ if ((Test-Path uninstallapps.txt) -or (Test-Path UninstallApps.txt) -or (Test-Pa
 $uninstallfeatures = "y"
 $systemrestore = "y"
 
-# TODO: User message contain link to main brief document.
-
 # Print Express Settings.
 print "Express Settings:"
 $settings = @(	
@@ -433,8 +431,7 @@ elseif ($Insider)
 	print "  Windows Update policies are left unchanged in Windows pre-release software."
 }
 space
-print "To learn more, visit https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md"
-print "Standard privacy, security, tasks, services and UI changes as listed in WinRice documentation will apply. These changes are not configurable."
+print "To learn more, visit https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md."
 space
 $customize = ask "Do you want to proceed with Express Settings? [Y/n]"
 if (!(check($customize)))
@@ -775,8 +772,7 @@ print "Starting WinRice..."
 # Intro.
 Function WinRice {
 	Clear-Host
-	space
-	print "pratyakshm's WinRice - main branch"
+	print "pratyakshm's WinRice"
 	space
 	print "Copyright (c) Pratyaksh Mehrotra and contributors"
 	print "https://github.com/pratyakshm/WinRice"
@@ -786,17 +782,30 @@ Function WinRice {
 # OS Build.
 Function OSBuildInfo {
 	space
-	print "$ProductName $DisplayVersion "
+	# If Windows 11 (OS build is greater than or equal to 22000)
 	if ($CurrentBuild -ge 22000)
 	{
-		print "Build $OSBuild, $BuildBranch branch"
+		# If a Windows Insider
+		if ($Insider)
+		{
+			print "$ProductName Insider Preview"
+			print "OS Build: $OSBuild, Channel: $DisplayVersion, Branch: $BuildBranch"
+		}
+		# If on Retail / prod build
+		else 
+		{
+			print "$ProductName $DisplayVersion"
+			print "OS Build: $OSBuild, Channel: General Availability, Branch: $BuildBranch"
+		}
 	}
+	# If Windows 10 (OS build is lesser than 22000)
 	elseif ($CurrentBuild -lt 22000)
 	{
-		print "Build $OSBuildCore, $BuildBranch branch"
+		print "$ProductName $DisplayVersion"
+		print "OS Build: $OSBuildCore, Branch: $BuildBranch" # Windows Insiders on Windows 10 are not considered due to less number of users.
 	}
 	space
-	space
+	print "---------------------------------------------------"
 	Start-Sleep 1
 }
 
@@ -806,7 +815,6 @@ Function ChangesDone {
 	print "---------------------------"
 	print "     CHANGES PERFORMED     "
 	print "---------------------------"
-	space
 	Start-Sleep 1
 }
 
