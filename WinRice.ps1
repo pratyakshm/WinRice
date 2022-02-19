@@ -328,18 +328,11 @@ $isonline = {
 
 RunWithProgress -Text "[3/5] Device is connnected to the Internet" -Task $isonline -Exit $true | Out-Null
 
-# Check if laptop (https://devblogs.microsoft.com/scripting/hey-scripting-guy-weekend-scripter-how-can-i-use-wmi-to-detect-laptops/).
-Param(
-[string]$computer = “localhost”
-)
-$isLaptop = $false | Out-Null
-if(Get-WmiObject -Class Win32_SystemEnclosure -ComputerName $computer | Where-Object {$_.ChassisTypes -eq 9 -or $_.ChassisTypes -eq 10 -or $_.ChassisTypes -eq 14}) { 
-	$isLaptop = $true | Out-Null
-	}
-if(Get-WmiObject -Class Win32_Battery -ComputerName $computer) { 
-	$isLaptop = $true | Out-Null
-	}
-$isLaptop
+# Check if device is a laptop, notebook or a sub-notebook (https://devblogs.microsoft.com/scripting/hey-scripting-guy-weekend-scripter-how-can-i-use-wmi-to-detect-laptops/).
+if(Get-WmiObject -Class Win32_SystemEnclosure | Where-Object {$_.ChassisTypes -eq 9 -or $_.ChassisTypes -eq 10 -or $_.ChassisTypes -eq 14}) 
+{ 
+	$isLaptop = $true
+}
 
 # Check PowerShell version and import required modules.
 $pwshver = {
