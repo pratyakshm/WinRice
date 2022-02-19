@@ -269,6 +269,8 @@ $OSBuildCore = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\
 $OSBuild = $OSBuildCore.TrimStart("10.0")
 $BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
 $hkeyuser = (Get-CimInstance -ClassName Win32_UserAccount | Where-Object -FilterScript {$_.Name -eq $env:USERNAME}).SID
+$Insider = (Get-Item -Path "HKLM:\SOFTWARE\Microsoft\WindowsSelfHost\Applicability").Property -contains "IsBuildFlightingEnabled" -or (Get-Item -Path "HKLM:\SOFTWARE\Microsoft\WindowsSelfHost\Applicability").Property -contains "BranchName"
+
 
 ### DISPLAY INFO ###
 
@@ -418,14 +420,15 @@ ForEach ($setting in $settings)
 {
 	print "  $setting"
 }
-if ( (-not($BuildBranch -like "rs_prerelease" -or $BuildBranch -like "ni_release")) -and (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) ) 
+if (!($Insider) -and (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}))
 {
 	$dwu = "y"
 	$au = "y"
 	print "  Windows automatic updates will be disabled."
 	print "  Windows quality updates will be delayed by 4 days and feature updates will be delayed by 20 days."
 }
-elseif ($BuildBranch -like "rs_prerelease" -or $BuildBranch -like "ni_release")
+
+elseif ($Insider)
 {
 	print "  Windows Update policies are left unchanged in Windows pre-release software."
 }
@@ -573,7 +576,7 @@ if (!(check($customize)))
 		print "  NO changes will be made to Widgets."
 	}
 	
-	if ( (-not($BuildBranch -like "rs_prerelease" -or $BuildBranch -like "ni_release")) -and (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) )
+	if ( (!($Insider)) -and (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) )
 	{	
 		space
 		print "WINDOWS UPDATE"
@@ -2246,7 +2249,7 @@ Function EnableBackgroundApps {
 # Disable Windows Error Reporting 
 function DisableErrorReporting {
 	space
-	if (!($BuildBranch -like "co_release" -or $BuildBranch -like "vb_release"))
+	if ($Insider)
 	{
 		print "Error reporting will be left unchanged in Windows pre-release software."
 		return
@@ -2267,7 +2270,7 @@ function EnableErrorReporting {
 Function DisableFeedback {
 $ErrorActionPreference = 'SilentlyContinue'
 	space
-	if (!($BuildBranch -like "co_release" -or $BuildBranch -like "vb_release"))
+	if ($Insider)
 	{
 		print "Feedback notifications will be left unchanged in Windows pre-release software."
 		return
@@ -2542,7 +2545,7 @@ Function EnableTailoredExperiences {
 # Disable Telemetry. 
 Function DisableTelemetry {
 	space
-	if (!($BuildBranch -like "co_release" -or $BuildBranch -like "vb_release"))
+	if ($Insider)
 	{
 		print "Telemetry settings will be left unchanged in Windows pre-release software."
 		return
@@ -3055,9 +3058,9 @@ function EnableAMDTasks {
 Function SetupWindowsUpdate {
 	space
 	# Perform checks.
-	if ($BuildBranch -like "rs_prerelease" -or $BuildBranch -like "ni_release")
+	if ($Insider)
 	{
-		print "Windows Update policies will be left unchanged in Windows pre-release software."
+		print "Windows Update policies are left unchanged in Windows pre-release software."
 		return
 	}
     if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) 
