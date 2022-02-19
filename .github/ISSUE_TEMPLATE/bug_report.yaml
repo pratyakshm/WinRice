@@ -16,12 +16,10 @@ body:
       multiple: false
       options:
         - "Apps"
-        - "Features"
         - "Privacy"
         - "Security"
-        - "Tasks"
-        - "Services"
-        - "Windows Explorer / User Interface"
+        - "OS"
+        - "Windows Explorer"
         - "Other"
     validations:
       required: true
