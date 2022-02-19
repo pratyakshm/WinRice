@@ -40,11 +40,7 @@ If any one of the criteria is not met, WinRice terminates itself.
 
 ## Running WinRice
 
-#### Download and run [this executable (.EXE) file](https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice-main.exe).
-
-## Known Issues
-
-Known issues are tracked [here](https://github.com/pratyakshm/WinRice/issues/16).
+#### Download [WinRice.exe](https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice.exe).
 
 ## Contributing
 
