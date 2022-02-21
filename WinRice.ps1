@@ -2565,7 +2565,7 @@ Function LimitTelemetry {
 		"HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
 		"HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
 	)
-	ForEach (TelemetryPath in TelemetryPaths)
+	ForEach ($TelemetryPath in $TelemetryPaths)
 	{
 		Set-ItemProperty -Path $TelemetryPath -Name "AllowTelemetry" -Type DWord -Value 1
 
@@ -2586,7 +2586,7 @@ Function FullTelemetry {
 		"HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
 		"HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
 	)
-	ForEach (TelemetryPath in TelemetryPaths)
+	ForEach ($TelemetryPath in $TelemetryPaths)
 	{
 		Set-ItemProperty -Path $TelemetryPath -Name "AllowTelemetry" -Type DWord -Value 3
 
