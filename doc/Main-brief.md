@@ -45,7 +45,7 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 
 ### 🎛️ Features Uninstalled: 
 
-- Hello Face
+- Hello Face (if no Camera is detected)
 - Legacy Components (DirectPlay)
 - Math Recognizer
 - OpenSSH Client

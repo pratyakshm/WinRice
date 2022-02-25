@@ -6,8 +6,7 @@ If the user chooses to uninstall apps but doesn't specify which apps to uninstal
 
 - Calendar
 - Cortana
-- Camera (if no camera is connected)
-- Feedback Hub
+- Camera (if no camera is detected)
 - Get Help
 - Mail 
 - Maps
@@ -23,7 +22,6 @@ If the user chooses to uninstall apps but doesn't specify which apps to uninstal
 - Tips
 - Whiteboard
 - Weather
-- Xbox
 
 ## Uninstall Apps From a Text File
 

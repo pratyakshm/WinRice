@@ -1482,7 +1482,6 @@ Function UninstallerCLI {
 		"Microsoft.549981C3F5F10"
 		"Microsoft.BingNews"
 		"Microsoft.BingWeather"
-		"Microsoft.GamingApp"
 		"Microsoft.GetHelp" 
 		"Microsoft.Getstarted" # Tips app 
 		"Microsoft.MSPaint" # Paint 3D app
@@ -1495,10 +1494,7 @@ Function UninstallerCLI {
 		"Microsoft.PowerAutomateDesktop"
 		"Microsoft.Whiteboard"
 		"Microsoft.WindowsCommunicationsApps" 
-		"Microsoft.WindowsFeedbackHub" 
 		"Microsoft.WindowsMaps" 
-		"Microsoft.WindowsSoundRecorder"
-		"Microsoft.XboxApp"
 	)
 	ForEach ($InboxApp in $InboxApps) 
 	{
