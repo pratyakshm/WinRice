@@ -1833,7 +1833,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	
 	if (!(Get-CimInstance -ClassName Win32_PnPEntity | Where-Object -FilterScript {($_.PNPClass -eq "Camera") -or ($_.PNPClass -eq "Image")})) 
 	{
-		Get-WindowsCapability -Online "*Hello.Face*" | Remove-WindowsCapability -Online | Out-Null
+		Get-WindowsPackage -Online | Where-Object PackageName -like *Hello-Face* | Remove-WindowsPackage -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
 		print "    - Uninstalled Windows Hello Face"
 	}
 
