@@ -197,8 +197,7 @@ Function print($text) {
 	Start-Sleep -Milliseconds 150
 }
 
-Function 
-	currentuser {
+Function currentuser {
 	print "  Note: This setting will not affect other user accounts in this device."
 }
 
