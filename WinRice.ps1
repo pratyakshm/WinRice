@@ -2168,10 +2168,10 @@ Function DisableActivityHistory {
 	space
 	print "Disabling Activity History..."
 	$ActivityKeys = @(
-		"EnableActivityFeed"
 		"PublishUserActivities"
 		"UploadUserActivities"
 	)
+	$ActivityFeed = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
 	ForEach ($ActivityKey in $ActivityKeys) {
 		Set-ItemProperty -Path $ActivityFeed -Name $ActivityKey -Type DWord -Value 0
 	}
@@ -2186,6 +2186,7 @@ Function EnableActivityHistory {
 		"PublishUserActivities"
 		"UploadUserActivities"
 	)
+	$ActivityFeed = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
 	ForEach ($ActivityKey in $ActivityKeys) {
 		Set-ItemProperty -Path $ActivityFeed -Name $ActivityKey -Type DWord -Value 1
 	}
@@ -2603,7 +2604,6 @@ Function EnableClipboard {
 	print "Enabled Clipboard History."
     Start-Sleep 1
     Set-Clipboard "Demo text by WinRice."
-	print "You can now copy multiple items to your clipboard."
     print "Access your clipboard now using Windows key + V."
 	Write-Warning "If the Clipboard History feature does not work, retry it after a device restart."
 }
@@ -3037,6 +3037,7 @@ function DisableAMDTasks {
 	{
 		return
 	}
+	space
 	print "This device is powered by an AMD processor, disabling additional AMD specific tasks..."
 	$Tasks = @(
 		"AMDLinkUpdate"
@@ -3363,34 +3364,34 @@ Function Restore3DObjects {
 # Hide Search bar from taskbar.
 Function HideSearch {
 	space
-	print "Hiding Search button..."
+	print "Hiding Search icon..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
-	print "Hid Search button."
+	print "Hid Search icon."
 }
 
 # Restore Search bar to taskbar.
 Function RestoreSearch {
 	space
-	print "Restoring Search button..."
+	print "Restoring Search icon..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
-	print "Restored Search button."
+	print "Restored Search icon."
 }
 
 # Hide Task View.
 Function HideTaskView {
 	space
-	print "Hiding Task view button..."
+	print "Hiding Task view icon..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
-	print "Hid Task view button."
+	print "Hid Task view icon."
 }
 
 # Restore Task View button.
 Function RestoreTaskView {
 	space
-	print "Restoring Task view button..."
+	print "Restoring Task view icon ..."
 	currentuser
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -ErrorAction SilentlyContinue
 	print "Restored Task view icon."
@@ -3403,10 +3404,10 @@ Function HideCortana {
 		return
 	}
 	space
-	print "Hiding Cortana button..."
+	print "Hiding Cortana icon..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
-	print "Hid Cortana button."
+	print "Hid Cortana icon."
 }
 
 # Restore Cortana button in taskbar.
@@ -3415,10 +3416,10 @@ Function RestoreCortana {
 	{
 		return
 	}
-	print "Restoring Cortana button..."
+	print "Restoring Cortana icon..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
-	print "Restored Cortana button."
+	print "Restored Cortana icon."
 }
 
 # Hide Meet Now icon from tray.
@@ -3487,9 +3488,9 @@ function HideWidgets {
 		return
 	}
 	space
-	print "Hiding Widgets..."
+	print "Hiding Widgets icon..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 0
-	print "Hid Widgets."
+	print "Hid Widgets icon."
 }
 
 # Enable Widgets item - Windows 11 only
@@ -3499,9 +3500,9 @@ function RestoreWidgets {
 		return
 	}
 	space
-	print "Restoring Widgets..."
+	print "Restoring Widgets icon..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 1
-	print "Restored Widgets."
+	print "Restored Widgets icon."
 }
 
 # Disable chat item - Windows 11 only
@@ -3511,9 +3512,9 @@ function HideChat {
 		return
 	}
 	space
-	print "Hiding Chat..."
+	print "Hiding Chat icon..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 0
-	print "Hidd Chat."
+	print "Hidd Chat icon."
 }
 
 # Enable Chat item - Windows 11 only
@@ -3523,9 +3524,9 @@ function RestoreChat {
 		return
 	}
 	space
-	print "Restoring Chat..."
+	print "Restoring Chat icon..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 1
-	print "Restored Chat."
+	print "Restored Chat icon."
 }
 
 Start-Sleep -Seconds 2
