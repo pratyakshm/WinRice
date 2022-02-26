@@ -2515,14 +2515,7 @@ Function DisableTailoredExperiences {
 	space
 	print "Disabling Tailored experiences..."
 	currentuser
-	$TailoredExp1 = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
-	$TailoredExp2 = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting"
-	if (!(Test-Path $CloudContent )) 
-	{
-		New-Item $CloudContent -Force | Out-Null
-	}
-	Set-ItemProperty -Path $TailoredExp1 -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
-	Set-ItemProperty -Path $TailoredExp2 -Name "Disabled" -Type DWord -Value 1
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Privacy" -Name "TailoredExperiencesWithDiagnosticDataEnabled" -Type DWord -Value 0
 	print "Disabled Tailored experiences."
 }
 
@@ -2531,10 +2524,7 @@ Function EnableTailoredExperiences {
 	space
 	print "Enabling Tailored experiences..."
 	currentuser
-	$TailoredExp1 = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
-	$TailoredExp2 = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting"
-	Remove-ItemProperty -Path $TailoredExp1 -Name "DisableTailoredExperiencesWithDiagnosticData" -ErrorAction SilentlyContinue
-	Remove-ItemProperty -Path $TailoredExp2 -Name "Disabled" -ErrorAction SilentlyContinue
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Privacy" -Name "TailoredExperiencesWithDiagnosticDataEnabled" -Type DWord -Value 1
 	print "Enabled Tailed experiences."
 }
 
