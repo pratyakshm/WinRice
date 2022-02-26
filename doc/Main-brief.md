@@ -2,11 +2,10 @@
 
 Your WinRice experience can be customized. Please read [`Settings.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Settings.md) to learn more.
 
-## Legend
+Legend
 | Symbol | Significance |
 | ---------- | -------  |
-| 🎛️  | Tasks prefixed with 🎛️ "control knob" emoji are such tasks which are only run when they are configured. You may learn more by visiting [``Settings.md``](https://github.com/pratyakshm/WinRice/blob/main/doc/Settings.md). |
-| 🧪 | Tasks prefixed with 🧪 "test tube" emoji behave differently when device is detected to be flighting in the Windows Insider Program. |
+| 🎛️  | Tasks prefixed with 🎛️ "control knob" are such tasks which are only run when they are configured. You may learn more by visiting [Settings](https://github.com/pratyakshm/WinRice/blob/main/doc/Settings.md) |
 
 ## Apps
 
@@ -71,19 +70,14 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 - Advertising ID
 - App suggestions
 - Background apps
+- Feedback notifications
 - Inking & typing personalization
 - Location tracking
 - Maps updates
 - Online speech recognition
 - Tailored Experiences
+- Telemetry
 - Websites' access to language list to provide loaclly relevant content
-
-## Limit The Following:
-
-- 🧪 Diagnostic data
-- 🧪 Feedback notifications
-
-#### 🔔 Check [notes](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#notes)
 
 ## Turn On the Following:
 
@@ -204,7 +198,9 @@ See more at [111 Attacking EvilCorp Anatomy of a Corporate Hack Sean Metcalf Wil
 - DiagTrack
 - SysMain
 
-## 🧪🎛️ Windows Update
+## 🎛️ Windows Update
+
+##### P.S. Windows Update policies are only applied to Windows editions that support Group policies. These are Education, Enterprise, Enterprise LTSC and Professional editions.
 
 ### Setup Windows Update
 
@@ -253,16 +249,6 @@ Setup the following policies to Windows Update:
 - Set File Explorer to open This PC by default
 - Turn off Keyboard shortcut for Sticky keys
 - Use the Print screen button to open Screen snipping
-
-
-
-## Notes
-
-- Diagnostic data is switched to default/minimal for all devices - and set to optional in Windows Insider devices.
-
-- Feedback notifications is switched off in all devices - and not configured in Windows Insider devices.
-
-- Windows Update policies are only configured on devices running the retail version of Windows 11/10. Windows Update policies are only applied to Windows editions that support Group policies. These are Education, Enterprise, Enterprise LTSC and Professional editions.
 
 ---
 

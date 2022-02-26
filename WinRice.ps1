@@ -68,8 +68,8 @@ $tasks = @(
 	# "ShowSuggestedContentInStart",
 	"DisableTailoredExperiences",	
 	# "EnableTailoredExperiences",
-	"LimitTelemetry",				
-	# "FullTelemetry",
+	"DisableTelemetry",				
+	# "EnableTelemetry",
 	"EnableClipboard",				
 	# "DisableClipboard",
 
@@ -420,7 +420,7 @@ if (!($Insider) -and (Get-WindowsEdition -Online | Where-Object -FilterScript {$
 
 elseif ($Insider)
 {
-	print "  This device is flighting in the Windows Insider Program, hence Windows Update policies will not be configured."
+	print "  Windows Update policies are left unchanged in Windows pre-release software."
 }
 space
 print "To learn more, visit https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md."
@@ -2162,29 +2162,20 @@ Function PrivacySecurity {
 Function DisableActivityHistory {
 	space
 	print "Disabling Activity History..."
-	$ActivityKeys = @(
-		"PublishUserActivities"
-		"UploadUserActivities"
-	)
 	$ActivityFeed = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
-	ForEach ($ActivityKey in $ActivityKeys) {
-		Set-ItemProperty -Path $ActivityFeed -Name $ActivityKey -Type DWord -Value 0
-	}
+	Set-ItemProperty -Path $ActivityFeed -Name "EnableActivityFeed" -Type DWord -Value 0
+	Set-ItemProperty -Path $ActivityFeed -Name "PublishUserActivities" -Type DWord -Value 0
+	Set-ItemProperty -Path $ActivityFeed -Name "UploadUserActivities" -Type DWord -Value 0	
 	print "Disabled Activity History."
 }
 
 # Enable Activity History.
 Function EnableActivityHistory {
 	print "Enabling Activity History..."
-	$ActivityKeys = @(
-		"EnableActivityFeed"
-		"PublishUserActivities"
-		"UploadUserActivities"
-	)
-	$ActivityFeed = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
-	ForEach ($ActivityKey in $ActivityKeys) {
-		Set-ItemProperty -Path $ActivityFeed -Name $ActivityKey -Type DWord -Value 1
-	}
+	$ActivityHistory = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
+	Set-ItemProperty -Path $ActivityHistory -Name "EnableActivityFeed" -Type DWord -Value 1
+	Set-ItemProperty -Path $ActivityHistory -Name "PublishUserActivities" -Type DWord -Value 1
+	Set-ItemProperty -Path $ActivityHistory -Name "UploadUserActivities" -Type DWord -Value 1
 	print "Enabled Activity History."
 }
 
@@ -2256,7 +2247,7 @@ function DisableErrorReporting {
 	space
 	if ($Insider)
 	{
-		print "Windows Insider build detected. Windows Error Reporting will not be configured."
+		print "Error reporting will be left unchanged in Windows pre-release software."
 		return
 	}
 	print "Disabling Windows Error Reporting..."
@@ -2277,7 +2268,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	space
 	if ($Insider)
 	{
-		print "This device is flighting in the Windows Insider Program, hence Feedback frequency will not be modified."
+		print "Feedback notifications will be left unchanged in Windows pre-release software."
 		return
 	}
 	print "Disabling Feedback notifications..."
@@ -2361,9 +2352,9 @@ Function DisableLangAccess {
 	space
 	print "Disabling websites' ability to provide you with locally relevant content by accessing your language list..."
 	currentuser
-	$LangAccessKeyPath = "HKCU:\Control Panel\International\User Profile"
-	Remove-ItemProperty -Path $LangAccessKeyPath -Name "HttpAcceptLanguageOptOut" -ErrorAction SilentlyContinue | Out-Null
-	New-ItemProperty -Path $LangAccessKeyPath -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 1 | Out-Null
+	$LangAccess = "HKCU:\Control Panel\International\User Profile"
+	Remove-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -ErrorAction SilentlyContinue | Out-Null
+	New-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 1 | Out-Null
 	print "Disabled websites' ability to provide you with locally relevant content by accessing your language list."
 }
 
@@ -2371,8 +2362,8 @@ Function DisableLangAccess {
 Function EnableLangAccess {
 	print "Enabling websites' ability to provide you with locally relevant content by accessing your language list..."
 	currentuser
-	$LangAccessKeyPath = "HKCU:\Control Panel\International\User Profile"
-	Set-ItemProperty -Path $LangAccessKeyPath -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 0
+	$LangAccess = "HKCU:\Control Panel\International\User Profile"
+	Set-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 0
 	print "Enabled websites' ability to provide you with locally relevant content by accessing your language list."
 }
 
@@ -2380,14 +2371,14 @@ Function EnableLangAccess {
 Function DisableLocationTracking {
 	space
 	print "Disabling location tracking..."
-	$LocationKeyPath1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
-	$LocationKeyPath2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
-	if (!(Test-Path $LocationKeyPath1)) 
+	$Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
+	$Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
+	if (!(Test-Path $Location1)) 
 	{
-		New-Item -Path $LocationKeyPath1 -Force | Out-Null
+		New-Item -Path $Location1 -Force | Out-Null
 	}
-	Set-ItemProperty -Path $LocationKeyPath1 -Name "Value" -Type String -Value "Deny"
-	Set-ItemProperty -Path $LocationKeyPath2 -Name "SensorPermissionState" -Type DWord -Value 0
+	Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Deny"
+	Set-ItemProperty -Path $Location2 -Name "SensorPermissionState" -Type DWord -Value 0
 	print "Disabled Location tracking."
 }
 
@@ -2395,14 +2386,14 @@ Function DisableLocationTracking {
 Function EnableLocationTracking {
 	space
 	print "Enabling Location tracking..."
-	$LocationKeyPath1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
-	$LocationKeyPath2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
-	if (!(Test-Path LocationKeyPath1)) 
+	$Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
+	$Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
+	if (!(Test-Path )) 
 	{
-		New-Item -Path $LocationKeyPath1 -Force | Out-Null
+		New-Item -Path $Location1 -Force | Out-Null
 	}
-	Set-ItemProperty -Path $LocationKeyPath1 -Name "Value" -Type String -Value "Allow"
-	Set-ItemProperty -Path $LocationKeyPath2 -Name "SensorPermissionState" -Type DWord -Value 1
+	Set-ItemProperty -Path $Location1 -Name "Value" -Type String -Value "Allow"
+	Set-ItemProperty -Path $Location2 -Name "SensorPermissionState" -Type DWord -Value 1
 	print "Enabled Location tracking."
 }
 
@@ -2427,13 +2418,13 @@ Function DisableSpeechRecognition {
 	space
 	print "Disabling Online Speech recognition..."
 	currentuser
-	$SpeechKeyPath = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
-	if (!(Test-Path $SpeechKeyPath)) 
+	$Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
+	if (!(Test-Path $Speech)) 
 	{
-		New-Item -Path $SpeechKeyPath -ErrorAction SilentlyContinue | Out-Null
+		New-Item -Path $Speech -ErrorAction SilentlyContinue | Out-Null
 	}
-	Remove-ItemProperty -Path $SpeechKeyPath -Name "HasAccepted" -ErrorAction SilentlyContinue
-	New-ItemProperty -Path $SpeechKeyPath -Name "HasAccepted" -Type DWord -Value 0 -ErrorAction SilentlyContinue | Out-Null
+	Remove-ItemProperty -Path $Speech -Name "HasAccepted" -ErrorAction SilentlyContinue
+	New-ItemProperty -Path $Speech -Name "HasAccepted" -Type DWord -Value 0 -ErrorAction SilentlyContinue | Out-Null
 	print "Disabled Online Speech recognition."
 }
 
@@ -2442,12 +2433,12 @@ Function EnableSpeechRecognition {
 	space
 	print "Enabling Speech recognition..."
 	currentuser
-	$SpeechKeyPath = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
-	if (!(Test-Path $SpeechKeyPath)) 
+	$Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
+	if (!(Test-Path )) 
 	{
-		New-Item -Path $SpeechKeyPath | Out-Null
+		New-Item -Path $Speech | Out-Null
 	}
-	Set-ItemProperty -Path $SpeechKeyPath -Name "HasAccepted" -Type DWord -Value 1
+	Set-ItemProperty -Path $Speech -Name "HasAccepted" -Type DWord -Value 1
 	print "Enabled Online Speech recognition"
 }
 
@@ -2456,7 +2447,7 @@ Function DisableSilentInstallApps {
 	space
 	print "Disabling silent installation of suggested apps..."
 	currentuser
-	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SilentInstalledAppsEnabled" -Type DWord -Value 1
+	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SilentInstalledAppsEnabled -Type DWord -Value 1
 	print "Disabled silent installation of suggested apps."
 }
 
@@ -2465,7 +2456,7 @@ Function EnableSilentInstallApps {
 	space
 	print "Enabling silent installation of suggested apps..."
 	currentuser
-	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SilentInstalledAppsEnabled" -Type DWord -Value 1
+	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SilentInstalledAppsEnabled -Type DWord -Value 1
 	print "Enabled silent installation of suggested apps."
 }
 
@@ -2475,9 +2466,9 @@ Function HideSuggestedContentInSettings {
 	print "Disabling suggested content in Settings app..."
 	currentuser
 	$CDN = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
-	Set-ItemProperty -Path $CDN -Name "SubscribedContent-353694Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $CDN -Name "SubscribedContent-353696Enabled" -Type DWord -Value 0
-	Set-ItemProperty -Path $CDN -Name "SubscribedContent-338393Enabled" -Type DWord -Value 0
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-353694Enabled -Type DWord -Value 0
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-353696Enabled -Type DWord -Value 0
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-338393Enabled -Type DWord -Value 0
 	print "Disabled suggested content in Settings app."
 }
 
@@ -2487,9 +2478,9 @@ Function ShowSuggestedContentInSettings {
 	print "Enabling suggested content in Settings app..."
 	currentuser
 	$CDN = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
-	Set-ItemProperty -Path $CDN -Name "SubscribedContent-353694Enabled" -Type DWord -Value 1
-	Set-ItemProperty -Path $CDN -Name "SubscribedContent-353696Enabled" -Type DWord -Value 1
-	Set-ItemProperty -Path $CDN -Name "SubscribedContent-338393Enabled" -Type DWord -Value 1
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-353694Enabled -Type DWord -Value 1
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-353696Enabled -Type DWord -Value 1
+	Set-ItemProperty -Path $CDN -Name SubscribedContent-338393Enabled -Type DWord -Value 1
 	print "Enabled suggested content in Settings app."
 }
 
@@ -2502,7 +2493,7 @@ Function HideSuggestedContentInStart {
 	space 
 	print "Disabling suggested content in Start menu..."
 	currentuser
-	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-338388Enabled" -Type DWord -Value 0
+	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 0
 	print "Disabled suggested content in Start menu."
 }
 
@@ -2515,7 +2506,7 @@ Function ShowSuggestedContentInStart {
 	space 
 	print "Enabling Suggested content in Start menu..."
 	currentuser
-	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-338388Enabled" -Type DWord -Value 1
+	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 1
 	print "Enabled Suggested content in Start menu."
 }
 
@@ -2524,14 +2515,14 @@ Function DisableTailoredExperiences {
 	space
 	print "Disabling Tailored experiences..."
 	currentuser
-	$TailoredExperiencesKeyPath1 = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
-	$TailoredExperiencesKeyPath2 = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting"
-	if (!(Test-Path $TailoredExperiencesKeyPath1 )) 
+	$TailoredExp1 = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
+	$TailoredExp2 = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting"
+	if (!(Test-Path $CloudContent )) 
 	{
-		New-Item $TailoredExperiencesKeyPath1 -Force | Out-Null
+		New-Item $CloudContent -Force | Out-Null
 	}
-	Set-ItemProperty -Path $TailoredExperiencesKeyPath1 -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
-	Set-ItemProperty -Path $TailoredExperiencesKeyPath2 -Name "Disabled" -Type DWord -Value 1
+	Set-ItemProperty -Path $TailoredExp1 -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
+	Set-ItemProperty -Path $TailoredExp2 -Name "Disabled" -Type DWord -Value 1
 	print "Disabled Tailored experiences."
 }
 
@@ -2540,54 +2531,42 @@ Function EnableTailoredExperiences {
 	space
 	print "Enabling Tailored experiences..."
 	currentuser
-	$TailoredExperiencesKeyPath1 = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
-	$TailoredExperiencesKeyPath2 = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting"
-	Remove-ItemProperty -Path $TailoredExperiencesKeyPath1 -Name "DisableTailoredExperiencesWithDiagnosticData" -ErrorAction SilentlyContinue
-	Remove-ItemProperty -Path $TailoredExperiencesKeyPath2 -Name "Disabled" -ErrorAction SilentlyContinue
+	$TailoredExp1 = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
+	$TailoredExp2 = "HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting"
+	Remove-ItemProperty -Path $TailoredExp1 -Name "DisableTailoredExperiencesWithDiagnosticData" -ErrorAction SilentlyContinue
+	Remove-ItemProperty -Path $TailoredExp2 -Name "Disabled" -ErrorAction SilentlyContinue
 	print "Enabled Tailed experiences."
 }
 
-# Limit Telemetry. 
-Function LimitTelemetry {
+# Disable Telemetry. 
+Function DisableTelemetry {
 	space
 	if ($Insider)
 	{
-		print "This device is flighting in the Windows Insider Program, hence Diagnostic data will not be limited."
+		print "Telemetry settings will be left unchanged in Windows pre-release software."
 		return
 	}
-	print "Limiting telemetry..."
-	$TelemetryPath = @(
-		"HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-		"HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-		"HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
-	)
-	ForEach ($TelemetryPath in $TelemetryPaths)
-	{
-		Set-ItemProperty -Path $TelemetryPath -Name "AllowTelemetry" -Type DWord -Value 1
-
-	}
-	print "Limited telemetry."
+	print "Disabling telemetry..."
+	$Telemetry1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
+	$Telemetry2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
+	$Telemetry3 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
+	Set-ItemProperty -Path $Telemetry1 -Name "AllowTelemetry" -Type DWord -Value 0
+	Set-ItemProperty -Path $Telemetry2 -Name "AllowTelemetry" -Type DWord -Value 0
+	Set-ItemProperty -Path $Telemetry3 -Name "AllowTelemetry" -Type DWord -Value 0
+	print "Disabled telemetry."
 }
 
-# Full Telemetry.
-Function FullTelemetry {
-	if (!($Insider))
-	{	
-		return
-	}
+# Enable Telemetry.
+Function EnableTelemetry {
 	space
-	print "This device is flighting in the Windows Insider Program, hence Diagnostic ata will be set to optional..."
-	$TelemetryPath = @(
-		"HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-		"HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-		"HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
-	)
-	ForEach ($TelemetryPath in $TelemetryPaths)
-	{
-		Set-ItemProperty -Path $TelemetryPath -Name "AllowTelemetry" -Type DWord -Value 3
-
-	}
-	print "Diagnostic data is set to optional."
+	print "Enabling Telemetry..."
+	$Telemetry1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
+	$Telemetry2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
+	$Telemetry3 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
+	Set-ItemProperty -Path $Telemetry1  -Name "AllowTelemetry" -Type DWord -Value 3
+	Set-ItemProperty -Path $Telemetry2 -Name "AllowTelemetry" -Type DWord -Value 3
+	Set-ItemProperty -Path $Telemetry3 -Name "AllowTelemetry" -Type DWord -Value 3
+	print "Disabled telemetry."
 }
 
 # Enable Clipboard History.
@@ -3077,7 +3056,7 @@ Function SetupWindowsUpdate {
 	# Perform checks.
 	if ($Insider)
 	{
-		print "This device is flighting in the Windows Insider Program, hence Windows Update policies will not be configured."
+		print "Windows Update policies are left unchanged in Windows pre-release software."
 		return
 	}
     if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) 
@@ -3148,7 +3127,7 @@ Function SetupWindowsUpdate {
 		log "    - $WinUpdatePolicy"
 	}
 
-	print "Successfully configured Windows Update policies."
+	print "Set up Windows Update policies."
 }
 
 
