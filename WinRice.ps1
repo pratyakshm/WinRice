@@ -67,9 +67,9 @@ $tasks = @(
 	"HideSuggestedContentInStart",
 	# "ShowSuggestedContentInStart",
 	"DisableTailoredExperiences",	
-	# "EnableTailoredExperiences",
-	"DisableTelemetry",				
-	# "EnableTelemetry",
+	# "EnableTailoredExperiences",s
+	"TelemetryRequired",				
+	"TelemetryOptional",
 	"EnableClipboard",				
 	# "DisableClipboard",
 
@@ -2183,20 +2183,16 @@ Function EnableActivityHistory {
 Function DisableAdvertisingID {
 	space
 	print "Disabling Advertising ID..."
-	$AdvertisingID = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
-	if (!(Test-Path $AdvertisingID)) 
-	{
-		New-Item -Path $AdvertisingID | Out-Null
-	}
-	Set-ItemProperty -Path $AdvertisingID -Name "DisabledByGroupPolicy" -Type DWord -Value 1
+	currentuser
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" -Name "Enabled" -Type DWord -Value 0
 	print "Disabled Advertising ID."
 }
 
 # Enable Advertising ID.
 Function EnableAdvertisingID {
 	print "Enabling Advertising ID..."
-	$Advertising = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
-	Remove-ItemProperty -Path $Advertising -Name "DisabledByGroupPolicy" -ErrorAction SilentlyContinue
+	currentuser
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" -Name "Enabled" -Type DWord -Value 1
 	print "Enabled Advertising ID."
 }
 
@@ -2528,35 +2524,31 @@ Function EnableTailoredExperiences {
 	print "Enabled Tailed experiences."
 }
 
-# Disable Telemetry. 
-Function DisableTelemetry {
+# Set Diagnostic Data to Required. 
+Function TelemetryRequired {
 	space
 	if ($Insider)
 	{
-		print "Telemetry settings will be left unchanged in Windows pre-release software."
+		print "This device is flighting in the Windows Insider Program, hence Diagnostic data will not be Required."
 		return
 	}
-	print "Disabling telemetry..."
-	$Telemetry1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-	$Telemetry2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-	$Telemetry3 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
-	Set-ItemProperty -Path $Telemetry1 -Name "AllowTelemetry" -Type DWord -Value 0
-	Set-ItemProperty -Path $Telemetry2 -Name "AllowTelemetry" -Type DWord -Value 0
-	Set-ItemProperty -Path $Telemetry3 -Name "AllowTelemetry" -Type DWord -Value 0
-	print "Disabled telemetry."
+	print "Setting Diagnostic data level to Required..."
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "AllowTelemetry" -Type DWord -Value 1
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "MaxTelemetryAllowed" -Type DWord -Value 1
+	print "Set Diagnostic data level to Required."
 }
 
-# Enable Telemetry.
-Function EnableTelemetry {
+# Set Diagnostic Data to Optional.
+Function TelemetryOptional {
 	space
-	print "Enabling Telemetry..."
-	$Telemetry1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-	$Telemetry2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-	$Telemetry3 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
-	Set-ItemProperty -Path $Telemetry1  -Name "AllowTelemetry" -Type DWord -Value 3
-	Set-ItemProperty -Path $Telemetry2 -Name "AllowTelemetry" -Type DWord -Value 3
-	Set-ItemProperty -Path $Telemetry3 -Name "AllowTelemetry" -Type DWord -Value 3
-	print "Disabled telemetry."
+	if (!($Insider))
+	{	
+		return
+	}
+	print "This device is flighting in the Windows Insider Program, hence Diagnostic ata will be set to optional..."
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "AllowTelemetry" -Type DWord -Value 3
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "MaxTelemetryAllowed" -Type DWord -Value 3
+	print "Diagnostic data is set to Optional."
 }
 
 # Enable Clipboard History.
