@@ -130,30 +130,30 @@ $tasks = @(
 	"WindowsExplorer",
 	"EnablePrtScrToSnip",		   
 	# "DisablePrtScrSnip",
-	# "ShowExtensions",
-	# "HideExtensions",
-	"HideRecentFilesInQuickAccess",
+	# "EnableExtensions",
+	# "Disable",
+	"DisableRecentFilesInQuickAccess",
 	# "ShowRecentFilesInQuickAccess",
 	"DisableStickyKeys",           
 	# "EnableStickyKeys",
 	"SetExplorerThisPC",           
 	# "SetExplorerQuickAccess",
-    "Hide3DObjects",      		   
-	# "Restore3DObjects",
-	"HideSearch",			   
-	# "RestoreSearch"
-	"HideTaskView",                
-	# "RestoreTaskView",
-	"HideCortana",			       
-	# "RestoreCortana",
-	"HideMeetNow",				   
-	# "RestoreMeetNow",
-	"HideNI",		   
-	# "RestoreNI",  (News and Interests)
-	"HideWidgets",
-	# "RestoreWidgets",
-	"HideChat",
-	# "RestoreChat",
+    "Disable3DObjects",      		   
+	# "Enable3DObjects",
+	"DisableSearch",			   
+	# "EnableSearch"
+	"DisableSearchView",                
+	# "EnableTaskView",
+	"DisableCortana",			       
+	# "EnableCortana",
+	"DisableMeetNow",				   
+	# "EnableMeetNow",
+	"DisableNI",		   
+	# "EnableNI",  (News and Interests)
+	"DisableWidgets",
+	# "EnableWidgets",
+	"DisableChat",
+	# "EnableChat",
 	"ChangesDone",
 
 ###  Tasks after successful run ###
@@ -3186,55 +3186,54 @@ Function WindowsExplorer {
 # Use Print screen button to open screen skipping.
 Function EnablePrtScrToSnip {
 	space
-	print "Binding Print Screen key to launch Snip overlay..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 1
-	print "Bound Print Screen key to launch Snip overlay."
+	print "Print screen key will now invoke Snip overlay."
 }
 	
 # Don't use Print screen button to open screen skipping.
 Function DisablePrtScrSnip {
 	space
-	print "Unbinding Snip overlay launch from Print screen key...."
+	print "Telling Print screen key to not invoke Snip overlay..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
-	print "Unbound Snip overlay launch from Print screen key."
+	print "Print screen key will no longer invoke Snip overlay."
 }
 
 # Show extensions.
-Function ShowExtensions {
+Function EnableExtensions {
 	space
-	print "Showing extensions in file names..."
+	print "Enabling showing extensions next to files..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 0
-	print "Showed extensions in file names."
+	print "Enabled showing of extensions next to files."
 }
 
 # Hide extensions.
-function HideExtensions {
+function Disable {
 	space
-	print "Hiding extensions from file names..."
+	print "Disabling showing extensions next to files..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 1
-	print "Hid extensions in file names."
+	print "Disabled showing extensions next to files."
 }
 
 # Hide Recent files in Quick Access.
-function HideRecentFilesInQuickAccess {
+function DisableRecentFilesInQuickAccess {
 	space
-	print "Hiding recent files from Quick Access..."
+	print "Disabling recent files in Quick Access..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name ShowRecent -Type DWord -Value 0
-	print "Hid recent files from Quick Access."
+	print "Disabled recent files in Quick Access."
 }
 
 # Show Recent files in Quick Access.
 function ShowRecentFilesInQuickAccess {
 	space 
-	print "Showing Recent files in Quick Access..."
+	print "Enabling recent files in Quick Access...."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name ShowRecent -Type DWord -Value 1
-	print "Shown Recent files in Quick Access."
+	print "Enabled recent files in Quick Access."
 }
 
 # Disable Sticky keys.
@@ -3274,142 +3273,142 @@ Function SetExplorerQuickAccess {
 }
 
 # Hide 3D Objects.
-Function Hide3DObjects {
+Function Disable3DObjects {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
 	}
 	space
-	print "Hiding 3D Objects..."
+	print "Disabling 3D Objects..."
 	Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Recurse -ErrorAction SilentlyContinue
-	$Hide3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-	$Hide3DObjects2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-	if (!(Test-Path $Hide3DObjects1)) 
+	$Disable3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+	$Disable3DObjects2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+	if (!(Test-Path $Disable3DObjects1)) 
 	{
-		New-Item -Path $Hide3DObjects1 -Force | Out-Null
+		New-Item -Path $Disable3DObjects1 -Force | Out-Null
 	}
-	Set-ItemProperty -Path $Hide3DObjects1 -Name "ThisPCPolicy" -Type String -Value "Hide"
-	if (!(Test-Path $Hide3DObjects2)) 
+	Set-ItemProperty -Path $Disable3DObjects1 -Name "ThisPCPolicy" -Type String -Value "Hide"
+	if (!(Test-Path $Disable3DObjects2)) 
 	{
-		New-Item -Path $Hide3DObjects2 -Force | Out-Null
+		New-Item -Path $Disable3DObjects2 -Force | Out-Null
 	}
-	Set-ItemProperty -Path $Hide3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
-	print "Hid 3D Objects."
+	Set-ItemProperty -Path $Disable3DObjects2 -Name "ThisPCPolicy" -Type String -Value "Hide"
+	print "Disabled 3D Objects."
 }
 
 # Restore 3D Objects.
-Function Restore3DObjects {
+Function Enable3DObjects {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
 	}
 	space
-	print "Restoring 3D Objects..."
-	$Restore3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
-	$Restore3DObjects2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-	$Restore3DObjects3 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
-	if (!(Test-Path $Restore3DObjects1)) 
+	print "Enabling 3D Objects..."
+	$Enable3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
+	$Enable3DObjects2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+	$Enable3DObjects3 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
+	if (!(Test-Path $Enable3DObjects1)) 
 	{
-		New-Item -Path $Restore3DObjects1 | Out-Null
+		New-Item -Path $Enable3DObjects1 | Out-Null
 	}
-	Remove-ItemProperty -Path $Restore3DObjects2 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
-	Remove-ItemProperty -Path $Restore3DObjects3 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
-	print "Restoring 3D Objects."
+	Remove-ItemProperty -Path $Enable3DObjects2 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
+	Remove-ItemProperty -Path $Enable3DObjects3 -Name "ThisPCPolicy" -ErrorAction SilentlyContinue
+	print "Enabled 3D Objects."
 }
 
 # Hide Search bar from taskbar.
-Function HideSearch {
+Function DisableSearch {
 	space
-	print "Hiding Search icon..."
+	print "Disabling Search icon..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
-	print "Hid Search icon."
+	print "Disabled Search icon."
 }
 
 # Restore Search bar to taskbar.
 Function RestoreSearch {
 	space
-	print "Restoring Search icon..."
+	print "Enabling Search icon..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
-	print "Restored Search icon."
+	print "Enabled Search icon."
 }
 
 # Hide Task View.
-Function HideTaskView {
+Function DisableSearchView {
 	space
-	print "Hiding Task view icon..."
+	print "Disabling Task view icon..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
-	print "Hid Task view icon."
+	print "Disabled Task view icon."
 }
 
 # Restore Task View button.
-Function RestoreTaskView {
+Function EnableTaskView {
 	space
-	print "Restoring Task view icon ..."
+	print "Enabling Task view icon ..."
 	currentuser
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -ErrorAction SilentlyContinue
-	print "Restored Task view icon."
+	print "Enabled Task view icon."
 }
 
 # Hide Cortana icon from taskbar.
-Function HideCortana {
+Function DisableCortana {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
 	}
 	space
-	print "Hiding Cortana icon..."
+	print "Disabling Cortana icon..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
-	print "Hid Cortana icon."
+	print "Disabled Cortana icon."
 }
 
 # Restore Cortana button in taskbar.
-Function RestoreCortana {
+Function EnableCortana {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
 	}
-	print "Restoring Cortana icon..."
+	print "Enabling Cortana icon..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
-	print "Restored Cortana icon."
+	print "Enabled Cortana icon."
 }
 
 # Hide Meet Now icon from tray.
-Function HideMeetNow {
+Function DisableMeetNow {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
 	}
 	space
-	print "Hiding Meet now..."
+	print "Disabling Meet now..."
     $Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
     $Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
     Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1
     Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
-	print "Hid Meet now."
+	print "Disabled Meet now."
 }
 
 # Restore Meet Now icon on tray.
-Function RestoreMeetNow {
+Function EnableMeetNow {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
 	}
 	space
-	print "Restoring Meet now..."
+	print "Enabling Meet now..."
     $Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
     $Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
     Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 0
     Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
-	print "Restored Meet now."
+	print "Enabled Meet now."
 }
 
 # Turn off News and interests feed.
-Function HideNI {
+Function DisableNI {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
@@ -3424,7 +3423,7 @@ Function HideNI {
 }
 
 # Turn on News and interests feed.
-Function RestoreNI {
+Function EnableNI {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
@@ -3438,43 +3437,43 @@ Function RestoreNI {
 }
 
 # Disable Widgets item - Windows 11 only.
-function HideWidgets {
+function DisableWidgets {
 	if ($CurrentBuild -lt 22000)
 	{
 		return
 	}
 	space
-	print "Hiding Widgets icon..."
+	print "Disabling Widgets icon..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 0
-	print "Hid Widgets icon."
+	print "Disabled Widgets icon."
 }
 
 # Enable Widgets item - Windows 11 only
-function RestoreWidgets {
+function EnableWidgets {
 	if ($CurrentBuild -lt 22000)
 	{
 		return
 	}
 	space
-	print "Restoring Widgets icon..."
+	print "Enabling Widgets icon..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarDa -Type DWord -Value 1
-	print "Restored Widgets icon."
+	print "Enabled Widgets icon."
 }
 
 # Disable chat item - Windows 11 only
-function HideChat {
+function DisableChat {
 	if ($CurrentBuild -lt 22000)
 	{
 		return
 	}
 	space
-	print "Hiding Chat icon..."
+	print "Disabling Chat icon..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 0
-	print "Hidd Chat icon."
+	print "Disabled Chat icon."
 }
 
 # Enable Chat item - Windows 11 only
-function RestoreChat {
+function EnableChat {
 	if ($CurrentBuild -lt 22000)
 	{
 		return
@@ -3482,7 +3481,7 @@ function RestoreChat {
 	space
 	print "Restoring Chat icon..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 1
-	print "Restored Chat icon."
+	print "Enabled Chat icon."
 }
 
 Start-Sleep -Seconds 2
