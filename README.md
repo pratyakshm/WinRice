@@ -20,27 +20,28 @@ WinRice, amongst a host of other things, improves privacy, de-clutters the Windo
 
 ## Documentation
 
-The documentation for WinRice is available below. Before running WinRice, please ensure that you have read the essential documentation.
+The documentation for WinRice is available below. 
 
-**Documentation folder:** [Tap here](https://github.com/pratyakshm/WinRice/tree/main/doc)  
+If you're a beginner, Main brief is all you need. It describes the modifications that WinRice generally performs: [`Main-brief.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md).
+
+The directory that contains all documents is available [here](https://github.com/pratyakshm/WinRice/tree/main/doc).  
  
 **Known issues**: See [Known issues](https://github.com/pratyakshm/WinRice/issues?q=is%3Aopen+is%3Aissue+label%3A%22Bug+report%22) before running WinRice.
-
-**Functions**: See [Functions](https://github.com/pratyakshm/WinRice/wiki/Functions) to get a detailed explanation of each function.
 
 ## Requirements
 
 WinRice, when run, checks if all of the following requirements are met:
-- Device is online and connected to the Internet.
+- Device is connected to the Internet.
 - Device is powered by a Windows build that's currently in service. [See more](https://github.com/pratyakshm/WinRice/blob/main/doc/Supported-winver.md).
 - PowerShell session is elevated to admin.
-- If there are any pending device restarts.
+- There are no pending device restarts.
 
 If any one of the criteria is not met, WinRice terminates itself.
 
 ## Running WinRice
 
 #### Download [WinRice.exe](https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice.exe).
+
 
 ## Contributing
 
