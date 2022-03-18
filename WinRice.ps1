@@ -40,7 +40,7 @@ $tasks = @(
 
 ### Privacy ###
 	"PrivacySecurity",
-	"DisableActivityHistory",	
+	# "DisableActivityHistory",	
 	# "EnableActivityHistory",
 	"DisableAdvertisingID",			
 	# "EnableAdvertisingID",
@@ -54,9 +54,9 @@ $tasks = @(
 	# "EnableInkHarvesting",
 	"DisableLangAccess",  		    
 	# "EnableLangAccess",
-	"DisableLocationTracking",      
+	# "DisableLocationTracking",      
 	# "EnableLocationTracking",
-	"DisableMapUpdates",			
+	# "DisableMapUpdates",			
 	# "EnableMapsUpdates",
 	"DisableSpeechRecognition",		
 	# "EnableSpeechRecognition",
@@ -97,8 +97,8 @@ $tasks = @(
 ### OS ###
 	"OS",
 	# "DisableStorageSense",		   
-	"EnableStorageSense",
-	"DisableReserves",	   
+	# "EnableStorageSense",
+	# "DisableReserves",	   
 	# "EnableReserves",
 	"DisableAutoplay",             
 	# "EnableAutoplay",
@@ -110,7 +110,7 @@ $tasks = @(
 	# "BIOSTimeLocal",
 	"EnableNumLock",			   
 	# "DisableNumLock",
-	"DisableServices",			   
+	# "DisableServices",			   
 	# "EnableServices",
 	"DisableTasks",				   
 	# "DisableTasks",
@@ -971,7 +971,7 @@ Function InstallNanaZip {
 		return
 	}
 	print "Installing NanaZip... (https://github.com/M2Team/NanaZip)"
-	winget install NanaZip -s msstore --accept-source-agreements --accept-package-agreements | Out-Null
+	winget install NanaZip -s msstore --accept-source-agreements --accept-package-agreements --accept-source-agreements | Out-Null
 	print "Installed NanaZip."
 }
 
@@ -979,7 +979,7 @@ Function InstallNanaZip {
 Function UninstallNanaZip {
 	space
 	print "Uninstalling NanaZip..."
-	winget uninstall 40174MouriNaruto.NanaZip_gnj4mf6z9tkrc --accept-package-agreements | Out-Null
+	winget uninstall 40174MouriNaruto.NanaZip_gnj4mf6z9tkrc --accept-package-agreements --accept-source-agreements | Out-Null
 	print "Uninstalled NanaZip."
 }
 
@@ -2156,7 +2156,6 @@ Function PrivacySecurity {
 	print "-------------------------"
 }
 
-# Privacy and advertising
 
 # Disable Activity History.
 Function DisableActivityHistory {
@@ -2270,9 +2269,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 	print "Disabling Feedback notifications..."
 	currentuser
 	$Feedback1 = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
-	$Feedback2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
-	$Feedback3 = "Microsoft\Windows\Feedback\Siuf\DmClient"
-	$Feedback4 = "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
+	$Feedback2 = "Microsoft\Windows\Feedback\Siuf\DmClient"
+	$Feedback3 = "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
 	if (!(Test-Path $Feedback1)) 
 	{
 		New-Item -Path $Feedback1 -Force | Out-Null
@@ -2282,9 +2280,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 	{
 		New-Item -Path $Feedback2 -Force | Out-Null
 	}
-	Set-ItemProperty -Path $Feedback2 -Name "DoNotShowFeedbackNotifications" -Type DWord -Value 1
+	Disable-ScheduledTask -TaskName $Feedback2 | Out-Null
 	Disable-ScheduledTask -TaskName $Feedback3 | Out-Null
-	Disable-ScheduledTask -TaskName $Feedback4 | Out-Null
 	print "Disabled Feedback notifications."
 }
 
@@ -2293,17 +2290,14 @@ Function EnableFeedback {
 	print "Enabling Feedback notifications..."
 	currentuser
 	$Feedback1 = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
-	$Feedback2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
-	$Feedback3 = "Microsoft\Windows\Feedback\Siuf\DmClient"
-	$Feedback4 = "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
+	$Feedback2 = "Microsoft\Windows\Feedback\Siuf\DmClient"
+	$Feedback3 = "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
 	if (!(Test-Path $Feedback1 )) 
 	{
 		New-Item $Feedback1 -Force | Out-Null
 	}
-	Remove-ItemProperty -Path $Feedback1 -Name "NumberOfSIUFInPeriod"
-	Remove-ItemProperty -Path $Feedback2 -Name "DoNotShowFeedbackNotifications"
-	Enable-ScheduledTask -TaskName $Feedback3 | Out-Null
-	Enable-ScheduledTask` -TaskName $Feedback4 | Out-Null
+	Enable-ScheduledTask -TaskName $Feedback2 | Out-Null
+	Enable-ScheduledTask` -TaskName $Feedback3 | Out-Null
 	print "Enabled Feedback notifications."
 }
 
@@ -2443,7 +2437,7 @@ Function DisableSilentInstallApps {
 	space
 	print "Disabling silent installation of suggested apps..."
 	currentuser
-	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SilentInstalledAppsEnabled -Type DWord -Value 1
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name SilentInstalledAppsEnabled -Type DWord -Value 1
 	print "Disabled silent installation of suggested apps."
 }
 
@@ -2489,7 +2483,7 @@ Function HideSuggestedContentInStart {
 	space 
 	print "Disabling suggested content in Start menu..."
 	currentuser
-	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 0
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name SubscribedContent-338388Enabled -Type DWord -Value 0
 	print "Disabled suggested content in Start menu."
 }
 
@@ -2502,7 +2496,7 @@ Function ShowSuggestedContentInStart {
 	space 
 	print "Enabling Suggested content in Start menu..."
 	currentuser
-	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 1
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name SubscribedContent-338388Enabled -Type DWord -Value 1
 	print "Enabled Suggested content in Start menu."
 }
 
@@ -2955,8 +2949,6 @@ Function DisableTasks {
 		"Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" 
 		"Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" 
 		"Microsoft\Windows\Windows Error Reporting\QueueReporting" 
-		"Microsoft\Windows\Feedback\Siuf\DmClient"
-		"Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
     )
     ForEach ($Task in $Tasks) 
 	{
@@ -2976,8 +2968,6 @@ Function EnableTasks {
 		"Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" 
 		"Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" 
 		"Microsoft\Windows\Windows Error Reporting\QueueReporting" 
-		"Microsoft\Windows\Feedback\Siuf\DmClient"
-		"Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"
     )
     ForEach ($Task in $Tasks) 
 	{
@@ -3385,10 +3375,8 @@ Function DisableMeetNow {
 	}
 	space
 	print "Disabling Meet now..."
-    $Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-    $Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-    Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 1
-    Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
+    $Meet = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+    Set-ItemProperty -Path $Meet -Name "HideSCAMeetNow" -Type DWord -Value 1
 	print "Disabled Meet now."
 }
 
@@ -3400,10 +3388,8 @@ Function EnableMeetNow {
 	}
 	space
 	print "Enabling Meet now..."
-    $Meet1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-    $Meet2 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-    Set-ItemProperty -Path $Meet1 -Name "HideSCAMeetNow" -Type DWord -Value 0
-    Set-ItemProperty -Path $Meet2 -Name "HideSCAMeetNow" -Type DWord -Value 1
+    $Meet = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+    Set-ItemProperty -Path $Meet -Name "HideSCAMeetNow" -Type DWord -Value 0
 	print "Enabled Meet now."
 }
 

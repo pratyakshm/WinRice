@@ -67,13 +67,10 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 
 ## Turn Off the Following:
 
-- Activity History
 - Advertising ID
 - App suggestions
 - Background apps
 - Inking & typing personalization
-- Location tracking
-- Maps updates
 - Online speech recognition
 - Tailored Experiences
 - Websites' access to language list to provide loaclly relevant content
@@ -199,10 +196,6 @@ See more at [111 Attacking EvilCorp Anatomy of a Corporate Hack Sean Metcalf Wil
 - StartCN
 - StartDVR
 
-### Disables the following services:
-
-- DiagTrack
-- SysMain
 
 ## 🧪🎛️ Windows Update
 
@@ -225,10 +218,8 @@ Setup the following policies to Windows Update:
 
 - Turn off AutoPlay
 - Turn off Autorun
-- Turn off Reserved Storage
   - This setting will only take effect after an update is installed.
 - 🎛️ Set BIOS time to UTC
-- Turn on Storage Sense
 - Turn on Num lock on startup
 
 # Windows Explorer
@@ -236,15 +227,15 @@ Setup the following policies to Windows Update:
 ## Turn Off the Following:
 
 | Item               | Place                 | OS                        |
-| ------------------ | --------------------- | ------------------------- |
-| Widgets icon       | Taskbar         | Windows 11                |
-| Chat icon          | Taskbar         | Windows 11                |
-| Search icon        | Taskbar         | Windows 11 and Windows 10 |
-| Task view          | Taskbar         | Windows 11 and Windows 10 |
-| Cortana            | Taskbar         | Windows 10                |
-| 3D Objects         | File Explorer sidebar | Windows 10                |
-| Meet now           | Apps tray           | Windows 10                |
-| News and interests | Apps tray           | Windows 10                |
+| ------------------ | --------------------- | ------------------- |
+| Widgets icon       | Taskbar         | Windows 11            |
+| Chat icon          | Taskbar         | Windows 11            |
+| Search icon        | Taskbar         | Windows 11 and 10     |
+| Task view          | Taskbar         | Windows 11 and 10     |
+| Cortana            | Taskbar         | Windows 10            |
+| 3D Objects         | File Explorer sidebar | Windows 10      |
+| Meet now           | Other system tray icons | Windows 10    |
+| News and interests | Other system tray icons | Windows 10    |
 
 </details>
 
