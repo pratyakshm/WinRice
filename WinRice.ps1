@@ -566,6 +566,7 @@ if (!(check($customize)))
 		print "  NO changes will be made to Widgets."
 	}
 	
+	# OS Changes
 	if ( (!($Insider)) -and (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) )
 	{	
 		space
@@ -605,24 +606,36 @@ if (!(check($customize)))
 		}
 	}
 	space
-
-	print "If your device has Windows and Linux dual booted, its recommended to make Windows OS follow the UTC time in order to avoid time differences with Linux."
-	$biostime = ask "Do you want Windows to follow UTC time? [y/N]"
+	
+	print "  If your device has Windows and Linux dual booted, its recommended to make Windows OS follow the UTC time in order to avoid time differences with Linux."
+	$biostime = ask "  Do you want Windows to follow UTC time? [y/N]"
 	if (not($biostime))
 	{
 		$biostime = "n"
 	}
 	if (check($biostime))
 	{
-		print "Windows will follow UTC time."
+		print "  Windows will follow UTC time."
 	}
 	elseif (!check($biostime))
 	{
-		print "Windows will not follow UTC time."
+		print "  Windows will not follow UTC time."
 	}
 	space
 
-	$systemrestore = ask "Do you want to create a system restore point? [Y/n]"
+	$systemwidepolicies = ask "  Do you want WinRice to configure policies that apply to all users in this device? [Y/n]"
+	Start-Sleep -Milliseconds 100
+	if (check($systemwidepolicies))
+	{
+		print "  WinRice will also configure policies that apply to all users."
+	}
+	elseif (!(check($systemwidepolicies)))
+	{
+		print "  WinRice will not configure policies that apply to all users."
+	}
+	space
+	
+	$systemrestore = ask "  Do you want to create a system restore point? [Y/n]"
 	Start-Sleep -Milliseconds 100
 	if (check($systemrestore))
 	{
@@ -740,6 +753,14 @@ if (!(check($customize)))
 		Write-Host "No changes will be made to Windows updates' delivery time." -ForegroundColor DarkGray
 	}
 	
+	if (check($systemwidepolicies))
+	{
+		Write-Host "Systemwide policies WILL be applied.."
+	}
+	elseif (!(check($systemwidepolicies)))
+	{
+		Write-Host "Systemwide policies will NOT be applied."
+	}
 	if (!($systemrestore))
 	{
 		$systemrestore = "y"
