@@ -33,6 +33,7 @@ Windows quality updates are delayed by 4 days.
 Windows feature updates are delayed by up to 20 days.
 
 ***
+&nbsp;
 
 # Custom Settings
 
@@ -40,39 +41,16 @@ Users can customize their WinRice experience using these Custom Settings if they
 
 ## App Installation
 
-WinRice will ask if user wants to install apps. 
+WinRice asks if you want to install apps. If you choose to do so, you will be presented with two methods of app installation, which are [Winstall](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winstall.md) and [WinGet import](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/import.md).
 
-#### If the user wants to install apps...
-
-WinRice will ask them the method of app installation between [Winstall](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winstall.md) and [WinGet import](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/import.md).
-
-#### If the user does not want to install apps...
-
-WinRice will respect that.
 
 ## App Uninstallation
 
-WinRice will ask if the user wants to uninstall non-essential apps. These are apps that are left unused by most users hence considered non-essential.
-
-#### If the user wants to uninstall non-essential apps...
-
-WinRice will uninstall non-essential apps using one of three methods which is chosen by the user. See [App-uninstallation.md](https://github.com/pratyakshm/WinRice/blob/main/doc/App-uninstallation.md) for detailed information on app uninstallation.
-
-#### If the user does not want to uninstall non-essential apps...
-
-WinRice will not uninstall non-essential apps.
+WinRice asks if you want to uninstall some built-in apps that are generally left unused. To learn more, see [App-uninstallation.md](https://github.com/pratyakshm/WinRice/blob/main/doc/App-uninstallation.md).
 
 ### Microsoft OneDrive - Uninstallation
 
-If the user has accepted to uninstall non-essential apps, WinRice will ask them if they want to uninstall Microsoft OneDrive too.
-
-#### If the user chooses to uninstall Microsoft OneDrive...
-
-It is uninstalled.
-
-#### Otherwise...
-
-Microsoft OneDrive is left untouched.
+WinRice asks if you want to uninstall OneDrive.
 
 ## Feature Installation
 
@@ -80,15 +58,7 @@ Microsoft OneDrive is left untouched.
 
 .NET 3.5 is a legacy runtime which is used to support running legacy applications and programs. While this may prove useful in corporate environments, with some exceptions, this feature is not too important in consumer devices.
 
-WinRice will ask if the user wants to install .NET 3.5.
-
-#### If the user chooses to install .NET 3.5...
-
-It will be installed.
-
-#### Otherwise...
-
-It will not be installed.
+WinRice asks if you want to install .NET 3.5.
 
 ### Windows Subsystem for Linux
 
@@ -96,13 +66,7 @@ The Windows Subsystem for Linux lets developers run a GNU/Linux environment -- i
 
 By default, WSL is not installed in Windows consumer editions. WinRice will ask if the user wants to install Windows Subsystem for Linux.
 
-#### If the user chooses to install WSL...
-
-It will be installed.
-
-#### Otherwise...
-
-It will not be installed.
+WinRice asks if you want to install WSL.
 
 ### Windows Sandbox
 
@@ -110,31 +74,13 @@ Windows Sandbox provides a lightweight desktop environment to safely run applica
 
 By default, Windows Sandbox is not installed in Windows consumer editions. WinRice will ask if the user wants to install Windows Sandbox.
 
-#### If the user chooses to install Windows Sandbox...
-
-It will be installed.
-
-#### Otherwise...
-
-Windows Sandbox will not be installed.
-
+WinRice asks if you want to install Windows Sandbox.
 
 ## Feature Uninstallation
 
 Windows, by default, ships with optional features, some of which are no longer broadbly used in most consumer devices. Here's a list of the features: [Link](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#features-uninstalled-optional). If none of these features are useful to you, I suggest you to opt into removing them from your device. 
 
-WinRice will ask if the user wants to remove these features from their devices.
-
-
-#### If the user chooses to uninstall these optional features...
-
-They will be uninstalled and/or disabled as necessary.
-
-
-#### Otherwise...
-
-WinRice will not uninstall these features.
-
+WinRice asks if you want to uninstall these optional features.
 
 ### Widgets - Windows 11 only
 
@@ -142,28 +88,11 @@ Widgets at a glance is a new experience which ships with Windows 11. Learn more 
 
 Widgets is an optional experience and it can be both disabled and removed.
 
-WinRice will ask if the user wants to remove Widgets from their device.
-
-#### If the user chooses to remove Widgets...
-
-Widgets functionality is removed from the device.
-
-#### Otherwise, 
-
-Widgets functionality is not modified by WinRice.
-
+WinRice asks if you want to remove Widgets from your device.
 
 ## Windows Update
 
-WinRice applies [these policies](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#windows-update-optional) to Windows Update. 
-
-#### If the user chooses to apply these policies...
-
-They are applied.
-
-#### Otherwise...
-
-Windows Update policies are not applied.
+WinRice asks if you want to apply [these Windows Update policies](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#windows-update-optional).
 
 ## System
 
@@ -173,15 +102,7 @@ If your device has Windows and Linux dual booted, its recommended to make Window
 
 However, some reports have shown that this modification might (unintentionally) make the device not display the correct time.
 
-WinRice will ask if the user wants to make this modification.
-
-#### If the user chooses to make this modification...
-
-It is made.
-
-#### Otherwise...
-
-It isn't made.
+WinRice asks if you want to make this change.
 
 ### System Restore
 
@@ -189,14 +110,7 @@ System Restore is a useful utility to restore your device to a previous timestam
 
 Since WinRice performs a good number of registry modifications to a vast amount of devices from notebooks to PCs, across different OS editions, OS versions and hardware, it might sometimes cause something unexpected to occur with your device. 
 
-#### If chosen by the user...
-WinRice creates a System Restore point which backups only the registry tree so that most modifications performed by WinRice are restored to defaults.
-
-#### Otherwise...
-
-WinRice still creates a System Restore point unless it is explicitly denied by the user.
-
-&nbsp;
+WinRice asks if you want to create a System restore point.
 
 ### ⚠️ Notes regarding Windows Update policies:
 
@@ -209,6 +123,3 @@ WinRice still creates a System Restore point unless it is explicitly denied by t
 ## Feedback
 
 If you have observed an issue with docs or if there are accessibility issues, please consider [filing an issue](https://github.com/pratyakshm/WinRice/issues/new?assignees=pratyakshm&labels=Issue-Docs&template=doc_issue.yaml&title=Docs+issue%3A+).
-
-
-

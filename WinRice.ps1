@@ -607,9 +607,9 @@ if (!(check($customize)))
 	}
 	space
 	
-	print "  If your device has Windows and Linux dual booted, its recommended to make Windows OS follow the UTC time in order to avoid time differences with Linux."
-	$biostime = ask "  Do you want Windows to follow UTC time? [y/N]"
-	if (not($biostime))
+	print "If your device has Windows and Linux dual booted, its recommended to make Windows OS follow the UTC time in order to avoid time differences with Linux."
+	$biostime = ask "Do you want Windows to follow UTC time? [y/N]"
+	if (!($biostime))
 	{
 		$biostime = "n"
 	}
@@ -617,13 +617,12 @@ if (!(check($customize)))
 	{
 		print "  Windows will follow UTC time."
 	}
-	elseif (!check($biostime))
+	elseif (!(check($biostime)))
 	{
 		print "  Windows will not follow UTC time."
 	}
-	space
 
-	$systemwidepolicies = ask "  Do you want WinRice to configure policies that apply to all users in this device? [Y/n]"
+	$systemwidepolicies = ask "Do you want WinRice to configure policies that apply to all users in this device? [Y/n]"
 	Start-Sleep -Milliseconds 100
 	if (check($systemwidepolicies))
 	{
@@ -633,9 +632,8 @@ if (!(check($customize)))
 	{
 		print "  WinRice will not configure policies that apply to all users."
 	}
-	space
 	
-	$systemrestore = ask "  Do you want to create a system restore point? [Y/n]"
+	$systemrestore = ask "Do you want to create a system restore point? [Y/n]"
 	Start-Sleep -Milliseconds 100
 	if (check($systemrestore))
 	{
