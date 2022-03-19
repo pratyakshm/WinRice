@@ -1663,8 +1663,13 @@ Function UnpinStartTiles {
 	{
 		return
 	}
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Unpinning all tiles from Start Menu..."
+	systemwide
 	Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <DefaultLayoutOverride>'
@@ -2180,8 +2185,13 @@ Function PrivacySecurity {
 
 # Disable Activity History.
 Function DisableActivityHistory {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Disabling Activity History..."
+	systemwide
 	$ActivityFeed = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
 	Set-ItemProperty -Path $ActivityFeed -Name "EnableActivityFeed" -Type DWord -Value 0
 	Set-ItemProperty -Path $ActivityFeed -Name "PublishUserActivities" -Type DWord -Value 0
@@ -2191,7 +2201,12 @@ Function DisableActivityHistory {
 
 # Enable Activity History.
 Function EnableActivityHistory {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	print "Enabling Activity History..."
+	systemwide
 	$ActivityHistory = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
 	Set-ItemProperty -Path $ActivityHistory -Name "EnableActivityFeed" -Type DWord -Value 1
 	Set-ItemProperty -Path $ActivityHistory -Name "PublishUserActivities" -Type DWord -Value 1
@@ -2372,8 +2387,13 @@ Function EnableLangAccess {
 
 # Disable Location Tracking.
 Function DisableLocationTracking {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Disabling location tracking..."
+	systemwide
 	$Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
 	$Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
 	if (!(Test-Path $Location1)) 
@@ -2387,8 +2407,13 @@ Function DisableLocationTracking {
 
 # Enable location tracking.
 Function EnableLocationTracking {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Enabling Location tracking..."
+	systemwide
 	$Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
 	$Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
 	if (!(Test-Path )) 
@@ -2402,16 +2427,26 @@ Function EnableLocationTracking {
 
 # Disable automatic Maps updates.
 Function DisableMapUpdates {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Disabling automatic Maps updates..."
+	systemwide
 	Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 0
 	print "Disabled automatic Maps updates."
 }
 
 # Enable maps updates.
 Function EnableMapsUpdates {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Enabling automatic Maps updates..."
+	systemwide
 	Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 1
 	print "Enabled automatic Maps updates."
 }
@@ -2535,8 +2570,12 @@ Function TelemetryRequired {
 		print "This device is flighting in the Windows Insider Program, hence Diagnostic data will not be Required."
 		return
 	}
-	systemwide
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	print "Setting Diagnostic data level to Required..."
+	systemwide
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "AllowTelemetry" -Type DWord -Value 1
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "MaxTelemetryAllowed" -Type DWord -Value 1
 	print "Set Diagnostic data level to Required."
@@ -2549,8 +2588,12 @@ Function TelemetryOptional {
 	{	
 		return
 	}
-	systemwide
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	print "This device is flighting in the Windows Insider Program, hence Diagnostic ata will be set to optional..."
+	systemwide
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "AllowTelemetry" -Type DWord -Value 3
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "MaxTelemetryAllowed" -Type DWord -Value 3
 	print "Diagnostic data is set to Optional."
@@ -2581,6 +2624,10 @@ Function DisableClipboard {
 # Security features
 
 Function AutoLoginPostUpdate {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Enabling automatic login post updates..."
 	systemwide
@@ -2589,6 +2636,10 @@ Function AutoLoginPostUpdate {
 } 
 
 Function StayOnLockscreenPostUpdate {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Disabling automatic login post updates..."
 	systemwide
@@ -2597,6 +2648,10 @@ Function StayOnLockscreenPostUpdate {
 }
 
 Function DisableVBS {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	# Check if current processor supports MBEC (https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity)
 	# This function disables Virtualization based security if your device's processor does not support MBEC. On unsupported processors, MBEC is emulated which taxes CPU performance.
@@ -2622,6 +2677,10 @@ Function DisableVBS {
 }
 
 Function EnableVBS {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Enabling Virtualization-based security..."
 	systemwide
@@ -2632,6 +2691,10 @@ Function EnableVBS {
 
 # Disables Windows WDigest credential caching (https://stealthbits.com/blog/wdigest-clear-text-passwords-stealing-more-than-a-hash/).
 Function DisableLogonCredential {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Disabling Windows WDigest credential caching..."
 	systemwide
@@ -2642,6 +2705,10 @@ Function DisableLogonCredential {
 
 # Enables Windows WDigest credential caching.
 Function EnableLogonCredential {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Enabling Windows WDigest credential caching..."
 	systemwide
@@ -2651,6 +2718,10 @@ Function EnableLogonCredential {
 
 # Disable LLMNR (https://www.blackhillsinfosec.com/how-to-disable-llmnr-why-you-want-to/).
 Function DisableLLMNR {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Disabling LLMNR..."
 	systemwide
@@ -2661,6 +2732,10 @@ Function DisableLLMNR {
 
 # Enable LLMNR
 Function EnableLLMNR {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Enabling LLMNR..."
 	systemwide
@@ -2669,6 +2744,10 @@ Function EnableLLMNR {
 }
 
 Function EnableSEHOP {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	$SEHOP = "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"
 	$Enabled = Get-ItemPropertyValue -Path $SEHOP -Name DisableExceptionChainValidation
@@ -2683,6 +2762,10 @@ Function EnableSEHOP {
 }
 
 Function DisableSEHOP {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Disabling Structured Exception Handling Overwrite Protection..."
 	systemwide
@@ -2692,6 +2775,10 @@ Function DisableSEHOP {
 }
 
 Function DisableWPAD {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Disabling Web Proxy Auto-Discovery..."
 	systemwide
@@ -2703,6 +2790,10 @@ Function DisableWPAD {
 }
 
 Function EnableWPAD {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Enabling Web Proxy Auto-Discovery..."
 	systemwide
@@ -2712,6 +2803,10 @@ Function EnableWPAD {
 }
 
 Function EnableLSAProtection {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Enabling LSA Protection/Auditing..."
 	systemwide
@@ -2721,6 +2816,10 @@ Function EnableLSAProtection {
 }
 
 Function DisableLSAProtection {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Disabling LSA Protection/Auditing..."
 	systemwide
@@ -2729,6 +2828,10 @@ Function DisableLSAProtection {
 }
 
 Function DisableScriptHost {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Disabling Windows Script Host..."
 	systemwide
@@ -2738,6 +2841,10 @@ Function DisableScriptHost {
 }
 
 Function EnableScriptHost {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Enabling Windows Script Host..."
 	systemwide
@@ -2746,6 +2853,10 @@ Function EnableScriptHost {
 }
 
 Function DisableOfficeOLE {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space 
 	if (-not (Test-Path "C:\Program Files\Microsoft Office"))
 	{
@@ -2764,6 +2875,10 @@ Function DisableOfficeOLE {
 }
 
 Function EnableOfficeOLE {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	if (-not (Test-Path "C:\Program Files\Microsoft Office"))
 	{
@@ -2810,6 +2925,10 @@ Function EnableAutoplay {
 
 # Disable Autorun for all drives.
 Function DisableAutorun {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Disabling Autorun for all drives..."
 	systemwide
@@ -2824,6 +2943,10 @@ Function DisableAutorun {
 
 # Enable Autorun for removable drives.
 Function EnableAutorun {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Enabling Autorun for all drives..."
 	systemwide
@@ -2861,6 +2984,10 @@ Function BIOSTimeUTC {
 	{
 		return
 	}
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Setting Windows to follow BIOS Time..."
 	systemwide
@@ -2870,6 +2997,10 @@ Function BIOSTimeUTC {
 
 # Make Windows follow local time
 Function BIOSTimeLocal {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Setting Windows to follow Local Time..."
 	systemwide
@@ -2879,6 +3010,10 @@ Function BIOSTimeLocal {
 
 # Enable Num lock on startup.
 Function EnableNumLock {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Setting Num lock to turn on autoamtically on Startup..."
 	New-ItemProperty -Path "Registry::HKEY_USERS\.DEFAULT\Control Panel\Keyboard" -Name InitialKeyboardIndicators -PropertyType String -Value 2147483650 -Force | Out-Null
@@ -2914,6 +3049,10 @@ Function DisableStorageSense {
 
 # Disable Reserved Storage. 
 Function DisableReserves {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Disabling Reserved Storage..."
 	systemwide
@@ -2923,6 +3062,10 @@ Function DisableReserves {
 
 # Enable Reserved Storage. 
 Function EnableReserves {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Enabling Reserved Storage..."
 	systemwide
@@ -3054,6 +3197,10 @@ function EnableAMDTasks {
 
 # Intelligently setup Windows Update policies.
 Function SetupWindowsUpdate {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	# Perform checks.
 	if ($Insider)
@@ -3136,6 +3283,10 @@ Function SetupWindowsUpdate {
 
 # Reset all Windows Update policies
 Function ResetWindowsUpdate {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
     space
 	systemwide
     Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Recurse
@@ -3144,6 +3295,10 @@ Function ResetWindowsUpdate {
 
 # A simple registry edit that fixes an issue where a small batch of devices turn back on after powering down.
 Function EnablePowerdownAfterShutdown {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Enabling full powerdown on shut down..."
 	print "This is known to fix issues where some PCs might boot up without user input after shutdown."
@@ -3154,6 +3309,10 @@ Function EnablePowerdownAfterShutdown {
 
 # Revert the EnablePowerdownAfterShutdown edit.
 Function DisablePowerdownAfterShutdown {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Disabling full powerdown on shut down..."
 	systemwide
@@ -3289,6 +3448,10 @@ Function Disable3DObjects {
 	{
 		return
 	}
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
 	space
 	print "Disabling 3D Objects..."
 	systemwide
@@ -3311,6 +3474,10 @@ Function Disable3DObjects {
 # Restore 3D Objects.
 Function Enable3DObjects {
 	if ($CurrentBuild -ge 22000) 
+	{
+		return
+	}
+	if (!(check($systemwidepolicies)))
 	{
 		return
 	}
