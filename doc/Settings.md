@@ -26,6 +26,7 @@ No apps except NanaZip and HEVC Video Extensions are installed. Apps can only be
 No features are installed. 
 
 # Windows Update
+
 Automatic Windows update is disabled.
 
 Windows quality updates are delayed by 4 days.
@@ -56,43 +57,46 @@ WinRice asks if you want to uninstall OneDrive.
 
 ### .NET 3.5
 
-.NET 3.5 is a legacy runtime which is used to support running legacy applications and programs. While this may prove useful in corporate environments, with some exceptions, this feature is not too important in consumer devices.
+.NET 3.5 is a legacy runtime which is used to support running legacy applications and programs. While this may prove useful in corporate environments, with some exceptions, this feature is not too important in consumer devices. 
 
-WinRice asks if you want to install .NET 3.5.
+By default, this feature is not installed, hence WinRice asks if you want to install it.
+
 
 ### Windows Subsystem for Linux
 
 The Windows Subsystem for Linux lets developers run a GNU/Linux environment -- including most command-line tools, utilities, and applications -- directly on Windows, unmodified, without the overhead of a traditional virtual machine or dualboot setup. Read more at [What is the Windows Subsystem for Linux? - docs.microsoft.com](https://docs.microsoft.com/en-us/windows/wsl/about).
 
-By default, WSL is not installed in Windows consumer editions. WinRice will ask if the user wants to install Windows Subsystem for Linux.
-
-WinRice asks if you want to install WSL.
+By default, this feature is not installed, hence WinRice asks if you want to install it.
 
 ### Windows Sandbox
 
 Windows Sandbox provides a lightweight desktop environment to safely run applications in isolation. Software installed inside the Windows Sandbox environment remains "sandboxed" and runs separately from the host machine. Read more at [Windows Sandbox - docs.microsoft.com](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-overview).
 
-By default, Windows Sandbox is not installed in Windows consumer editions. WinRice will ask if the user wants to install Windows Sandbox.
-
-WinRice asks if you want to install Windows Sandbox.
+By default, this feature is not installed, hence WinRice asks if you want to install it.
 
 ## Feature Uninstallation
 
 Windows, by default, ships with optional features, some of which are no longer broadbly used in most consumer devices. Here's a list of the features: [Link](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#features-uninstalled-optional). If none of these features are useful to you, I suggest you to opt into removing them from your device. 
 
-WinRice asks if you want to uninstall these optional features.
+WinRice asks if you want to uninstall these features.
 
 ### Widgets - Windows 11 only
 
 Widgets at a glance is a new experience which ships with Windows 11. Learn more about them: [Stay up to date with widgets - support.microsoft.com](https://support.microsoft.com/en-us/windows/stay-up-to-date-with-widgets-7ba79aaa-dac6-4687-b460-ad16a06be6e4).
 
-Widgets is an optional experience and it can be both disabled and removed.
-
-WinRice asks if you want to remove Widgets from your device.
+Widgets is an optional experience and it can be removed. Hence, WinRice asks if you want to remove Widgets.
 
 ## Windows Update
 
-WinRice asks if you want to apply [these Windows Update policies](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#windows-update-optional).
+Windows Update, at least in the media, is reputed to cause more problems than offer solutions. Since 2019, however, Microsoft has begun to leverage Microsoft Cloud to use and train ML models that offer intelligent Windows Update rollouts - and it is working. Windows Update experience has globally improved for millions of devices, and there are far less adverse post update scenarios that users face at present day compared to circa 2017.
+
+While Microsoft's ML performs quite a good job in itself, WinRice still applies policies to Windows Update, once the user asks it to do so.
+
+### List of Windows Update policies:
+- Disabling of automatic updates
+- Delaying of quality updates by 4 days and feature upgrades by 20 days
+- Disabling updating of Microsoft products via Windows Update
+- Disabling Delivery Optimization (i.e. WU will download updates only from MSFT CDN)
 
 ## System
 
