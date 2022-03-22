@@ -1,6 +1,19 @@
-# Ordered list of jobs which WinRice performs
+# Main brief document
 
-Your WinRice experience can be customized. Please read [`Settings.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Settings.md) to learn more.
+💡 Your WinRice experience can be customized. Please read [`Settings.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Settings.md) to learn more.
+
+## Contents of this page
+
+| Category | Link |
+| -------- | ---- |
+| Apps | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#apps)
+| Features | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#features)
+| Privacy | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#privacy)
+| Security | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#security)
+| OS | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#os)
+| Windows Explorer | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#windows-explorer)
+
+
 
 ## Legend
 | Symbol | Significance |
@@ -8,7 +21,7 @@ Your WinRice experience can be customized. Please read [`Settings.md`](https://g
 | 🎛️  | Tasks prefixed with 🎛️ "control knob" emoji are such tasks which are only run when they are configured. You may learn more by visiting [``Settings.md``](https://github.com/pratyakshm/WinRice/blob/main/doc/Settings.md). |
 | 🧪 | Tasks prefixed with 🧪 "test tube" emoji behave differently when device is detected to be flighting in the Windows Insider Program. |
 
-## Apps
+# Apps
 
 ### Things Installed:
 
@@ -35,7 +48,11 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 - Office
 - Xbox
 
-## Features
+## 🔚 End of Apps section
+
+***
+
+# Features
 
 ### 🎛️ Features Installed:
 
@@ -63,6 +80,11 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 - XPS Printer
 - XPS Viewer
 
+
+## 🔚 End of Features section
+
+***
+
 # Privacy
 
 ## Turn Off the Following:
@@ -86,6 +108,11 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 
 - Clipboard history
 </details>
+
+
+## 🔚 End of Privacy section
+
+***
 
 # Security
 
@@ -174,9 +201,14 @@ WinRice disables Office OLE.
 
 See more at [111 Attacking EvilCorp Anatomy of a Corporate Hack Sean Metcalf Will Schroeder - youtube.com](https://youtu.be/nJSMJyRNvlM?).
 
-# System
 
-### Disables the following tasks:
+## 🔚 End of Security section
+
+***
+
+# OS
+
+## Disables the following tasks:
 
 - Consolidator
 - DmClient
@@ -188,7 +220,7 @@ See more at [111 Attacking EvilCorp Anatomy of a Corporate Hack Sean Metcalf Wil
 - QueueReporting
 - UsbCeip
 
-#### Disables these additional tasks if your device is powered by an AMD processor:
+### Disables these additional tasks if your device is powered by an AMD processor:
 
 - AMDLinkUpdate
 - AMDRyzenMasterSDKTask
@@ -196,6 +228,25 @@ See more at [111 Attacking EvilCorp Anatomy of a Corporate Hack Sean Metcalf Wil
 - StartCN
 - StartDVR
 
+## Restores Power options
+
+This is useful for OEM devices which ship with a lot of power options hidden by default. WinRice restores them to the user.
+
+<details><summary> Tap to show / hide picture that demonstrates what the Power Options menu looks like after these changes</summary>
+
+![image](https://user-images.githubusercontent.com/54220235/149530018-d71f56a5-f1f2-4365-af8b-92a16e28aae3.png)
+
+</details>
+
+### More OS Level Changes That Are Made:
+
+- Autoplay is disabled
+- AutoRun is disabled 
+- Hibernation is disabled on Desktops
+- 🎛️ OS is set to follow UTC time
+- Num lock is set to be enabled every boot
+- Windows Welcome experiences are disabled
+- Windows Tips notifications are disabled
 
 ## 🧪🎛️ Windows Update
 
@@ -214,13 +265,10 @@ Setup the following policies to Windows Update:
 
 - Reset Windows Update is available for users who want to switch back to stock Windows Update settings.
 
-## More Changes:
+## 🔚 End of OS section
 
-- Turn off AutoPlay
-- Turn off Autorun
-  - This setting will only take effect after an update is installed.
-- 🎛️ Set BIOS time to UTC
-- Turn on Num lock on startup
+***
+
 
 # Windows Explorer
 
@@ -245,6 +293,10 @@ Setup the following policies to Windows Update:
 - Turn off Keyboard shortcut for Sticky keys
 - Use the Print screen button to open Screen snipping
 
+
+## 🔚 End of Windows Explorer section
+
+***
 
 
 ## Notes
