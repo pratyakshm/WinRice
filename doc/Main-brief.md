@@ -301,11 +301,13 @@ Setup the following policies to Windows Update:
 
 ## Notes
 
-- Diagnostic data is switched to default/minimal for all devices - and set to optional in Windows Insider devices.
+- WinRice sets your Diagnostic data to Required level. But if you're a Windows Insider, WinRice switches your Diagnostic data to Required + Optional level.
 
-- Feedback notifications is switched off in all devices - and not configured in Windows Insider devices.
+- Feedback notifications are not tweaked in Windows Insider devices.
 
 - Windows Update policies are only configured on devices running the retail version of Windows 11/10. Windows Update policies are only applied to Windows editions that support Group policies. These are Education, Enterprise, Enterprise LTSC and Professional editions.
+
+- Windows Update policies are not configured on devices running Windows pre-release software (read: Windows Insider).
 
 ---
 
