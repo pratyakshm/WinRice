@@ -3670,7 +3670,10 @@ Start-Sleep -Seconds 2
 ######### Tasks after successful run #########
 
 Function Success {
-	Stop-Process -Name explorer -Force
+	if ($CurrentBuild -lt 22000)
+	{
+		Stop-Process -Name explorer -Force
+	}
 	Start-Sleep 3
 	print "Thank you for using WinRice."
 	Stop-Transcript
