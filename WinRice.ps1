@@ -1625,6 +1625,7 @@ $ProgressPreference = 'SilentlyContinue'
 	{
 		return
 	}
+	Write-Host " "
 	elseif (check($uninstallmethod))
 	{
 		UninstallerGUI
@@ -1775,8 +1776,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 	print "Uninstalling Microsoft OneDrive..."
 
 	# Uninstall using WinGet.
-	winget uninstall Microsoft.OneDrive --accept-source-agreements --accept-package-agreements --silent | Out-Null
-	winget uninstall Microsoft.OneDriveSync_8wekyb3d8bbwe --accept-package-agreements --accept-source-agreements | Out-Null
+	winget uninstall Microsoft.OneDrive | Out-Null
+	winget uninstall Microsoft.OneDriveSync_8wekyb3d8bbwe | Out-Null
 	
 	# Cleanup leftover folders.
 	Remove-Item "$env:USERPROFILE\OneDrive" -Recurse -Force
