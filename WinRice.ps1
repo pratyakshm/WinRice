@@ -132,7 +132,7 @@ $tasks = @(
 	"EnablePrtScrToSnip",		   
 	# "DisablePrtScrSnip",
 	# "EnableExtensions",
-	# "Disable",
+	# "DisableExtensions",
 	"DisableRecentFilesInQuickAccess",
 	# "ShowRecentFilesInQuickAccess",
 	"DisableStickyKeys",           
@@ -1521,7 +1521,7 @@ Function UninstallerCLI {
 	{
 		if (Get-AppxPackage $InboxApp) 
 		{
-			print "     Uninstalling $InboxApp..."
+			print "  Uninstalling $InboxApp..."
 			Get-AppxPackage -Name $InboxApp | Remove-AppxPackage 
 			Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $InboxApp | Remove-AppxProvisionedPackage -Online | Out-Null
 		}
@@ -1529,7 +1529,7 @@ Function UninstallerCLI {
 
 	if (!(Get-CimInstance -ClassName Win32_PnPEntity | Where-Object -FilterScript {($_.PNPClass -eq "Camera") -or ($_.PNPClass -eq "Image")})) 
 	{
-		print "     Uninstalling Microsoft.WindowsCamera..."
+		print "  Uninstalling Microsoft.WindowsCamera..."
 		if (Get-AppxPackage "Microsoft.WindowsCamera")
 		{
 			Get-AppxPackage "Microsoft.WindowsCamera" | Remove-AppxPackage
@@ -1551,7 +1551,7 @@ Function UninstallerCLI {
 	{
 		if (Get-AppxPackage $SponsoredApp) 
 		{
-			print "     Uninstalling $SponsoredApp.."
+			print "  Uninstalling $SponsoredApp.."
 			Get-AppxPackage -Name $SponsoredApp | Remove-AppxPackage 
 			Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $SponsoredApp | Remove-AppxProvisionedPackage -Online | Out-Null
 		}
@@ -1569,12 +1569,12 @@ function UninstallerList {
 		{
 			if (Get-AppxPackage $App) 
 			{
-				print "     Uninstalling $App"
+				print "  Uninstalling $App"
 				Get-AppxPackage "$App" | Remove-AppxPackage
 			}
 			elseif (!(Get-AppxPackage $App))
 			{
-				print "     Couldn't find: $App"
+				print "  Couldn't find: $App"
 			}
 		}
 		print "Uninstalled listed apps."
@@ -1587,12 +1587,12 @@ function UninstallerList {
 		{
 			if (Get-AppxPackage $App) 
 			{
-				print "     Uninstalling $App"
+				print "  Uninstalling $App"
 				Get-AppxPackage "$App" | Remove-AppxPackage
 			}
 			elseif (!(Get-AppxPackage $App))
 			{
-				print "     Couldn't find: $App"
+				print "  Couldn't find: $App"
 			}
 		}
 		print "Uninstalled listed apps."
@@ -1605,12 +1605,12 @@ function UninstallerList {
 		{
 			if (Get-AppxPackage $App) 
 			{
-				print "     Uninstalling $App"
+				print "  Uninstalling $App"
 				Get-AppxPackage "$App" | Remove-AppxPackage
 			}
 			elseif (!(Get-AppxPackage $App))
 			{
-				print "     Couldn't find: $App"
+				print "  Couldn't find: $App"
 			}
 		}
 		print "Uninstalled listed apps."
@@ -1857,7 +1857,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	if (!(Get-CimInstance -ClassName Win32_PnPEntity | Where-Object -FilterScript {($_.PNPClass -eq "Camera") -or ($_.PNPClass -eq "Image")})) 
 	{
 		Get-WindowsPackage -Online | Where-Object PackageName -like *Hello-Face* | Remove-WindowsPackage -Online -NoRestart -WarningAction SilentlyContinue | Out-Null
-		print "    - Uninstalled Windows Hello Face"
+		print "  - Uninstalled Windows Hello Face"
 	}
 
 	# Print list of capabilities
@@ -1876,7 +1876,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		)
 		ForEach ($CapList in $CapLists) {
 			Start-Sleep -Milliseconds 20
-			print "    - Uninstalled $CapList"
+			print "  - Uninstalled $CapList"
 		}
 	}
 
@@ -1894,7 +1894,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		)
 		ForEach ($CapList in $CapLists) {
 			Start-Sleep -Milliseconds 20
-			print "    - Uninstalled $CapList"
+			print "  - Uninstalled $CapList"
 		}
 	}
 
@@ -1927,7 +1927,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	ForEach ($Feature in $Features) 
 	{
 		Start-Sleep -Milliseconds 20
-		print "    - Disabled $Feature"
+		print "  - Disabled $Feature"
 	}
 	
 	print "Removed capabilities and features."
@@ -1973,7 +1973,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	ForEach ($CapList in $CapLists) 
 	{
 		Start-Sleep -Milliseconds 70
-		print "    - Installed $CapList"
+		print "  - Installed $CapList"
 	}
 
 	$OptionalFeatures = @(
@@ -1985,7 +1985,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Get-WindowsOptionalFeature -Online | Where-Object {$_.FeatureName -like $OptionalFeature} | Enable-WindowsOptionalFeature -Online -NoRestart | Out-Null
 	}
 	# Print user friendly list of features uninstalled.
-	print "    - Enabled Work Folders Client."
+	print " - Enabled Work Folders Client."
 	
 	print "Added capabilities and features."
 }
@@ -2278,7 +2278,7 @@ function DisableErrorReporting {
 	space
 	if ($Insider)
 	{
-		print "Error reporting will be left unchanged in Windows pre-release software."
+		print "Error reporting is left unchanged in Windows pre-release software."
 		return
 	}
 	print "Disabling Windows Error Reporting..."
@@ -2299,7 +2299,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	space
 	if ($Insider)
 	{
-		print "Feedback notifications will be left unchanged in Windows pre-release software."
+		print "Feedback notifications are left unchanged in Windows pre-release software."
 		return
 	}
 	print "Disabling Feedback notifications..."
@@ -2563,7 +2563,6 @@ Function TelemetryRequired {
 	space
 	if ($Insider)
 	{
-		print "This device is flighting in the Windows Insider Program, hence Diagnostic data will not be Required."
 		return
 	}
 	if (!(check($systemwidepolicies)))
@@ -2588,7 +2587,7 @@ Function TelemetryOptional {
 	{
 		return
 	}
-	print "This device is flighting in the Windows Insider Program, hence Diagnostic ata will be set to optional..."
+	print "This device is flighting in the Windows Insider Program, hence Diagnostic data will be set to optional..."
 	systemwide
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "AllowTelemetry" -Type DWord -Value 3
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "MaxTelemetryAllowed" -Type DWord -Value 3
@@ -3400,9 +3399,9 @@ Function EnableExtensions {
 }
 
 # Hide extensions.
-function Disable {
+function DisableExtensions {
 	space
-	print "Hiding extensions from file names..."
+	print "Disabling extensions from file names..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 1
 	print "Disabled showing extensions next to files."
 }
@@ -3410,7 +3409,7 @@ function Disable {
 # Hide Recent files in Quick Access.
 function DisableRecentFilesInQuickAccess {
 	space
-	print "Hiding recent files from Quick Access..."
+	print "Disabling recent files from Quick Access..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name ShowRecent -Type DWord -Value 0
 	print "Disabled recent files in Quick Access."
 }
@@ -3418,9 +3417,9 @@ function DisableRecentFilesInQuickAccess {
 # Show Recent files in Quick Access.
 function ShowRecentFilesInQuickAccess {
 	space 
-	print "Showing Recent files in Quick Access..."
+	print "Enabling showing Recent files in Quick Access..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name ShowRecent -Type DWord -Value 1
-	print "Enabled recent files in Quick Access."
+	print "Enabled showing recent files in Quick Access."
 }
 
 # Disable Sticky keys.
@@ -3511,15 +3510,15 @@ Function Enable3DObjects {
 # Hide Search bar from taskbar.
 Function DisableSearch {
 	space
-	print "Hiding Search button..."
+	print "Disabling Search icon..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
 	print "Disabled Search icon."
 }
 
 # Restore Search bar to taskbar.
-Function RestoreSearch {
+Function EnableSearch {
 	space
-	print "Restoring Search button..."
+	print "Enabling Search icon..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
 	print "Enabled Search icon."
 }
@@ -3527,7 +3526,7 @@ Function RestoreSearch {
 # Hide Task View.
 Function DisableSearchView {
 	space
-	print "Hiding Task view button..."
+	print "Disabling Task view icon..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
 	print "Disabled Task view icon."
 }
@@ -3535,7 +3534,7 @@ Function DisableSearchView {
 # Restore Task View button.
 Function EnableTaskView {
 	space
-	print "Restoring Task view button..."
+	print "Enabling Task view icon..."
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -ErrorAction SilentlyContinue
 	print "Enabled Task view icon."
 }
@@ -3547,7 +3546,7 @@ Function DisableCortana {
 		return
 	}
 	space
-	print "Hiding Cortana button..."
+	print "Disabled Cortana button..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
 	print "Disabled Cortana icon."
 }
@@ -3558,7 +3557,7 @@ Function EnableCortana {
 	{
 		return
 	}
-	print "Restoring Cortana button..."
+	print "Enabling Cortana button..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
 	print "Enabled Cortana icon."
 }
@@ -3661,7 +3660,7 @@ function EnableChat {
 		return
 	}
 	space
-	print "Restoring Chat icon..."
+	print "Enabling Chat icon..."
 	Set-ItemProperty -Path "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarMn -Type DWord -Value 1
 	print "Enabled Chat icon."
 }
