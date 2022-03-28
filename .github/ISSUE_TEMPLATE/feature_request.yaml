@@ -12,7 +12,7 @@ body:
     id: principles
     attributes:
       label: WinRice principles
-      description: https://github.com/pratyakshm/WinRice/wiki/Principles
+      description: https://github.com/pratyakshm/WinRice/blob/main/doc/CONTRIBUTING.md#principles
       options:
         - label: "I have read the WinRice principles and I believe that this feature request abides by the WinRice principles to my truest sense."
           required: true

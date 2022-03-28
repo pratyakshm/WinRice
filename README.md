@@ -33,10 +33,9 @@ The directory that contains all documents is available [here](https://github.com
 WinRice, when run, checks if all of the following requirements are met:
 - Device is connected to the Internet.
 - Device is powered by a Windows build that's currently in service. [See more](https://github.com/pratyakshm/WinRice/blob/main/doc/Supported-winver.md).
-- PowerShell session is elevated to admin.
 - There are no pending device restarts.
 
-If any one of the criteria is not met, WinRice terminates itself.
+If any one of the above criteria are not met, WinRice terminates itself.
 
 ## Running WinRice
 
@@ -45,4 +44,4 @@ If any one of the criteria is not met, WinRice terminates itself.
 
 ## Contributing
 
-Read [CONTRIBUTING.MD](https://github.com/pratyakshm/WinRice/blob/main/CONTRIBUTING.md).
+Read [CONTRIBUTING.MD](https://github.com/pratyakshm/WinRice/blob/main/doc/CONTRIBUTING.md).
