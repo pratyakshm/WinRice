@@ -403,14 +403,16 @@ $systemrestore = "y"
 # Print Express Settings.
 print "Express Settings:"
 $settings = @(	
-	"A set of unessential apps WILL be uninstalled."	
-	"A set of unessential features WILL be uninstalled."
-	"Apps will NOT be installed."
-	"NO optional features are installed."
+	"A set of non-essential apps will be uninstalled."	
+	"A set of non-essential features will be uninstalled."
 )
 ForEach ($setting in $settings) 
 {
 	print "  $setting"
+}
+if ($CurrentBuild -ge 22000)
+{
+	Write-Host "  Widgets will not be removed."
 }
 if (!($Insider) -and (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}))
 {
@@ -431,9 +433,9 @@ $customize = ask "Do you want to proceed with Express Settings? [Y/n]"
 if (!(check($customize)))
 {
 	space
-	space
 	print "Please take your time to answer the questions below in order to save user config."
 	print "Press Enter to proceed after answering a question."
+	space
 	space
 
 	# App Deployment
@@ -457,16 +459,15 @@ if (!(check($customize)))
 		print "  Apps WILL be installed using: Winstall."
 	}
 	
-	$uninstallapps = ask "Do you want to uninstall unessential apps? [Y/n]"
+	$uninstallapps = ask "Do you want to uninstall non-essential apps? [Y/n]"
 	Start-Sleep -Milliseconds 100
 	if (!($uninstallapps))
 	{
 		$uninstallapps = "y"
-		print "No input detected, unessential apps WILL be uninstalled."
+		print "No input detected, non-essential apps WILL be uninstalled."
 	}
 	elseif (check($uninstallapps))
 	{
-		print "  Unessential apps WILL be uninstalled."
 		if ((Test-Path uninstallapps.txt) -or (Test-Path UninstallApps.txt) -or (Test-Path Uninstallapps.txt))
 		{
 			$uninstallmethod = "list"
@@ -475,97 +476,38 @@ if (!(check($customize)))
 		{
 			$uninstallmethod = ask "Do you want to select which apps to uninstall? [y/N]"
 			Start-Sleep -Milliseconds 100
-			if (check($uninstallmethod))
-			{
-				print "  You will select which apps you want to uninstall."
-			}
-			elseif (!(check($uninstallmethod)))
-			{
-				print " A predefined list of apps will be uninstalled."
-			}
 		}
 		$uninstallod = ask "Do you want to uninstall Microsoft OneDrive? [y/N]"
 		Start-Sleep -Milliseconds 100
-		if (check($uninstallod))
-		{
-			print "  Microsoft OneDrive WILL be uninstalled."
-		}
-		elseif (!(check($uninstallod)))
-		{
-			print "  Microsoft OneDrive will NOT be uninstalled."
-		}
-	}
-	elseif (!(check($uninstallapps)))
-	{
-		print "  No changes will be made to unessential apps."
 	}
 
 	space
 
 	# Feature Deployment
 	print "FEATURE DEPLOYMENT"
-
-	$netfx3 = ask "Do you want to install .NET 3.5? (used for running legacy programs) [y/N]"
-	Start-Sleep -Milliseconds 100
-	if (check($netfx3))
-	{
-		print "  .NET 3.5 WILL be installed."
-	}
-	elseif (!(check($netfx3)))
-	{
-		print "  NO changes will be made to .NET 3.5."
-	}
-
-	$wsl = ask "Do you want to install Windows Subsystem for Linux? [y/N]"
-	Start-Sleep -Milliseconds 100
-	if (check($wsl))
-	{
-		print "  Windows Subsystem for Linux WILL be installed."
-	}
-	elseif (!(check($wsl)))
-	{
-		print "  NO changes will be made to Windows Subsystem for Linux."
-	}
-
-	$sandbox = ask "Do you want to install Windows Sandbox? [y/N]"
-	Start-Sleep -Milliseconds 100
-	if (check($sandbox))
-	{
-		print " Windows Sandbox WILL be installed."
-	}
-	elseif (!(check($sandbox)))
-	{
-		print "  NO changes will be made to Windows Sandbox."
-	}
-
-	$uninstallfeatures = ask "Do you want to uninstall unessential optional features? [Y/n]"
+	
+	$uninstallfeatures = ask "Do you want to uninstall non-essential optional features? [Y/n]"
 	Start-Sleep -Milliseconds 100
 	if (!($uninstallfeatures))
 	{
 		$uninstallfeatures = "y"
-		print "  NO input detected, unessential features WILL be uninstalled."
-	}
-	if (check($uninstallfeatures))
-	{
-		print "  Unessential features WILL be uninstalled."
-	}
-	elseif (!(check($uninstallfeatures)))
-	{
-		print "  NO changes will be made to unessential features."
+		print "  NO input detected, non-essential features WILL be uninstalled."
 	}
 
 	if ($CurrentBuild -ge 22000) {
 		$widgets = ask "Do you want to uninstall Widgets [y/N]"
 	}
+
+	$netfx3 = ask "Do you want to install .NET 3.5? (used for running legacy programs) [y/N]"
 	Start-Sleep -Milliseconds 100
-	if (check($widgets))
-	{
-		print "  Widgets WILL be uninstalled."
-	}
-	elseif (!(check($widgets)))
-	{
-		print "  NO changes will be made to Widgets."
-	}
+
+	$wsl = ask "Do you want to install Windows Subsystem for Linux? [y/N]"
+	Start-Sleep -Milliseconds 100
+
+	$sandbox = ask "Do you want to install Windows Sandbox? [y/N]"
+	Start-Sleep -Milliseconds 100
+
+	
 	
 	# OS Changes
 	if ( (!($Insider)) -and (Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}) )
@@ -574,207 +516,142 @@ if (!(check($customize)))
 		print "WINDOWS UPDATE"
 
 		$dwu = ask "Do you want to delay Windows updates by a few days? [Y/n]"
-		Start-Sleep -Milliseconds 100
-		if (check($dwu))
-		{
-			print "  Windows updates will be delayed."
-		}
-		elseif (!(check($dwu)))
-		{
-			print "  NO changes will be made to Windows update delivery time."
-		}
-
 		$au = ask "Do you want to turn off automatic updates? [Y/n]"
-		Start-Sleep -Milliseconds 100
-		if (check($au))
-		{
-			print "  Windows automatic updates will be disabled."
-		}
-		elseif (!(check($au)))
-		{
-			print "  NO changes will be made to automatic Windows updates."
-		}
-
 		$drivers = ask "Do you want to turn off driver updates from Windows Update? [y/N]"
-		Start-Sleep -Milliseconds 100
-		if (check($drivers))
-		{
-			print "  Drivers will no longer be delivered using Windows Update."
-		}
-		elseif (!(check($drivers)))
-		{
-			print "  NO changes will be made to driver updates."
-		}
 	}
 	space
-	
-	print "If your device has Windows and Linux dual booted, its recommended to make Windows OS follow the UTC time in order to avoid time differences with Linux."
-	$biostime = ask "Do you want Windows to follow UTC time? [y/N]"
-	if (!($biostime))
+	$UseUTSCWhenFollowBIOSTime = ask "Do you want Windows to use UTC when it follows BIOS time? Warning: This may have unintended consequences. [y/N]"
+	if (!($UseUTSCWhenFollowBIOSTime))
 	{
-		$biostime = "n"
+		$UseUTSCWhenFollowBIOSTime = "n"
 	}
-	if (check($biostime))
-	{
-		print "  Windows will follow UTC time."
-	}
-	elseif (!(check($biostime)))
-	{
-		print "  Windows will not follow UTC time."
-	}
-
 	$systemwidepolicies = ask "Do you want WinRice to configure policies that apply to all users in this device? [Y/n]"
 	Start-Sleep -Milliseconds 100
-	if (check($systemwidepolicies))
-	{
-		print "  WinRice will also configure policies that apply to all users."
-	}
-	elseif (!(check($systemwidepolicies)))
-	{
-		print "  WinRice will not configure policies that apply to all users."
-	}
-	
 	$systemrestore = ask "Do you want to create a system restore point? [Y/n]"
 	Start-Sleep -Milliseconds 100
-	if (check($systemrestore))
-	{
-		print "  A system restore point will be created."
-	}
-	elseif (!(check($systemrestore)))
-	{
-		print " NO system restore point will be created."
-	}
-
+	print "------------------------------- "
 	space 
 	space
 
 	# REPRINT CONFIG TO USER
-	print "To sum it up,"
+	Write-Host "To sum it up, you've chosen to: "
+
+	## App Installation
 	if (check($installapps))
 	{
-		Write-Host "Apps will be installed using " -NoNewline -ForegroundColor DarkCyan
+		Write-Host " - Install apps using " -NoNewline -ForegroundColor Cyan
 		if ($installusing -like "2")
 		{
-			Write-Host "Winstall." -ForegroundColor DarkCyan
+			Write-Host "Winstall." -ForegroundColor Cyan
 		}
 		elseif ($installusing -like "1")
 		{
 			Write-Host "winget import method." -ForegroundColor Cyan
 		}
 	}
-	elseif (!(check($installapps)))
-	{
-		Write-Host "NO apps will be installed." -ForegroundColor DarkGray
-	}
-	
-	elseif (!(check($uninstallapps)))
-	{
-		Write-Host "NO changes will be made to unessential features." -ForegroundColor DarkGray
-	}
-	elseif (check($uninstallapps))
+
+	## App Uninstallation
+	if (check($uninstallapps))
 	{
 	
-		Write-Host "Unessential apps will be uninstalled" -NoNewline -ForegroundColor DarkCyan
+		Write-Host " - Uninstall non-essential apps" -NoNewline -ForegroundColor Cyan
 		if ($uninstallmethod -like "list")
 		{
-			Write-Host " using List." -ForegroundColor DarkCyan
+			Write-Host " using a custom List." -ForegroundColor Cyan
 		}
 		elseif (check($uninstallmethod))
 		{
-			Write-Host " and you will SELECT which apps to uninstall down the line." -ForegroundColor Cyan
+			Write-Host " which you will select later on." -ForegroundColor Cyan
 		}
 		elseif (!(check($uninstallmethod)) -and (check($uninstallapps)))
 		{
-			Write-Host " from the predefined list." -ForegroundColor DarkCyan
+			Write-Host " from our predefined list." -ForegroundColor Cyan
 		}
 	}
 	
+	if (check($uninstallod))
+	{
+		Write-Host " - Uninstall OneDrive." -ForegroundColor Cyan
+	}
+
+
+	## Feature Uninstallation
+	if (check($uninstallfeatures))
+	{
+		Write-Host " - Uninstall non-essential features." -ForegroundColor Cyan
+	}
+
+	if (check($widgets))
+	{
+		Write-Host " - Uninstall Widgets." -ForegroundColor Cyan
+	}
+
+
+	## Feature Installation
 	if (check($netfx3))
 	{
-		Write-Host ".NET 3.5 will be installed." -ForegroundColor DarkCyan
+		Write-Host " - Install .NET 3.5." -ForegroundColor Cyan
 	}
-	elseif (!(check($netfx3)))
-	{
-		Write-Host "NO changes will be made to .NET 3.5." -ForegroundColor DarkGray
-	}
-	
+
 	if (check($wsl))
 	{
-		Write-Host "Windows Subsystem for Linux will be installed." -ForegroundColor DarkCyan
-	}
-	elseif (!(check($wsl)))
-	{
-		Write-Host "NO changes will be made to Windows Subsystem for Linux." -ForegroundColor DarkGray
+		Write-Host " - Install WSL." -ForegroundColor Cyan
 	}
 	
 	if (check($sandbox))
 	{
-		Write-Host "Windows Sandbox will be installed." -ForegroundColor DarkCyan
-	}
-	elseif (!(check($sandbox)))
-	{
-		Write-Host "NO changes will be made to Windows Sandbox." -ForegroundColor DarkGray
+		Write-Host " - Install Windows Sandbox." -ForegroundColor Cyan
 	}
 	
-	if (!(check($uninstallfeatures)))
+
+	# Windows Update
+	if ((check($au)) -or (check($dwu)) -or (check($drivers)))
 	{
-		Write-Host "NO changes will be made to unessential features." -ForegroundColor DarkGray
-	}
-	elseif (check($uninstallfeatures))
-	{
-		Write-Host "Unessential features will be uninstalled." -ForegroundColor DarkCyan
-	}
-	
-	if (!(check($widgets)))
-	{
-		Write-Host "NO changes will be made to Widgets." -ForegroundColor DarkGray
-	}
-	elseif (check($widgets))
-	{
-		Write-Host "Widgets will be uninstalled." -ForegroundColor DarkCyan
+		Write-Host "You have chosen these Windows Update policies:"
 	}
 	
 	if (check($au))
 	{
-		Write-Host "Windows automatic updates will be disabled." -ForegroundColor DarkCyan
-	}
-	elseif (!(check($au)))
-	{
-		Write-Host "No changes will be made to automatic Windows updates." -ForegroundColor DarkGray
+		Write-Host " - Disable automatic updates." -ForegroundColor Cyan
 	}
 	
 	if (check($dwu))
 	{
-		Write-Host "Windows quality updates will be delayed by 4 days and feature updates will be delayed by 20 days." -ForegroundColor DarkCyan
+		Write-Host " - Delay Windows quality updates by 4 days and feature updates by 20 days." -ForegroundColor Cyan
 	}
-	elseif (!(check($dwu)))
+
+	if (check($drivers))
 	{
-		Write-Host "No changes will be made to Windows updates' delivery time." -ForegroundColor DarkGray
+		Write-Host " - Disable driver delivery via Windows Update."
 	}
+
 	
-	if (check($systemwidepolicies))
+	# Extras
+	if (!(check($systemwidepolicies)))
 	{
-		Write-Host "Systemwide policies WILL be applied.."
+		Write-Host " - Not apply any machinewide policies." -ForegroundColor Yellow
 	}
-	elseif (!(check($systemwidepolicies)))
+	elseif (check($systemwidepolicies))
 	{
-		Write-Host "Systemwide policies will NOT be applied."
-	}
-	if (!($systemrestore))
-	{
-		$systemrestore = "y"
-		Write-Host "A System restore point WILL be created." -ForegroundColor DarkCyan
+		Write-Host " - Apply machinewide policies." -ForegroundColor Cyan
 	}
 	if (!(check($systemrestore)))
 	{
-		Write-Host "NO system restore point will be created." -ForegroundColor DarkGray
+		Write-Host " - Not create a System Restore point." -ForegroundColor Yellow
+	}
+	elseif (check($systemrestore))
+	{
+		Write-Host " - Create a System restore point." -ForegroundColor Cyan
+	}
+	if (check($UseUTSCWhenFollowBIOSTime))
+	{
+		Write-Host " - Set Windows to use UTC when following BIOS time." -ForegroundColor DarkRed
 	}
 
-	Start-Sleep -Milliseconds 1700
 	space
 	
 	Write-Host "If this configuration is correct, " -NoNewline
-	Write-Host "press any key to go ahead." -ForegroundColor Yellow
+	Write-Host "press any key to go ahead." -ForegroundColor Green
 	Write-Host "If this configuration is not correct, restart WinRice and create a new one."
 	$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
 }
@@ -1626,7 +1503,6 @@ $ProgressPreference = 'SilentlyContinue'
 	{
 		return
 	}
-	Write-Host " "
 	elseif (check($uninstallmethod))
 	{
 		UninstallerGUI
@@ -2987,7 +2863,7 @@ Function EnableHibernation {
 
 # Make Windows follow BIOS time
 Function BIOSTimeUTC {
-	if (!(check($biostime)))
+	if (!(check($UseUTSCWhenFollowBIOSTime)))
 	{
 		return
 	}
@@ -2996,10 +2872,10 @@ Function BIOSTimeUTC {
 		return
 	}
 	space
-	print "Setting Windows to follow BIOS Time..."
+	print "Setting Windows to use UTC when following BIOS time..."
 	systemwide
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name "RealTimeIsUniversal" -Type DWord -Value 1
-	print "Windows is set to follow BIOS Time."
+	print "Set Windows to use UTC when following BIOS time."
 }
 
 # Make Windows follow local time
@@ -3009,10 +2885,10 @@ Function BIOSTimeLocal {
 		return
 	}
 	space
-	print "Setting Windows to follow Local Time..."
+	print "Setting Windows to use local time when following BIOS time..."
 	systemwide
 	Remove-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name "RealTimeIsUniversal" -ErrorAction SilentlyContinue
-	print "Windows is set to follow Local Time."
+	print "Set Windows to use local time when following BIOS time."
 }
 
 # Enable Num lock on startup.
@@ -3080,11 +2956,11 @@ Function EnableReserves {
 	print "Enabled Reserved Storage."
 }
 
-# Disable unessential services.
+# Disable non-essential services.
 Function DisableServices {
 $ErrorActionPreference = 'SilentlyContinue'
 	space
-	print "Disabling unessential services..."
+	print "Disabling non-essential services..."
     	$Services = @(
 		"DiagTrack"
 		"SysMain"
@@ -3098,11 +2974,11 @@ $ErrorActionPreference = 'SilentlyContinue'
 	print "Disabled unnecesarry services."
 }
 
-# Enable unessential services.
+# Enable non-essential services.
 Function EnableServices {
 $ErrorActionPreference = 'SilentlyContinue'
 	space
-	print "Enabling unessential services..."
+	print "Enabling non-essential services..."
     	$Services = @(
 		"DiagTrack"
 		"SysMain"
@@ -3113,13 +2989,13 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Set-Service $Service -StartupType Automatic
 		print "    Started service: $Service."
 	}
-	print "Enabled unessential services."
+	print "Enabled non-essential services."
 }
 
-# Disable unessential scheduled tasks.
+# Disable non-essential scheduled tasks.
 Function DisableTasks {
 	space
-	print "Disabling unessential tasks..."
+	print "Disabling non-essential tasks..."
 	$Tasks = @(
 		"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser"
 		"Microsoft\Windows\Application Experience\ProgramDataUpdater"
@@ -3135,10 +3011,10 @@ Function DisableTasks {
 		Disable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
 		print "    Disabled task: $Task."
 	}
-    print "Disabled unessential tasks."
+    print "Disabled non-essential tasks."
 }
 
-# Enable unessential scheduled tasks.
+# Enable non-essential scheduled tasks.
 Function EnableTasks {
 	$Tasks = @(
 		"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser"
@@ -3154,7 +3030,7 @@ Function EnableTasks {
 		Enable-ScheduledTask -TaskName $Task | Out-Null -ErrorAction SilentlyContinue
 		print "    Enabled task: $Task."
 	}
-    print "Enabled unessential tasks."
+    print "Enabled non-essential tasks."
 }
 
 # Disable AMD tasks
