@@ -62,23 +62,21 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 
 ### 🎛️ Features Uninstalled: 
 
-- Hello Face (if no Camera is detected)
-- Legacy Components (DirectPlay)
+- DirectPlay
+- Legacy Components
 - Math Recognizer
-- OpenSSH Client
-- PowerShell 2.0
-- PowerShell ISE
-- Quick Assist
-- SMB 1.0/CIFS File Sharing Support
+- SMB 1 Protocol
 - SMB Direct
-- Snipping Tool
 - Steps Recorder
+- Snipping Tool (Windows 10)
 - Windows Fax & Scan
-- Windows Media Player
+- Windows Hello Face (if no Camera is connected to device)
+- Windows PowerShell ISE
+- Windows PowerShell v2 
+- Windows XPS Features
+- XPS Document Writer
 - WordPad
-- Work Folders
-- XPS Printer
-- XPS Viewer
+- Work Folders Client
 
 
 ## 🔚 End of Features section
@@ -91,7 +89,7 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 
 - Advertising ID
 - App suggestions
-- Background apps
+- Error reporting
 - Inking & typing personalization
 - Online speech recognition
 - Tailored Experiences
@@ -301,13 +299,17 @@ Setup the following policies to Windows Update:
 
 ## Notes
 
-- WinRice sets your Diagnostic data to Required level. But if you're a Windows Insider, WinRice switches your Diagnostic data to Required + Optional level.
+- WinRice sets your Diagnostic data to Required level. On devices running Windows pre-release software, Diagnostic data is set to Optional level.
 
-- Feedback notifications are not tweaked in Windows Insider devices.
+- Error reporting is not disabled in Windows pre-release software.
 
-- Windows Update policies are only configured on devices running the retail version of Windows 11/10. Windows Update policies are only applied to Windows editions that support Group policies. These are Education, Enterprise, Enterprise LTSC and Professional editions.
+- Feedback notifications are not disabled in Windows pre-release software.
 
-- Windows Update policies are not configured on devices running Windows pre-release software (read: Windows Insider).
+- Windows Update policies are not applied in Windows pre-release software.
+
+- Windows Update policies are only applied to Windows editions that support Group policies. These are Education, Enterprise, Enterprise LTSC and Professional editions. Windows editions that are derivates of Windows Core edition (for instance, Windows 11/10 Home) do not support Group policies, hence Windows Update policies cannot be applied to them.
+
+
 
 ---
 
