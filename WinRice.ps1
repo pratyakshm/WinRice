@@ -327,7 +327,7 @@ $isonline = {
 	}
 }
 
-RunWithProgress -Text "[3/5] Device is connnected to the Internet" -Task $isonline -Exit $true | Out-Null
+RunWithProgress -Text "[3/5] Device is connected to the Internet" -Task $isonline -Exit $true | Out-Null
 
 # Check if device is a laptop, notebook or a sub-notebook (https://devblogs.microsoft.com/scripting/hey-scripting-guy-weekend-scripter-how-can-i-use-wmi-to-detect-laptops/).
 if(Get-WmiObject -Class Win32_SystemEnclosure | Where-Object {$_.ChassisTypes -eq 9 -or $_.ChassisTypes -eq 10 -or $_.ChassisTypes -eq 14}) 
@@ -1695,9 +1695,9 @@ $ErrorActionPreference = 'SilentlyContinue'
 		return 
 	}
 	space
-	print "Removing capabilites and features..."
+	print "Removing capabilities and features..."
 
-	# Capablities 
+	# Capabilities 
 	if ($CurrentBuild -lt 22000) 
 	{
 		$Capabilities = @(
@@ -1812,7 +1812,7 @@ $ProgressPreference = 'SilentlyContinue'
 $WarningPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
 	space
-	print "Adding capabilites and features..."
+	print "Adding capabilities and features..."
 	# Install capabilities.
 	$Capabilities = @(
 		"App.StepsRecorder*"
@@ -2898,7 +2898,7 @@ Function EnableNumLock {
 		return
 	}
 	space
-	print "Setting Num lock to turn on autoamtically on Startup..."
+	print "Setting Num lock to turn on automatically on Startup..."
 	New-ItemProperty -Path "Registry::HKEY_USERS\.DEFAULT\Control Panel\Keyboard" -Name InitialKeyboardIndicators -PropertyType String -Value 2147483650 -Force | Out-Null
 	print "Num lock will turn on automatically on Startup."
 }
@@ -2971,7 +2971,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Set-Service $Service -StartupType Disabled
 		print "    Stopped service: $Service."
 	}
-	print "Disabled unnecesarry services."
+	print "Disabled unnecessary services."
 }
 
 # Enable non-essential services.

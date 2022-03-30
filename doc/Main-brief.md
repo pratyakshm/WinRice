@@ -93,7 +93,7 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 - Inking & typing personalization
 - Online speech recognition
 - Tailored Experiences
-- Websites' access to language list to provide loaclly relevant content
+- Websites' access to language list to provide locally relevant content
 
 ## Limit The Following:
 
@@ -122,7 +122,7 @@ After a device restarts after applying a Windows Update, it stays on the lock sc
 Virtualization-based security, or VBS, uses hardware virtualization features to create and isolate a secure region of memory from the normal operating system. 
 Virtualization-based security causes big performance impact in devices that do not support, amongst many other things, MBEC. In MBEC-unsupported devices, its behavior is emulated which causes the impact.
 
-WinRice disables Virtualization-based security on MBEC-unsuppported devices.
+WinRice disables Virtualization-based security on MBEC-unsupported devices.
 
 **Note:** Disabling Virtualization-based security results in loss of functionality of WSL and WSA as they are powered by Hyper-V. If you use WSL or WSA, you need to re-enable Virtualization-based security.
 
@@ -141,7 +141,7 @@ Digest Authentication is a challenge/response protocol that was primarily used i
 
 This is where WDigest comes into play, something to be concerned with related to WDigest is that it stores passwords in clear-text, in memory. If a malicious user has access to an endpoint and is able to run a tool like Mimikatz, not only would they get the hashes currently stored in memory, but they’d also be able to get the clear-text password for the accounts as well. 
 
-WinRice disables WDiogest Credential Caching on all devices.
+WinRice disables WDigest Credential Caching on all devices.
 
 See more at [What is Digest Authentication?: Logon and Authentication - docs.microsoft.com](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc778868(v%3dws.10)).
 

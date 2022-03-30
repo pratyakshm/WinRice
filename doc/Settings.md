@@ -13,7 +13,7 @@ A set of non-essential apps [listed in this document](https://github.com/pratyak
 
 ## Feature Uninstallation
 
-A set of non-essential featuers [listed in this part of this document](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#features-uninstalled-optional) are disabled and/or uninstalled from the device.
+A set of non-essential features [listed in this part of this document](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#features-uninstalled-optional) are disabled and/or uninstalled from the device.
 
 # Installation
 
