@@ -8,9 +8,9 @@
 <a href="#license"><img src="https://img.shields.io/badge/License-GPL_v3-blue" alt="License"></a>
 </p>
 
-<p align="center"><a href="doc/Main-brief.md">A brief on WinRice</a> &bull; <a href="doc">Documentation</a> &bull; <a href="#-running-winrice">Usage</a>
+<p align="center"><a href="doc/Main-brief.md">A brief on WinRice</a> &bull; <a href="doc">Documentation</a> &bull; <a href="#running-winrice">Usage</a>
 
-<p align="center"><a href="doc/Frequently-answered-questions.md">FAQ</a>   &bull; <a href="LICENSE">License</a> &bull; <a href="#%EF%B8%8F-contributing">Contribution</a>
+<p align="center"><a href="doc/Frequently-answered-questions.md">FAQ</a>   &bull; <a href="LICENSE">License</a> &bull; <a href="#contributing">Contribution</a>
 
 ## Description
 
