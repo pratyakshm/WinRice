@@ -39,8 +39,15 @@ If any one of the above criteria are not met, WinRice terminates itself.
 
 ## Running WinRice
 
-#### Download [WinRice.exe](https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice.exe).
+Download and run [WinRice.exe](https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice.exe).
 
+### Other method(s)
+
+Alternatively, you may use this command in PowerShell (Admin)
+
+```
+Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://bit.ly/WinRice'))
+```
 
 ## Contributing
 
