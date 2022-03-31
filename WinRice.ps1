@@ -1,5 +1,5 @@
 # This file is a part of the WinRice software
-# Copyright (c) 2021 Pratyaksh Mehrotra <pratyakshm@protonmail.com>
+# Copyright (c) 2022 Pratyaksh Mehrotra <pratyakshm@protonmail.com>
 # All rights reserved.
 
 # Default preset
