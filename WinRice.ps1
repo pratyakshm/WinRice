@@ -187,6 +187,7 @@ Function wrexit {
 
 Function ask($question) {
 	Read-Host $question
+	Start-Sleep -Milliseconds 100
 }
 
 Function space {
@@ -386,8 +387,7 @@ $SCCM_Namespace = $null
 
 RunWithProgress -Text "[5/5] Session is fresh" -Task $isrestartpending -Exit $true | Out-Null
 
-
-Start-Sleep -Milliseconds 200
+Start-Sleep -Milliseconds 100
 Write-Host "Completed checks." -ForegroundColor green 
 space
 
@@ -441,7 +441,6 @@ if (!(check($customize)))
 	# App Deployment
 	print "APP DEPLOYMENT"
 	$installapps = ask "Do you want to install apps using WinGet? [y/N]"
-	Start-Sleep -Milliseconds 100
 	if (check($installapps))
 	{
 		$installusing = ask "Okay, do you want to use (1) winget import or (2) Winstall? [1/2]"
@@ -460,7 +459,6 @@ if (!(check($customize)))
 	}
 	
 	$uninstallapps = ask "Do you want to uninstall non-essential apps? [Y/n]"
-	Start-Sleep -Milliseconds 100
 	if (!($uninstallapps))
 	{
 		$uninstallapps = "y"
@@ -475,10 +473,8 @@ if (!(check($customize)))
 		elseif (!(Test-Path uninstallapps.txt) -or (!(Test-Path UninstallApps.txt)) -or (!(Test-Path Uninstallapps.txt)))
 		{
 			$uninstallmethod = ask "Do you want to select which apps to uninstall? [y/N]"
-			Start-Sleep -Milliseconds 100
 		}
 		$uninstallod = ask "Do you want to uninstall Microsoft OneDrive? [y/N]"
-		Start-Sleep -Milliseconds 100
 	}
 
 	space
@@ -487,7 +483,6 @@ if (!(check($customize)))
 	print "FEATURE DEPLOYMENT"
 	
 	$uninstallfeatures = ask "Do you want to uninstall non-essential optional features? [Y/n]"
-	Start-Sleep -Milliseconds 100
 	if (!($uninstallfeatures))
 	{
 		$uninstallfeatures = "y"
@@ -499,13 +494,10 @@ if (!(check($customize)))
 	}
 
 	$netfx3 = ask "Do you want to install .NET 3.5? (used for running legacy programs) [y/N]"
-	Start-Sleep -Milliseconds 100
 
 	$wsl = ask "Do you want to install Windows Subsystem for Linux? [y/N]"
-	Start-Sleep -Milliseconds 100
 
 	$sandbox = ask "Do you want to install Windows Sandbox? [y/N]"
-	Start-Sleep -Milliseconds 100
 
 	
 	
@@ -526,9 +518,7 @@ if (!(check($customize)))
 		$UseUTSCWhenFollowBIOSTime = "n"
 	}
 	$systemwidepolicies = ask "Do you want WinRice to configure policies that apply to all users in this device? [Y/n]"
-	Start-Sleep -Milliseconds 100
 	$systemrestore = ask "Do you want to create a system restore point? [Y/n]"
-	Start-Sleep -Milliseconds 100
 	print "------------------------------- "
 	space 
 	space
