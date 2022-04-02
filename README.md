@@ -8,42 +8,47 @@
 <a href="#license"><img src="https://img.shields.io/badge/License-GPL_v3-blue" alt="License"></a>
 </p>
 
-<p align="center"><a href="doc/Main-brief.md">A brief on WinRice</a> &bull; <a href="doc">Documentation</a> &bull; <a href="#running-winrice">Usage</a>
+<p align="center"><a href="#features">Features</a> &bull; <a href="doc">Documentation</a> &bull; <a href="#using-winrice">Usage</a>
 
 <p align="center"><a href="doc/Frequently-answered-questions.md">FAQ</a>   &bull; <a href="LICENSE">License</a> &bull; <a href="#contributing">Contribution</a>
 
-## Description
+## About
 
-WinRice uses PowerShell automation to setup a Windows device. It currently supports only the latest retail builds of Windows 11 and 10.
+WinRice is a PowerShell script designed to automate setting up a new Windows device or a fresh Windows installation. It automates a few of the useful things that people generally do when installing starting afresh in Windows.
   
-WinRice, amongst a host of other things, improves privacy, de-clutters the Windows user interface and removes non-essential apps from Windows while still retaining OS functionality.
+## Features
+  - Allows you to batch install apps & features
+  - Configures Windows UI
+  - Configures Windows Update policies
+  - Enhances privacy
+  - Disables non-essential tasks
+  - Disables silent installation of apps from Microsoft Store
+  - Disables suggestions and tips
+  - Hardens security
+  - Removes non-essential apps
+  - Removes non-essential features
+  - Restores all power options
 
-## Documentation
 
-The documentation for WinRice is available below. 
+## Using WinRice
+  
+### Requirements
+  
+  - You've read the documentation and know what WinRice does. If you're new, start with [`Main-brief.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md).
+  - Your device:
+    - Is connected to the Internet
+    - Is powered by an [in-service Windows version](https://github.com/pratyakshm/WinRice/blob/main/doc/Supported-winver.md).
+    - Does not have any pending restarts
 
-If you're a beginner, Main brief is all you need. It describes the modifications that WinRice generally performs: [`Main-brief.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md).
-
-The directory that contains all documents is available [here](https://github.com/pratyakshm/WinRice/tree/main/doc).  
+ The directory that contains all documents is available [here](https://github.com/pratyakshm/WinRice/tree/main/doc).  
  
-**Known issues**: See [Known issues](https://github.com/pratyakshm/WinRice/issues?q=is%3Aopen+is%3Aissue+label%3A%22Bug+report%22) before running WinRice.
+### Using an EXE [Recommended]
+  
+Use [this link](https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice.exe) to download the program.
 
-## Requirements
+### Alternative methods
 
-WinRice, when run, checks if all of the following requirements are met:
-- Device is connected to the Internet.
-- Device is powered by a Windows build that's currently in service. [See more](https://github.com/pratyakshm/WinRice/blob/main/doc/Supported-winver.md).
-- There are no pending device restarts.
-
-If any one of the above criteria are not met, WinRice terminates itself.
-
-## Running WinRice
-
-Download and run [WinRice.exe](https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice.exe).
-
-### Other method(s)
-
-Alternatively, you may use this command in PowerShell (Admin)
+Alternatively, you may use this command in PowerShell (Admin) to run WinRice:
 
 ```
 Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://bit.ly/WinRice'))
