@@ -1373,6 +1373,7 @@ Function UninstallerCLI {
 		"Microsoft.BingWeather"
 		"Microsoft.GetHelp" 
 		"Microsoft.Getstarted" # Tips app 
+		"Microsoft.Microsoft3DViewer"
 		"Microsoft.MSPaint" # Paint 3D app
 		# "Microsoft.Paint"  # Paint app (MSIX)
 		"Microsoft.MicrosoftOfficeHub" # Office webview
@@ -1381,6 +1382,7 @@ Function UninstallerCLI {
 		"Microsoft.MicrosoftSolitaireCollection" 
 		"Microsoft.News" 
 		"Microsoft.PowerAutomateDesktop"
+		"Microsoft.SkypeApp"
 		"Microsoft.Whiteboard"
 		"Microsoft.WindowsCommunicationsApps" 
 		"Microsoft.WindowsMaps" 
