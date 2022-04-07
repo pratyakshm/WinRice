@@ -86,6 +86,7 @@ hypervisorlaunchtype
 img
 inbox
 installapps
+Installdot
 installusing
 isadmin
 isonline
@@ -192,6 +193,7 @@ uncomment
 uninstall
 uninstallapps
 uninstallation
+Uninstalldot
 Uninstaller
 uninstallfeatures
 uninstalling

@@ -22,12 +22,12 @@ $tasks = @(
 	# "Winuninstall"
 	"InstallHEVC", 
 	# "UninstallHEVC"
-	"EnableWSL", "Activity", 
-	# "DisableWSL",
-	"EnabledotNET3.5", "Activity", 
-	# "DisabledotNET3.5",
-	"EnableSandbox",
-	# "DisableSandbox",
+	"InstallWSL", "Activity", 
+	# "UninstallWSL",
+	"InstalldotNET3.5", "Activity", 
+	# "UninstalldotNET3.5",
+	"InstallSandbox",
+	# "UninstallSandbox",
 	"UninstallApps", "Activity", 
 	"WebApps",
 	"UnpinStartTiles", "Activity", 
@@ -592,28 +592,6 @@ if (!(check($customize)))
 	{
 		Write-Host " - Install Windows Sandbox." -ForegroundColor Cyan
 	}
-	
-
-	# Windows Update
-	if ((check($au)) -or (check($dwu)) -or (check($drivers)))
-	{
-		Write-Host "You have chosen these Windows Update policies:"
-	}
-	
-	if (check($au))
-	{
-		Write-Host " - Disable automatic updates." -ForegroundColor Cyan
-	}
-	
-	if (check($dwu))
-	{
-		Write-Host " - Delay Windows quality updates by 4 days and feature updates by 20 days." -ForegroundColor Cyan
-	}
-
-	if (check($drivers))
-	{
-		Write-Host " - Disable driver delivery via Windows Update."
-	}
 
 	
 	# Extras
@@ -638,6 +616,28 @@ if (!(check($customize)))
 		Write-Host " - Set Windows to use UTC when following BIOS time." -ForegroundColor DarkRed
 	}
 
+
+	# Windows Update
+	if ((check($au)) -or (check($dwu)) -or (check($drivers)))
+	{	
+		space
+		Write-Host "You have chosen these Windows Update policies:"
+	}
+	
+	if (check($au))
+	{
+		Write-Host " - Disable automatic updates." -ForegroundColor Cyan
+	}
+	
+	if (check($dwu))
+	{
+		Write-Host " - Delay Windows quality updates by 4 days and feature updates by 20 days." -ForegroundColor Cyan
+	}
+
+	if (check($drivers))
+	{
+		Write-Host " - Disable driver delivery via Windows Update." -ForegroundColor Cyan
+	}
 	space
 	
 	Write-Host "If this configuration is correct, " -NoNewline
@@ -1851,8 +1851,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 	print "Added capabilities and features."
 }
 
-# Enable Windows Subsystem for Linux.
-Function EnableWSL {
+# Install Windows Subsystem for Linux.
+Function InstallWSL {
 $ProgressPreference = 'SilentlyContinue'
 	if (!(check($wsl))) 
 	{ 
@@ -1884,16 +1884,16 @@ $ProgressPreference = 'SilentlyContinue'
 	print "Installed Windows Subsystem for Linux."
 }
 
-# Disable Windows Subsystem for Linux.
-Function DisableWSL {
+# Uninstall Windows Subsystem for Linux.
+Function UninstallWSL {
 $ProgressPreference = 'SilentlyContinue'
 $WarningPreference = 'SilentlyContinue'
 	space
 
-	# Inform user if WSL is already disabled.
+	# Inform user if WSL is already uninstalled.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Disabled") 
 	{
-		print "Windows Subsystem for Linux is already disabled."
+		print "Windows Subsystem for Linux is already uninstalled."
 		return
 	}
 
@@ -1910,8 +1910,8 @@ $WarningPreference = 'SilentlyContinue'
 	print "Uninstalled Windows Subsystem for Linux."
 }
 
-# Enable Sandbox.
-Function EnableSandbox {
+# Install Sandbox.
+Function InstallSandbox {
 $ProgressPreference = 'SilentlyContinue'
 	if (!(check($sandbox)))
 	{
@@ -1920,64 +1920,64 @@ $ProgressPreference = 'SilentlyContinue'
 	space
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Enabled")
 	 {
-		print "Windows Sandbox is already enabled."
+		print "Windows Sandbox is already installed."
 		return
 	}
 
 	# Warn if unsupported Edition (not version).
 	if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) 
 	{
-		print "Could not enable Windows Sandbox since $ProductName does not support it."
+		print "Could not install Windows Sandbox since $ProductName does not support it."
 		return
 	}
 
-	# Enable Sandbox.
+	# Install Sandbox.
 	print "Enabling Windows Sandbox..."
 	Enable-WindowsOptionalFeature -FeatureName "Containers-DisposableClientVM" -All -Online -NoRestart -WarningAction Ignore | Out-Null
 
 	# Print status.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Disabled") 
 	{
-		print "Could not enable Windows Sandbox."
+		print "Could not install Windows Sandbox."
 		return
 	}
-	print "Enabled Windows Sandbox."
+	print "Install Windows Sandbox."
 }
 
-# Disable Sandbox
-Function DisableSandbox {
+# Uninstall Sandbox
+Function UninstallSandbox {
 $ProgressPreference = 'SilentlyContinue'
 	space
 
-	# Check if already disabled.
+	# Check if already uninstalled.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Disabled") 
 	{
-		print "Windows Sandbox is already disabled."
+		print "Windows Sandbox is already uninstalled."
 		return
 	}
 
 	# Warn if unsupported Edition (not version)
 	if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"}))
 	{
-		print "Windows Sandbox can't be toggled in $ProductName."
+		print "Windows Sandbox can't be configured in $ProductName."
 		return
 	}
 
-	# Enable Sandbox
-	print "Disabling Windows Sandbox..."
+	# Uninstall Sandbox
+	print "Uninstalling Windows Sandbox..."
 	Disable-WindowsOptionalFeature -FeatureName "Containers-DisposableClientVM" -All -Online -NoRestart -WarningAction Ignore | Out-Null
 	
 	# Print status.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Enabled") 
 	{
-		print "Could not disable Windows Sandbox."
+		print "Could not uninstall Windows Sandbox."
 		return
 	}
-	print "Disabled Windows Sandbox."
+	print "Uninstalled Windows Sandbox."
 }
 
-# Enable dotNET 3.5.
-Function EnabledotNET3.5 {
+# Install dotNET 3.5.
+Function InstalldotNET3.5 {
 $ProgressPreference = 'SilentlyContinue'
 	if (!(check($netfx3))) 
 	{ 
@@ -1985,49 +1985,49 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 	space
 
-	# Check if already enabled.
+	# Check if already install.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Enabled")
 	{
-		print ".NET 3.5 is already enabled."
+		print ".NET 3.5 is already installed."
 		return
 	}
 
-	# Enable dotNET 3.5.
-	print "Enabling .NET 3.5..."
+	# Install dotNET 3.5.
+	print "Installing .NET 3.5..."
 	Enable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -NoRestart | Out-Null
 
 	# Print status.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Disabled")
 	{
-		print "Could not enable .NET 3.5."
+		print "Could not install .NET 3.5."
 		return
 	}
-	print "Enabled .NET 3.5."
+	print "Installed .NET 3.5."
 }
 
-# Disable dotNET 3.5
-Function DisabledotNET3.5 {
+# Uninstall dotNET 3.5
+Function UninstalldotNET3.5 {
 $ProgressPreference = 'SilentlyContinue'
 	space
 
-	# Check if already disabled.
+	# Check if already uninstalled.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Disabled")
 	{
-		print ".NET 3.5 is already disabled."
+		print ".NET 3.5 is already uninstalled."
 		return
 	}
 
-	# Disable dotNET 3.5.
-	print "Disabling .NET 3.5..."
+	# Uninstall dotNET 3.5.
+	print "Uninstalling .NET 3.5..."
 	Disable-WindowsOptionalFeature -Online -FeatureName "NetFx3" -NoRestart | Out-Null
 
 	# Print status.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Enabled")
 	{
-		print ".NET 3.5 is already disabled."
+		print ".NET 3.5 is already uninstalled."
 		return
 	}
-	print "Disabled .NET 3.5."
+	print "Uninstalled .NET 3.5."
 }
 
 
@@ -2439,7 +2439,6 @@ Function TelemetryRequired {
 
 # Set Diagnostic Data to Optional.
 Function TelemetryOptional {
-	space
 	if (!($Insider))
 	{	
 		return
@@ -2448,6 +2447,7 @@ Function TelemetryOptional {
 	{
 		return
 	}
+	space
 	print "This device is flighting in the Windows Insider Program, hence Diagnostic data will be set to optional..."
 	systemwide
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "AllowTelemetry" -Type DWord -Value 3
