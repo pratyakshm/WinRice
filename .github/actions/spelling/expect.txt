@@ -46,6 +46,7 @@ Disabledot
 dll
 DObjects
 dualboot
+DViewer
 DVR
 dword
 dws
@@ -171,6 +172,7 @@ SEH
 sehop
 Siuf
 SIUFIn
+Skype
 Smb
 spam
 Spotify
