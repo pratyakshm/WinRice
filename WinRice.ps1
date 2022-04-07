@@ -3459,8 +3459,10 @@ Function DisableNI {
 	print "Disabling News and interests..."
 	$Feed1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds"
 	$Feed2 = "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Windows\CurrentVersion\Feeds"
-	Set-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 | Out-Null
-	Set-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 | Out-Null
+	Remove-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode
+	Remove-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode
+	New-ItemProperty -Path $Feed1 -Name ShellFeedsTaskbarViewMode -Type DWord -Value 2 -Force | Out-Null
+	New-ItemProperty -Path $Feed2 -Name ShellFeedsTaskbarViewMode -Type Dword -Value 2 -Force | Out-Null
 	print "Disabled News and interests."
 }
 
