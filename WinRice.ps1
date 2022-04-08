@@ -3306,7 +3306,8 @@ Function EnableStickyKeys {
 Function SetExplorerThisPC {
 	space
 	print "Setting default File Explorer view to This PC..."
-	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -Type DWord -Value 1
+	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo"
+	New-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -Type DWord -Value 1 -Force | Out-Null
 	print "Set default File Explorer view to This PC."
 }
 
@@ -3410,7 +3411,7 @@ Function DisableCortana {
 		return
 	}
 	space
-	print "Disabled Cortana button..."
+	print "Disabled Cortana icon..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
 	print "Disabled Cortana icon."
 }
@@ -3421,7 +3422,7 @@ Function EnableCortana {
 	{
 		return
 	}
-	print "Enabling Cortana button..."
+	print "Enabling Cortana icon..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 1
 	print "Enabled Cortana icon."
 }
@@ -3433,10 +3434,10 @@ Function DisableMeetNow {
 		return
 	}
 	space
-	print "Disabling Meet now..."
-    $Meet = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-    Set-ItemProperty -Path $Meet -Name "HideSCAMeetNow" -Type DWord -Value 1
-	print "Disabled Meet now."
+	print "Disabling Meet Now..."
+	New-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" | Out-Null
+    New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "HideSCAMeetNow" -Type DWord -Value 1 -Force | Out-Null
+	print "Disabled Meet Now."
 }
 
 # Restore Meet Now icon on tray.
@@ -3446,10 +3447,9 @@ Function EnableMeetNow {
 		return
 	}
 	space
-	print "Enabling Meet now..."
-    $Meet = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-    Set-ItemProperty -Path $Meet -Name "HideSCAMeetNow" -Type DWord -Value 0
-	print "Enabled Meet now."
+	print "Enabling Meet Now..."
+	Remove-Item "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" | Out-Null
+	print "Enabled Meet Now."
 }
 
 # Turn off News and interests feed.
