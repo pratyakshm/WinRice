@@ -199,11 +199,6 @@ Function print($text) {
 	Start-Sleep -Milliseconds 150
 }
 
-Function systemwide {
-	Write-Warning "This policy applies to all users in this device."
-	Start-Sleep -Milliseconds 350
-}
-
 function RunWithProgress {
     param(
         [Parameter(Mandatory = $true)]
@@ -1541,7 +1536,6 @@ Function UnpinStartTiles {
 	}
 	space
 	print "Unpinning all tiles from Start Menu..."
-	systemwide
 	Set-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -Value '<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <LayoutOptions StartTileGroupCellWidth="6" />'
 	Add-Content -Path 'C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\DefaultLayouts.xml' -value '  <DefaultLayoutOverride>'
@@ -2057,7 +2051,6 @@ Function DisableActivityHistory {
 	}
 	space
 	print "Disabling Activity History..."
-	systemwide
 	$ActivityFeed = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
 	Set-ItemProperty -Path $ActivityFeed -Name "EnableActivityFeed" -Type DWord -Value 0
 	Set-ItemProperty -Path $ActivityFeed -Name "PublishUserActivities" -Type DWord -Value 0
@@ -2072,7 +2065,6 @@ Function EnableActivityHistory {
 		return
 	}
 	print "Enabling Activity History..."
-	systemwide
 	$ActivityHistory = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
 	Set-ItemProperty -Path $ActivityHistory -Name "EnableActivityFeed" -Type DWord -Value 1
 	Set-ItemProperty -Path $ActivityHistory -Name "PublishUserActivities" -Type DWord -Value 1
@@ -2259,7 +2251,6 @@ Function DisableLocationTracking {
 	}
 	space
 	print "Disabling location tracking..."
-	systemwide
 	$Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
 	$Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
 	if (!(Test-Path $Location1)) 
@@ -2279,7 +2270,6 @@ Function EnableLocationTracking {
 	}
 	space
 	print "Enabling Location tracking..."
-	systemwide
 	$Location1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
 	$Location2 = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}"
 	if (!(Test-Path )) 
@@ -2299,7 +2289,6 @@ Function DisableMapUpdates {
 	}
 	space
 	print "Disabling automatic Maps updates..."
-	systemwide
 	Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 0
 	print "Disabled automatic Maps updates."
 }
@@ -2312,7 +2301,6 @@ Function EnableMapsUpdates {
 	}
 	space
 	print "Enabling automatic Maps updates..."
-	systemwide
 	Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 1
 	print "Enabled automatic Maps updates."
 }
@@ -2434,7 +2422,6 @@ Function TelemetryRequired {
 		return
 	}
 	print "Setting Diagnostic data level to Required..."
-	systemwide
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "AllowTelemetry" -Type DWord -Value 1
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "MaxTelemetryAllowed" -Type DWord -Value 1
 	print "Set Diagnostic data level to Required."
@@ -2452,7 +2439,6 @@ Function TelemetryOptional {
 	}
 	space
 	print "This device is flighting in the Windows Insider Program, hence Diagnostic data will be set to optional..."
-	systemwide
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "AllowTelemetry" -Type DWord -Value 3
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "MaxTelemetryAllowed" -Type DWord -Value 3
 	print "Diagnostic data is set to Optional."
@@ -2489,7 +2475,6 @@ Function AutoLoginPostUpdate {
 	}
 	space
 	print "Enabling automatic login post updates..."
-	systemwide
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 1
 	print "Enabled Automatic login applying updates."
 } 
@@ -2501,7 +2486,6 @@ Function StayOnLockscreenPostUpdate {
 	}
 	space
 	print "Disabling automatic login post updates..."
-	systemwide
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent"
 	print "Disabled Automatic login after applying updates."
 }
@@ -2520,7 +2504,6 @@ Function DisableVBS {
 		return
 	}
 	print "Disabling Virtualization-based security..."
-	systemwide
 	print "  This processor does not natively support MBEC. Emulating it will result in bigger impact on performance on MBEC-unsupported CPUs."
 	print "  See https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity."
 	Start-Sleep -Milliseconds 400
@@ -2542,7 +2525,6 @@ Function EnableVBS {
 	}
 	space
 	print "Enabling Virtualization-based security..."
-	systemwide
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" -Name "Enabled" -Type DWord -Value 1
 	bcdedit.exe /set hypervisorlaunchtype auto | Out-Null
 	print "Enabled Virtualization-based security."
@@ -2556,7 +2538,6 @@ Function DisableLogonCredential {
 	}
 	space
 	print "Disabling Windows WDigest credential caching..."
-	systemwide
 	# https://stealthbits.com/blog/wdigest-clear-text-passwords-stealing-more-than-a-hash/
 	Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\SecurityProviders\Wdigest" -Name "UseLogonCredential" -Type "DWORD" -Value 0
 	print "Disabled Windows WDigest credential caching."
@@ -2570,7 +2551,6 @@ Function EnableLogonCredential {
 	}
 	space
 	print "Enabling Windows WDigest credential caching..."
-	systemwide
 	Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\SecurityProviders\Wdigest" -Name "UseLogonCredential" -Type "DWORD" -Value 1
 	print "Enabled Windows WDigest credential caching."
 }
@@ -2583,7 +2563,6 @@ Function DisableLLMNR {
 	}
 	space
 	print "Disabling LLMNR..."
-	systemwide
 	New-Item -Path "HKLM:\Software\Policies\Microsoft\Windows NT\" -Name "DNSClient" -Force | Out-Null
 	Set-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\Windows NT\DNSClient" -Name "EnableMulticast" -Type "DWORD" -Value 0 -Force | Out-Null
 	print "Disabled LLMNR."
@@ -2597,7 +2576,6 @@ Function EnableLLMNR {
 	}
 	space
 	print "Enabling LLMNR..."
-	systemwide
 	Remove-Item -Path "HKLM:\Software\Policies\Microsoft\Windows NT\DNS Client" | Out-Null
 	print "Enabled LLMNR."
 }
@@ -2615,7 +2593,6 @@ Function EnableSEHOP {
 		return
 	}
 	print "Enabling Structured Exception Handling Overwrite Protection..."
-	systemwide
 	New-ItemProperty -Path $SEHOP -Type DWord -Name DisableExceptionChainValidation -Value 0 -Force | Out-Null
 	print "Enabled Structured Exception Handling Overwrite Protection."
 }
@@ -2627,7 +2604,6 @@ Function DisableSEHOP {
 	}
 	space
 	print "Disabling Structured Exception Handling Overwrite Protection..."
-	systemwide
 	$SEHOP = "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"
 	Remove-ItemProperty -Path $SEHOP -Type DWord -Name DisableExceptionChainValidation | Out-Null
 	print "Disabled Structured Exception Handling Overwrite Protection."
@@ -2640,7 +2616,6 @@ Function DisableWPAD {
 	}
 	space
 	print "Disabling Web Proxy Auto-Discovery..."
-	systemwide
 	New-Item -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" -Name "Wpad" -Force | Out-Null
     New-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad" -Name "Wpad" -Force | Out-Null
     Set-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad" -Name "WpadOverride" -Type "DWORD" -Value 1 -Force
@@ -2655,7 +2630,6 @@ Function EnableWPAD {
 	}
 	space
 	print "Enabling Web Proxy Auto-Discovery..."
-	systemwide
 	Remove-Item -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad" -Force | Out-Null
     Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad" -Force | Out-Null
 	print "Enabled Web Proxy Auto-Discovery."
@@ -2668,7 +2642,6 @@ Function EnableLSAProtection {
 	}
 	space
 	print "Enabling LSA Protection/Auditing..."
-	systemwide
 	New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\" -Name "LSASSs.exe" -Force | Out-Null
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LSASS.exe" -Name "AuditLevel" -Type "DWORD" -Value 8 -Force
 	print "Enabled LSA Protection/Auditing."
@@ -2681,7 +2654,6 @@ Function DisableLSAProtection {
 	}
 	space
 	print "Disabling LSA Protection/Auditing..."
-	systemwide
 	Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LSASS.exe"
 	print "Disabled LSA Protection/Auditing."
 }
@@ -2693,7 +2665,6 @@ Function DisableScriptHost {
 	}
 	space
 	print "Disabling Windows Script Host..."
-	systemwide
 	New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows Script Host\" -Name "Settings" -Force | Out-Null
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Script Host\Settings" -Name "Enabled" -Type "DWORD" -Value 0 -Force
 	print "Disabled Windows Script Host."
@@ -2706,7 +2677,6 @@ Function EnableScriptHost {
 	}
 	space
 	print "Enabling Windows Script Host..."
-	systemwide
 	Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows Script Host\Settings" -Force | Out-Null
 	print "Enabled Windows Script Host."
 }
@@ -2722,7 +2692,6 @@ Function DisableOfficeOLE {
 		return
 	}
 	print "Disabling Office OLE..."
-	systemwide
 	$Keys = Get-Item -Path "HKLM:\Software\RegisteredApplications" | Select-Object -ExpandProperty property
 	$Product = $Keys | Where-Object {$_ -Match "Outlook.Application."}
 	$OfficeVersion = ($Product.Replace("Outlook.Application.","")+".0")
@@ -2807,7 +2776,6 @@ Function DisableAutorun {
 	}
 	space
 	print "Disabling Autorun for all drives..."
-	systemwide
 	$Autorun = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
 	if (!(Test-Path $Autorun)) 
 	{
@@ -2825,7 +2793,6 @@ Function EnableAutorun {
 	}
 	space
 	print "Enabling Autorun for all drives..."
-	systemwide
 	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoDriveTypeAutoRun" -ErrorAction SilentlyContinue
 	print "Enabled Autorun for all drives."
 }
@@ -2866,7 +2833,6 @@ Function BIOSTimeUTC {
 	}
 	space
 	print "Setting Windows to use UTC when following BIOS time..."
-	systemwide
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name "RealTimeIsUniversal" -Type DWord -Value 1
 	print "Set Windows to use UTC when following BIOS time."
 }
@@ -2879,7 +2845,6 @@ Function BIOSTimeLocal {
 	}
 	space
 	print "Setting Windows to use local time when following BIOS time..."
-	systemwide
 	Remove-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name "RealTimeIsUniversal" -ErrorAction SilentlyContinue
 	print "Set Windows to use local time when following BIOS time."
 }
@@ -2931,7 +2896,6 @@ Function DisableReserves {
 	}
 	space
 	print "Disabling Reserved Storage..."
-	systemwide
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager" -Name "ShippedWithReserves" -Type DWord -Value 0
 	print "Disabled Reserved Storage."
 }
@@ -2944,7 +2908,6 @@ Function EnableReserves {
 	}
 	space
 	print "Enabling Reserved Storage..."
-	systemwide
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager" -Name "ShippedWithReserves" -Type DWord -Value 1
 	print "Enabled Reserved Storage."
 }
@@ -3092,7 +3055,6 @@ Function SetupWindowsUpdate {
 	print "Setting up Windows Update policies..."
 
     # Declare registry keys locations.
-	systemwide
 	$Update1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
 	$Update2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
 	$DeliveryOptimization = "Registry::HKEY_USERS\$hkeyuser\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"
@@ -3164,7 +3126,6 @@ Function ResetWindowsUpdate {
 		return
 	}
     space
-	systemwide
     Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Recurse
     print "All Windows Update policies were reset."
 }
@@ -3178,7 +3139,6 @@ Function EnablePowerdownAfterShutdown {
 	space
 	print "Enabling full powerdown on shut down..."
 	print "This is known to fix issues where some PCs might boot up without user input after shutdown."
-	systemwide
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name PowerdownAfterShutdown -Type DWord -Value 1
 	print "Enabled full power down on shut down."
 }
@@ -3191,7 +3151,6 @@ Function DisablePowerdownAfterShutdown {
 	}
 	space
 	print "Disabling full powerdown on shut down..."
-	systemwide
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name PowerdownAfterShutdown -Type DWord -Value 0
 	print "Disabled full powerdown on shut down."
 }
@@ -3331,7 +3290,6 @@ Function Disable3DObjects {
 	}
 	space
 	print "Disabling 3D Objects..."
-	systemwide
 	Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Recurse -ErrorAction SilentlyContinue
 	$Disable3DObjects1 = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
 	$Disable3DObjects2 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag"
