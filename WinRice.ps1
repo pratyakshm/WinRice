@@ -517,7 +517,8 @@ if (!(check($customize)))
 	{
 		$UseUTSCWhenFollowBIOSTime = "n"
 	}
-	$systemwidepolicies = ask "Do you want WinRice to configure policies that apply to all users in this device? [Y/n]"
+	Write-Host "Some changes are configured for all users in this device."
+	$systemwidepolicies = ask "Do you want to apply those changes? [Y/n]"
 	$systemrestore = ask "Do you want to create a system restore point? [Y/n]"
 	print "------------------------------- "
 	space 
@@ -597,11 +598,11 @@ if (!(check($customize)))
 	# Extras
 	if (!(check($systemwidepolicies)))
 	{
-		Write-Host " - Not apply any machinewide policies." -ForegroundColor Yellow
+		Write-Host " - Not configure specific changes that apply to all users in this device." -ForegroundColor Yellow
 	}
 	elseif (check($systemwidepolicies))
 	{
-		Write-Host " - Apply machinewide policies." -ForegroundColor Cyan
+		Write-Host " - Configure specific changes that apply to all users in this device." -ForegroundColor Cyan
 	}
 	if (!(check($systemrestore)))
 	{
