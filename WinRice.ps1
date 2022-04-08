@@ -517,7 +517,7 @@ if (!(check($customize)))
 	{
 		$UseUTSCWhenFollowBIOSTime = "n"
 	}
-	Write-Host "Some changes are configured for all users in this device."
+	Write-Host "For some changes to take proper effect, they must be applied to all users in this device."
 	$systemwidepolicies = ask "Do you want to apply those changes? [Y/n]"
 	$systemrestore = ask "Do you want to create a system restore point? [Y/n]"
 	print "------------------------------- "
