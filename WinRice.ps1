@@ -380,7 +380,7 @@ $isrestartpending = {
 $WMI_Reg        = $null
 $SCCM_Namespace = $null
 
-RunWithProgress -Text "[5/5] Session is fresh" -Task $isrestartpending -Exit $true | Out-Null
+RunWithProgress -Text "[5/5] Device session is fresh" -Task $isrestartpending -Exit $true | Out-Null
 
 Start-Sleep -Milliseconds 100
 Write-Host "Completed checks." -ForegroundColor green 
