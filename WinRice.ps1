@@ -3499,16 +3499,28 @@ Function Success {
 		Stop-Process -Name explorer -Force
 	}
 	Start-Sleep 3
+	print "WinRice has finished working."
 	print "Thank you for using WinRice."
 	Stop-Transcript
-	Write-Host "Restarting this device in 10 seconds."
-	for ($time = 10; $time -ge 0 ; $time--)
-	{   
-		Start-Sleep 1
-		Write-Progress -Activity "Device restart" -Status "Restarting in $time seconds."
+	Add-Type -AssemblyName PresentationCore, PresentationFramework
+	switch (
+	[System.Windows.MessageBox]::Show(
+		"WinRice needs to restart this device to finish applying changes. Restart now?",
+		'Restart required',
+		'YesNo',
+		'Warning'
+	)
+	) 
+	{
+		'Yes' 
+		{
+			Restart-Computer
+		}
+		'No' 
+		{
+			print "Skipped device restart. A device restart is pending."
+		}
 	}
-	Restart-Computer
-
 }
 
 # Call the desired functions.
