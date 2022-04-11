@@ -67,7 +67,6 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 - Math Recognizer
 - SMB 1 Protocol
 - SMB Direct
-- Steps Recorder
 - Snipping Tool (Windows 10)
 - Windows Fax & Scan
 - Windows Hello Face (if no Camera is connected to device)

@@ -1688,7 +1688,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	if ($CurrentBuild -lt 22000) 
 	{
 		$Capabilities = @(
-			"App.StepsRecorder*"
 			"MathRecognizer*"
 			"Microsoft-Windows-SnippingTool*"
 			"Microsoft.Windows.PowerShell.ISE*"
@@ -1701,7 +1700,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	elseif ($CurrentBuild -ge 22000)
 	{
 		$Capabilities = @(
-			"App.StepsRecorder*"
 			"MathRecognizer*"
 			"Microsoft.Windows.PowerShell.ISE*"
 			"Microsoft.Windows.WordPad*"
@@ -1727,7 +1725,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	{
 		$CapLists =@(
 			"Math Recognizer"
-			"Steps Recorder"
 			"Snipping Tool" 
 			"Windows Fax & Scan"
 			"Windows Hello Face"
@@ -1745,7 +1742,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	{
 		$CapLists =@(
 			"Math Recognizer"
-			"Steps Recorder"
 			"Windows Fax & Scan"
 			"Windows Hello Face"
 			"Windows PowerShell ISE"
@@ -1802,7 +1798,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	print "Adding capabilities and features..."
 	# Install capabilities.
 	$Capabilities = @(
-		"App.StepsRecorder*"
 		"Hello.Face*"
 		"MathRecognizer*"
 		"Microsoft-Windows-SnippingTool*"
@@ -1821,7 +1816,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 		"Math Recognizer"
 		"Microsoft Paint"
 		"Snipping Tool"
-		"Steps Recorder"
 		"Windows Fax & Scan"
 		"Windows Hello Face"
 		"Windows PowerShell ISE"
