@@ -165,12 +165,12 @@ $tasks = @(
 # Reverting changes: https://github.com/pratyakshm/WinRice/wiki/Reverting-changes.
 
 # Core functions +++
-Function Log($text) {
+function Log($text) {
 	Start-Sleep -Milliseconds 200
     Write-Host $text
 }
 
-Function check($test) {
+function check($test) {
     if ($test -like "y" -or $test -like "yeah" -or $test -like "yes" -or $test -like "yep" -or $test -like "yea" -or $test -like "yah") { 
 		return $true
 	}
@@ -179,22 +179,22 @@ Function check($test) {
 	}
 }
 
-Function wrexit {
+function wrexit {
 	Write-Host "WinRice will now exit."
 	Start-Sleep -Seconds 2
 	exit
 }
 
-Function ask($question) {
+function ask($question) {
 	Read-Host $question
 	Start-Sleep -Milliseconds 100
 }
 
-Function space {
+function space {
 	Write-Host " "
 }
 
-Function print($text) {
+function print($text) {
 	Write-Host $text
 	Start-Sleep -Milliseconds 150
 }
@@ -648,7 +648,7 @@ if (!(check($customize)))
 print "Starting WinRice..."
 
 # Intro.
-Function WinRice {
+function WinRice {
 	Clear-Host
 	print "pratyakshm's WinRice"
 	space
@@ -658,7 +658,7 @@ Function WinRice {
 }
 
 # OS Build.
-Function OSBuildInfo {
+function OSBuildInfo {
 	space
 	# If Windows 11 (OS build is greater than or equal to 22000)
 	if ($CurrentBuild -ge 22000)
@@ -688,7 +688,7 @@ Function OSBuildInfo {
 }
 
 # Changes performed.
-Function ChangesDone {
+function ChangesDone {
 	space
 	print "---------------------------"
 	print "     CHANGES PERFORMED     "
@@ -697,7 +697,7 @@ Function ChangesDone {
 }
 
 # Create a system restore point with type MODIFY_SETTINGS.
-Function CreateSystemRestore {
+function CreateSystemRestore {
 $ProgressPreference = 'SilentlyContinue'
 	if (!(check($systemrestore)))
 	{
@@ -714,7 +714,7 @@ $ProgressPreference = 'SilentlyContinue'
 }
 
 # Prevent the console output from freezing by emulating backspace key. (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Module/Sophia.psm1#L728-L767)
-Function Activity {
+function Activity {
 	# Sleep for 500ms.
 	Start-Sleep -Milliseconds 500
 
@@ -761,7 +761,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 ###################################
 
 # Update status
-Function AppsFeatures {
+function AppsFeatures {
 	space
 	print "-------------------------"
 	print "     APPS & FEATURES     "
@@ -769,7 +769,7 @@ Function AppsFeatures {
 }
 
 # Install VCLibs packages .
-Function InstallVCLibs {
+function InstallVCLibs {
 $ProgressPreference = 'SilentlyContinue'
 	# Create new folder and set location.
 	if (!(Test-Path WinRice)) 
@@ -805,7 +805,7 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 }
 
-Function UninstallVCLibs {
+function UninstallVCLibs {
 	if (!(Get-AppxPackage *VCLibs*)) 
 	{
 		print "Visual C++ Libraries are not present on this device."
@@ -823,7 +823,7 @@ Function UninstallVCLibs {
 }
 
 # Install WinGet (Windows Package Manager)
-Function InstallWinGet {
+function InstallWinGet {
 $ErrorActionPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
 	if (Get-Command winget) 
@@ -844,7 +844,7 @@ $ProgressPreference = 'SilentlyContinue'
 }
 	
 # Install NanaZip.
-Function InstallNanaZip {
+function InstallNanaZip {
 	space
 	if (!(Get-Command winget)) 
 	{
@@ -862,7 +862,7 @@ Function InstallNanaZip {
 }
 
 # Uninstall NanaZip.
-Function UninstallNanaZip {
+function UninstallNanaZip {
 	space
 	print "Uninstalling NanaZip..."
 	winget uninstall 40174MouriNaruto.NanaZip_gnj4mf6z9tkrc --accept-package-agreements --accept-source-agreements | Out-Null
@@ -870,7 +870,7 @@ Function UninstallNanaZip {
 }
 
 # Use winget import (part of code used here was picked from https://devblogs.microsoft.com/scripting/hey-scripting-guy-can-i-open-a-file-dialog-box-with-windows-powershell/)
-Function WinGetImport {
+function WinGetImport {
 	if (($installusing -like "2") -or (!($installusing)))
 	{
 		return
@@ -902,7 +902,7 @@ Function WinGetImport {
 }
 
 # Install apps from Winstall file (the Winstall.txt file must be on the same directory as WinRice).
-Function Winstall {
+function Winstall {
 $ErrorActionPreference = 'Continue'
 	if (($installusing -like "1") -or (!($installusing)))
 	{
@@ -972,7 +972,7 @@ $ErrorActionPreference = 'Continue'
 
 # Uninstall apps from Winstall file (the Winstall.txt file must be on the same directory as WinRice). [reverting Winstall changes]
 # Using this is not recommended
-Function Winuninstall {
+function Winuninstall {
 $ErrorActionPreference = 'Continue'
 	space
 	if (!(Get-Command winget)) 
@@ -1043,7 +1043,7 @@ $ErrorActionPreference = 'Continue'
 }
 
 # Install HEVC.
-Function InstallHEVC {
+function InstallHEVC {
 $ProgressPreference = 'SilentlyContinue'
 	space
 	if (Get-AppxPackage -Name Microsoft.HEVCVideoExtension) 
@@ -1092,7 +1092,7 @@ $ProgressPreference = 'SilentlyContinue'
 }
 
 # Uninstall HEVC 
-Function UninstallHEVC {
+function UninstallHEVC {
 $ProgressPreference = 'SilentlyContinue'
 	if (!(Get-AppxPackage "Microsoft.HEVCVideoExtension")) 
 	{
@@ -1113,7 +1113,7 @@ $ProgressPreference = 'SilentlyContinue'
 }
 
 # Uninstaller GUI.
-Function UninstallerGUI {
+function UninstallerGUI {
 	space
     Add-Type -AssemblyName PresentationCore, PresentationFramework
 
@@ -1242,7 +1242,7 @@ Function UninstallerGUI {
     }
 
 
-    #region Functions.
+    #region functions.
     function Get-CheckboxClicked
     {
         [CmdletBinding()]
@@ -1328,7 +1328,7 @@ Function UninstallerGUI {
         # If package checked, add to the array list to uninstall.
         [void]$AppxPackages.Add($AppxName)
     }
-    #endregion Functions.
+    #endregion functions.
 
     #region Events Handlers.
 
@@ -1361,7 +1361,7 @@ Function UninstallerGUI {
 }
 
 # Uninstaller CLI.
-Function UninstallerCLI {
+function UninstallerCLI {
 	print "Uninstalling inbox apps..." # Remove inbox apps.
 	$InboxApps = @(
 		"Clipchamp.Clipchamp"
@@ -1486,7 +1486,7 @@ function UninstallerList {
 }
 
 # Main Uninstall function.
-Function UninstallApps {
+function UninstallApps {
 $ErrorActionPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
 	if (!(check($uninstallapps)))
@@ -1527,7 +1527,7 @@ function WebApps {
 }
 
 # Unpin all start menu tiles.
-Function UnpinStartTiles {
+function UnpinStartTiles {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
@@ -1606,7 +1606,7 @@ Function UnpinStartTiles {
 }
 
 # Unpin apps from taskbar (https://docs.microsoft.com/en-us/answers/questions/214599/unpin-icons-from-taskbar-in-windows-10-20h2.html).
-Function UnpinAppsFromTaskbar {
+function UnpinAppsFromTaskbar {
 	space
 	print "Unpinning apps from taskbar..."
 	$AppNames = @(
@@ -1627,7 +1627,7 @@ Function UnpinAppsFromTaskbar {
 }
 
 # Uninstall Microsoft OneDrive.
-Function UninstallOneDrive {
+function UninstallOneDrive {
 $ErrorActionPreference = 'SilentlyContinue'
 	if (!(check($uninstallod))) 
 	{ 
@@ -1656,7 +1656,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 
 # Install Microsoft OneDrive 
-Function InstallOneDrive {
+function InstallOneDrive {
 	if (!(Get-Command winget)) 
 	{
 		print "WinGet is not installed. Could not install Microsoft OneDrive."
@@ -1675,7 +1675,7 @@ Function InstallOneDrive {
 
 
 # Uninstall Windows Optional Features and Windows Capabilities.
-Function UninstallFeatures {
+function UninstallFeatures {
 $ProgressPreference = 'SilentlyContinue'
 $WarningPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
@@ -1792,7 +1792,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 }
 
 # Install Windows Optional Features and Windows Capabilities.
-Function InstallFeatures {
+function InstallFeatures {
 $ProgressPreference = 'SilentlyContinue'
 $WarningPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
@@ -1845,7 +1845,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 }
 
 # Install Windows Subsystem for Linux.
-Function InstallWSL {
+function InstallWSL {
 $ProgressPreference = 'SilentlyContinue'
 	if (!(check($wsl))) 
 	{ 
@@ -1878,7 +1878,7 @@ $ProgressPreference = 'SilentlyContinue'
 }
 
 # Uninstall Windows Subsystem for Linux.
-Function UninstallWSL {
+function UninstallWSL {
 $ProgressPreference = 'SilentlyContinue'
 $WarningPreference = 'SilentlyContinue'
 	space
@@ -1904,7 +1904,7 @@ $WarningPreference = 'SilentlyContinue'
 }
 
 # Install Sandbox.
-Function InstallSandbox {
+function InstallSandbox {
 $ProgressPreference = 'SilentlyContinue'
 	if (!(check($sandbox)))
 	{
@@ -1938,7 +1938,7 @@ $ProgressPreference = 'SilentlyContinue'
 }
 
 # Uninstall Sandbox
-Function UninstallSandbox {
+function UninstallSandbox {
 $ProgressPreference = 'SilentlyContinue'
 	space
 
@@ -1970,7 +1970,7 @@ $ProgressPreference = 'SilentlyContinue'
 }
 
 # Install dotNET 3.5.
-Function InstalldotNET3.5 {
+function InstalldotNET3.5 {
 $ProgressPreference = 'SilentlyContinue'
 	if (!(check($netfx3))) 
 	{ 
@@ -1999,7 +1999,7 @@ $ProgressPreference = 'SilentlyContinue'
 }
 
 # Uninstall dotNET 3.5
-Function UninstalldotNET3.5 {
+function UninstalldotNET3.5 {
 $ProgressPreference = 'SilentlyContinue'
 	space
 
@@ -2031,7 +2031,7 @@ $ProgressPreference = 'SilentlyContinue'
 ######################################
 
 # Update status
-Function PrivacySecurity {
+function PrivacySecurity {
 	space
 	print "-------------------------"
 	print "    PRIVACY & SECURITY   "
@@ -2040,7 +2040,7 @@ Function PrivacySecurity {
 
 
 # Disable Activity History.
-Function DisableActivityHistory {
+function DisableActivityHistory {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2055,7 +2055,7 @@ Function DisableActivityHistory {
 }
 
 # Enable Activity History.
-Function EnableActivityHistory {
+function EnableActivityHistory {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2069,7 +2069,7 @@ Function EnableActivityHistory {
 }
 
 # Disable Advertising ID.
-Function DisableAdvertisingID {
+function DisableAdvertisingID {
 	space
 	print "Disabling Advertising ID..."
 	currentuser
@@ -2078,7 +2078,7 @@ Function DisableAdvertisingID {
 }
 
 # Enable Advertising ID.
-Function EnableAdvertisingID {
+function EnableAdvertisingID {
 	print "Enabling Advertising ID..."
 	currentuser
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" -Name "Enabled" -Type DWord -Value 1
@@ -2086,7 +2086,7 @@ Function EnableAdvertisingID {
 }
 
 # Disable Background apps (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Sophia.psm1#L8988-L9033).
-Function DisableBackgroundApps {
+function DisableBackgroundApps {
 	space
 	print "Disabling Background apps..."
 	Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process 
@@ -2116,7 +2116,7 @@ Function DisableBackgroundApps {
 }
 
 # Enable Background apps.
-Function EnableBackgroundApps {
+function EnableBackgroundApps {
 	print "Enabling Background apps..."
 	Get-ChildItem -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications | ForEach-Object -Process 
 	{
@@ -2146,7 +2146,7 @@ function EnableErrorReporting {
 }
 
 # Disable Feedback.
-Function DisableFeedback {
+function DisableFeedback {
 $ErrorActionPreference = 'SilentlyContinue'
 	space
 	if ($Insider)
@@ -2173,7 +2173,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 }
 
 # Enable Feedback.
-Function EnableFeedback {
+function EnableFeedback {
 	print "Enabling Feedback notifications..."
 	$Feedback1 = "HKCU:\SOFTWARE\Microsoft\Siuf\Rules"
 	$Feedback2 = "Microsoft\Windows\Feedback\Siuf\DmClient"
@@ -2188,7 +2188,7 @@ Function EnableFeedback {
 }
 
 # Disable inking personalization.
-Function DisableInkHarvesting {
+function DisableInkHarvesting {
 	space
 	print "Disabling Inking & typing personalization..."
 	$Ink1 = "HKCU:\Software\Microsoft\InputPersonalization"
@@ -2205,7 +2205,7 @@ Function DisableInkHarvesting {
 }
 
 # Enable inking personalization. 
-Function EnableInkHarvesting {
+function EnableInkHarvesting {
 	space
 	print "Enabling Inking & typing personalization..."
 	$Ink1 = "HKCU:\Software\Microsoft\InputPersonalization"
@@ -2222,7 +2222,7 @@ Function EnableInkHarvesting {
 }
 
 # Disable "Let websites provide locally relevant content by accessing my language list".
-Function DisableLangAccess {
+function DisableLangAccess {
 	space
 	print "Disabling websites' ability to provide you with locally relevant content by accessing your language list..."
 	$LangAccess = "HKCU:\Control Panel\International\User Profile"
@@ -2232,7 +2232,7 @@ Function DisableLangAccess {
 }
 
 # Enable "Let websites provide locally relevant content by accessing my language list".
-Function EnableLangAccess {
+function EnableLangAccess {
 	print "Enabling websites' ability to provide you with locally relevant content by accessing your language list..."
 	$LangAccess = "HKCU:\Control Panel\International\User Profile"
 	Set-ItemProperty -Path $LangAccess -Name "HttpAcceptLanguageOptOut" -Type DWord -Value 0
@@ -2240,7 +2240,7 @@ Function EnableLangAccess {
 }
 
 # Disable Location Tracking.
-Function DisableLocationTracking {
+function DisableLocationTracking {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2259,7 +2259,7 @@ Function DisableLocationTracking {
 }
 
 # Enable location tracking.
-Function EnableLocationTracking {
+function EnableLocationTracking {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2278,7 +2278,7 @@ Function EnableLocationTracking {
 }
 
 # Disable automatic Maps updates.
-Function DisableMapUpdates {
+function DisableMapUpdates {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2290,7 +2290,7 @@ Function DisableMapUpdates {
 }
 
 # Enable maps updates.
-Function EnableMapsUpdates {
+function EnableMapsUpdates {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2302,7 +2302,7 @@ Function EnableMapsUpdates {
 }
 
 # Disable Speech Recognition.
-Function DisableSpeechRecognition {
+function DisableSpeechRecognition {
 	space
 	print "Disabling Online Speech recognition..."
 	$Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
@@ -2316,7 +2316,7 @@ Function DisableSpeechRecognition {
 }
 
 # Enable speech recognition. 
-Function EnableSpeechRecognition {
+function EnableSpeechRecognition {
 	space
 	print "Enabling Speech recognition..."
 	$Speech = "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
@@ -2329,7 +2329,7 @@ Function EnableSpeechRecognition {
 }
 
 # Disable silent installation of recommended apps.
-Function DisableSilentInstallApps {
+function DisableSilentInstallApps {
 	space
 	print "Disabling silent installation of suggested apps..."
 	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SilentInstalledAppsEnabled -Type DWord -Value 1
@@ -2337,7 +2337,7 @@ Function DisableSilentInstallApps {
 }
 
 # Enable silent installation of recommended apps.
-Function EnableSilentInstallApps {
+function EnableSilentInstallApps {
 	space
 	print "Enabling silent installation of suggested apps..."
 	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SilentInstalledAppsEnabled -Type DWord -Value 1
@@ -2345,7 +2345,7 @@ Function EnableSilentInstallApps {
 }
 
 # Disable "Show suggested content in Settings app"
-Function HideSuggestedContentInSettings {
+function HideSuggestedContentInSettings {
 	space
 	print "Disabling suggested content in Settings app..."
 	$CDN = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
@@ -2356,7 +2356,7 @@ Function HideSuggestedContentInSettings {
 }
 
 # Enable "Show suggested content in Settings app"
-Function ShowSuggestedContentInSettings {
+function ShowSuggestedContentInSettings {
 	space
 	print "Enabling suggested content in Settings app..."
 	$CDN = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
@@ -2367,7 +2367,7 @@ Function ShowSuggestedContentInSettings {
 }
 
 # Disable "Show me suggested content in Start menu".
-Function HideSuggestedContentInStart {
+function HideSuggestedContentInStart {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
@@ -2379,7 +2379,7 @@ Function HideSuggestedContentInStart {
 }
 
 # Enable "Show me suggested content in Start menu".
-Function ShowSuggestedContentInStart {
+function ShowSuggestedContentInStart {
 	if ($CurrentBuild -ge 22000)
 	{
 		return
@@ -2391,7 +2391,7 @@ Function ShowSuggestedContentInStart {
 }
 
 # Disable Tailored experiences.
-Function DisableTailoredExperiences {
+function DisableTailoredExperiences {
 	space
 	print "Disabling Tailored experiences..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Privacy" -Name "TailoredExperiencesWithDiagnosticDataEnabled" -Type DWord -Value 0
@@ -2399,7 +2399,7 @@ Function DisableTailoredExperiences {
 }
 
 # Enable Tailored experiences.
-Function EnableTailoredExperiences {
+function EnableTailoredExperiences {
 	space
 	print "Enabling Tailored experiences..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Privacy" -Name "TailoredExperiencesWithDiagnosticDataEnabled" -Type DWord -Value 1
@@ -2407,7 +2407,7 @@ Function EnableTailoredExperiences {
 }
 
 # Set Diagnostic Data to Required. 
-Function TelemetryRequired {
+function TelemetryRequired {
 	space
 	if ($Insider)
 	{
@@ -2424,7 +2424,7 @@ Function TelemetryRequired {
 }
 
 # Set Diagnostic Data to Optional.
-Function TelemetryOptional {
+function TelemetryOptional {
 	if (!($Insider))
 	{	
 		return
@@ -2441,7 +2441,7 @@ Function TelemetryOptional {
 }
 
 # Enable Clipboard History.
-Function EnableClipboard {
+function EnableClipboard {
 	space
 	print "Enabling Clipboard History..."
 	$Clipboard = "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Clipboard"
@@ -2454,7 +2454,7 @@ Function EnableClipboard {
 }
 
 # Disable Clipboard History.
-Function DisableClipboard {
+function DisableClipboard {
 	space
 	print "Disabling Clipboard History..."
 	$Clipboard = "Registry::HKEY_USERS\$hkeyuser\Software\Microsoft\Clipboard"
@@ -2464,7 +2464,7 @@ Function DisableClipboard {
 
 # Security features
 
-Function AutoLoginPostUpdate {
+function AutoLoginPostUpdate {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2475,7 +2475,7 @@ Function AutoLoginPostUpdate {
 	print "Enabled Automatic login applying updates."
 } 
 
-Function StayOnLockscreenPostUpdate {
+function StayOnLockscreenPostUpdate {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2486,7 +2486,7 @@ Function StayOnLockscreenPostUpdate {
 	print "Disabled Automatic login after applying updates."
 }
 
-Function DisableVBS {
+function DisableVBS {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2514,7 +2514,7 @@ Function DisableVBS {
 	space
 }
 
-Function EnableVBS {
+function EnableVBS {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2527,7 +2527,7 @@ Function EnableVBS {
 }
 
 # Disables Windows WDigest credential caching (https://stealthbits.com/blog/wdigest-clear-text-passwords-stealing-more-than-a-hash/).
-Function DisableLogonCredential {
+function DisableLogonCredential {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2540,7 +2540,7 @@ Function DisableLogonCredential {
 }
 
 # Enables Windows WDigest credential caching.
-Function EnableLogonCredential {
+function EnableLogonCredential {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2552,7 +2552,7 @@ Function EnableLogonCredential {
 }
 
 # Disable LLMNR (https://www.blackhillsinfosec.com/how-to-disable-llmnr-why-you-want-to/).
-Function DisableLLMNR {
+function DisableLLMNR {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2565,7 +2565,7 @@ Function DisableLLMNR {
 }
 
 # Enable LLMNR
-Function EnableLLMNR {
+function EnableLLMNR {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2576,7 +2576,7 @@ Function EnableLLMNR {
 	print "Enabled LLMNR."
 }
 
-Function EnableSEHOP {
+function EnableSEHOP {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2593,7 +2593,7 @@ Function EnableSEHOP {
 	print "Enabled Structured Exception Handling Overwrite Protection."
 }
 
-Function DisableSEHOP {
+function DisableSEHOP {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2605,7 +2605,7 @@ Function DisableSEHOP {
 	print "Disabled Structured Exception Handling Overwrite Protection."
 }
 
-Function DisableWPAD {
+function DisableWPAD {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2619,7 +2619,7 @@ Function DisableWPAD {
 	print "Disabled Web Proxy Auto-Discovery."
 }
 
-Function EnableWPAD {
+function EnableWPAD {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2631,7 +2631,7 @@ Function EnableWPAD {
 	print "Enabled Web Proxy Auto-Discovery."
 }
 
-Function EnableLSAProtection {
+function EnableLSAProtection {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2643,7 +2643,7 @@ Function EnableLSAProtection {
 	print "Enabled LSA Protection/Auditing."
 }
 
-Function DisableLSAProtection {
+function DisableLSAProtection {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2654,7 +2654,7 @@ Function DisableLSAProtection {
 	print "Disabled LSA Protection/Auditing."
 }
 
-Function DisableScriptHost {
+function DisableScriptHost {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2666,7 +2666,7 @@ Function DisableScriptHost {
 	print "Disabled Windows Script Host."
 }
 
-Function EnableScriptHost {
+function EnableScriptHost {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2677,7 +2677,7 @@ Function EnableScriptHost {
 	print "Enabled Windows Script Host."
 }
 
-Function DisableOfficeOLE {
+function DisableOfficeOLE {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2698,7 +2698,7 @@ Function DisableOfficeOLE {
 	print "Disabled Office OLE."
 }
 
-Function EnableOfficeOLE {
+function EnableOfficeOLE {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2724,7 +2724,7 @@ Function EnableOfficeOLE {
 ####################################
 
 # Update status.
-Function OS {
+function OS {
 	space
 	print "---------------------------"
 	print "      OPERATING SYSTEM     "   
@@ -2732,7 +2732,7 @@ Function OS {
 }
 
 # Restore Power Options
-Function RestorePowerOptions {
+function RestorePowerOptions {
 	space
 	print "Restoring power options in Advanced power settings menu..."
 	New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e" -Name Attributes -Type DWord -Value 0 -Force | Out-Null
@@ -2749,7 +2749,7 @@ Function RestorePowerOptions {
 }
 
 # Disable Autoplay.
-Function DisableAutoplay {
+function DisableAutoplay {
 	space
 	print "Disabling AutoPlay..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -Name "DisableAutoplay" -Type DWord -Value 1
@@ -2757,7 +2757,7 @@ Function DisableAutoplay {
 }
 
 # Enable Autoplay.
-Function EnableAutoplay {
+function EnableAutoplay {
 	space
 	print "Enabling Autoplay..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -Name "DisableAutoplay" -Type DWord -Value 0
@@ -2765,7 +2765,7 @@ Function EnableAutoplay {
 }
 
 # Disable Autorun for all drives.
-Function DisableAutorun {
+function DisableAutorun {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2782,7 +2782,7 @@ Function DisableAutorun {
 }
 
 # Enable Autorun for removable drives.
-Function EnableAutorun {
+function EnableAutorun {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2794,7 +2794,7 @@ Function EnableAutorun {
 }
 
 # Disable Hiberfile.sys
-Function DisableHibernation {
+function DisableHibernation {
 	if ($isLaptop)
 	{
 		return
@@ -2806,7 +2806,7 @@ Function DisableHibernation {
 }
 
 # Enable Hibernation
-Function EnableHibernation {
+function EnableHibernation {
 	if ($isLaptop) 
 	{
 		return
@@ -2818,7 +2818,7 @@ Function EnableHibernation {
 }
 
 # Make Windows follow BIOS time
-Function BIOSTimeUTC {
+function BIOSTimeUTC {
 	if (!(check($UseUTSCWhenFollowBIOSTime)))
 	{
 		return
@@ -2834,7 +2834,7 @@ Function BIOSTimeUTC {
 }
 
 # Make Windows follow local time
-Function BIOSTimeLocal {
+function BIOSTimeLocal {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2846,7 +2846,7 @@ Function BIOSTimeLocal {
 }
 
 # Enable Num lock on startup.
-Function EnableNumLock {
+function EnableNumLock {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2858,14 +2858,14 @@ Function EnableNumLock {
 }
 
 # Disable Num lock on startup.
-Function DisableNumLock {
+function DisableNumLock {
 	space
 	New-ItemProperty -Path "Registry::HKEY_USERS\.DEFAULT\Control Panel\Keyboard" -Name InitialKeyboardIndicators -PropertyType String -Value 2147483648 -Force | Out-Null
 	print "Num lock will no longer turn on automatically on Startup."
 }
 
 # Enable Storage Sense. 
-Function EnableStorageSense {
+function EnableStorageSense {
 	space
 	print "Enabling Storage Sense..."
 	$StorageSense = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
@@ -2875,7 +2875,7 @@ Function EnableStorageSense {
 }
 
 # Disable Storage Sense.
-Function DisableStorageSense {
+function DisableStorageSense {
 	space
 	print "Disabling Storage Sense..."
 	$StorageSense = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
@@ -2885,7 +2885,7 @@ Function DisableStorageSense {
 }
 
 # Disable Reserved Storage. 
-Function DisableReserves {
+function DisableReserves {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2897,7 +2897,7 @@ Function DisableReserves {
 }
 
 # Enable Reserved Storage. 
-Function EnableReserves {
+function EnableReserves {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -2909,7 +2909,7 @@ Function EnableReserves {
 }
 
 # Disable non-essential services.
-Function DisableServices {
+function DisableServices {
 $ErrorActionPreference = 'SilentlyContinue'
 	space
 	print "Disabling non-essential services..."
@@ -2927,7 +2927,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 }
 
 # Enable non-essential services.
-Function EnableServices {
+function EnableServices {
 $ErrorActionPreference = 'SilentlyContinue'
 	space
 	print "Enabling non-essential services..."
@@ -2945,7 +2945,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 }
 
 # Disable non-essential scheduled tasks.
-Function DisableTasks {
+function DisableTasks {
 	space
 	print "Disabling non-essential tasks..."
 	$Tasks = @(
@@ -2967,7 +2967,7 @@ Function DisableTasks {
 }
 
 # Enable non-essential scheduled tasks.
-Function EnableTasks {
+function EnableTasks {
 	$Tasks = @(
 		"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser"
 		"Microsoft\Windows\Application Experience\ProgramDataUpdater"
@@ -3031,7 +3031,7 @@ function EnableAMDTasks {
 }
 
 # Intelligently setup Windows Update policies.
-Function SetupWindowsUpdate {
+function SetupWindowsUpdate {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -3116,7 +3116,7 @@ Function SetupWindowsUpdate {
 
 
 # Reset all Windows Update policies
-Function ResetWindowsUpdate {
+function ResetWindowsUpdate {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -3127,7 +3127,7 @@ Function ResetWindowsUpdate {
 }
 
 # A simple registry edit that fixes an issue where a small batch of devices turn back on after powering down.
-Function EnablePowerdownAfterShutdown {
+function EnablePowerdownAfterShutdown {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -3140,7 +3140,7 @@ Function EnablePowerdownAfterShutdown {
 }
 
 # Revert the EnablePowerdownAfterShutdown edit.
-Function DisablePowerdownAfterShutdown {
+function DisablePowerdownAfterShutdown {
 	if (!(check($systemwidepolicies)))
 	{
 		return
@@ -3151,28 +3151,28 @@ Function DisablePowerdownAfterShutdown {
 	print "Disabled full powerdown on shut down."
 }
 
-Function DisableWindowsTipsNotifications {
+function DisableWindowsTipsNotifications {
 	space
 	print "Disabling Windows tips and suggestions notifications...."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-338389Enabled" -Type DWord -Value 0
 	print "Disabled Windows tips and suggestions notifications."
 }
 
-Function EnableWindowsTipsNotifications {
+function EnableWindowsTipsNotifications {
 	space
 	print "Enabling Windows tips and suggestions notifications...."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-338389Enabled" -Type DWord -Value 1
 	print "Enabled Windows tips and suggestions notifications."
 }
 
-Function DisableWindowsWelcomeExperience {
+function DisableWindowsWelcomeExperience {
 	space
 	print "Disabling Windows welcome experience..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-310093Enabled" -Type DWord -Value 0 
 	print "Disabled Windows welcome experience."
 }
 
-Function EnableWindowsWelcomeExperience {
+function EnableWindowsWelcomeExperience {
 	space
 	print "Enabling Windows welcome experience..."
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name "SubscribedContent-310093Enabled" -Type DWord -Value 1
@@ -3186,7 +3186,7 @@ Function EnableWindowsWelcomeExperience {
 ####################################
 
 # Update status: Explorer Changes.
-Function WindowsExplorer {	
+function WindowsExplorer {	
 	space
 	print "----------------------------------"
 	print "          WINDOWS EXPLORER        "
@@ -3194,7 +3194,7 @@ Function WindowsExplorer {
 }
 
 # Use Print screen button to open screen skipping.
-Function EnablePrtScrToSnip {
+function EnablePrtScrToSnip {
 	space
 	print "Binding Print Screen key to launch Snip overlay..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 1
@@ -3202,7 +3202,7 @@ Function EnablePrtScrToSnip {
 }
 	
 # Don't use Print screen button to open screen skipping.
-Function DisablePrtScrSnip {
+function DisablePrtScrSnip {
 	space
 	print "Unbinding Snip overlay launch from Print screen key...."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
@@ -3210,7 +3210,7 @@ Function DisablePrtScrSnip {
 }
 
 # Show extensions.
-Function EnableExtensions {
+function EnableExtensions {
 	space
 	print "Showing extensions in file names..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 0
@@ -3242,7 +3242,7 @@ function ShowRecentFilesInQuickAccess {
 }
 
 # Disable Sticky keys.
-Function DisableStickyKeys {
+function DisableStickyKeys {
 	space
 	print "Disabling Sticky keys..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
@@ -3250,7 +3250,7 @@ Function DisableStickyKeys {
 }
 
 # Enable Sticky keys.
-Function EnableStickyKeys {
+function EnableStickyKeys {
 	space
 	print "Enabling Sticky keys..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "510"
@@ -3258,7 +3258,7 @@ Function EnableStickyKeys {
 }
 
 # Change default File Explorer view to This PC.
-Function SetExplorerThisPC {
+function SetExplorerThisPC {
 	space
 	print "Setting default File Explorer view to This PC..."
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo"
@@ -3267,7 +3267,7 @@ Function SetExplorerThisPC {
 }
 
 # Change default File Explorer view to Quick Access.
-Function SetExplorerQuickAccess {
+function SetExplorerQuickAccess {
 	space
 	print "Setting default File Explorer view to Quick Access..."
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -ErrorAction SilentlyContinue
@@ -3275,7 +3275,7 @@ Function SetExplorerQuickAccess {
 }
 
 # Hide 3D Objects.
-Function Disable3DObjects {
+function Disable3DObjects {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
@@ -3303,7 +3303,7 @@ Function Disable3DObjects {
 }
 
 # Restore 3D Objects.
-Function Enable3DObjects {
+function Enable3DObjects {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
@@ -3327,7 +3327,7 @@ Function Enable3DObjects {
 }
 
 # Hide Search bar from taskbar.
-Function DisableSearch {
+function DisableSearch {
 	space
 	print "Disabling Search icon..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 0
@@ -3335,7 +3335,7 @@ Function DisableSearch {
 }
 
 # Restore Search bar to taskbar.
-Function EnableSearch {
+function EnableSearch {
 	space
 	print "Enabling Search icon..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" -Name "SearchboxTaskbarMode" -Type DWord -Value 2
@@ -3343,7 +3343,7 @@ Function EnableSearch {
 }
 
 # Hide Task View.
-Function DisableSearchView {
+function DisableSearchView {
 	space
 	print "Disabling Task view icon..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -Type DWord -Value 0
@@ -3351,7 +3351,7 @@ Function DisableSearchView {
 }
 
 # Restore Task View button.
-Function EnableTaskView {
+function EnableTaskView {
 	space
 	print "Enabling Task view icon..."
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowTaskViewButton" -ErrorAction SilentlyContinue
@@ -3359,7 +3359,7 @@ Function EnableTaskView {
 }
 
 # Hide Cortana icon from taskbar.
-Function DisableCortana {
+function DisableCortana {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
@@ -3371,7 +3371,7 @@ Function DisableCortana {
 }
 
 # Restore Cortana button in taskbar.
-Function EnableCortana {
+function EnableCortana {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
@@ -3382,7 +3382,7 @@ Function EnableCortana {
 }
 
 # Hide Meet Now icon from tray.
-Function DisableMeetNow {
+function DisableMeetNow {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
@@ -3395,7 +3395,7 @@ Function DisableMeetNow {
 }
 
 # Restore Meet Now icon on tray.
-Function EnableMeetNow {
+function EnableMeetNow {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
@@ -3407,7 +3407,7 @@ Function EnableMeetNow {
 }
 
 # Turn off News and interests feed.
-Function DisableNI {
+function DisableNI {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
@@ -3424,7 +3424,7 @@ Function DisableNI {
 }
 
 # Turn on News and interests feed.
-Function EnableNI {
+function EnableNI {
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
@@ -3489,7 +3489,7 @@ Start-Sleep -Seconds 2
 
 ######### Tasks after successful run #########
 
-Function Success {
+function Success {
 	if ($CurrentBuild -lt 22000)
 	{
 		Stop-Process -Name explorer -Force
