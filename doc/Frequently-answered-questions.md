@@ -20,7 +20,7 @@ All documentation for this program is contained in the [doc](https://github.com/
 **A:** Refer to [doc/Supported-winver.md](https://github.com/pratyakshm/WinRice/blob/main/doc/Supported-winver.md).
 
 **Q:** **I opted to turn off automatic Windows updates, but they're not turned off. Why?**  
-**A:** Editions based on Windows Core, Windows 11 Home for instance, does not support setting up group policies. Hence, WinRice can't setup Windows Update policies in these editions. 
+**A:** Windows Update policies are only applied to Windows editions that support Group policies. These are Education, Enterprise, Enterprise LTSC and Professional editions. Windows editions that are derivates of Windows Core edition (for instance, Windows 11/10 Home) do not support Group policies, hence Windows Update policies cannot be applied to them.
 If WinRice has not set up group policies despite your edition of Windows supporting it, please consider filing a [bug report](https://github.com/pratyakshm/WinRice/issues/new?assignees=pratyakshm&labels=Issue-Bug&template=bug_report.yaml&title=Bug%3A+).
 
 ---

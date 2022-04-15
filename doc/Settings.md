@@ -90,7 +90,7 @@ Widgets is an optional experience and it can be removed. Hence, WinRice asks if 
 
 Windows Update, at least in the media, is reputed to cause more problems than offer solutions. Since 2019, however, Microsoft has begun to leverage Microsoft Cloud to use and train ML models that offer intelligent Windows Update rollouts - and it is working. Windows Update experience has globally improved for millions of devices, and there are far less adverse post update scenarios that users face at present day compared to circa 2017.
 
-While Microsoft's ML performs quite a good job in itself, WinRice still applies policies to Windows Update, once the user asks it to do so.
+While Microsoft's ML performs quite a good job in itself, WinRice still applies policies to Windows Update, if the user asks it to do so.
 
 ### List of Windows Update policies:
 - Disabling of automatic updates
@@ -116,11 +116,20 @@ Since WinRice performs a good number of registry modifications to a vast amount 
 
 WinRice asks if you want to create a System restore point.
 
-### ⚠️ Notes regarding Windows Update policies:
+### Device-wide policies
 
-- WinRice will not apply update policies to Windows Insiders' devices.
+Some changes need to be applied device-wide for them to take effect. These changes apply to all current and future user accounts that will be created on your device. It is strongly recommended to agree to apply device-wide policies as well, since these policies make up much of the security hardening that WinRice performs to your device.
 
-- Update policies are only applied to Windows Pro, Education, Enterprise, and other editions that are derived from Windows Enterprise edition. This is a OS level restriction put forward by Microsoft and WinRice has no control over it.
+WinRice asks if you want to apply these device-wide changes.
+
+---
+
+#### ⚠️ Notes regarding Windows Update policies:
+
+- Windows Update policies are not applied in Windows pre-release software.
+
+- Windows Update policies are only applied to Windows editions that support Group policies. These are Education, Enterprise, Enterprise LTSC and Professional editions. Windows editions that are derivates of Windows Core edition (for instance, Windows 11/10 Home) do not support Group policies, hence Windows Update policies cannot be applied to them.
+
 
 ---
 
