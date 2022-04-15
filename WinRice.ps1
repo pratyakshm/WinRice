@@ -394,12 +394,14 @@ if ((Test-Path uninstallapps.txt) -or (Test-Path UninstallApps.txt) -or (Test-Pa
 }
 $uninstallfeatures = "y"
 $systemrestore = "y"
+$systemwidepolicies = "y"
 
 # Print Express Settings.
 print "Express Settings:"
 $settings = @(	
 	"A set of non-essential apps will be uninstalled."	
 	"A set of non-essential features will be uninstalled."
+	"Configure specific changes that apply to all users in this device."
 )
 ForEach ($setting in $settings) 
 {
