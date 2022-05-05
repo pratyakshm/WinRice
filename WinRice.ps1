@@ -119,6 +119,8 @@ $tasks = @(
 	# "EnableAMDTasks",
 	"SetupWindowsUpdate",		   
 	# "ResetWindowsUpdate",
+	"DisableDeviceInstallation",
+	# "EnableDeviceInstallation",
 	# "EnablePowerdownAfterShutdown",
 	# "DisablePowerdownAfterShutdown",
 	"DisableWindowsTipsNotifications",
@@ -3124,6 +3126,26 @@ function ResetWindowsUpdate {
     space
     Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Recurse
     print "All Windows Update policies were reset."
+}
+
+function DisableDeviceInstallation {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
+	print "Setting policy to prevent download of custom apps, device drivers and icons from your device manufacturer..."
+	New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" -Name "PreventDeviceMetadataFromNetwork" -Value 1 -Force | Out-Null
+	print "Windows will no longer download custom apps, device drivers and icons from your device manufacturer."
+}
+
+function EnableDeviceInstallation {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
+	print "Removing policies that prevents download of custom apps, device drivers and icons from your device manufacturer..."
+	New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" -Name "PreventDeviceMetadataFromNetwork" -Value 0 -Force | Out-Null
+	print "Windows can now download custom apps, device drivers and icons from your device manufacturer."
 }
 
 # A simple registry edit that fixes an issue where a small batch of devices turn back on after powering down.
