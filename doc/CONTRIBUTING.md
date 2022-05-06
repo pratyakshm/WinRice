@@ -7,7 +7,7 @@ I ask that **before you start your work on a feature that you would like to requ
 ## Principles
 
 1. Prefer usage of first party software over third party software (instance: WinGet over Chocolatey, etc.).
-2. Avoid removing software which is tied to the operating sytem (e.g. Microsoft Edge).
+2. Avoid removing software which is tied to the operating system (e.g. Microsoft Edge).
 3. Avoid removing software that is unrecoverable.
 4. Avoid removing developer category inbox apps (e.g. Windows Terminal).
 5. Avoid removing media playback apps (e.g. Media Player, Movies & TV, Photos, etc.).

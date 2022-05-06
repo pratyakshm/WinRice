@@ -141,6 +141,8 @@ $tasks = @(
 	# "EnableStickyKeys",
 	"SetExplorerThisPC",           
 	# "SetExplorerQuickAccess",
+	"FixAppHoverPreviewThreshold",
+	# "RevertAppHoverPreviewThreshold",
     "Disable3DObjects",      		   
 	# "Enable3DObjects",
 	"DisableSearch",			   
@@ -972,8 +974,8 @@ $ErrorActionPreference = 'Continue'
 	}
 }
 
-# Uninstall apps from Winstall file (the Winstall.txt file must be on the same directory as WinRice). [reverting Winstall changes]
-# Using this is not recommended
+# Uninstall apps from Winstall file (the Winstall.txt file must be on the same directory as WinRice).
+# Using this is NOT recommended.
 function Winuninstall {
 $ErrorActionPreference = 'Continue'
 	space
@@ -1044,7 +1046,7 @@ $ErrorActionPreference = 'Continue'
 	}
 }
 
-# Install HEVC.
+# Install HEVC Video Extensions.
 function InstallHEVC {
 $ProgressPreference = 'SilentlyContinue'
 	space
@@ -1364,7 +1366,8 @@ function UninstallerGUI {
 
 # Uninstaller CLI.
 function UninstallerCLI {
-	print "Uninstalling inbox apps..." # Remove inbox apps.
+	# Remove inbox apps.
+	print "Uninstalling inbox apps..." 
 	$InboxApps = @(
 		"Clipchamp.Clipchamp"
 		"MicrosoftTeams"
@@ -1372,11 +1375,11 @@ function UninstallerCLI {
 		"Microsoft.BingNews"
 		"Microsoft.BingWeather"
 		"Microsoft.GetHelp" 
-		"Microsoft.Getstarted" # Tips app 
+		"Microsoft.Getstarted" # Tips 
 		"Microsoft.Microsoft3DViewer"
-		"Microsoft.MSPaint" # Paint 3D app
+		"Microsoft.MSPaint" # Paint 3D
 		# "Microsoft.Paint"  # Paint app (MSIX)
-		"Microsoft.MicrosoftOfficeHub" # Office webview
+		"Microsoft.MicrosoftOfficeHub" # Office WebView app
 		"Microsoft.Office.OneNote" # OneNote for Windows 10
 		"Microsoft.MixedReality.Portal"
 		"Microsoft.MicrosoftSolitaireCollection" 
@@ -1407,7 +1410,8 @@ function UninstallerCLI {
 		}
 	}
 
-	$SponsoredApps = @(					# Remove Sponsored apps.
+	# Remove Sponsored apps.
+	$SponsoredApps = @(		
 		"*AdobePhotoshopExpress*"
 		"*CandyCrush*"
 		"*BubbleWitch3Saga*"
@@ -1516,10 +1520,14 @@ $ProgressPreference = 'SilentlyContinue'
 
 # Remove Office webapps.
 function WebApps {
+	# Test if the web-app exists. If it does not,
+	# do not proceed with the function.
 	if (!(Test-Path "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk")) 
 	{
 		return
 	}
+
+	# Remove web-apps shortcuts.
 	print "Removing Office web-apps..."
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Excel.lnk"
 	Remove-Item "%appdata%\Microsoft\Windows\Start Menu\Programs\Outlook.lnk"
@@ -1530,6 +1538,9 @@ function WebApps {
 
 # Unpin all start menu tiles.
 function UnpinStartTiles {
+	# Check the OS build number.
+	# If the device is running Windows 11, do not
+	# proceed with the function.
 	if ($CurrentBuild -ge 22000) 
 	{
 		return
@@ -1567,14 +1578,17 @@ function UnpinStartTiles {
 	</LayoutModificationTemplate>
 "@
 	$layoutFile="C:\Windows\StartMenuLayout.xml"
+
 	# Delete layout file if it already exists.
 	if(Test-Path $layoutFile)
 	{
 		Remove-Item $layoutFile
 	}
+
 	# Creates a blank layout file.
 	$START_MENU_LAYOUT | Out-File $layoutFile -Encoding ASCII
 	$regAliases = @("HKLM", "HKCU")
+
 	# Assign the start layout and force it to apply with "LockedStartLayout" at both the machine and user level.
 	foreach ($regAlias in $regAliases)
 	{
@@ -1586,12 +1600,14 @@ function UnpinStartTiles {
 		}
 		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 1
 		Set-ItemProperty -Path $keyPath -Name "StartLayoutFile" -Value $layoutFile
-		}
+	}
+
 	# Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process.
 	Stop-Process -name explorer -Force
 	Start-Sleep -s 5
 	$wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
 	Start-Sleep -s 5
+
 	# Enable the ability to pin items again by disabling "LockedStartLayout".
 	foreach ($regAlias in $regAliases)
 	{
@@ -1599,11 +1615,14 @@ function UnpinStartTiles {
 		$keyPath = $basePath + "\Explorer" 
 		Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 0
 	}
+
 	# Restart Explorer and delete the layout file.
 	Stop-Process -name explorer -Force
+
 	# Uncomment the next line to make clean start menu default for all new users.
 	Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
 	Remove-Item $layoutFile
+
 	print "Unpinned all tiles from Start Menu."
 }
 
@@ -1631,11 +1650,16 @@ function UnpinAppsFromTaskbar {
 # Uninstall Microsoft OneDrive.
 function UninstallOneDrive {
 $ErrorActionPreference = 'SilentlyContinue'
+	# Check if the user has set preference to uninstall OneDrive. 
+	# Proceed if the user has set preference otherwise do not run 
+	# this function further.
 	if (!(check($uninstallod))) 
 	{ 
 		return 
 	}
 	space
+	# Check if winget is installed. If winget is not installed,
+	# do not proceed to run this function further.
 	if (!(Get-Command winget)) 
 	{
 		print "WinGet is not installed. Microsoft OneDrive could not be uninstalled."
@@ -1643,7 +1667,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	}
 	print "Uninstalling Microsoft OneDrive..."
 
-	# Uninstall using WinGet.
+	# Uninstall using winget.
 	winget uninstall Microsoft.OneDrive | Out-Null
 	winget uninstall Microsoft.OneDriveSync_8wekyb3d8bbwe | Out-Null
 	
@@ -1659,13 +1683,19 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 # Install Microsoft OneDrive 
 function InstallOneDrive {
+	# Check if winget is installed. If winget is not installed,
+	# do not proceed to run this function further.
 	if (!(Get-Command winget)) 
 	{
 		print "WinGet is not installed. Could not install Microsoft OneDrive."
 		return
 	}
+	# Install OneDrive using winget
 	print "Installing Microsoft OneDrive..."
 	winget install Microsoft.OneDrive --source winget --accept-package-agreements --accept-source-agreements --silent | Out-Null
+	
+	# Check if OneDrive is successfully installed using winget, and inform the
+	# user if installation has failed.
 	$check = winget list Microsoft.OneDrive
 	if ($check -like "No installed package found matching input criteria.") 
 	{
@@ -1688,7 +1718,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	space
 	print "Removing capabilities and features..."
 
-	# Capabilities 
+	# List capabilities separately for Windows 11 and Windows 10.
 	if ($CurrentBuild -lt 22000) 
 	{
 		$Capabilities = @(
@@ -1713,6 +1743,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		)
 	}
 
+	# Remove listed capabilities.
 	ForEach ($Capability in $Capabilities) 
 	{
 		Get-WindowsCapability -Online | Where-Object {$_.Name -like $Capability} | Remove-WindowsCapability -Online | Out-Null
@@ -1724,7 +1755,9 @@ $ErrorActionPreference = 'SilentlyContinue'
 		print "  - Uninstalled Windows Hello Face"
 	}
 
-	# Print list of capabilities
+	# Print the list of capabilities to the user.
+
+	# Capabilities in Windows 10.
 	if ($CurrentBuild -lt 22000)
 	{
 		$CapLists =@(
@@ -1742,6 +1775,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		}
 	}
 
+	# Capabilities in Windows 11.
 	elseif ($CurrentBuild -ge 22000)
 	{
 		$CapLists =@(
@@ -1758,6 +1792,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		}
 	}
 
+	# List optional features.
 	$OptionalFeatures = @(
 		"LegacyComponents"
 		"Printing-XPSServices-Feature*"
@@ -1775,7 +1810,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 		Get-WindowsOptionalFeature -Online | Where-Object {$_.FeatureName -like $OptionalFeature} | Disable-WindowsOptionalFeature -Online -NoRestart | Out-Null
 	}
 
-	# Print user friendly list of features uninstalled.
+	# Print the list of features to the user.
 	$Features =@(
 		"DirectPlay"
 		"PowerShell v2 (root)"
@@ -1800,6 +1835,7 @@ $WarningPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
 	space
 	print "Adding capabilities and features..."
+
 	# Install capabilities.
 	$Capabilities = @(
 		"Hello.Face*"
@@ -1815,7 +1851,8 @@ $ErrorActionPreference = 'SilentlyContinue'
 	{
 		Get-WindowsCapability -Online | Where-Object {$_.Name -like $Capability} | Add-WindowsCapability -Online | Out-Null
 	}
-	# Print user friendly list of capabilities installed.
+
+	# Print user friendly list of capabilities & features installed.
 	$CapLists =@(
 		"Math Recognizer"
 		"Microsoft Paint"
@@ -1840,7 +1877,6 @@ $ErrorActionPreference = 'SilentlyContinue'
 	{
 		Get-WindowsOptionalFeature -Online | Where-Object {$_.FeatureName -like $OptionalFeature} | Enable-WindowsOptionalFeature -Online -NoRestart | Out-Null
 	}
-	# Print user friendly list of features uninstalled.
 	print " - Enabled Work Folders Client."
 	
 	print "Added capabilities and features."
@@ -1905,7 +1941,7 @@ $WarningPreference = 'SilentlyContinue'
 	print "Uninstalled Windows Subsystem for Linux."
 }
 
-# Install Sandbox.
+# Install Windows Sandbox.
 function InstallSandbox {
 $ProgressPreference = 'SilentlyContinue'
 	if (!(check($sandbox)))
@@ -1926,7 +1962,7 @@ $ProgressPreference = 'SilentlyContinue'
 		return
 	}
 
-	# Install Sandbox.
+	# Install Windows Sandbox.
 	print "Enabling Windows Sandbox..."
 	Enable-WindowsOptionalFeature -FeatureName "Containers-DisposableClientVM" -All -Online -NoRestart -WarningAction Ignore | Out-Null
 
@@ -1939,7 +1975,7 @@ $ProgressPreference = 'SilentlyContinue'
 	print "Install Windows Sandbox."
 }
 
-# Uninstall Sandbox
+# Uninstall Windows Sandbox.
 function UninstallSandbox {
 $ProgressPreference = 'SilentlyContinue'
 	space
@@ -1958,7 +1994,7 @@ $ProgressPreference = 'SilentlyContinue'
 		return
 	}
 
-	# Uninstall Sandbox
+	# Uninstall Windows Sandbox.
 	print "Uninstalling Windows Sandbox..."
 	Disable-WindowsOptionalFeature -FeatureName "Containers-DisposableClientVM" -All -Online -NoRestart -WarningAction Ignore | Out-Null
 	
@@ -2087,7 +2123,7 @@ function EnableAdvertisingID {
 	print "Enabled Advertising ID."
 }
 
-# Disable Background apps (https://github.com/farag2/Windows-10-Sophia-Script/blob/master/Sophia/PowerShell%205.1/Sophia.psm1#L8988-L9033).
+# Disable Background apps (https://github.com/farag2/Windows-10-Sophia-Script).
 function DisableBackgroundApps {
 	space
 	print "Disabling Background apps..."
@@ -2127,7 +2163,7 @@ function EnableBackgroundApps {
 	print "Enabled Background apps."
 }
 
-# Disable Windows Error Reporting 
+# Disable Windows Error Reporting. 
 function DisableErrorReporting {
 	space
 	if ($Insider)
@@ -2140,7 +2176,7 @@ function DisableErrorReporting {
 	print "Disabled Windows Error Reporting."
 }
 
-# Enable Windows Error Reporting 
+# Enable Windows Error Reporting. 
 function EnableErrorReporting {
 	print "Enabling Windows Error Reporting..."
 	Enable-WindowsErrorReporting | Out-Null
@@ -2494,8 +2530,11 @@ function DisableVBS {
 		return
 	}
 	space
-	# Check if current processor supports MBEC (https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity)
-	# This function disables Virtualization based security if your device's processor does not support MBEC. On unsupported processors, MBEC is emulated which taxes CPU performance.
+	# Check if current processor supports MBEC.
+	# (https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity)
+	# This function disables Virtualization based security if your device's
+	# processor does not support MBEC. On unsupported processors, MBEC is emulated
+	# which taxes CPU performance.
 	$mbec = Get-CimInstance -ClassName Win32_DeviceGuard -Namespace root\Microsoft\Windows\DeviceGuard | Select-Object AvailableSecurityProperties
 	if ($mbec -contains 7)
 	{
@@ -2505,9 +2544,10 @@ function DisableVBS {
 	print "  This processor does not natively support MBEC. Emulating it will result in bigger impact on performance on MBEC-unsupported CPUs."
 	print "  See https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity."
 	Start-Sleep -Milliseconds 400
-	# Disable Memory Integrity Core isolation (this needs to be disabled in order to disable VBS)
+	# Disable Memory Integrity Core isolation.
+	# Memory Integrity Core Isolation must be disabled before we disable Virtual-ization based security.
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" -Name "Enabled" -Type DWord -Value 0
-	# Disable VBS
+	# Disable Virtualization-based security.
 	bcdedit.exe /set hypervisorlaunchtype off | Out-Null
 	print "Disabled Virtualization-based security."
 	space
@@ -3128,6 +3168,9 @@ function ResetWindowsUpdate {
     print "All Windows Update policies were reset."
 }
 
+# This function will disable "Device Installation" in sysdm.cpl > Hardware > Device 
+# Installation Settings. Setting this policy will prevent automatic download of 
+# custom apps, icons and device drivers from the manufacturer.
 function DisableDeviceInstallation {
 	if (!(check($systemwidepolicies)))
 	{
@@ -3138,6 +3181,9 @@ function DisableDeviceInstallation {
 	print "Windows will no longer download custom apps, device drivers and icons from your device manufacturer."
 }
 
+# This function will re-enable "Device Installation" in sysdm.cpl > Hardware > Device 
+# Installation Settings. Setting this policy will allow automatic download of 
+# custom apps, icons and device drivers from the manufacturer.
 function EnableDeviceInstallation {
 	if (!(check($systemwidepolicies)))
 	{
@@ -3148,7 +3194,7 @@ function EnableDeviceInstallation {
 	print "Windows can now download custom apps, device drivers and icons from your device manufacturer."
 }
 
-# A simple registry edit that fixes an issue where a small batch of devices turn back on after powering down.
+# A registry modification that fixes an issue where a small batch of devices turn back on after powering down.
 function EnablePowerdownAfterShutdown {
 	if (!(check($systemwidepolicies)))
 	{
@@ -3296,7 +3342,83 @@ function SetExplorerQuickAccess {
 	print "Set default File Explorer view to Quick Access."
 }
 
+# Update threshold of taskbar thumbnails.
+# 
+# If you have opened an app and hover over it's icon in the taskbar, a 
+# flyout opens up. The flyout usually displays a preview of currently 
+# open window(s) inside that app. 
+#
+# Similarly, if you have a lot of windows open inside a particular app, 
+# you might notice that hovering over the app on the taskbar displays a 
+# list of currently opened windows and does not render their preview.
+# 
+# This behavior is determined by a threshold. The threshold is the number
+# of concurrently open app windows inside an app. Once the threshold is
+# exceeded, the flyout only displays a list of names of currently open 
+# windows instead of displaying their previews.
+#
+# However, in rare scenarios, users may notice that if they hover over the
+# app in the taskbar, the hover flyout shows a list without window previews
+# even if only one window is open. 
+
+# This function aims to repair this incorrect behavior by modifying the threshold 
+# according to some of the most commonly used screen resolutions worldwide.
+
+function FixAppHoverPreviewThreshold {
+	# Check if the threshold is absurdly set to 1.
+	$thumbnails = Get-ItemPropertyValue -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband" -Name NumThumbnails
+	if ($thumbnails -ne 1)
+	{
+		return
+	}
+	space
+	print "Attempting to fix incorrect behavior where hovering on an opened app in taskbar does not show the window preview(s)..."
+	# Save screen width to "monitorwidth" variable.
+	Add-Type -AssemblyName System.Windows.Forms
+	$monitorwidth = ([System.Windows.Forms.SystemInformation]::PrimaryMonitorSize).Width
+	# The following code will set threshold according to resolutions.
+	# Data is set in descending order of the most commonly used resolutions.
+	# Data derived on 6th May, 2022 from 
+	# https://gs.statcounter.com/screen-resolution-stats/desktop/worldwide 
+	
+	# If screen width is equal to 1920px (HD), set threshold to 16.
+	if ($monitorwidth -eq 1920)
+	{
+		$threshold = 16
+	}
+	# Else if screen width is equal to 1536px, set threshold to 14.
+	elseif ($monitorwidth -eq 1536)
+	{
+		$threshold = 14
+	}
+	# Else if screen width is equal to 1440px, set threshold to 12.
+	elseif ($monitorwidth -eq 1440)
+	{
+		$threshold = 12
+	}
+	# Else if screen width is equal to 1366px or 1280px, set threshold to 11.
+	elseif ($monitorwidth -eq 1366 -or $monitorwidth -eq 1280)
+	{
+		$threshold = 11
+	}
+	# Else, set threshold to 10.
+	else
+	{
+		$threshold = 10
+	}
+	New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband" -Name NumThumbnails -Type DWord -Value $threshold -Force | Out-Null
+	print "Fixed the behavior, hovering on an opened app in taskbar should show its' window preview(s)."
+}
+
+function RevertAppHoverPreviewThreshold {
+	space
+	print "Reverting fix for app hover in taskbar..."
+	Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband" -Name NumThumbnails -Force
+	print "The fix was reverted. Please restart your device for the changes to take effect."
+}
+
 # Hide 3D Objects.
+# This function only runs in Windows 10.
 function Disable3DObjects {
 	if ($CurrentBuild -ge 22000) 
 	{
@@ -3325,6 +3447,7 @@ function Disable3DObjects {
 }
 
 # Restore 3D Objects.
+# This function only runs in Windows 10.
 function Enable3DObjects {
 	if ($CurrentBuild -ge 22000) 
 	{
@@ -3381,6 +3504,7 @@ function EnableTaskView {
 }
 
 # Hide Cortana icon from taskbar.
+# This function only runs in Windows 10.
 function DisableCortana {
 	if ($CurrentBuild -ge 22000) 
 	{
@@ -3393,6 +3517,7 @@ function DisableCortana {
 }
 
 # Restore Cortana button in taskbar.
+# This function only runs in Windows 10.
 function EnableCortana {
 	if ($CurrentBuild -ge 22000) 
 	{
@@ -3404,6 +3529,7 @@ function EnableCortana {
 }
 
 # Hide Meet Now icon from tray.
+# This function only runs in Windows 10.
 function DisableMeetNow {
 	if ($CurrentBuild -ge 22000) 
 	{
@@ -3417,6 +3543,7 @@ function DisableMeetNow {
 }
 
 # Restore Meet Now icon on tray.
+# This function only runs in Windows 10.
 function EnableMeetNow {
 	if ($CurrentBuild -ge 22000) 
 	{
@@ -3429,6 +3556,7 @@ function EnableMeetNow {
 }
 
 # Turn off News and interests feed.
+# This function only runs in Windows 10.
 function DisableNI {
 	if ($CurrentBuild -ge 22000) 
 	{
@@ -3446,6 +3574,7 @@ function DisableNI {
 }
 
 # Turn on News and interests feed.
+# This function only runs in Windows 10.
 function EnableNI {
 	if ($CurrentBuild -ge 22000) 
 	{
@@ -3459,7 +3588,8 @@ function EnableNI {
 	print "Enabled News and interests."
 }
 
-# Disable Widgets item - Windows 11 only.
+# Disable Widgets icon.
+# This function only runs in Windows 11.
 function DisableWidgets {
 	if ($CurrentBuild -lt 22000)
 	{
@@ -3471,7 +3601,8 @@ function DisableWidgets {
 	print "Disabled Widgets icon."
 }
 
-# Enable Widgets item - Windows 11 only
+# Enable Widgets icon.
+# This function only runs in Windows 11.
 function EnableWidgets {
 	if ($CurrentBuild -lt 22000)
 	{
@@ -3483,7 +3614,8 @@ function EnableWidgets {
 	print "Enabled Widgets icon."
 }
 
-# Disable chat item - Windows 11 only
+# Disable chat icon.
+# This function only runs in Windows 11.
 function DisableChat {
 	if ($CurrentBuild -lt 22000)
 	{
@@ -3495,7 +3627,8 @@ function DisableChat {
 	print "Disabled Chat icon."
 }
 
-# Enable Chat item - Windows 11 only
+# Enable Chat icon.
+# This function only runs in Windows 11.
 function EnableChat {
 	if ($CurrentBuild -lt 22000)
 	{
@@ -3507,19 +3640,30 @@ function EnableChat {
 	print "Enabled Chat icon."
 }
 
-Start-Sleep -Seconds 2
-
-######### Tasks after successful run #########
+####################################
+#### Tasks after successful run ####
+####################################
 
 function Success {
+	# Clear all variables from the PowerShell session.
+	Remove-Variable * -ErrorAction SilentlyContinue -Force
+
+	# If device is running Windows 10, restart Windows Explorer for all
+	# Windows Explorer changes to take effect immediately.
 	if ($CurrentBuild -lt 22000)
 	{
 		Stop-Process -Name explorer -Force
 	}
+
+	# Sleep for 3 seconds and then stop logging.
 	Start-Sleep 3
-	print "WinRice has finished working."
-	print "Thank you for using WinRice."
 	Stop-Transcript
+
+	# Produce ending message.
+	Write-Host "WinRice has finished working."
+	Write-Host "Thank you for using WinRice."
+	
+	# Ask if user wants to restart the device to apply all changes.
 	Add-Type -AssemblyName PresentationCore, PresentationFramework
 	switch (
 	[System.Windows.MessageBox]::Show(
@@ -3536,7 +3680,7 @@ function Success {
 		}
 		'No' 
 		{
-			print "Skipped device restart. A device restart is pending."
+			Write-Host "Skipped device restart. A device restart is pending."
 		}
 	}
 }

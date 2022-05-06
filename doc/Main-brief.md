@@ -289,6 +289,7 @@ Setup the following policies to Windows Update:
 - Set File Explorer to open This PC by default
 - Turn off Keyboard shortcut for Sticky keys
 - Use the Print screen button to open Screen snipping
+- If taskbar is found to not preview windows of opened apps correctly, an attempt is made to fix this.
 
 
 ## 🔚 End of Windows Explorer section

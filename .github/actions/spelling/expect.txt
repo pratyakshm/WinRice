@@ -58,6 +58,7 @@ Enabledot
 endregion
 endtext
 Enum
+eshold
 exe
 Facebook
 farag
@@ -66,6 +67,7 @@ FDB
 fedd
 FHV
 Firefox
+flyout
 foreach
 Getstarted
 github
@@ -92,6 +94,7 @@ installusing
 isadmin
 isonline
 isrestartpending
+ization
 JScript
 jse
 JSMJy
@@ -115,9 +118,11 @@ machinewide
 malware
 mbec
 Mehrotra
+Metadata
 microsoft
 Mimikatz
 Minecraft
+monitorwidth
 Mouri
 MSFT
 msi
@@ -179,12 +184,14 @@ Spotify
 src
 ssign
 ssl
+statcounter
 stealthbits
 sys
+sysdm
 systemrestore
 systemwidepolicies
-sytem
 SZZ
+Taskband
 taskbar
 TCUI
 Textblock
