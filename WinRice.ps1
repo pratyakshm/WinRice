@@ -259,7 +259,10 @@ if (!(check($hasReadDoc))) {
 if (!(Test-Path C:\WinRice)) {
 	New-Item C:\WinRice -ItemType Directory | Out-Null 
 }
+# Start logging
 Start-Transcript -OutputDirectory "C:\WinRice" | Out-Null 
+
+# Store OS details
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 $DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion -ErrorAction SilentlyContinue
@@ -272,9 +275,10 @@ $BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
 $hkeyuser = (Get-CimInstance -ClassName Win32_UserAccount | Where-Object -FilterScript {$_.Name -eq $env:USERNAME}).SID
 $Insider = (Get-Item -Path "HKLM:\SOFTWARE\Microsoft\WindowsSelfHost\Applicability").Property -contains "IsBuildFlightingEnabled" -or (Get-Item -Path "HKLM:\SOFTWARE\Microsoft\WindowsSelfHost\Applicability").Property -contains "BranchName"
 
+# Change window title
+$host.UI.RawUI.WindowTitle = "pratyakshm's WinRice"
 
-### DISPLAY INFO ###
-
+# Display Information
 Clear-Host
 print "WinRice pre-execution environment"
 Start-Sleep -Milliseconds 20
@@ -289,10 +293,10 @@ $ErrorActionPreference = 'SilentlyContinue'
 $WarningPreference = 'SilentlyContinue'
 
 
-####### BEGIN CHECKS #########
+# Begin checks
 Write-Host "Beginning checks..."
 
-# Check if supported OS build.
+# Check 1: If supported OS build.
 $oscheck = {
 	$CurrentBuild = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name CurrentBuild
 	if ($CurrentBuild -lt 19042) {
@@ -305,16 +309,15 @@ $oscheck = {
 RunWithProgress -Text "[1/5] Windows version is supported" -Task $oscheck -Exit $true | Out-Null
 
 
-# Check if session is elevated.
+# Check 2: If session is elevated.
 $isadmin = {
 	$currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 	$admin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 	return $admin
 }
-
 RunWithProgress -Text "[2/5] Session is elevated" -Task $isadmin -Exit $true | Out-Null
 
-# Exit WinRice if PC is not connected.
+# Check 3: Internet Connection.
 $isonline = {
 	Import-Module BitsTransfer
 	Start-BitsTransfer https://raw.githubusercontent.com/WinRice/Files/main/File.txt
@@ -326,27 +329,22 @@ $isonline = {
 		return $false | Out-Null
 	}
 }
-
 RunWithProgress -Text "[3/5] Device is connected to the Internet" -Task $isonline -Exit $true | Out-Null
 
-# Check if device is a laptop, notebook or a sub-notebook (https://devblogs.microsoft.com/scripting/hey-scripting-guy-weekend-scripter-how-can-i-use-wmi-to-detect-laptops/).
+# Check 4: Device form-factor (https://devblogs.microsoft.com/scripting/hey-scripting-guy-weekend-scripter-how-can-i-use-wmi-to-detect-laptops/).
 if(Get-WmiObject -Class Win32_SystemEnclosure | Where-Object {$_.ChassisTypes -eq 9 -or $_.ChassisTypes -eq 10 -or $_.ChassisTypes -eq 14}) 
 { 
 	$isLaptop = $true
 }
 
-# Check PowerShell version and import required modules.
+# Task 1: Import Appx Module to PowerShell if necessary.
 $pwshver = {
-	if ((($PSVersionTable).PSVersion).Major -eq "5") { 
-		return $true 
-	}
 	Import-Module -Name Appx -UseWindowsPowerShell -WarningAction "SilentlyContinue" | Out-Null
 	return $true
 }
-
 RunWithProgress -Text "[4/5] Setting up PowerShell" -Task $pwshver -Exit $true | Out-Null
 
-# Check for pending restart (part of code used here was picked from https://thesysadminchannel.com/remotely-check-pending-reboot-status-powershell).
+# Check 5: Check for pending restarts (part of code used here was picked from https://thesysadminchannel.com/remotely-check-pending-reboot-status-powershell).
 $isrestartpending = {
 	param (
 		[Parameter(
@@ -383,9 +381,9 @@ $isrestartpending = {
 # Clear variables.
 $WMI_Reg        = $null
 $SCCM_Namespace = $null
-
 RunWithProgress -Text "[5/5] Device session is fresh" -Task $isrestartpending -Exit $true | Out-Null
 
+# Conclude checks.
 Start-Sleep -Milliseconds 100
 Write-Host "Completed checks." -ForegroundColor green 
 space
@@ -422,7 +420,6 @@ if (!($Insider) -and (Get-WindowsEdition -Online | Where-Object -FilterScript {$
 	print "  Windows automatic updates will be disabled."
 	print "  Windows quality updates will be delayed by 4 days and feature updates will be delayed by 20 days."
 }
-
 elseif ($Insider)
 {
 	print "  Windows Update policies are left unchanged in Windows pre-release software."
@@ -430,7 +427,9 @@ elseif ($Insider)
 space
 print "To learn more, visit https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md."
 space
+
 $customize = ask "Do you want to proceed with Express Settings? [Y/n]"
+
 if (!(check($customize)))
 {
 	space
@@ -742,7 +741,7 @@ public static extern bool SetForegroundWindow(IntPtr hWnd);
 		Add-Type @SetForegroundWindow
 	}
 
-	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "*PowerShell*" -or $_.MainWindowTitle -like "*Windows PowerShell*" -or $_.MainWindowTitle -like "*pwsh*"} | ForEach-Object -Process {
+	Get-Process | Where-Object -FilterScript {$_.MainWindowTitle -like "*PowerShell*" -or $_.MainWindowTitle -like "*pratyakshm's WinRice*" -or $_.MainWindowTitle -like "*pwsh*"} | ForEach-Object -Process {
 		# Show window if minimized.
 		[WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10) | Out-Null 
 
@@ -1116,255 +1115,451 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 }
 
-# Uninstaller GUI.
+# App Uninstaller GUI. (code reused from https://github.com/farag2/Sophia-Script-for-Windows)
 function UninstallerGUI {
 	space
-    Add-Type -AssemblyName PresentationCore, PresentationFramework
+	print "Launching App Uninstaller GUI..."
+	Add-Type -AssemblyName PresentationCore, PresentationFramework
+	#region Variables
+	# Apps unchecked by default.
+	$UncheckedAppxPackages = @(
+    # AMD Radeon Software
+    "AdvancedMicroDevicesInc-2.AMDRadeonSoftware",
+	
+	# Camera
+	"Microsoft.WindowsCamera",
 
-    #region Variables.
-    # ArrayList containing the UWP apps to remove.
-    $AppxPackages = New-Object -TypeName System.Collections.ArrayList($null)
+    # Calculator
+    "Microsoft.WindowsCalculator",
 
-	print "App Uninstaller GUI"
-	print "If app selection menu is not visible, use Alt + Tab to switch to that window."
+    # Intel Graphics Control Center
+    "AppUp.IntelGraphicsControlPanel",
+    "AppUp.IntelGraphicsExperience",
 
-    # List of UWP apps that won't be checked for removal.
-    $UncheckedAppxPackages = @(
+	# Microsoft Office
+	"Microsoft.Office.Desktop.OneNote",
+	"Microsoft.Office.Desktop.Word",
+	"Microsoft.Office.Desktop",
+	"Microsoft.Office.Desktop.Outlook",
+	"Microsoft.Office.Desktop.Excel",
+	"Microsoft.Office.Desktop.Access",
+	"Microsoft.Office.Desktop.PowerPoint",
 
-        # Calculator.
-        "Microsoft.WindowsCalculator",
-    
-        # Microsoft Office.
-        "Microsoft.Office.Desktop.OneNote",
-        "Microsoft.Office.Desktop.Word",
-        "Microsoft.Office.Desktop",
-        "Microsoft.Office.Desktop.Outlook",
-        "Microsoft.Office.Desktop.Excel",
-        "Microsoft.Office.Desktop.Access",
-        "Microsoft.Office.Desktop.PowerPoint",
-    
-        # Microsoft Store.
-        "Microsoft.WindowsStore",
-    
-        # Photos (and Video Editor).
-        "Microsoft.Windows.Photos",
-        "Microsoft.Photos.MediaEngineDLC",
+    # NVIDIA Control Panel
+    "NVIDIACorp.NVIDIAControlPanel",
 
-        # Snip & Sketch.
-        "Microsoft.ScreenSketch"
+    # Paint
+    "Microsoft.Paint",
 
-    )
+    # Realtek Audio Console
+    "RealtekSemiconductorCorp.RealtekAudioControl"
 
-    # UWP apps that won't be shown in the form
-    $ExcludedAppxPackages = @(
-		# HEVC Video Extensions from Device Manufacturer.
-		"Microsoft.HEVCVideoExtension",
+    # Sticky Notes
+    "Microsoft.MicrosoftStickyNotes",
 
-		# Microsoft Store and appx dependencies.
-		"Microsoft.StorePurchaseApp",
-        "Microsoft.DesktopAppInstaller",
-    
-        # Web Media Extensions.
-        "Microsoft.WebMediaExtensions"
+    # Screen Sketch
+    "Microsoft.ScreenSketch",
 
-        # Media Engine DLC
-        "Microsoft.Photos.MediaEngineDLC"
+    # Xbox TCUI
+    "Microsoft.Xbox.TCUI",
 
-        # Windows Terminal.
-        "Microsoft.WindowsTerminal"
+    # Xbox Speech To Text Overlay
+    "Microsoft.XboxSpeechToTextOverlay",
 
-        # Web Experience (used for Widgets).
-        "MicrosoftWindows.Client.WebExperience"
-            
-        # Xbox apps.
-		"Microsoft.GamingServices",
-        "Microsoft.XboxIdentityProvider",
-        "Microsoft.Xbox.TCUI",
-        "Microsoft.XboxSpeechToTextOverlay",
-        "Microsoft.XboxGamingOverlay",
-        "Microsoft.XboxGameOverlay"
-    )
-    #endregion Variables.
+    # Xbox Game Bar
+    "Microsoft.XboxGamingOverlay",
 
-    #region XAML Markup.
-    [xml]$XAML = '
-    <Window
+    # Xbox Game Bar Plugin
+    "Microsoft.XboxGameOverlay",
+
+	# Xbox Identity Provider
+    "Microsoft.XboxIdentityProvider",
+
+    # Xbox Console Companion
+    "Microsoft.XboxApp",
+
+    # Xbox
+    "Microsoft.GamingApp",
+    "Microsoft.GamingServices",
+
+	# Windows Terminal
+	"Microsoft.WindowsTerminal",
+	"Microsoft.WindowsTerminalPreview"
+	)
+
+	# Apps not displayed.
+	$ExcludedAppxPackages = @(
+	# HEVC Video Extensions (personal & OEM)
+	"Microsoft.HEVCVideoExtension",
+	"Microsoft.HEVCVideoExtensions",
+
+    # Desktop App Installer
+    "Microsoft.DesktopAppInstaller",
+
+    # Microsoft Store
+    "Microsoft.WindowsStore",
+	
+    # Notepad
+    "Microsoft.WindowsNotepad",
+
+	# Photos     
+    "Microsoft.Windows.Photos",
+    "Microsoft.Photos.MediaEngineDLC",
+
+    # Store Experience Host
+    "Microsoft.StorePurchaseApp",
+
+    # Web Media Extensions
+    "Microsoft.WebMediaExtensions"
+	)
+
+	#region Variables
+	#region XAML Markup
+	# The section defines the design of the upcoming dialog box
+[xml]$XAML = '
+<Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Name="Window"
-    MinHeight="450" MinWidth="400"
+    MinHeight="400" MinWidth="415"
     SizeToContent="Width" WindowStartupLocation="CenterScreen"
     TextOptions.TextFormattingMode="Display" SnapsToDevicePixels="True"
-    FontFamily="Segoe UI" FontSize="12" ShowInTaskbar="False">
+    FontFamily="Candara" FontSize="16" ShowInTaskbar="True"
+    Background="#F1F1F1" Foreground="#262626">
     <Window.Resources>
-    <Style TargetType="StackPanel">
-                <Setter Property="Orientation" Value="Horizontal"/>
-            </Style>
-            <Style TargetType="CheckBox">
-                <Setter Property="Margin" Value="10, 10, 5, 10"/>
-                <Setter Property="IsChecked" Value="True"/>
-            </Style>
-            <Style TargetType="TextBlock">
-                <Setter Property="Margin" Value="5, 10, 10, 10"/>
-            </Style>
-            <Style TargetType="Button">
-                <Setter Property="Margin" Value="20"/>
-                <Setter Property="Padding" Value="10"/>
-            </Style>
-        </Window.Resources>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <CheckBox Name="CheckboxRemoveAll" IsChecked="False"/>
-                    <TextBlock Name="TextblockRemoveAll"/>
-                </StackPanel>
-            </Grid>
-            <ScrollViewer Name="Scroll" Grid.Row="1"
-                HorizontalScrollBarVisibility="Disabled"
-                VerticalScrollBarVisibility="Auto">
+        <Style TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="10, 13, 10, 10"/>
+            <Setter Property="IsChecked" Value="True"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="0, 10, 10, 10"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="IsEnabled" Value="False"/>
+        </Style>
+        <Style TargetType="Border">
+            <Setter Property="Grid.Row" Value="1"/>
+            <Setter Property="CornerRadius" Value="0"/>
+            <Setter Property="BorderThickness" Value="0, 1, 0, 1"/>
+            <Setter Property="BorderBrush" Value="#000000"/>
+        </Style>
+        <Style TargetType="ScrollViewer">
+            <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="BorderBrush" Value="#000000"/>
+            <Setter Property="BorderThickness" Value="0, 1, 0, 1"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Name="PanelSelectAll" Grid.Column="0" HorizontalAlignment="Left">
+                <CheckBox Name="CheckBoxSelectAll" IsChecked="False"/>
+                <TextBlock Name="TextBlockSelectAll" Margin="10,10, 0, 10"/>
+            </StackPanel>
+            <StackPanel Name="PanelRemoveForAll" Grid.Column="1" HorizontalAlignment="Right">
+                <TextBlock Name="TextBlockRemoveForAll" Margin="10,10, 0, 10"/>
+                <CheckBox Name="CheckBoxForAllUsers" IsChecked="False"/>
+            </StackPanel>
+        </Grid>
+        <Border>
+            <ScrollViewer>
                 <StackPanel Name="PanelContainer" Orientation="Vertical"/>
             </ScrollViewer>
-            <Button Name="Button" Grid.Row="2"/>
-        </Grid>
+        </Border>
+        <Button Name="ButtonUninstall" Grid.Row="2"/>
+    </Grid>
 </Window>
-    '
-    #endregion XAML Markup.
+'
+#endregion XAML Markup
 
-    $Reader = (New-Object -TypeName System.Xml.XmlNodeReader -ArgumentList $XAML)
-    $Form = [Windows.Markup.XamlReader]::Load($Reader)
-    $XAML.SelectNodes("//*[@*[contains(translate(name(.),'n','N'),'Name')]]") | ForEach-Object -Process {
-        Set-Variable -Name ($_.Name) -Value $Form.FindName($_.Name) -Scope Global
-    }
+	$Reader = (New-Object -TypeName System.Xml.XmlNodeReader -ArgumentList $XAML)
+	$Form = [Windows.Markup.XamlReader]::Load($Reader)
+	$XAML.SelectNodes("//*[@*[contains(translate(name(.),'n','N'),'Name')]]") | ForEach-Object -Process {
+		Set-Variable -Name ($_.Name) -Value $Form.FindName($_.Name)
+	}
 
+	$Window.Title               = "Windows apps"
+	$ButtonUninstall.Content    = "Uninstall"
+	$TextBlockRemoveForAll.Text = "For all users"
+	$TextBlockSelectAll.Text    = "Select all"
 
-    #region functions.
-    function Get-CheckboxClicked
-    {
-        [CmdletBinding()]
-        param
-        (
-            [Parameter(
-                Mandatory = $true,
-                ValueFromPipeline = $true
-            )]
-            [ValidateNotNull()]
-            $CheckBox
-        )
+	$ButtonUninstall.Add_Click({ButtonUninstallClick})
+	$CheckBoxForAllUsers.Add_Click({CheckBoxForAllUsersClick})
+	$CheckBoxSelectAll.Add_Click({CheckBoxSelectAllClick})
+	#endregion Variables
 
-        $AppxName = $CheckBox.Parent.Children[1].Text
-        if ($CheckBox.IsChecked)
-        {
-            [void]$AppxPackages.Add($AppxName)
-        }
-        else
-        {
-            [void]$AppxPackages.Remove($AppxName)
-        }
-        if ($AppxPackages.Count -gt 0)
-        {
-            $Button.IsEnabled = $true
-        }
-        else
-        {
-            $Button.IsEnabled = $false
-        }
-    }
+	#region Functions
+	function Get-AppxBundle
+	{
+		[CmdletBinding()]
+		param
+		(
+			[string[]]
+			$Exclude,
 
-    function DeleteButton
-    {
-        [void]$Window.Close()
-        $OFS = "|"
-        if ($CheckboxRemoveAll.IsChecked) {   
-            print "Uninstalling selected apps..."
-            Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage -AllUsers
-            print "Uninstalled."
-        }
-        else {  
-            print "Uninstalling selected apps..."
-            Get-AppxPackage -PackageTypeFilter Bundle | Where-Object -FilterScript {$_.Name -cmatch $AppxPackages} | Remove-AppxPackage
-            print "Uninstalled."
-        }
-        $OFS = " "
-    }
+			[switch]
+			$AllUsers
+		)
 
-    function Add-AppxControl
-    {
-        [CmdletBinding()]
-        param
-        (
-            [Parameter(
-                Mandatory = $true,
-                ValueFromPipeline = $true
-            )]
-            [ValidateNotNull()]
-            [string]
-            $AppxName
-        )
+		$AppxPackages = @(Get-AppxPackage -PackageTypeFilter Bundle -AllUsers:$AllUsers | Where-Object -FilterScript {$_.Name -notin $ExcludedAppxPackages})
 
-        $CheckBox = New-Object -TypeName System.Windows.Controls.CheckBox
-        $CheckBox.Add_Click({Get-CheckboxClicked -CheckBox $_.Source})
+		# The Bundle packages contains no Microsoft Teams
+		if (Get-AppxPackage -Name MicrosoftTeams -AllUsers:$AllUsers)
+		{
+			# Temporarily hack: due to the fact that there are actually two Microsoft Teams packages, we need to choose the first one to display
+			$AppxPackages += Get-AppxPackage -Name MicrosoftTeams -AllUsers:$AllUsers | Select-Object -Index 0
+		}
 
-        $TextBlock = New-Object -TypeName System.Windows.Controls.TextBlock
-        $TextBlock.Text = $AppxName
+		# The Bundle packages contains no Spotify
+		if (Get-AppxPackage -Name SpotifyAB.SpotifyMusic -AllUsers:$AllUsers)
+		{
+			# Temporarily hack: due to the fact that there are actually two Microsoft Teams packages, we need to choose the first one to display
+			$AppxPackages += Get-AppxPackage -Name SpotifyAB.SpotifyMusic -AllUsers:$AllUsers | Select-Object -Index 0
+		}
 
-        $StackPanel = New-Object -TypeName System.Windows.Controls.StackPanel
-        [void]$StackPanel.Children.Add($CheckBox)
-        [void]$StackPanel.Children.Add($TextBlock)
+		$PackagesIds = [Windows.Management.Deployment.PackageManager, Windows.Web, ContentType = WindowsRuntime]::new().FindPackages() | Select-Object -Property DisplayName -ExpandProperty Id | Select-Object -Property Name, DisplayName
 
-        [void]$PanelContainer.Children.Add($StackPanel)
+		foreach ($AppxPackage in $AppxPackages)
+		{
+			$PackageId = $PackagesIds | Where-Object -FilterScript {$_.Name -eq $AppxPackage.Name}
 
-        if ($UncheckedAppxPackages.Contains($AppxName))
-        {
-            $CheckBox.IsChecked = $false
-            # Exit function, item is not checked.
-            return
-        }
+			if (-not $PackageId)
+			{
+				continue
+			}
 
-        # If package checked, add to the array list to uninstall.
-        [void]$AppxPackages.Add($AppxName)
-    }
-    #endregion functions.
+			[PSCustomObject]@{
+				Name            = $AppxPackage.Name
+				PackageFullName = $AppxPackage.PackageFullName
+				DisplayName     = $PackageId.DisplayName
+			}
+		}
+	}
 
-    #region Events Handlers.
+	function Add-Control
+	{
+		[CmdletBinding()]
+		param
+		(
+			[Parameter(
+				Mandatory = $true,
+				ValueFromPipeline = $true
+			)]
+			[ValidateNotNull()]
+			[PSCustomObject[]]
+			$Packages
+		)
 
-    # Window Loaded Event.
-    $Window.Add_Loaded({
-        $OFS = "|"
-        (Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cnotmatch $ExcludedAppxPackages}).Name | ForEach-Object -Process {
-            Add-AppxControl -AppxName $_
-        }
-        $OFS = " "
+		process
+		{
+			foreach ($Package in $Packages)
+			{
+				$CheckBox = New-Object -TypeName System.Windows.Controls.CheckBox
+				$CheckBox.Tag = $Package.PackageFullName
 
-        $TextblockRemoveAll.Text = "All users"
-        $Window.Title = "Select apps"
-        $Button.Content = "Uninstall"
-    })
+				$TextBlock = New-Object -TypeName System.Windows.Controls.TextBlock
 
-    # Button Click Event.
-    $Button.Add_Click({DeleteButton})
-    #endregion Events Handlers.
+				if ($Package.DisplayName)
+				{
+					$TextBlock.Text = $Package.DisplayName
+				}
+				else
+				{
+					$TextBlock.Text = $Package.Name
+				}
 
-    if (Get-AppxPackage -PackageTypeFilter Bundle -AllUsers | Where-Object -FilterScript {$_.Name -cnotmatch ($ExcludedAppxPackages -join "|")})
-    {
-        # Display the dialog box.
-        $Form.ShowDialog() | Out-Null
-    }
-    else
-    {
-        print "Nothing to display."
-    }
+				$StackPanel = New-Object -TypeName System.Windows.Controls.StackPanel
+				$StackPanel.Children.Add($CheckBox) | Out-Null
+				$StackPanel.Children.Add($TextBlock) | Out-Null
+
+				$PanelContainer.Children.Add($StackPanel) | Out-Null
+
+				if ($UncheckedAppxPackages.Contains($Package.Name))
+				{
+					$CheckBox.IsChecked = $false
+				}
+				else
+				{
+					$CheckBox.IsChecked = $true
+					$PackagesToRemove.Add($Package.PackageFullName)
+				}
+
+				$CheckBox.Add_Click({CheckBoxClick})
+			}
+		}
+	}
+
+	function CheckBoxForAllUsersClick
+	{
+		$PanelContainer.Children.RemoveRange(0, $PanelContainer.Children.Count)
+		$PackagesToRemove.Clear()
+		$AppXPackages = Get-AppxBundle -Exclude $ExcludedAppxPackages -AllUsers:$CheckBoxForAllUsers.IsChecked
+		$AppXPackages | Add-Control
+
+		ButtonUninstallSetIsEnabled
+	}
+
+	function ButtonUninstallClick
+	{
+		print "Uninstalling selected apps..."
+
+		$Window.Close() | Out-Null
+
+		# If Xbox Game Bar is selected to uninstall stop its' processes
+		if ($PackagesToRemove -match "Microsoft.XboxGamingOverlay")
+		{
+			Get-Process -Name GameBar, GameBarFTServer -ErrorAction Ignore | Stop-Process -Force
+		}
+
+		$PackagesToRemove | Remove-AppxPackage -AllUsers:$CheckBoxForAllUsers.IsChecked -Verbose
+
+		print "Uninstalled selected apps."
+	}
+
+	function CheckBoxClick
+	{
+		$CheckBox = $_.Source
+
+		if ($CheckBox.IsChecked)
+		{
+			$PackagesToRemove.Add($CheckBox.Tag) | Out-Null
+		}
+		else
+		{
+			$PackagesToRemove.Remove($CheckBox.Tag)
+		}
+
+		ButtonUninstallSetIsEnabled
+	}
+
+	function CheckBoxSelectAllClick
+	{
+		$CheckBox = $_.Source
+
+		if ($CheckBox.IsChecked)
+		{
+			$PackagesToRemove.Clear()
+
+			foreach ($Item in $PanelContainer.Children.Children)
+			{
+				if ($Item -is [System.Windows.Controls.CheckBox])
+				{
+					$Item.IsChecked = $true
+					$PackagesToRemove.Add($Item.Tag)
+				}
+			}
+		}
+		else
+		{
+			$PackagesToRemove.Clear()
+
+			foreach ($Item in $PanelContainer.Children.Children)
+			{
+				if ($Item -is [System.Windows.Controls.CheckBox])
+				{
+					$Item.IsChecked = $false
+				}
+			}
+		}
+
+		ButtonUninstallSetIsEnabled
+	}
+
+	function ButtonUninstallSetIsEnabled
+	{
+		if ($PackagesToRemove.Count -gt 0)
+		{
+			$ButtonUninstall.IsEnabled = $true
+		}
+		else
+		{
+			$ButtonUninstall.IsEnabled = $false
+		}
+	}
+	#endregion Functions
+
+	# Check "For all users" checkbox to uninstall packages from all accounts.
+	if ($ForAllUsers)
+	{
+		$CheckBoxForAllUsers.IsChecked = $true
+	}
+
+	$PackagesToRemove = [Collections.Generic.List[string]]::new()
+	$AppXPackages = Get-AppxBundle -Exclude $ExcludedAppxPackages -AllUsers:$ForAllUsers
+	$AppXPackages | Add-Control
+
+	if ($AppxPackages.Count -eq 0)
+	{
+		print "No uninstallable apps found."
+	}
+	else
+	{
+		#region Sendkey function
+		# Emulate the Backspace key sending to prevent the console window to freeze
+		Start-Sleep -Milliseconds 500
+
+		Add-Type -AssemblyName System.Windows.Forms
+
+		$SetForegroundWindow = @{
+			Namespace        = "WinAPI"
+			Name             = "ForegroundWindow"
+			Language         = "CSharp"
+			MemberDefinition = @"
+[DllImport("user32.dll")]
+public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
+[DllImport("user32.dll")]
+[return: MarshalAs(UnmanagedType.Bool)]
+public static extern bool SetForegroundWindow(IntPtr hWnd);
+"@
+		}
+
+		if (-not ("WinAPI.ForegroundWindow" -as [type]))
+		{
+			Add-Type @SetForegroundWindow
+		}
+
+		Get-Process | Where-Object -FilterScript {(($_.ProcessName -eq "powershell") -or ($_.ProcessName -eq "WindowsTerminal")) -and ($_.MainWindowTitle -like "*pratyakshm's WinRice*")} | ForEach-Object -Process {
+			# Show window if its minimized
+			[WinAPI.ForegroundWindow]::ShowWindowAsync($_.MainWindowHandle, 10)
+
+			Start-Sleep -Seconds 1
+
+			# Force move the console window to the foreground
+			[WinAPI.ForegroundWindow]::SetForegroundWindow($_.MainWindowHandle)
+
+			Start-Sleep -Seconds 1
+
+			# Emulate the Backspace key sending to prevent the console window to freeze
+			[System.Windows.Forms.SendKeys]::SendWait("{BACKSPACE 1}")
+		}
+		#endregion Sendkey function
+
+		if ($PackagesToRemove.Count -gt 0)
+		{
+			$ButtonUninstall.IsEnabled = $true
+		}
+
+		# Force move the WPF form to the foreground
+		$Window.Add_Loaded({$Window.Activate()})
+		$Form.ShowDialog() | Out-Null
+	}
 }
 
-# Uninstaller CLI.
+# App Uninstaller CLI.
 function UninstallerCLI {
 	# Remove inbox apps.
 	print "Uninstalling inbox apps..." 

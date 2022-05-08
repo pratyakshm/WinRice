@@ -1,9 +1,7 @@
 aae
 abaf
 adguard
-Aissue
 amd
-Aopen
 api
 appdata
 apps
@@ -22,15 +20,14 @@ blackhillsinfosec
 bloatware
 blog
 broadbly
+Candara
 cbb
 CCWWT
 Ceip
-Checkbox
+checkbox
 Cim
 Clipchamp
-cmatch
 Cmdlet
-cnotmatch
 COMPUTERNAME
 config
 Cortana
@@ -42,7 +39,6 @@ dac
 defaultlayout
 devblogs
 DHCP
-Disabledot
 dll
 DObjects
 dualboot
@@ -54,11 +50,9 @@ dwu
 EAFA
 elseif
 emoji
-Enabledot
 endregion
 endtext
 Enum
-eshold
 exe
 Facebook
 farag
@@ -114,7 +108,6 @@ Logon
 lsa
 lsass
 LTSC
-machinewide
 malware
 mbec
 Mehrotra
@@ -140,7 +133,9 @@ NFFX
 NFTCH
 nmzlz
 nns
+notin
 notmatch
+NVIDIA
 oscheck
 OZr
 Pca
@@ -148,6 +143,7 @@ PCs
 PEntity
 Photoshop
 PKDZBMV
+Plugin
 png
 powercfg
 powerdown
@@ -162,7 +158,9 @@ Ptr
 pwd
 pwsh
 pwshver
+Radeon
 ransomware
+Realtek
 regex
 RNvl
 Ryzen
@@ -172,9 +170,9 @@ SCCM
 scriptblock
 SDK
 Searchbox
-Segoe
 SEH
 sehop
+Sendkey
 Siuf
 SIUFIn
 Skype
@@ -194,12 +192,12 @@ SZZ
 Taskband
 taskbar
 TCUI
-Textblock
 thesysadminchannel
 tkrc
 UInt
 uncomment
 uninstall
+uninstallable
 uninstallapps
 uninstallation
 Uninstalldot
@@ -223,7 +221,6 @@ virtualization
 wdigest
 webapps
 websites
-webview
 wekyb
 Whiteboard
 wiki
@@ -238,6 +235,7 @@ wmi
 Wnd
 wonderhowto
 wpad
+WPF
 wrexit
 WSA
 wscript
@@ -258,6 +256,7 @@ xaml
 Xbox
 xml
 xmlns
+XPackages
 XPS
 yaml
 youtu
