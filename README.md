@@ -14,9 +14,9 @@
 
 ## About
 
-WinRice is a PowerShell script designed to automate setting up a new Windows device or a fresh Windows installation. It automates a few of the useful things that people generally do when installing starting afresh in Windows.
+WinRice is a PowerShell script designed to automate setting up a new Windows device. It automates a few of the useful things that people generally do in a fresh Windows installation or a new Windows device.
   
-## Features
+## Core Features
   - Allows you to batch install apps & features
   - Configures Windows UI
   - Configures Windows Update policies
@@ -33,14 +33,16 @@ WinRice is a PowerShell script designed to automate setting up a new Windows dev
 ## Using WinRice
   
 ### Requirements
-  
-  - You've read the documentation and know what WinRice does. If you're new, start with [`Main-brief.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md).
-  - Your device:
-    - Is connected to the Internet
-    - Is powered by an [in-service Windows version](https://github.com/pratyakshm/WinRice/blob/main/doc/Supported-winver.md).
-    - Does not have any pending restarts
 
- The directory that contains all documents is available [here](https://github.com/pratyakshm/WinRice/tree/main/doc).  
+You must meet these requirements before running WinRice.
+
+  - You've read the documentation and you know what WinRice does. If you're new, start with [`Main-brief.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md).
+  - Your device:
+    - Is connected to the Internet.
+    - Is powered by an [in-service Windows version](https://github.com/pratyakshm/WinRice/blob/main/doc/Supported-winver.md).
+    - Does not have any pending restarts.
+
+The directory that contains all documents is available [here](https://github.com/pratyakshm/WinRice/tree/main/doc).  
  
 ### Using an EXE [Recommended]
   
@@ -48,10 +50,10 @@ Use [this link](https://github.com/pratyakshm/WinRice/releases/download/v0.5.041
 
 ### Alternative methods
 
-Alternatively, you may use this command in PowerShell (Admin) to run WinRice:
+Alternatively, use Win + X shortcut to open the quick links menu, and from there open Terminal (Admin) (or Windows PowerShell (Admin) if you are on Windows 10) and execute this command:
 
 ```
-Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://bit.ly/WinRice'))
+Invoke-WebRequest bit.ly/WinRice | Invoke-Expression
 ```
 
 ## Contributing
