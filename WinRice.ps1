@@ -100,6 +100,8 @@ $tasks = @(
 	# "EnableStorageSense",
 	# "DisableReserves",	   
 	# "EnableReserves",
+	"EnableLongPath",
+	# "DisableLongPath",
 	"RestorePowerOptions",
 	"DisableAutoplay",             
 	# "EnableAutoplay",
@@ -3143,6 +3145,28 @@ function EnableReserves {
 	print "Enabling Reserved Storage..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager" -Name "ShippedWithReserves" -Type DWord -Value 1
 	print "Enabled Reserved Storage."
+}
+
+function EnableLongPath {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
+	space
+	print "Enabling long path support..."
+	New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -Type DWORD -Force | Out-Null
+	print "Enabled long path support."
+}
+
+function DisableLongPath {
+	if (!(check($systemwidepolicies)))
+	{
+		return
+	}
+	space
+	print "Disabling long path support..."
+	Remove-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Type DWord
+	print "Disabled long path support."
 }
 
 # Disable non-essential services.

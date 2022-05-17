@@ -237,13 +237,16 @@ This is useful for OEM devices which ship with a lot of power options hidden by 
 
 ### More OS Level Changes That Are Made:
 
-- Autoplay is disabled
-- AutoRun is disabled 
-- Hibernation is disabled on Desktops
-- 🎛️ OS is set to follow UTC time
-- Num lock is set to be enabled every boot
-- Windows Welcome experiences are disabled
-- Windows Tips notifications are disabled
+Things disabled:
+- Autoplay & Autorun.
+- Hibernation (desktop only).
+- Windows welcome experience after an update which shows what's new.
+- Tips and suggestions when using Windows.
+
+Things enabled:
+- 🎛️ OS may be enabled to follow UTC if its set to follow BIOS time.
+- Num lock on startup.
+- Long path support.
 
 ## 🧪🎛️ Windows Update
 
