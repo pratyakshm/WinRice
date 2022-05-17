@@ -170,11 +170,7 @@ $tasks = @(
 
 # Reverting changes: https://github.com/pratyakshm/WinRice/wiki/Reverting-changes.
 
-# Core functions +++
-function Log($text) {
-	Start-Sleep -Milliseconds 200
-    Write-Host $text
-}
+# Core functions 
 
 function check($test) {
     if ($test -like "y" -or $test -like "yeah" -or $test -like "yes" -or $test -like "yep" -or $test -like "yea" -or $test -like "yah") { 
@@ -202,6 +198,7 @@ function space {
 
 function print($text) {
 	Write-Host $text
+	# Sleep for 150 milliseconds because I am a menace
 	Start-Sleep -Milliseconds 150
 }
 
@@ -253,7 +250,7 @@ function RunWithProgress {
 # Did you read the docs? (Funny stuff).
 $hasReadDoc = ask "By proceeding ahead, you acknowledge that you have read and understood the program documentation. [y/n]"
 if (!(check($hasReadDoc))) {
-	log "You (the user) have not read the program documentation. WinRice will now exit."
+	print "You (the user) have not read the program documentation. WinRice will now exit."
 	exit
 }
 
@@ -3369,7 +3366,7 @@ function SetupWindowsUpdate {
 	)
 	ForEach ($WinUpdatePolicy in $WinUpdatePolicies) 
 	{
-		log "    - $WinUpdatePolicy"
+		print "    - $WinUpdatePolicy"
 	}
 
 	print "Set up Windows Update policies."
