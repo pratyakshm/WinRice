@@ -26,14 +26,21 @@
 ### Things Installed:
 
 - HEVC Video Extensions
+
 - Visual C++ Libraries
-- Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/))
+
+- Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/)
+
+- 🎛️ Chocolatey Package Manager ([Website](https://chocolatey.org/))
+
 - NanaZip ([GitHub](https://github.com/M2Team/NanaZip))
 
 #### 🎛️ Leveraging WinGet to Install Apps
 
 - [`winget.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winget.md)
+
 - [`import.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/import.md)
+
 - [`winstall.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winstall.md)
 
 

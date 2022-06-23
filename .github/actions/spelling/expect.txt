@@ -83,6 +83,7 @@ hypervisorlaunchtype
 img
 inbox
 installapps
+installchoco
 Installdot
 installusing
 isadmin
@@ -220,6 +221,7 @@ VBS
 virtualization
 wdigest
 webapps
+website
 websites
 wekyb
 Whiteboard

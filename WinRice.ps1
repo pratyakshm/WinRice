@@ -15,6 +15,7 @@ $tasks = @(
 	# "InstallVCLibs",
 	# "UninstallVCLibs",
 	"InstallWinGet",
+	"InstallChocolateyPackageManager",
 	"InstallNanaZip", 
 	# "UninstallNanaZip",
 	"WinGetImport",
@@ -456,7 +457,7 @@ if (!(check($customize)))
 	{
 		print "  Apps WILL be installed using: Winstall."
 	}
-	
+	$installchoco = ask "Do you want to install Chocolatey Package Manager? [y/N]"
 	$uninstallapps = ask "Do you want to uninstall non-essential apps? [Y/n]"
 	if (!($uninstallapps))
 	{
@@ -538,6 +539,11 @@ if (!(check($customize)))
 		{
 			Write-Host "winget import method." -ForegroundColor Cyan
 		}
+	}
+
+	## Chocolatey Installation
+	if (check($installchoco)) {
+		Write-Host " - Install Chocolatey Package Manager." -ForegroundColor Cyan
 	}
 
 	## App Uninstallation
@@ -803,7 +809,7 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 	else
 	{
-		print "Could not update Visual C++ Libraries."
+		print "Failed to update Visual C++ Libraries."
 	}
 }
 
@@ -818,7 +824,7 @@ function UninstallVCLibs {
 	Get-AppxPackage *VCLibs* | Remove-AppxPackage
 	if (Get-AppxPackage *VCLibs*) 
 	{
-		print "Could not uninstall Visual C++ Libraries."
+		print "Failed to uninstall Visual C++ Libraries."
 		return
 	}
 	print "Uninstalled Visual C++ Libraries."
@@ -839,12 +845,40 @@ $ProgressPreference = 'SilentlyContinue'
 	Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
 	if (!(Get-Command winget))
 	{
-		print "Could not install WinGet."
+		print "Failed to install WinGet."
 		return
 	}
 	print "Installed WinGet."
 }
 	
+# Install Chocolatey Package Manager.
+function InstallChocolateyPackageManager {
+	if (!($installchoco))
+	{
+		return
+	}
+	if (Get-Command choco)
+	{
+		return
+	}
+	space
+	print "Installing Chocolatey Package Manager..."
+	
+	# Set env variable to make choco installer use Windows inbuilt compression tools instead of downloading and using 7-zip.
+	$env:chocolateyUseWindowsCompression = 'true'
+	
+	# Install choco using their official installation script (https://chocolatey.org/install).
+	[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expressio ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) | Out-Null
+	
+	# Print status message.
+	if (!(Get-Command choco)) {
+		print "Failed to install Chocolatey Package Manager."
+		return 
+	}
+	print "Installed Chocolatey Package Manager."
+}
+
+
 # Install NanaZip.
 function InstallNanaZip {
 	space
@@ -1086,7 +1120,7 @@ $ProgressPreference = 'SilentlyContinue'
 	Remove-Item WinRice -Recurse -Force
 	if (!(Get-AppxPackage *HEVC*))
 	{
-		print "Could not install HEVC Video Extensions."
+		print "Failed to install HEVC Video Extensions."
 		return
 	}
 	
@@ -1110,7 +1144,7 @@ $ProgressPreference = 'SilentlyContinue'
 	}
 	else 
 	{
-		print "Could not uninstall HEVC Video Extensions."
+		print "Failed to uninstall HEVC Video Extensions."
 	}
 }
 
@@ -1856,7 +1890,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 	# do not proceed to run this function further.
 	if (!(Get-Command winget)) 
 	{
-		print "WinGet is not installed. Microsoft OneDrive could not be uninstalled."
+		print "Failed to uninstall Microsoft OneDrive since WinGet isn't installed."
 		return
 	}
 	print "Uninstalling Microsoft OneDrive..."
@@ -1881,7 +1915,7 @@ function InstallOneDrive {
 	# do not proceed to run this function further.
 	if (!(Get-Command winget)) 
 	{
-		print "WinGet is not installed. Could not install Microsoft OneDrive."
+		print "Failed to install Microsoft OneDrive since WinGet isn't installed."
 		return
 	}
 	# Install OneDrive using winget
@@ -1893,7 +1927,7 @@ function InstallOneDrive {
 	$check = winget list Microsoft.OneDrive
 	if ($check -like "No installed package found matching input criteria.") 
 	{
-		print "Could not install Microsoft OneDrive."
+		print "Failed to install Microsoft OneDrive."
 		return
 	}
 	print "Installed Microsoft OneDrive."
@@ -2099,7 +2133,7 @@ $ProgressPreference = 'SilentlyContinue'
 	Start-BitsTransfer https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi 
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Disabled") 
 	{
-		print "Could not install Windows Subsystem for Linux."
+		print "Failed to install Windows Subsystem for Linux."
 		return
 	}
 	Set-Content -Path 'WSL2.ps1' -value 'wsl --set-default-version 2'
@@ -2129,7 +2163,7 @@ $WarningPreference = 'SilentlyContinue'
 	# Print status.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "Microsoft-Windows-Subsystem-Linux").State -like "Enabled") 
 	{
-		print "Could not uninstall Windows Subsystem for Linux."
+		print "Failed to uninstall Windows Subsystem for Linux."
 		return
 	}
 	print "Uninstalled Windows Subsystem for Linux."
@@ -2152,7 +2186,7 @@ $ProgressPreference = 'SilentlyContinue'
 	# Warn if unsupported Edition (not version).
 	if (!(Get-WindowsEdition -Online | Where-Object -FilterScript {$_.Edition -like "Enterprise*" -or $_.Edition -eq "Education" -or $_.Edition -eq "Professional"})) 
 	{
-		print "Could not install Windows Sandbox since $ProductName does not support it."
+		print "Failed to install Windows Sandbox since $ProductName does not support it."
 		return
 	}
 
@@ -2163,7 +2197,7 @@ $ProgressPreference = 'SilentlyContinue'
 	# Print status.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Disabled") 
 	{
-		print "Could not install Windows Sandbox."
+		print "Failed to install Windows Sandbox."
 		return
 	}
 	print "Install Windows Sandbox."
@@ -2195,7 +2229,7 @@ $ProgressPreference = 'SilentlyContinue'
 	# Print status.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "Containers-DisposableClientVM").State -like "Enabled") 
 	{
-		print "Could not uninstall Windows Sandbox."
+		print "Failed to uninstall Windows Sandbox."
 		return
 	}
 	print "Uninstalled Windows Sandbox."
@@ -2224,7 +2258,7 @@ $ProgressPreference = 'SilentlyContinue'
 	# Print status.
 	if ((Get-WindowsOptionalFeature -Online -FeatureName "NetFx3").State -like "Disabled")
 	{
-		print "Could not install .NET 3.5."
+		print "Failed to install .NET 3.5."
 		return
 	}
 	print "Installed .NET 3.5."
