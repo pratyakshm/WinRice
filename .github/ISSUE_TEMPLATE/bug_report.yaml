@@ -9,32 +9,16 @@ body:
       value: |
         Thanks for taking your time to file this report.
   - type: dropdown
-    id: category
-    attributes:
-      label: Select category
-      description: Which category is this issue filed against?
-      multiple: false
-      options:
-        - "Apps"
-        - "Privacy"
-        - "Security"
-        - "OS"
-        - "Windows Explorer"
-        - "Other"
-    validations:
-      required: true
-  - type: dropdown
     id: winver
     attributes:
       label: Windows version
       description: "Check all that apply."
       multiple: true
       options:
-         - "Windows 11 22H2"
-         - "Windows 11 21H2"
-         - "Windows 10 21H2"
-         - "Windows 10 21H1"
-         - "Windows 10 20H2"
+         - "Windows 11, version 22H2 (Fall 2022 Update)"
+         - "Windows 11, version 21H2 (Original Release)"
+         - "Windows 10, version 21H2 (November 2011 Update)"
+         - "Windows 10, version 21H1 (May 2021 Update)"
     validations:
       required: true
   - type: input
