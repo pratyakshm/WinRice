@@ -29,7 +29,7 @@
 
 - Visual C++ Libraries
 
-- Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/)
+- Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/))
 
 - 🎛️ Chocolatey Package Manager ([Website](https://chocolatey.org/))
 
@@ -186,7 +186,7 @@ The LSA, which includes the Local Security Authority Server Service (LSASS) proc
 
 WinRice enables LSA Protection on all devices.
 
-See more at [Configuring Additional LSA Protection](https://docs.microsoft.com/en-us/windows-server/security/credentials-protection-and-management/configuring-additional-lsa-protection)
+See more at [Configuring Additional LSA Protection](https://docs.microsoft.com/en-us/windows-server/security/credentials-protection-and-management/configuring-additional-lsa-protection).
 
 ### Windows Script Host
 
@@ -236,7 +236,7 @@ See more at [111 Attacking EvilCorp Anatomy of a Corporate Hack Sean Metcalf Wil
 
 This is useful for OEM devices which ship with a lot of power options hidden by default. WinRice restores them to the user.
 
-<details><summary> Tap to show / hide picture that demonstrates what the Power Options menu looks like after these changes</summary>
+<details><summary>Screen shot of Advanced power settings applet</summary>
 
 ![image](https://user-images.githubusercontent.com/54220235/149530018-d71f56a5-f1f2-4365-af8b-92a16e28aae3.png)
 

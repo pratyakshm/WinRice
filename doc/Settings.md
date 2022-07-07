@@ -44,6 +44,7 @@ Users can customize their WinRice experience using these Custom Settings if they
 
 WinRice asks if you want to install apps. If you choose to do so, you will be presented with two methods of app installation, which are [Winstall](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winstall.md) and [WinGet import](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/import.md).
 
+WinRice asks if you want to install Chocolatey Package Manager.
 
 ## App Uninstallation
 
@@ -102,7 +103,7 @@ While Microsoft's ML performs quite a good job in itself, WinRice still applies 
 
 ### UTC Time
 
-If your device has Windows and Linux dual booted, its recommended to make Windows OS follow the UTC time in order to avoid time differences with Linux.
+If your device has Windows and Linux dual booted, its recommended to make Windows OS use UTC time when following BIOS time in order to avoid time differences with Linux.
 
 However, some reports have shown that this modification might (unintentionally) make the device not display the correct time.
 

@@ -5,6 +5,7 @@ The user is asked if they want to uninstall such apps. If they choose to do so, 
 If the user chooses to uninstall apps but doesn't specify which apps to uninstall, the following apps will be uninstalled:
 
 - Calendar
+- Clipchamp
 - Cortana
 - Camera (if no camera is detected)
 - Get Help
@@ -29,13 +30,13 @@ WinRice supports uninstalling a list of apps from a text file.
 The text file must be formatted as follows:
 
 - There must be one app name per line.
-- App names must be absolute. Example: `Microsoft.WindowsMaps`
+- Absolute package name shall be used. Example: `Microsoft.WindowsMaps`
 - The filename must be `uninstallapps.txt`.
 - List must be saved in the same folder as WinRice.
 
-If an `uninstallapps.txt` file is detected, WinRice will not ask if the user wants to select which apps to uninstall. The list will be used automatically.
+If an `uninstallapps.txt` file is detected, WinRice won't ask if the user wants to select which apps to uninstall. The list will be used automatically.
 
-**Note:** To get absolute name of an app, use `Get-AppxPackage *app*`.
+**Note:** To get package name of an app, use `Get-AppxPackage *app*`.
 
 ---
 

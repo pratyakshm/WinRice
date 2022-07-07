@@ -11,10 +11,10 @@ All documentation for this program is contained in the [doc](https://github.com/
 **A:** Read [`Reverting-changes.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Reverting-changes.md).
 
 **Q:** **I've run WinRice and I observed an issue.**  
-**A:** [Open a ticket](https://github.com/pratyakshm/WinRice/issues/new/choose) in this repository.
+**A:** [Open a ticket](https://github.com/pratyakshm/WinRice/issues/new/choose).
 
 **Q:** **Please add &lt;feature&gt; to WinRice**  
-**A:** Submit a [Pull request](https://github.com/pratyakshm/WinRice/pulls) with your code or create an [Issue](https://github.com/pratyakshm/WinRice/issues). As long as it follows the WinRice [principles](https://github.com/pratyakshm/WinRice/blob/main/doc/CONTRIBUTING.md#principles) and adds value, I will most likely make it happen.
+**A:** Submit a [Pull request](https://github.com/pratyakshm/WinRice/pulls) with your code or [open a ticket](https://github.com/pratyakshm/WinRice/issues). As long as it follows the WinRice [principles](https://github.com/pratyakshm/WinRice/blob/main/doc/CONTRIBUTING.md#principles) and adds value, I will most likely make it happen.
 
 **Q:** **Which OS versions does WinRice support?**  
 **A:** Refer to [doc/Supported-winver.md](https://github.com/pratyakshm/WinRice/blob/main/doc/Supported-winver.md).
