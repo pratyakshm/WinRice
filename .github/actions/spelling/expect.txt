@@ -4,6 +4,7 @@ adguard
 amd
 api
 appdata
+applet
 apps
 appx
 ARSO
