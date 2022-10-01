@@ -893,7 +893,7 @@ function InstallNanaZip {
 		return
 	}
 	print "Installing NanaZip... (https://github.com/M2Team/NanaZip)"
-	winget install NanaZip -s msstore --accept-source-agreements --accept-package-agreements --accept-source-agreements | Out-Null
+	winget install 9N8G7TSCL18R --accept-source-agreements --accept-package-agreements | Out-Null
 	print "Installed NanaZip."
 }
 
