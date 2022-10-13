@@ -868,7 +868,7 @@ function InstallChocolateyPackageManager {
 	$env:chocolateyUseWindowsCompression = 'true'
 	
 	# Install choco using their official installation script (https://chocolatey.org/install).
-	[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expressio ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) | Out-Null
+	[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) | Out-Null
 	
 	# Print status message.
 	if (!(Get-Command choco)) {
