@@ -65,7 +65,6 @@ Firefox
 flyout
 foreach
 Getstarted
-github
 githubusercontent
 gnj
 HEVC
@@ -125,7 +124,6 @@ MSIX
 msixbundle
 MSPC
 MSSGKG
-msstore
 namespace
 Naruto
 nblggh
@@ -196,6 +194,7 @@ taskbar
 TCUI
 thesysadminchannel
 tkrc
+TSCL
 UInt
 uncomment
 uninstall
@@ -223,7 +222,6 @@ virtualization
 wdigest
 webapps
 website
-websites
 wekyb
 Whiteboard
 wiki
