@@ -1645,9 +1645,6 @@ function UninstallerCLI {
 		"*BubbleWitch3Saga*"
 		"*Twitter*"
 		"*Facebook*"
-		"*Spotify*"
-		"*Minecraft*"
-		"*Dolby*"
 	)
 	ForEach ($SponsoredApp in $SponsoredApps) 
 	{
