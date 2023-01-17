@@ -12,8 +12,8 @@
 
 | Windows OS | Version | Marketing name | OS Build | Servicing Option | Home, Pro, Pro Education and Pro for Workstations editions | Enterprise, Education and IoT Enterprise editions
 | ---------- | ----- | ----- | -------- | -------------------- | -- | -- 
+| Windows 10 | 22H2 | Windows 10 November 2022 Update    | 19045    | General Availability | ✔️ | ✔️
 | Windows 10 | 21H2 | Windows 10 November 2021 Update    | 19044    | General Availability | ✔️ | ✔️
-| Windows 10 | 21H1   | Windows 10 May 2021 Update  | 19043    | General Availability | ✔️ | ✔️
 
 ***
 
@@ -33,7 +33,7 @@ P.S.: If you are a Windows Insider, you may skip checking for compatibility sinc
 
 📢 Data provided in this table is extrapolated from [Microsoft's release health document](https://docs.microsoft.com/en-us/windows/release-health/) for [Windows 11](https://docs.microsoft.com/en-us/windows/release-health/windows11-release-information) and [Windows 10](https://docs.microsoft.com/en-us/windows/release-health/release-information). This is to say, as soon as a Windows version reaches end of servicing for consumer / client editions, WinRice subsequently drops support for it.
 
-⚠️ If the Version and OS build that you see are **NOT** listed in the table above, the version of Windows that your device is running has most likely reached End of servicing which means that your device is no longer receiving security updates and it is vulnerable to attacks. In such a scenario, you need to [update your device](https://support.microsoft.com/en-us/windows/update-windows-3c5ae7fc-9fb6-9af1-1984-b5e0412c556a) to the latest version of Windows. If you want to re-install Windows (strongly recommended), [click here to learn more.](https://github.com/pratyakshm/WinRice/wiki/Fresh-installation-of-Windows).
+⚠️ If the Version and OS build that you see are **NOT** listed in the table above, the version of Windows that your device is running has reached End of servicing which means that your device is no longer receiving security updates and it is vulnerable to attacks. In such a scenario, you need to [update your device](https://support.microsoft.com/en-us/windows/update-windows-3c5ae7fc-9fb6-9af1-1984-b5e0412c556a) to the latest version of Windows. If you want to re-install Windows (strongly recommended), [click here to learn more.](https://github.com/pratyakshm/WinRice/wiki/Fresh-installation-of-Windows).
 
 ---
 
