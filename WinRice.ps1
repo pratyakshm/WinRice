@@ -2768,17 +2768,8 @@ function DisableVBS {
 	print "Disabling Virtualization-based security..."
 	print "  This processor does not natively support MBEC. Emulating it will result in bigger impact on performance on MBEC-unsupported CPUs."
 	print "  See https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity."
-	Start-Sleep -Milliseconds 400
-	# Disable Memory Integrity Core isolation.
-	# Memory Integrity Core Isolation must be disabled before we disable Virtual-ization based security.
-	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" -Name "Enabled" -Type DWord -Value 0
-	# Disable Virtualization-based security.
-	bcdedit.exe /set hypervisorlaunchtype off | Out-Null
+	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard" -Name "HyperVVirtualizationBasedSecurityOptOut" -Type DWord -Value 1
 	print "Disabled Virtualization-based security."
-	space
-	print "  Note that virtualization features powered by Hyper-V such as WSL and WSA will not work until you re-enable Virtualization-based security."
-	print "  Read https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#virtualization-based-security for more."
-	space
 }
 
 function EnableVBS {

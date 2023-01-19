@@ -4,22 +4,21 @@
 
 ## Contents of this page
 
-| Category | Link |
-| -------- | ---- |
-| Apps | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#apps)
-| Features | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#features)
-| Privacy | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#privacy)
-| Security | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#security)
-| OS | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#os)
-| Windows Explorer | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#windows-explorer)
-
-
+| Category         | Link                                                                                             |
+| ---------------- | ------------------------------------------------------------------------------------------------ |
+| Apps             | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#apps)             |
+| Features         | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#features)         |
+| Privacy          | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#privacy)          |
+| Security         | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#security)         |
+| OS               | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#os)               |
+| Windows Explorer | [Click here](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#windows-explorer) |
 
 ## Legend
-| Symbol | Significance |
-| ---------- | -------  |
-| 🎛️  | Tasks prefixed with 🎛️ "control knob" emoji are such tasks which are only run when they are configured. You may learn more by visiting [``Settings.md``](https://github.com/pratyakshm/WinRice/blob/main/doc/Settings.md). |
-| 🧪 | Tasks prefixed with 🧪 "test tube" emoji behave differently when device is detected to be flighting in the Windows Insider Program. |
+
+| Symbol | Significance                                                                                                                                                                                                             |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 🎛️     | Tasks prefixed with 🎛️ "control knob" emoji are such tasks which are only run when they are configured. You may learn more by visiting [`Settings.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Settings.md). |
+| 🧪     | Tasks prefixed with 🧪 "test tube" emoji behave differently when device is detected to be flighting in the Windows Insider Program.                                                                                      |
 
 # Apps
 
@@ -43,7 +42,6 @@
 
 - [`winstall.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winstall.md)
 
-
 ### 🎛️ Apps Uninstalled:
 
 Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/App-uninstallation.md)
@@ -57,17 +55,17 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 
 ## 🔚 End of Apps section
 
-***
+---
 
 # Features
 
 ### 🎛️ Features Installed:
 
 - .NET 3.5
-- Windows Sandbox 
+- Windows Sandbox
 - Windows Subsystem for Linux
 
-### 🎛️ Features Uninstalled: 
+### 🎛️ Features Uninstalled:
 
 - DirectPlay
 - Legacy Components
@@ -78,16 +76,15 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 - Windows Fax & Scan
 - Windows Hello Face (if no Camera is connected to device)
 - Windows PowerShell ISE
-- Windows PowerShell v2 
+- Windows PowerShell v2
 - Windows XPS Features
 - XPS Document Writer
 - WordPad
 - Work Folders Client
 
-
 ## 🔚 End of Features section
 
-***
+---
 
 # Privacy
 
@@ -113,46 +110,39 @@ Refer to [`App-uninstallation.md`](https://github.com/pratyakshm/WinRice/blob/ma
 - Clipboard history
 </details>
 
-
 ## 🔚 End of Privacy section
 
-***
+---
 
 # Security
 
 ### Stay on lock screen post a Windows Update restart
+
 After a device restarts after applying a Windows Update, it stays on the lock screen and awaits manual login from a user.
 
 <!-- >
 ### Virtualization-based Security
-Virtualization-based security, or VBS, uses hardware virtualization features to create and isolate a secure region of memory from the normal operating system. 
-Virtualization-based security causes big performance impact in devices that do not support, amongst many other things, MBEC. In MBEC-unsupported devices, its behavior is emulated which causes the impact.
 
-WinRice disables Virtualization-based security on MBEC-unsupported devices.
-
-**Note:** Disabling Virtualization-based security results in loss of functionality of WSL and WSA as they are powered by Hyper-V. If you use WSL or WSA, you need to re-enable Virtualization-based security.
-
-To enable, open Windows Terminal (Admin) and run this command:
-```
-Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://git.io/J9OZr'))
-```
-After running this command, restart your device to apply the changes.
+Virtualization-based security, or VBS, uses hardware virtualization features to create and isolate a secure region of memory from the normal operating system.
+MBEC (Mode Based Execution Control) is one of the features that VBS requires to be able to run. Typically, devices that do not natively support MBEC, emulate it, causing drastic performance impact.
+On these devices, WinRice disables Virtualization-based security.
 
 See more at [Enable virtualization-based protection of code integrity - docs.microsoft.com](https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity).
 <--->
 
 ### Windows WDigest Credential Caching
 
-Digest Authentication is a challenge/response protocol that was primarily used in Windows Server 2003 for LDAP and web-based authentication. It utilizes Hypertext Transfer Protocol (HTTP) and Simple Authentication Security Layer (SASL) exchanges to authenticate. 
+Digest Authentication is a challenge/response protocol that was primarily used in Windows Server 2003 for LDAP and web-based authentication. It utilizes Hypertext Transfer Protocol (HTTP) and Simple Authentication Security Layer (SASL) exchanges to authenticate.
 
-This is where WDigest comes into play, something to be concerned with related to WDigest is that it stores passwords in clear-text, in memory. If a malicious user has access to an endpoint and is able to run a tool like Mimikatz, not only would they get the hashes currently stored in memory, but they’d also be able to get the clear-text password for the accounts as well. 
+This is where WDigest comes into play, something to be concerned with related to WDigest is that it stores passwords in clear-text, in memory. If a malicious user has access to an endpoint and is able to run a tool like Mimikatz, not only would they get the hashes currently stored in memory, but they’d also be able to get the clear-text password for the accounts as well.
 
 WinRice disables WDigest Credential Caching on all devices.
 
-See more at [What is Digest Authentication?: Logon and Authentication - docs.microsoft.com](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc778868(v%3dws.10)).
+See more at [What is Digest Authentication?: Logon and Authentication - docs.microsoft.com](<https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc778868(v%3dws.10)>).
 
 ### Link-Local Multicast Name Resolution
-LLMNR was (is) a protocol used that allowed name resolution without the requirement of a DNS server. It was (is) able to provide a hostname-to-IP based off a multicast packet sent across the network asking all listening Network-Interfaces to reply if they are authoritatively known as the hostname in the query. 
+
+LLMNR was (is) a protocol used that allowed name resolution without the requirement of a DNS server. It was (is) able to provide a hostname-to-IP based off a multicast packet sent across the network asking all listening Network-Interfaces to reply if they are authoritatively known as the hostname in the query.
 Windows will use LLMNR in certain circumstances to identify certain machines on the network, such as file-servers. If Windows attempts to use LLMNR to identify the server of a file-share and it receives a reply, it will send the current user’s credentials directly to that server assuming it wouldn’t have replied if it wasn’t the authoritative file-server. If that LLMNR received response was actually an impersonator, Windows just disclosed that user’s credential hash to a third-party. What’s worse? The impersonator may forward that packet to the actual file-server, so the user never realizes anything is amiss.
 
 WinRice disables LLMNR on all devices.
@@ -160,7 +150,8 @@ WinRice disables LLMNR on all devices.
 See more at [How to Disable LLMNR & Why You Want To - Black Hills Information Security - blackhillsinfosec.com](https://www.blackhillsinfosec.com/how-to-disable-llmnr-why-you-want-to/).
 
 ### Structured Exception Handling Overwrite Protection
-This feature is designed to block exploits that use the Structured Exception Handler (SEH) overwrite technique. This protection mechanism is provided at run-time. Therefore, it helps protect your device. 
+
+This feature is designed to block exploits that use the Structured Exception Handler (SEH) overwrite technique. This protection mechanism is provided at run-time. Therefore, it helps protect your device.
 
 WinRice enables Structured Exception Handling Overwrite Protection on all devices.
 
@@ -198,17 +189,16 @@ See more at [How-To Disable Windows Script Host - blog.f-secure.com](https://blo
 
 ### Office OLE
 
-OLE allows an editing application to export part of a document to another editing application and then import it with additional content. For example, a desktop publishing system might send some text to a word processor or a picture to a bitmap editor using OLE. 
+OLE allows an editing application to export part of a document to another editing application and then import it with additional content. For example, a desktop publishing system might send some text to a word processor or a picture to a bitmap editor using OLE.
 OLE is misused by malware and is often treated by some as an exploit.
 
 WinRice disables Office OLE.
 
 See more at [111 Attacking EvilCorp Anatomy of a Corporate Hack Sean Metcalf Will Schroeder - youtube.com](https://youtu.be/nJSMJyRNvlM?).
 
-
 ## 🔚 End of Security section
 
-***
+---
 
 # OS
 
@@ -245,12 +235,14 @@ This is useful for OEM devices which ship with a lot of power options hidden by 
 ### More OS Level Changes That Are Made:
 
 Things disabled:
+
 - Autoplay & Autorun.
 - Hibernation (desktop only).
 - Windows welcome experience after an update which shows what's new.
 - Tips and suggestions when using Windows.
 
 Things enabled:
+
 - 🎛️ OS may be enabled to follow UTC if its set to follow BIOS time.
 - Num lock on startup.
 - Long path support.
@@ -274,23 +266,22 @@ Setup the following policies to Windows Update:
 
 ## 🔚 End of OS section
 
-***
-
+---
 
 # Windows Explorer
 
 ## Turn Off the Following:
 
-| Item               | Place                 | OS                        |
-| ------------------ | --------------------- | ------------------- |
-| Widgets icon       | Taskbar         | Windows 11            |
-| Chat icon          | Taskbar         | Windows 11            |
-| Search icon        | Taskbar         | Windows 11 and 10     |
-| Task view          | Taskbar         | Windows 11 and 10     |
-| Cortana            | Taskbar         | Windows 10            |
-| 3D Objects         | File Explorer sidebar | Windows 10      |
-| Meet now           | Other system tray icons | Windows 10    |
-| News and interests | Other system tray icons | Windows 10    |
+| Item               | Place                   | OS                |
+| ------------------ | ----------------------- | ----------------- |
+| Widgets icon       | Taskbar                 | Windows 11        |
+| Chat icon          | Taskbar                 | Windows 11        |
+| Search icon        | Taskbar                 | Windows 11 and 10 |
+| Task view          | Taskbar                 | Windows 11 and 10 |
+| Cortana            | Taskbar                 | Windows 10        |
+| 3D Objects         | File Explorer sidebar   | Windows 10        |
+| Meet now           | Other system tray icons | Windows 10        |
+| News and interests | Other system tray icons | Windows 10        |
 
 </details>
 
@@ -301,11 +292,9 @@ Setup the following policies to Windows Update:
 - Use the Print screen button to open Screen snipping
 - If taskbar is found to not preview windows of opened apps correctly, an attempt is made to fix this.
 
-
 ## 🔚 End of Windows Explorer section
 
-***
-
+---
 
 ## Notes
 
@@ -318,8 +307,6 @@ Setup the following policies to Windows Update:
 - Windows Update policies are not applied in Windows pre-release software.
 
 - Windows Update policies are only applied to Windows editions that support Group policies. These are Education, Enterprise, Enterprise LTSC and Professional editions. Windows editions that are derivates of Windows Core edition (for instance, Windows 11/10 Home) do not support Group policies, hence Windows Update policies cannot be applied to them.
-
-
 
 ---
 
