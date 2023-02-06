@@ -1,13 +1,28 @@
-<p align="left"><a href="https://github.com/pratyakshm/WinRice"><img src="files/banner.png" width="470" height="250"></a></p> 
-<p align="left">
-<img alt="GitHub all releases" src="https://img.shields.io/github/downloads/pratyakshm/WinRice/total?style=for-the-badge">
-<img alt="Issues" src="https://img.shields.io/github/issues/pratyakshm/WinRice?style=for-the-badge"> 
-<img alt="Platform support" src="https://img.shields.io/badge/Windows%2011-Ready-blue?style=for-the-badge&logo=windows11">
-<img alt="Platform support" src="https://img.shields.io/badge/Windows%2010-Ready-yellow?style=for-the-badge&logo=windows">
-</p>
-<h2 align ="left">Set up your Windows device using automation</h2>
-
-<p align="left"><a href="#core-features">Features</a> &bull; <a href="doc">Documentation</a> &bull; <a href="#using-winrice">Usage</a> &bull; <a href="doc/Frequently-answered-questions.md">FAQ</a>   &bull; <a href="LICENSE">License</a> &bull; <a href="https://github.com/pratyakshm/WinRice/blob/main/doc/CONTRIBUTING.md">Contribution</a>
+<table border="0">
+  <tr>
+    <td align="center">
+      <a href="https://github.com/pratyakshm/WinRice">
+        <img src="files/banner.png" width="450" height="225">
+      </a>
+    </td>
+    <td align="center">
+      <h2 align="center">Set up your Windows device using automation</h2>
+      <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/pratyakshm/winrice/total?label=Users&style=for-the-badge">
+      <img alt="Issues" src="https://img.shields.io/github/issues/pratyakshm/WinRice?style=for-the-badge">
+      <br>
+      <img alt="Platform support" src="https://img.shields.io/badge/Windows%2011-Ready-blue?style=for-the-badge&logo=windows11">
+      <img alt="Platform support" src="https://img.shields.io/badge/Windows%2010-Ready-blue?style=for-the-badge&logo=windows">
+      <hr>
+      <p align="center">
+      <a href="#core-features">Features</a> &bull; 
+      <a href="doc">Documentation</a> &bull; 
+      <a href="doc/Frequently-answered-questions.md">FAQ</a> &bull; 
+      <a href="LICENSE">License</a> &bull; 
+      <a href="https://github.com/pratyakshm/WinRice/blob/main/doc/CONTRIBUTING.md">Contribution</a>
+      </p>
+    </td>
+  </tr>
+</table>
 
 ## About
 
@@ -25,29 +40,26 @@ WinRice is a PowerShell script designed to automate setting up a new Windows dev
   - Removes non-essential apps
   - Removes non-essential features
   - Restores all power options
-
-
-## Using WinRice
   
-### Requirements
+## Pre-requisites
 
-You must meet these requirements before running WinRice.
-
-  - You've read the documentation and you know what WinRice does. If you're running WinRice for the first time, take a look at [`Main-brief.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md). The directory that contains all documents is available [here](https://github.com/pratyakshm/WinRice/tree/main/doc).
+  - You've read the documentation. If you're running WinRice for the first time, take a look at [`Main-brief.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md). The directory that contains all documents is available [here](https://github.com/pratyakshm/WinRice/tree/main/doc).
   - Your device must:
     - Be connected to the Internet.
     - Be powered by an [in-service Windows version](https://github.com/pratyakshm/WinRice/blob/main/doc/Supported-winver.md).
     - Not have any pending restarts.
- 
-### Using an EXE [Recommended]
-  
-Use [this link](https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice.exe) to download the program.
+    
+## Download
 
-### Alternative methods
+<a href="https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice.exe"><img alt="Download Now" src="https://user-images.githubusercontent.com/54220235/216923215-0d0ecd81-8d99-47bb-828c-55aa894d3c6a.png"></a>
+
+
+<!-- #### Alternative method
   <details><summary> Click to expand </summary>
   Alternatively, use Win + X shortcut to open the quick links menu, and from there open Terminal (Admin) (or Windows PowerShell (Admin) if you are on Windows 10) and execute this command:
 
-```
+```powershell
 Invoke-WebRequest bit.ly/WinRice | Invoke-Expression
 ```
   </details>
+-->
