@@ -16,7 +16,7 @@ $tasks = @(
 	# "UninstallVCLibs",
 	"InstallWinGet",
 	"InstallChocolateyPackageManager",
-	"InstallNanaZip", 
+	# "InstallNanaZip", 
 	# "UninstallNanaZip",
 	"WinGetImport",
 	"Winstall",
@@ -862,7 +862,7 @@ function InstallChocolateyPackageManager {
 		return
 	}
 	space
-	print "Installing Chocolatey Package Manager..."
+print "Installing Chocolatey Package Manager..."
 	
 	# Set env variable to make choco installer use Windows inbuilt compression tools instead of downloading and using 7-zip.
 	$env:chocolateyUseWindowsCompression = 'true'

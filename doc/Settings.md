@@ -4,12 +4,11 @@ WinRice presents user with default settings that can be reconfigured by the user
 
 There are a few configurable settings in WinRice that have a broader sense of impact on the device usage.
 
-
 # Uninstallation
 
 ## App Uninstallation
 
-A set of non-essential apps [listed in this document](https://github.com/pratyakshm/WinRice/blob/main/doc/App-uninstallation.md) are uninstalled from the device. 
+A set of non-essential apps [listed in this document](https://github.com/pratyakshm/WinRice/blob/main/doc/App-uninstallation.md) are uninstalled from the device.
 
 ## Feature Uninstallation
 
@@ -19,11 +18,11 @@ A set of non-essential features [listed in this part of this document](https://g
 
 ## App Installation
 
-No apps except NanaZip and HEVC Video Extensions are installed. Apps can only be installed if the user opts to use Custom Settings instead of Express Settings.
+No apps except HEVC Video Extensions are installed. Apps can only be installed if the user opts to use Custom Settings instead of Express Settings.
 
 ## Feature Installation
 
-No features are installed. 
+No features are installed.
 
 # Windows Update
 
@@ -33,7 +32,8 @@ Windows quality updates are delayed by 4 days.
 
 Windows feature updates are delayed by up to 20 days.
 
-***
+---
+
 &nbsp;
 
 # Custom Settings
@@ -58,10 +58,9 @@ WinRice asks if you want to uninstall OneDrive.
 
 ### .NET 3.5
 
-.NET 3.5 is a legacy runtime which is used to support running legacy applications and programs. While this may prove useful in corporate environments, with some exceptions, this feature is not too important in consumer devices. 
+.NET 3.5 is a legacy runtime which is used to support running legacy applications and programs. While this may prove useful in corporate environments, with some exceptions, this feature is not too important in consumer devices.
 
 By default, this feature is not installed, hence WinRice asks if you want to install it.
-
 
 ### Windows Subsystem for Linux
 
@@ -77,7 +76,7 @@ By default, this feature is not installed, hence WinRice asks if you want to ins
 
 ## Feature Uninstallation
 
-Windows, by default, ships with optional features, some of which are no longer broadbly used in most consumer devices. Here's a list of the features: [Link](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#features-uninstalled-optional). If none of these features are useful to you, I suggest you to opt into removing them from your device. 
+Windows, by default, ships with optional features, some of which are no longer broadbly used in most consumer devices. Here's a list of the features: [Link](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md#features-uninstalled-optional). If none of these features are useful to you, I suggest you to opt into removing them from your device.
 
 WinRice asks if you want to uninstall these features.
 
@@ -94,6 +93,7 @@ Windows Update, at least in the media, is reputed to cause more problems than of
 While Microsoft's ML performs quite a good job in itself, WinRice still applies policies to Windows Update, if the user asks it to do so.
 
 ### List of Windows Update policies:
+
 - Disabling of automatic updates
 - Delaying of quality updates by 4 days and feature upgrades by 20 days
 - Disabling updating of Microsoft products via Windows Update
@@ -111,9 +111,9 @@ WinRice asks if you want to make this change.
 
 ### System Restore
 
-System Restore is a useful utility to restore your device to a previous timestamp. 
+System Restore is a useful utility to restore your device to a previous timestamp.
 
-Since WinRice performs a good number of registry modifications to a vast amount of devices from notebooks to PCs, across different OS editions, OS versions and hardware, it might sometimes cause something unexpected to occur with your device. 
+Since WinRice performs a good number of registry modifications to a vast amount of devices from notebooks to PCs, across different OS editions, OS versions and hardware, it might sometimes cause something unexpected to occur with your device.
 
 WinRice asks if you want to create a System restore point.
 
@@ -130,7 +130,6 @@ WinRice asks if you want to apply these device-wide changes.
 - Windows Update policies are not applied in Windows pre-release software.
 
 - Windows Update policies are only applied to Windows editions that support Group policies. These are Education, Enterprise, Enterprise LTSC and Professional editions. Windows editions that are derivates of Windows Core edition (for instance, Windows 11/10 Home) do not support Group policies, hence Windows Update policies cannot be applied to them.
-
 
 ---
 

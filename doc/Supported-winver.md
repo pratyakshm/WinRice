@@ -4,18 +4,19 @@
 
 ## Windows 11
 
-| Windows OS | Version | Marketing name | OS Build | Servicing Option | Home, Pro, Pro Education and Pro for Workstations editions | Enterprise, Education and IoT Enterprise editions
-| ---------- | ----- | ----- | -------- | -------------------- | -- | -- 
-| Windows 11 | 21H2  | N/A   | 22000    | General Availability | ✔️ | ✔️
+| Windows OS | Version | Marketing name         | OS Build | Servicing Option     | Home, Pro, Pro Education and Pro for Workstations editions | Enterprise, Education and IoT Enterprise editions |
+| ---------- | ------- | ---------------------- | -------- | -------------------- | ---------------------------------------------------------- | ------------------------------------------------- |
+| Windows 11 | 22H2    | Windows 11 2022 Update | 22621    | General Availability | ✔️                                                         | ✔️                                                |
+| Windows 11 | 21H2    | N/A                    | 22000    | General Availability | ✔️                                                         | ✔️                                                |
 
 ## Windows 10
 
-| Windows OS | Version | Marketing name | OS Build | Servicing Option | Home, Pro, Pro Education and Pro for Workstations editions | Enterprise, Education and IoT Enterprise editions
-| ---------- | ----- | ----- | -------- | -------------------- | -- | -- 
-| Windows 10 | 22H2 | Windows 10 November 2022 Update    | 19045    | General Availability | ✔️ | ✔️
-| Windows 10 | 21H2 | Windows 10 November 2021 Update    | 19044    | General Availability | ✔️ | ✔️
+| Windows OS | Version | Marketing name                  | OS Build | Servicing Option     | Home, Pro, Pro Education and Pro for Workstations editions | Enterprise, Education and IoT Enterprise editions |
+| ---------- | ------- | ------------------------------- | -------- | -------------------- | ---------------------------------------------------------- | ------------------------------------------------- |
+| Windows 10 | 22H2    | Windows 10 November 2022 Update | 19045    | General Availability | ✔️                                                         | ✔️                                                |
+| Windows 10 | 21H2    | Windows 10 November 2021 Update | 19044    | General Availability | ✔️                                                         | ✔️                                                |
 
-***
+---
 
 ## How to check if my device is compatible?
 

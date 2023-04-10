@@ -27,32 +27,35 @@
 ## About
 
 WinRice is a PowerShell script designed to automate setting up a new Windows device. It automates a few of the useful things that people generally do in a fresh Windows installation or a new Windows device.
-  
+
 ## Core Features
-  - Allows you to batch install apps & features
-  - Configures Windows UI
-  - Configures Windows Update policies
-  - Enhances privacy
-  - Disables non-essential tasks
-  - Disables silent installation of apps from Microsoft Store
-  - Disables suggestions and tips
-  - Hardens security
-  - Removes non-essential apps
-  - Removes non-essential features
-  - Restores all power options
-  
+
+- Allows you to batch install apps & features
+- Configures Windows UI
+- Configures Windows Update policies
+- Enhances privacy
+- Disables non-essential tasks
+- Disables silent installation of apps from Microsoft Store
+- Disables suggestions and tips
+- Hardens security
+- Removes non-essential apps
+- Removes non-essential features
+- Restores all power options
+
 ## Pre-requisites
 
-  - You've read the documentation. If you're running WinRice for the first time, take a look at [`Main-brief.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md). The directory that contains all documents is available [here](https://github.com/pratyakshm/WinRice/tree/main/doc).
-  - Your device must:
-    - Be connected to the Internet.
-    - Be powered by an [in-service Windows version](https://github.com/pratyakshm/WinRice/blob/main/doc/Supported-winver.md).
-    - Not have any pending restarts.
-    
+- You've read the documentation. If you're running WinRice for the first time, take a look at [`Main-brief.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/Main-brief.md). The directory that contains all documents is available [here](https://github.com/pratyakshm/WinRice/tree/main/doc).
+- Your device must:
+  - Be connected to the Internet.
+  - Be powered by an [in-service Windows version](https://github.com/pratyakshm/WinRice/blob/main/doc/Supported-winver.md).
+  - Not have any pending restarts.
+  - Be up to date. \*
+
+\* If you've just installed Windows, please ensure that all updates from Microsoft Store and Windows Update are installed. This is because WinRice uses some components that are only available in the latest updates. This is to ensure that WinRice works seamlessly on your device.
+
 ## Download
 
 <a href="https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice.exe"><img alt="Download Now" src="https://user-images.githubusercontent.com/54220235/216923215-0d0ecd81-8d99-47bb-828c-55aa894d3c6a.png"></a>
-
 
 <!-- #### Alternative method
   <details><summary> Click to expand </summary>

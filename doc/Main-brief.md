@@ -32,8 +32,6 @@
 
 - 🎛️ Chocolatey Package Manager ([Website](https://chocolatey.org/))
 
-- NanaZip ([GitHub](https://github.com/M2Team/NanaZip))
-
 #### 🎛️ Leveraging WinGet to Install Apps
 
 - [`winget.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winget.md)
