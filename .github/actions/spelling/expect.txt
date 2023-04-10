@@ -49,6 +49,7 @@ dword
 dws
 dwu
 EAFA
+ecd
 elseif
 emoji
 endregion

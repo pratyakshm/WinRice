@@ -1229,6 +1229,9 @@ function UninstallerGUI {
     # Desktop App Installer
     "Microsoft.DesktopAppInstaller",
 
+	# Get Help
+	"Microsoft.GetHelp",
+
     # Microsoft Store
     "Microsoft.WindowsStore",
 	
@@ -1602,7 +1605,6 @@ function UninstallerCLI {
 		"Microsoft.549981C3F5F10"
 		"Microsoft.BingNews"
 		"Microsoft.BingWeather"
-		"Microsoft.GetHelp" 
 		"Microsoft.Getstarted" # Tips 
 		"Microsoft.Microsoft3DViewer"
 		"Microsoft.MSPaint" # Paint 3D

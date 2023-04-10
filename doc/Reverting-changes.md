@@ -18,20 +18,19 @@ WinRice has a revert function for almost every function it has. For example, sin
 
 4. Edit the function calls section by commenting functions that you do not want to run and vice-versa.
 
-    For example, if you don't want the DisableAdvertisingID function to run, comment it by placing a <kbd>#</kbd> (pound) before the function name.
+   For example, if you don't want the DisableAdvertisingID function to run, comment it by placing a <kbd>#</kbd> (pound) before the function name.
 
-    On the contrary, say if you want the EnableAdvertisingID function to run, uncomment it by removing the pound before its name.
+   On the contrary, say if you want the EnableAdvertisingID function to run, uncomment it by removing the pound before its name.
 
 5. Save the file.
 
 6. Open PowerShell as administrator.
 
-7. In PowerShell, navigate to WinRice's folder (typically `~\Downloads\WinRice-main`).  
+7. In PowerShell, navigate to WinRice's folder (typically `~\Downloads\WinRice-main`).
 
 8. Use command <kbd>Set-ExecutionPolicy Unrestricted -Force -Scope Process</kbd> to force set your ExecutionPolicy for current PSSession to Unrestricted.
 
 9. Use <kbd>./WinRice.ps1</kbd> to execute the script.
-
 
 ## Re-Install Apps and Features
 
@@ -79,7 +78,7 @@ If WinRice removed an app that you want to use, you may use the below links to r
 
 - WinRice cannot uninstall apps that it installed using `winget import` feature.
 
-- WinRice may uninstall apps that it installed using the Winstall feature only if you still have the original Winstall text file which contained the list of apps. 
+- WinRice may uninstall apps that it installed using the Winstall feature only if you still have the original Winstall text file which contained the list of apps.
 
 ---
 

@@ -8,8 +8,7 @@ If the user chooses to uninstall apps but doesn't specify which apps to uninstal
 - Clipchamp
 - Cortana
 - Camera (if no camera is detected)
-- Get Help
-- Mail 
+- Mail
 - Maps
 - Microsoft OneDrive
 - Microsoft News
