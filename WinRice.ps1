@@ -5,6 +5,7 @@
 # Default preset
 $tasks = @(
 ### Maintenance Tasks ###
+	"Check-Requirements",
 	"WinRice",
 	"OSBuildInfo",
 	"CreateSystemRestore",
@@ -164,15 +165,18 @@ $tasks = @(
 	# "EnableChat",
 	"ChangesDone",
 
-###  Tasks after successful run ###
+###  Conclusion ###
 	"Activity",
 	"Success"
 )
 
-# Reverting changes: https://github.com/pratyakshm/WinRice/wiki/Reverting-changes.
+# Core Functions
 
-# Core functions 
+# Change Window Title
+$title=$host.UI.RawUI.WindowTitle
+$host.UI.RawUI.WindowTitle = "pratyakshm's WinRice"
 
+# Test if the user's input matches any possible variations of yes or no and return true or false accordingly
 function check($test) {
     if ($test -like "y" -or $test -like "yeah" -or $test -like "yes" -or $test -like "yep" -or $test -like "yea" -or $test -like "yah") { 
 		return $true
@@ -182,11 +186,13 @@ function check($test) {
 	}
 }
 
+# Terminates the script after waiting for 5 seconds.
 function wrexit {
-	Write-Host "WinRice will now exit."
-	Start-Sleep -Seconds 2
+	Write-Host "Requirements not met. Script is exiting."
+	Start-Sleep -Seconds 5
 	exit
 }
+
 
 function ask($question) {
 	Read-Host $question
@@ -199,8 +205,7 @@ function space {
 
 function print($text) {
 	Write-Host $text
-	# Sleep for 150 milliseconds because I am a menace
-	Start-Sleep -Milliseconds 150
+	Start-Sleep -Milliseconds 150 # I am a menace :D
 }
 
 function RunWithProgress {
@@ -217,7 +222,7 @@ function RunWithProgress {
     )
     $spinner = '\', '|', '/', '-', '\', '|', '/', '-'
 	$endtext = $text
-    # Run given scriptblock in bg
+    # Run given scriptblock in background
     $job = Start-Job -ScriptBlock $Task
     # Spin while job is running
     do {
@@ -243,26 +248,25 @@ function RunWithProgress {
     }
     Write-Host -NoNewline -ForegroundColor $color "`r  [$ind] "; Write-Host "$endtext"
 	# Exit on failure
-	if ($Exit -and $fail) { wrexit }
     return $result
 }
 
-
-# Did you read the docs? (Funny stuff).
+# This function prompts the user to confirm that they have read and understood the program documentation
 $hasReadDoc = ask "By proceeding ahead, you acknowledge that you have read and understood the program documentation. [y/n]"
 if (!(check($hasReadDoc))) {
-	print "You (the user) have not read the program documentation. WinRice will now exit."
-	exit
+	print "You haven't read the program documentation."
+	wrexit
 }
 
-# Core functions ---
+# Create a directory to store log in if it doesn't already exist
 if (!(Test-Path C:\WinRice)) {
 	New-Item C:\WinRice -ItemType Directory | Out-Null 
 }
+
 # Start logging
 Start-Transcript -OutputDirectory "C:\WinRice" | Out-Null 
 
-# Store OS details
+# Store values to later reuse them
 $CurrentVersionPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $CurrentBuild = Get-ItemPropertyValue $CurrentVersionPath -Name CurrentBuild
 $DisplayVersion = Get-ItemPropertyValue $CurrentVersionPath -Name DisplayVersion -ErrorAction SilentlyContinue
@@ -274,9 +278,6 @@ $OSBuild = $OSBuildCore.TrimStart("10.0")
 $BuildBranch = Get-ItemPropertyValue $CurrentVersionPath -Name BuildBranch
 $hkeyuser = (Get-CimInstance -ClassName Win32_UserAccount | Where-Object -FilterScript {$_.Name -eq $env:USERNAME}).SID
 $Insider = (Get-Item -Path "HKLM:\SOFTWARE\Microsoft\WindowsSelfHost\Applicability").Property -contains "IsBuildFlightingEnabled" -or (Get-Item -Path "HKLM:\SOFTWARE\Microsoft\WindowsSelfHost\Applicability").Property -contains "BranchName"
-
-# Change window title
-$host.UI.RawUI.WindowTitle = "pratyakshm's WinRice"
 
 # Display Information
 Clear-Host
@@ -292,59 +293,57 @@ $ProgressPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
 $WarningPreference = 'SilentlyContinue'
 
+function RunChecks {
+    Write-Host "Beginning checks..."
 
-# Begin checks
-Write-Host "Beginning checks..."
+    # Check 1: If supported OS build.
+    $oscheck = {
+        $CurrentBuild = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name CurrentBuild
+        if ($CurrentBuild -lt 19044) {
+            return $false
+        }
+        elseif ($CurrentBuild -ge 19044) {
+            return $true
+        }
+    }
+    RunWithProgress -Text "[1/5] Windows version is supported" -Task $oscheck -Exit $true | Out-Null
 
-# Check 1: If supported OS build.
-$oscheck = {
-	$CurrentBuild = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name CurrentBuild
-	if ($CurrentBuild -lt 19044) {
-		return $false
-	}
-	elseif ($CurrentBuild -ge 19044) {
-		return $true
-	}
-}
-RunWithProgress -Text "[1/5] Windows version is supported" -Task $oscheck -Exit $true | Out-Null
+    # Check 2: If session is elevated.
+    $isadmin = {
+        $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+        $admin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+        return $admin
+    }
+    RunWithProgress -Text "[2/5] Session is elevated" -Task $isadmin -Exit $true | Out-Null
 
+    # Check 3: Internet Connection.
+    $isonline = {
+        Import-Module BitsTransfer
+        Start-BitsTransfer https://raw.githubusercontent.com/WinRice/Files/main/File.txt
+        if (Test-Path File.txt) {
+            Remove-Item File.txt
+            return $true
+        }
+        elseif (!(Test-Path File.txt)) {
+            return $false | Out-Null
+        }
+    }
+    RunWithProgress -Text "[3/5] Device is connected to the Internet" -Task $isonline -Exit $true | Out-Null
 
-# Check 2: If session is elevated.
-$isadmin = {
-	$currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
-	$admin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-	return $admin
-}
-RunWithProgress -Text "[2/5] Session is elevated" -Task $isadmin -Exit $true | Out-Null
+    # Check 4: Device form-factor (https://devblogs.microsoft.com/scripting/hey-scripting-guy-weekend-scripter-how-can-i-use-wmi-to-detect-laptops/).
+    if(Get-WmiObject -Class Win32_SystemEnclosure | Where-Object {$_.ChassisTypes -eq 9 -or $_.ChassisTypes -eq 10 -or $_.ChassisTypes -eq 14}) 
+    { 
+        $isLaptop = $true
+    }
 
-# Check 3: Internet Connection.
-$isonline = {
-	Import-Module BitsTransfer
-	Start-BitsTransfer https://raw.githubusercontent.com/WinRice/Files/main/File.txt
-	if (Test-Path File.txt) {
-		Remove-Item File.txt
-		return $true
-	}
-	elseif (!(Test-Path File.txt)) {
-		return $false | Out-Null
-	}
-}
-RunWithProgress -Text "[3/5] Device is connected to the Internet" -Task $isonline -Exit $true | Out-Null
+    # Task 1: Import Appx Module to PowerShell if necessary.
+    $pwshver = {
+        Import-Module -Name Appx -UseWindowsPowerShell -WarningAction "SilentlyContinue" | Out-Null
+        return $true
+    }
+    RunWithProgress -Text "[4/5] Setting up PowerShell" -Task $pwshver -Exit $true | Out-Null
 
-# Check 4: Device form-factor (https://devblogs.microsoft.com/scripting/hey-scripting-guy-weekend-scripter-how-can-i-use-wmi-to-detect-laptops/).
-if(Get-WmiObject -Class Win32_SystemEnclosure | Where-Object {$_.ChassisTypes -eq 9 -or $_.ChassisTypes -eq 10 -or $_.ChassisTypes -eq 14}) 
-{ 
-	$isLaptop = $true
-}
-
-# Task 1: Import Appx Module to PowerShell if necessary.
-$pwshver = {
-	Import-Module -Name Appx -UseWindowsPowerShell -WarningAction "SilentlyContinue" | Out-Null
-	return $true
-}
-RunWithProgress -Text "[4/5] Setting up PowerShell" -Task $pwshver -Exit $true | Out-Null
-
-# Check 5: Check for pending restarts (part of code used here was picked from https://thesysadminchannel.com/remotely-check-pending-reboot-status-powershell).
+    # Check 5: Check for pending restarts (part of code used here was picked from https://thesysadminchannel.com/remotely-check-pending-reboot-status-powershell).
 $isrestartpending = {
 	param (
 		[Parameter(
@@ -382,6 +381,7 @@ $isrestartpending = {
 $WMI_Reg        = $null
 $SCCM_Namespace = $null
 RunWithProgress -Text "[5/5] Device session is fresh" -Task $isrestartpending -Exit $true | Out-Null
+
 
 # Conclude checks.
 Start-Sleep -Milliseconds 100
@@ -512,10 +512,10 @@ if (!(check($customize)))
 		$drivers = ask "Do you want to turn off driver updates from Windows Update? [y/N]"
 	}
 	space
-	$UseUTSCWhenFollowBIOSTime = ask "Do you want Windows to use UTC when it follows BIOS time? Warning: This may have unintended consequences. [y/N]"
-	if (!($UseUTSCWhenFollowBIOSTime))
+	$UseUTCWhenFollowBIOSTime = ask "Do you want Windows to use UTC when it follows BIOS time? Warning: This may have unintended consequences. [y/N]"
+	if (!($UseUTCWhenFollowBIOSTime))
 	{
-		$UseUTSCWhenFollowBIOSTime = "n"
+		$UseUTCWhenFollowBIOSTime = "n"
 	}
 	Write-Host "For some changes to take proper effect, they must be applied to all users in this device."
 	$systemwidepolicies = ask "Do you want to apply those changes? [Y/n]"
@@ -617,7 +617,7 @@ if (!(check($customize)))
 	{
 		Write-Host " - Create a System restore point." -ForegroundColor Cyan
 	}
-	if (check($UseUTSCWhenFollowBIOSTime))
+	if (check($UseUTCWhenFollowBIOSTime))
 	{
 		Write-Host " - Set Windows to use UTC when following BIOS time." -ForegroundColor DarkRed
 	}
@@ -3086,7 +3086,7 @@ function EnableHibernation {
 
 # Make Windows follow BIOS time
 function BIOSTimeUTC {
-	if (!(check($UseUTSCWhenFollowBIOSTime)))
+	if (!(check($UseUTCWhenFollowBIOSTime)))
 	{
 		return
 	}
