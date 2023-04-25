@@ -1,28 +1,20 @@
-<table border="0">
-  <tr>
-    <td align="center">
-      <a href="https://github.com/pratyakshm/WinRice">
-        <img src="files/banner.png" width="450" height="225">
-      </a>
-    </td>
-    <td align="center">
-      <h2 align="center">Set up your Windows device using automation</h2>
-      <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/pratyakshm/winrice/total?label=Users&style=for-the-badge">
-      <img alt="Issues" src="https://img.shields.io/github/issues/pratyakshm/WinRice?style=for-the-badge">
-      <br>
-      <img alt="Platform support" src="https://img.shields.io/badge/Windows%2011-Ready-blue?style=for-the-badge&logo=windows11">
-      <img alt="Platform support" src="https://img.shields.io/badge/Windows%2010-Ready-blue?style=for-the-badge&logo=windows">
-      <hr>
-      <p align="center">
-      <a href="#core-features">Features</a> &bull; 
-      <a href="doc">Documentation</a> &bull; 
-      <a href="doc/Frequently-answered-questions.md">FAQ</a> &bull; 
-      <a href="LICENSE">License</a> &bull; 
-      <a href="https://github.com/pratyakshm/WinRice/blob/main/doc/CONTRIBUTING.md">Contribution</a>
-      </p>
-    </td>
-  </tr>
-</table>
+<p align="center">
+ <img alt="Files Logo" <img src="files/banner.png" width="450">
+ <h2 align="center">WinRice - Set up your Windows device using automation
+</h2>
+</p>
+
+<p align="center">
+<img alt="No. of downloads" src="https://img.shields.io/github/downloads/pratyakshm/WinRice/total">  <img alt="GitHub issues" src="https://img.shields.io/github/issues/pratyakshm/WinRice">   <img alt="Platform support" src="https://img.shields.io/badge/Windows%2011-Ready-blue?&logo=windows11">  <img alt="Platform support" src="https://img.shields.io/badge/Windows%2010-Ready-blue?&logo=windows">
+</p>
+
+<p align="center">
+<a href="#core-features">Features</a> &bull; 
+<a href="doc">Documentation</a> &bull; 
+<a href="doc/Frequently-answered-questions.md">FAQ</a> &bull; 
+<a href="LICENSE">License</a> &bull; 
+<a href="https://github.com/pratyakshm/WinRice/blob/main/doc/CONTRIBUTING.md">Contribution</a>
+</p>
 
 ## About
 
@@ -30,17 +22,17 @@ WinRice is a PowerShell script designed to automate setting up a new Windows dev
 
 ## Core Features
 
-- Allows you to batch install apps & features
+- Batch installs apps and features automatically
 - Configures Windows UI
 - Configures Windows Update policies
 - Enhances privacy
 - Disables non-essential tasks
 - Disables silent installation of apps from Microsoft Store
 - Disables suggestions and tips
+- Exposes hidden power options
 - Hardens security
 - Removes non-essential apps
 - Removes non-essential features
-- Restores all power options
 
 ## Pre-requisites
 
