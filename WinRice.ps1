@@ -444,8 +444,25 @@ if (!(check($customize))) {
 		print "  Apps WILL be installed using: winget import."
 	}
 	elseif ($installusing -eq "2") {
-		print "  Apps WILL be installed using: Winstall."
+		$fileName = "Winstall.txt"
+		$faqLink = "https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winstall.md"
+		$filePath = "$PWD\Winstall.txt"
+
+		if (Test-Path -Path $filePath -PathType Leaf) {
+			$content = Get-Content -Path $filePath
+		
+			if ($null -eq $content -or $content.Length -eq 0) {
+				Write-Host "For a tutorial on creating the '$fileName' file, please visit: $faqLink"
+				Start-Process -FilePath "notepad.exe" -ArgumentList $filePath
+			}
+		}
+		else {
+			New-Item -ItemType File -Path $fileName -Force | Out-Null
+			Write-Host "For a tutorial on creating the '$fileName' file, please visit: $faqLink"
+			Start-Process -FilePath "notepad.exe" -ArgumentList $fileName -Wait
+		}
 	}
+	
 	$installchoco = ask "Do you want to install Chocolatey Package Manager? [y/N]"
 	$uninstallapps = ask "Do you want to uninstall non-essential apps? [Y/n]"
 	if (!($uninstallapps)) {
@@ -888,24 +905,11 @@ function Winstall {
 		return
 	}
 	# Try Winstall.txt
-	if (Test-Path Winstall.txt) {
-		print "Winstall"
+	print "Winstall"
+	$filePath = "$PWD\Winstall.txt"
+	if (Test-Path -Path $filePath -PathType Leaf) {
 		# Get each line from the text file and use winget install command on it.
-		print "Select Winstall text file from File Picker UI"
 		Get-Content 'Winstall.txt' | ForEach-Object 
-		{
-			$App = $_.Split('=')
-			print "    Installing $App..."
-			winget install "$App" --source winget --accept-package-agreements --accept-source-agreements --silent | Out-Null
-		}
-		print "Winstall has successfully installed the app(s)."
-	}
-	# Try winstall.txt
-	elseif (Test-Path winstall.txt) {
-		print "Winstall"
-		# Get each line from the text file and use winget install command on it.
-		print "Select Winstall text file from File Picker UI"
-		Get-Content 'winstall.txt' | ForEach-Object 
 		{
 			$App = $_.Split('=')
 			print "    Installing $App..."
@@ -915,14 +919,12 @@ function Winstall {
 	}
 	else {
 		[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
-		print "Winstall"
 		print "Select Winstall text file from File Picker UI"
 		$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
 		$OpenFileDialog.InitialDirectory = $initialDirectory
 		$OpenFileDialog.Filter = "Text file (*.txt)| *.txt"
 		$OpenFileDialog.ShowDialog() | Out-Null
 		if ($OpenFileDialog.FileName) {
-			print "Starting Winstall..."
 			Get-Content $OpenFileDialog.FileName | ForEach-Object 
 			{					
 				$App = $_.Split('=')
@@ -951,26 +953,13 @@ function Winuninstall {
 	if (!(check($sure))) {
 		return
 	}
+	print "Winunstall"
 
 	# Try Winstall.txt
-	if (Test-Path Winstall.txt) {
-		print "Winstall"
+	$filePath = "$PWD\Winstall.txt"
+	if (Test-Path -Path $filePath -PathType Leaf) {
 		# Get each line from the text file and use winget install command on it.
-		print "Select Winstall text file from File Picker UI"
 		Get-Content 'Winstall.txt' | ForEach-Object 
-		{
-			$App = $_.Split('=')
-			print "    Uninstalling $App..."
-			winget uninstall "$App" --accept-source-agreements --silent | Out-Null
-		}
-		print "Winstall has uninstalled the app(s)."
-	}
-	# Try winstall.txt
-	elseif (Test-Path winstall.txt) {
-		print "Winstall"
-		# Get each line from the text file and use winget install command on it.
-		print "Select Winstall text file from File Picker UI"
-		Get-Content 'winstall.txt' | ForEach-Object 
 		{
 			$App = $_.Split('=')
 			print "    Uninstalling $App..."
@@ -980,14 +969,12 @@ function Winuninstall {
 	}
 	else {
 		[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
-		print "Winstall"
 		print "Select Winstall text file from File Picker UI"
 		$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
 		$OpenFileDialog.InitialDirectory = $initialDirectory
 		$OpenFileDialog.Filter = "Text file (*.txt)| *.txt"
 		$OpenFileDialog.ShowDialog() | Out-Null
 		if ($OpenFileDialog.FileName) {
-			print "Starting Winstall..."
 			Get-Content $OpenFileDialog.FileName | ForEach-Object 
 			{					
 				$App = $_.Split('=')
