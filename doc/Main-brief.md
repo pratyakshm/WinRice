@@ -270,7 +270,7 @@ Setup the following policies to Windows Update:
 
 ## Turn Off the Following:
 
-| Item               | Place                   | OS                |
+| Item               | Area Affected           | OS                |
 | ------------------ | ----------------------- | ----------------- |
 | Widgets icon       | Taskbar                 | Windows 11        |
 | Chat icon          | Taskbar                 | Windows 11        |
@@ -285,10 +285,11 @@ Setup the following policies to Windows Update:
 
 ## More Changes:
 
-- Set File Explorer to open This PC by default
-- Turn off Keyboard shortcut for Sticky keys
-- Use the Print screen button to open Screen snipping
-- If taskbar is found to not preview windows of opened apps correctly, an attempt is made to fix this.
+- Set File Explorer to open This PC by default.
+- Turn off Keyboard shortcut for Sticky keys.
+- If ShareX is installed, WinRice disables the Print Screen key behavior of launching the Snipping Tool.
+- If the taskbar is detected to have incorrect window preview behavior for opened apps, an attempt is made to fix it.
+
 
 ## 🔚 End of Windows Explorer section
 
@@ -304,7 +305,7 @@ Setup the following policies to Windows Update:
 
 - Windows Update policies are not applied in Windows pre-release software.
 
-- Windows Update policies are only applied to Windows editions that support Group policies. These are Education, Enterprise, Enterprise LTSC and Professional editions. Windows editions that are derivates of Windows Core edition (for instance, Windows 11/10 Home) do not support Group policies, hence Windows Update policies cannot be applied to them.
+- Windows Update policies are only applied to Windows editions that support Group policies. These are Education, Enterprise, Enterprise LTSC and Professional editions. Windows editions that are derivates of Windows Core edition (for instance, Windows 11 / 10 Home) do not support Group policies, and as a result Windows Update policies cannot be applied to them.
 
 ---
 

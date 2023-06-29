@@ -134,8 +134,8 @@ $tasks = @(
 
 	### Windows Explorer ###
 	"WindowsExplorer",
-	"EnablePrtScrToSnip",		   
-	# "DisablePrtScrSnip",
+	# "EnablePrtScrToSnip",		   
+	"DisablePrtScrSnip",
 	# "EnableExtensions",
 	# "DisableExtensions",
 	"DisableRecentFilesInQuickAccess",
@@ -953,7 +953,7 @@ function Winuninstall {
 	if (!(check($sure))) {
 		return
 	}
-	print "Winunstall"
+	print "Winuninstall"
 
 	# Try Winstall.txt
 	$filePath = "$PWD\Winstall.txt"
@@ -3234,17 +3234,21 @@ function WindowsExplorer {
 # Use Print screen button to open screen skipping.
 function EnablePrtScrToSnip {
 	space
-	print "Binding Print Screen key to launch Snip overlay..."
+	print "Assigning Print Screen key to launch Snipping Tool..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 1
-	print "Print screen key will now invoke Snip overlay."
+	print "Print screen key will now launch Snipping tool."
 }
 	
 # Don't use Print screen button to open screen skipping.
 function DisablePrtScrSnip {
+	if (!(Get-AppxPackage *ShareX*)) {
+		print "ShareX was not found. Print Screen key behavior will not be changed."
+		return
+	} 	
 	space
-	print "Unbinding Snip overlay launch from Print screen key...."
+	print "Unassigning Snipping Tool action from Print Screen key..."
 	Set-ItemProperty -Path "HKCU:\Control Panel\Keyboard" -Name "PrintScreenKeyForSnippingEnabled" -Type DWord -Value 0
-	print "Print screen key will no longer invoke Snip overlay."
+	print "Print Screen key will no longer invoke Snipping Tool."
 }
 
 # Show extensions.
