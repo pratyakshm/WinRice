@@ -136,7 +136,7 @@ $tasks = @(
 	"WindowsExplorer",
 	# "EnablePrtScrToSnip",		   
 	"DisablePrtScrSnip",
-	# "EnableExtensions",
+	"EnableExtensions",
 	# "DisableExtensions",
 	"DisableRecentFilesInQuickAccess",
 	# "ShowRecentFilesInQuickAccess",
@@ -3254,9 +3254,9 @@ function DisablePrtScrSnip {
 # Show extensions.
 function EnableExtensions {
 	space
-	print "Showing extensions in file names..."
+	print "Configuring File Explorer to show extensions in file names..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 0
-	print "Enabled showing of extensions next to files."
+	print "File extensions will now be shown."
 }
 
 # Hide extensions.
@@ -3264,7 +3264,7 @@ function DisableExtensions {
 	space
 	print "Disabling extensions from file names..."
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Type DWord -Value 1
-	print "Disabled showing extensions next to files."
+	print "File extensions will no longer be shown."
 }
 
 # Hide Recent files in Quick Access.
