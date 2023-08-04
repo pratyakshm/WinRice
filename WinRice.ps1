@@ -2544,9 +2544,8 @@ function DisableVBS {
 	space
 	# Check if current processor supports MBEC.
 	# (https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity)
-	# This function disables Virtualization based security if your device's
-	# processor does not support MBEC. On unsupported processors, MBEC is emulated
-	# which taxes CPU performance.
+	# This function disables Virtualization based security if your device's processor does not support MBEC. On unsupported processors,
+	# MBEC is emulated which taxes CPU performance.
 	$mbec = Get-CimInstance -ClassName Win32_DeviceGuard -Namespace root\Microsoft\Windows\DeviceGuard | Select-Object AvailableSecurityProperties
 	if ($mbec -contains 7) {
 		return
@@ -2564,8 +2563,7 @@ function EnableVBS {
 	}
 	space
 	print "Enabling Virtualization-based security..."
-	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" -Name "Enabled" -Type DWord -Value 1
-	bcdedit.exe /set hypervisorlaunchtype auto | Out-Null
+	Remove-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard" -Name "HyperVVirtualizationBasedSecurityOptOut"
 	print "Enabled Virtualization-based security."
 }
 
