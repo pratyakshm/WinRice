@@ -2551,9 +2551,13 @@ function DisableVBS {
 		return
 	}
 	print "Disabling Virtualization-based security..."
-	print "  This processor does not natively support MBEC. Emulating it will result in bigger impact on performance on MBEC-unsupported CPUs."
+	print "  Warning: This processor lacks native support for MBEC. Windows 11 will emulate MBEC by default, leading to significant performance loss."
+	print "  As a result, VBS is disabled to eliminate MBEC emulation and unlock huge performance boost."
+	print"  P.S.: In a specific FPS game, over 100% FPS boost was observed after disabling VBS."
 	print "  See https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity."
-	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard" -Name "HyperVVirtualizationBasedSecurityOptOut" -Type DWord -Value 1
+	New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard" -Name "HyperVVirtualizationBasedSecurityOptOut" -Type DWord -Value 1 | Out-Null # Undocumented reg to opt out from Hyper-V based VBS
+	New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard" -Name "EnableVirtualizationBasedSecurity" -Type DWord -Value 0 | Out-Null # Disables VBS
+	New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" -Name "Enabled" -Type DWord -Value 0 | Out-Null # Core isolation switch
 	print "Disabled Virtualization-based security."
 }
 
@@ -2564,6 +2568,8 @@ function EnableVBS {
 	space
 	print "Enabling Virtualization-based security..."
 	Remove-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard" -Name "HyperVVirtualizationBasedSecurityOptOut"
+	Remove-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard" -Name "EnableVirtualizationBasedSecurity"
+	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" -Name "Enabled" -Type DWord -Value 1
 	print "Enabled Virtualization-based security."
 }
 
