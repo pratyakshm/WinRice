@@ -20,6 +20,10 @@
 
 WinRice is a PowerShell script designed to automate setting up a new Windows device. It automates a few of the useful things that people generally do in a fresh Windows installation or a new Windows device.
 
+## Download
+[<img src="https://github.com/pratyakshm/WinRice/assets/54220235/5ad6f92c-84e9-4730-b6ed-b57b625b5db1" alt="Download Button">](https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice.exe)
+
+
 ## Core Features
 
 - Batch installs apps and features automatically
@@ -45,11 +49,11 @@ WinRice is a PowerShell script designed to automate setting up a new Windows dev
 
 \* If you've just installed Windows, please ensure that all updates from Microsoft Store and Windows Update are installed. This is because WinRice uses some components that are only available in the latest updates. This is to ensure that WinRice works seamlessly on your device.
 
-## Download
+<!--  ## Download
 
-<a href="https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice.exe"><img alt="Download Now" src="https://user-images.githubusercontent.com/54220235/216923215-0d0ecd81-8d99-47bb-828c-55aa894d3c6a.png"></a>
+[<img src="https://github.com/pratyakshm/WinRice/assets/54220235/b0357402-d611-4638-afbb-4d6134ccd9dc" alt="Frame 32" width="300" height="200">](https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice.exe)
 
-<!-- #### Alternative method
+#### Alternative method
   <details><summary> Click to expand </summary>
   Alternatively, use Win + X shortcut to open the quick links menu, and from there open Terminal (Admin) (or Windows PowerShell (Admin) if you are on Windows 10) and execute this command:
 
