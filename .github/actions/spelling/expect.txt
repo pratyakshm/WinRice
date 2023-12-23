@@ -1,5 +1,6 @@
 aae
 abaf
+abhidahal
 adguard
 amd
 api
@@ -12,6 +13,8 @@ Autochk
 Autoplay
 Autorun
 backdoors
+bak
+baae
 bbebe
 bbwe
 bcdedit
@@ -25,6 +28,7 @@ Candara
 cbb
 CCWWT
 Ceip
+CETYU
 checkbox
 Cim
 Clipchamp
@@ -60,6 +64,7 @@ Facebook
 farag
 fba
 FDB
+FDFC
 fedd
 FHV
 Firefox
@@ -86,6 +91,7 @@ inbox
 installapps
 installchoco
 Installdot
+installflowlauncher
 installusing
 isadmin
 isonline
@@ -145,6 +151,7 @@ PEntity
 Photoshop
 PKDZBMV
 Plugin
+plugins
 png
 powercfg
 powerdown
