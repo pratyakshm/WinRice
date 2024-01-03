@@ -1,5 +1,5 @@
 # This file is a part of the WinRice software
-# Copyright (c) 2020-2023 Pratyaksh Mehrotra <contact@pratyakshm.com>
+# Copyright (c) 2020-2024 Pratyaksh Mehrotra <contact@pratyakshm.com>
 # All rights reserved.
 
 # Default preset
@@ -898,7 +898,7 @@ function InstallFlowLauncher {
 	$backupPath = Join-Path -Path $settingsFolderPath -ChildPath "Settings.json.bak"
 
 	# Delete the backup file to avoid unintended overwrite
-	Remove-Item -Path $backupPath -Force
+	Remove-Item -Path $backupPath -Force -ErrorAction SilentlyContinue
 
 	# Download the onsetGlaze theme for Flow
 	$url = "https://raw.githubusercontent.com/abhidahal/onsetGlaze.flow/main/OnsetGlaze.xaml"

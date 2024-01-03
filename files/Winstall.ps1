@@ -1,5 +1,5 @@
 # This file is a part of the WinRice software
-# Copyright (c) 2020-2023 Pratyaksh Mehrotra <contact@pratyakshm.com>
+# Copyright (c) 2020-2024 Pratyaksh Mehrotra <contact@pratyakshm.com>
 # All rights reserved.
 
 Function print($text) {
