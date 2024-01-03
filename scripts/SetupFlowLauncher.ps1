@@ -1,28 +1,21 @@
 # This file is a part of the WinRice software
 # Copyright (c) 2020-2024 Pratyaksh Mehrotra <contact@pratyakshm.com>
 # All rights reserved.
-Function space {
-	Write-Host " "
-}
 
-Function print($text) {
-	Write-Host $text
-}
-
-print "Installing Flow Launcher..."
+Write-Host "Installing Flow Launcher..."
 winget install Flow-Launcher.Flow-Launcher | Out-Null
 
 # Check if Flow Launcher is successfully installed.
 $packageId = "Flow-Launcher.Flow-Launcher"
 $installedPackages = winget list
 if ($installedPackages -match $packageId) {
-	print "Flow Launcher is installed."
+	Write-Host "Flow Launcher is installed."
 } else {
-	print "Failed to install Flow Launcher."
+	Write-Host "Failed to install Flow Launcher."
 	return
 }
 
-print "Customizing Flow Launcher..."
+Write-Host "Customizing Flow Launcher..."
 
 # Stop Flow Launcher running processes and remove Settings backup to ensure no unintended overwrite
 Stop-Process -Name "flow.launcher" -Force
@@ -76,16 +69,16 @@ function DisablePlugins {
 $jsonContent = Get-Content -Path $settingsPath | ConvertFrom-Json
 DisablePlugins -Object $jsonContent.PluginSettings.Plugins
 $jsonContent | ConvertTo-Json -Depth 100 | Set-Content -Path $settingsPath
-print "Customization performed: "
-print "    – Set Theme to OnsetGlaze."
-print "    – Disabled the following plugins:"
-print "    		– Browser Bookmarks"
-print "    		– Calculator"
-print "    		– Explorer"
-print "    		– Plugin Indicator"
-print "    		– Plugins Manager"
-print "    		– Shell"
-print "    		– URL"
-print "    		– Web Searches"
-print "    		– Windows Settings"
-print "You may change these preferences later in Flow Launcher Settings."
+Write-Host "Customization performed: "
+Write-Host "    – Set Theme to OnsetGlaze."
+Write-Host "    – Disabled the following plugins:"
+Write-Host "    		– Browser Bookmarks"
+Write-Host "    		– Calculator"
+Write-Host "    		– Explorer"
+Write-Host "    		– Plugin Indicator"
+Write-Host "    		– Plugins Manager"
+Write-Host "    		– Shell"
+Write-Host "    		– URL"
+Write-Host "    		– Web Searches"
+Write-Host "    		– Windows Settings"
+Write-Host "You may change these preferences later in Flow Launcher Settings."

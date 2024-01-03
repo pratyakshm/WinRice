@@ -1,5 +1,5 @@
 <p align="center">
- <img alt="Files Logo" <img src="files/banner.png" width="450">
+ <img alt="Files Logo" <img src=".github/banner.png" width="450">
  <h2 align="center">WinRice - Set up your Windows device using automation
 </h2>
 </p>
