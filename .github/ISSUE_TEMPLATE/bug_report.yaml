@@ -15,10 +15,9 @@ body:
       description: "Check all that apply."
       multiple: true
       options:
-         - "Windows 11, version 22H2 (Fall 2022 Update)"
-         - "Windows 11, version 21H2 (Original Release)"
-         - "Windows 10, version 21H2 (November 2011 Update)"
-         - "Windows 10, version 21H1 (May 2021 Update)"
+         - "Windows 11, version 24H2 (2024 Update)"
+         - "Windows 11, version 23H2 (2023 Update)"
+         - "Windows 10, version 22H2 (2022 Update)"
     validations:
       required: true
   - type: input

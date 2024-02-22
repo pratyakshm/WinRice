@@ -301,10 +301,10 @@ Write-Host "Beginning checks..."
 # Check 1: If supported OS build.
 $oscheck = {
 	$CurrentBuild = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name CurrentBuild
-	if ($CurrentBuild -lt 19044) {
+	if ($CurrentBuild -lt 19045) {
 		return $false
 	}
-	elseif ($CurrentBuild -ge 19044) {
+	elseif ($CurrentBuild -ge 19045) {
 		return $true
 	}
 }
