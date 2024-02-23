@@ -871,7 +871,7 @@ function UninstallNanaZip {
 }
 
 function InstallFlowLauncher {
-	if (!($installflowlauncher)) {
+	if (!(check($installflowlauncher))) {
 		return
 	}
 	print "Installing Flow Launcher..."
