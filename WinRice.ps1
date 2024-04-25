@@ -67,8 +67,8 @@ $tasks = @(
 	# "EnableSilentInstallApps",
 	"HideSuggestedContentInSettings",
 	# "ShowSuggestedContentInSettings",
-	"HideSuggestedContentInStart",
-	# "ShowSuggestedContentInStart",
+	"DisableAdsInStart",
+	# "EnableAdsInStart",
 	"DisableTailoredExperiences",	
 	# "EnableTailoredExperiences",s
 	"TelemetryRequired",				
@@ -2524,26 +2524,32 @@ function ShowSuggestedContentInSettings {
 	print "Enabled suggested content in Settings app."
 }
 
-# Disable "Show me suggested content in Start menu".
-function HideSuggestedContentInStart {
-	if ($CurrentBuild -ge 22000) {
-		return
-	}
+# Disable recommendations and suggested content in Start menu
+function DisableAdsInStart {
 	space 
-	print "Disabling suggested content in Start menu..."
-	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 0
-	print "Disabled suggested content in Start menu."
+	print "Disabling suggested content and recommendations in Start menu..."
+	
+	if ($CurrentBuild -ge 22000) {
+		New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name Start_IrisRecommendations -Type DWord -Value 0 | Out-Null # Disables ads in Recommended section; applies to Windows 11
+	}
+	if ($CurrentBuild -le 19045) {
+		Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 0 # Applies to Windows 10
+	}
+	print "Disabled suggested content and recommendations in Start menu."
 }
 
-# Enable "Show me suggested content in Start menu".
-function ShowSuggestedContentInStart {
-	if ($CurrentBuild -ge 22000) {
-		return
-	}
+# Enable recommendations and suggested content in Start menu
+function EnableAdsInStart {
 	space 
-	print "Enabling Suggested content in Start menu..."
-	Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 1
-	print "Enabled Suggested content in Start menu."
+	print "Enabling suggested content and recommendations in Start menu..."
+	
+	if ($CurrentBuild -ge 22000) {
+		New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name Start_IrisRecommendations -Type DWord -Value 1 | Out-Null # Enables ads in Recommended section; applies to Windows 11
+	}
+	if ($CurrentBuild -le 19045) {
+		Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Name SubscribedContent-338388Enabled -Type DWord -Value 1 # Applies to Windows 10
+	}
+	print "Enabled suggested content and recommendations in Start menu."
 }
 
 # Disable Tailored experiences.
@@ -2586,7 +2592,7 @@ function TelemetryOptional {
 		return
 	}
 	space
-	print "This device is flighting in the Windows Insider Program, hence Diagnostic data will be set to optional..."
+	print "This device is flighting in the Windows Insider Program. As a result, Diagnostic data setting will be set to Optional..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "AllowTelemetry" -Type DWord -Value 3
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"  -Name "MaxTelemetryAllowed" -Type DWord -Value 3
 	print "Diagnostic data is set to Optional."
@@ -2603,6 +2609,7 @@ function EnableClipboard {
 	Set-Clipboard "Demo text by WinRice."
 	print "Access your clipboard now using Windows key + V."
 	Write-Warning "If the Clipboard History feature does not work, retry it after a device restart."
+	Start-Sleep 3
 }
 
 # Disable Clipboard History.
@@ -2623,7 +2630,7 @@ function AutoLoginPostUpdate {
 	space
 	print "Enabling automatic login post updates..."
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "ARSOUserConsent" -Type DWord -Value 1
-	print "Enabled Automatic login applying updates."
+	print "Enabled Automatic login after applying updates."
 } 
 
 function StayOnLockscreenPostUpdate {
