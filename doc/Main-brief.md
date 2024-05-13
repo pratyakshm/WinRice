@@ -30,8 +30,6 @@
 
 - Windows Package Manager ([GitHub](https://github.com/microsoft/winget-cli/))
 
-- 🎛️ Chocolatey Package Manager ([Website](https://chocolatey.org/))
-
 #### 🎛️ Leveraging WinGet to Install Apps
 
 - [`winget.md`](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winget.md)

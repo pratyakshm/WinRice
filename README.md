@@ -1,7 +1,6 @@
 <p align="center">
- <img alt="Files Logo" <img src=".github/banner.png" width="450">
- <h2 align="center">WinRice - Set up your Windows device using automation
-</h2>
+ <img alt="Files Logo" <img src="https://github.com/pratyakshm/WinRice/assets/54220235/f06b1ea6-389c-46cc-b901-da8207e37b28" width="450">
+<!-- <h1 hidden>WinRice</h1> -->
 </p>
 
 <p align="center">
@@ -20,11 +19,9 @@
 
 WinRice is a PowerShell script designed to automate setting up a new Windows device. It automates a few of the useful things that people generally do in a fresh Windows installation or a new Windows device.
 
-## Download
-
 [<img src="https://github.com/pratyakshm/WinRice/assets/54220235/fa3f8057-9506-4dd6-8e01-c2689c4119c0" alt="Download Button" width="235" height="56">](https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice.exe)
 
-## Core Features
+## Feature Highlight
 
 - Batch installs apps and features automatically
 - Configures Windows UI

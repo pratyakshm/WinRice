@@ -15,7 +15,6 @@ $tasks = @(
 	# "InstallVCLibs",
 	# "UninstallVCLibs",
 	"InstallWinGet",
-	"InstallChocolateyPackageManager",
 	# "InstallNanaZip", 
 	# "UninstallNanaZip",
 	"InstallFlowLauncher",
@@ -465,7 +464,6 @@ if (!(check($customize))) {
 		}
 	}
 	
-	$installchoco = ask "Do you want to install Chocolatey Package Manager? [y/N]"
 	$installflowlauncher = ask "Do you want to install Flow Launcher? [y/N]"
 	if (check($installflowlauncher)) {
 		$installflowlauncher = "y"
@@ -541,11 +539,6 @@ if (!(check($customize))) {
 		elseif ($installusing -like "1") {
 			Write-Host "winget import method." -ForegroundColor Cyan
 		}
-	}
-
-	## Chocolatey Installation
-	if (check($installchoco)) {
-		Write-Host " - Install Chocolatey Package Manager." -ForegroundColor Cyan
 	}
 
 	## App Uninstallation
@@ -819,32 +812,6 @@ function InstallWinGet {
 	}
 	print "Installed WinGet."
 }
-	
-# Install Chocolatey Package Manager.
-function InstallChocolateyPackageManager {
-	if (!($installchoco)) {
-		return
-	}
-	if (Get-Command choco) {
-		return
-	}
-	space
-	print "Installing Chocolatey Package Manager..."
-	
-	# Set env variable to make choco installer use Windows inbuilt compression tools instead of downloading and using 7-zip.
-	$env:chocolateyUseWindowsCompression = 'true'
-	
-	# Install choco using their official installation script (https://chocolatey.org/install).
-	[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) | Out-Null
-	
-	# Print status message.
-	if (!(Get-Command choco)) {
-		print "Failed to install Chocolatey Package Manager."
-		return 
-	}
-	print "Installed Chocolatey Package Manager."
-}
-
 
 # Install NanaZip.
 function InstallNanaZip {

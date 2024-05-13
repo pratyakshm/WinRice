@@ -44,8 +44,6 @@ Users can customize their WinRice experience using these Custom Settings if they
 
 WinRice asks if you want to install apps. If you choose to do so, you will be presented with two methods of app installation, which are [Winstall](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/winstall.md) and [WinGet import](https://github.com/pratyakshm/WinRice/blob/main/doc/winget/import.md).
 
-WinRice asks if you want to install Chocolatey Package Manager.
-
 ## App Uninstallation
 
 WinRice asks if you want to uninstall some built-in apps that are generally left unused. To learn more, see [App-uninstallation.md](https://github.com/pratyakshm/WinRice/blob/main/doc/App-uninstallation.md).

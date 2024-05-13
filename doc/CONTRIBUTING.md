@@ -8,12 +8,12 @@ I ask that **before you start your work on a feature that you would like to requ
 
 1. Prefer usage of first party software over third party software (instance: WinGet over Chocolatey, etc.).
 2. Avoid removing software which is tied to the operating system (e.g. Microsoft Edge).
-3. Avoid removing software that is unrecoverable.
+3. Avoid removing unrecoverable software.
 4. Avoid removing developer category inbox apps (e.g. Windows Terminal).
 5. Avoid removing media playback apps (e.g. Media Player, Movies & TV, Photos, etc.).
 6. Avoid removing Xbox sister apps (e.g. Xbox Game bar, etc.).
-7. Avoid removing software which when removed might result in reduced OS and app functionality.
-8. Avoid modifying settings or files that might result in negative conflicts with Windows Update.
+7. Avoid removing software that can result in reduced crucial OS and app functionality
+8. Avoid modifying settings or files that may conflict with OS updates.
 9. Avoid making changes that might result in a degraded OS security and/or stability.
 10. Avoid adding registry edits that no longer take effect in [currently serviced Windows 11/10 versions](https://docs.microsoft.com/en-us/windows/release-health/release-information).
 
