@@ -21,6 +21,7 @@ WinRice is a PowerShell script designed to automate setting up a new Windows dev
 
 [<img src="https://github.com/pratyakshm/WinRice/assets/54220235/fa3f8057-9506-4dd6-8e01-c2689c4119c0" alt="Download Button" width="235" height="56">](https://github.com/pratyakshm/WinRice/releases/download/v0.5.04112021/WinRice.exe)
 
+
 ## Feature Highlight
 
 - Batch installs apps and features automatically
@@ -45,6 +46,16 @@ WinRice is a PowerShell script designed to automate setting up a new Windows dev
   - Be up to date. \*
 
 \* If you've just installed Windows, please ensure that all updates from Microsoft Store and Windows Update are installed. This is because WinRice uses some components that are only available in the latest updates. This is to ensure that WinRice works seamlessly on your device.
+
+## Testimonials 
+> ![based AF](https://i.imgur.com/CbI97e3.png)  
+> \- KenHV ([@KenHV](https://github.com/KenHV)) (July 11th, 2021)
+
+WinRice is fully free and open source. If you wish to support my work, you may [pledge via PayPal](https://paypal.me/pratyakshm).
+
+Made with 🩷 on 🌍. 
+
+Thank you for using WinRice.
 
 <!--  ## Download
 
